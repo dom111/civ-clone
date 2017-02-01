@@ -1,7 +1,7 @@
-game.on('start', function() {
+engine.on('start', function() {
     // TODO: controlled by options
-    game.turn = 0;
-    game.year = -4000;
+    engine.turn = 0;
+    engine.year = -4000;
 });
 
 var ranges = [
@@ -26,17 +26,17 @@ var ranges = [
     }
 ];
 
-game.on('turn-end', function() {
-    game.turn++;
+engine.on('turn-end', function() {
+    engine.turn++;
 
-    game.year += ranges.filter(function(range) {
-        return ('year' in range) ? game.year < range.year : true;
+    engine.year += ranges.filter(function(range) {
+        return ('year' in range) ? engine.year < range.year : true;
     })[0].increment;
 });
 
-game.on('turn-start', function() {
-    Notifications.add({
+engine.on('turn-start', function() {
+    engine.Notifications.add({
         name: 'date',
-        year: game.year
+        year: engine.year
     });
 });

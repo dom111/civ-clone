@@ -10,8 +10,15 @@
             "contents": [
                 "main.js"
             ]
+        },
+        {
+            "type": "unit",
+            "contents": [
+                "units/settler.json",
+                "units/militia.json",
+                "units/cavalry.json"
+            ]
         }
     ],
-    "options": [],
     "weight": 0
 }

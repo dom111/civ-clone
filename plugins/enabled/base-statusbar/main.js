@@ -24,22 +24,22 @@ var Statusbar = global.Statusbar = class Statusbar {
 
         var statusbar = this;
 
-        game.on('statusbar-update', () => statusbar.update());
-        game.on('turn-over', () => game.emit('statusbar-update'));
-        game.on('turn-start', () => game.emit('statusbar-update'));
-        game.on('unit-activate', () => game.emit('statusbar-update'));
-        game.on('unit-activate-next', () => game.emit('statusbar-update'));
-        game.on('unit-destroyed', () => game.emit('statusbar-update'));
-        game.on('unit-moved', () => game.emit('statusbar-update'));
+        engine.on('statusbar-update', () => statusbar.update());
+        engine.on('turn-over', () => engine.emit('statusbar-update'));
+        engine.on('turn-start', () => engine.emit('statusbar-update'));
+        engine.on('unit-activate', () => engine.emit('statusbar-update'));
+        engine.on('unit-activate-next', () => engine.emit('statusbar-update'));
+        engine.on('unit-destroyed', () => engine.emit('statusbar-update'));
+        engine.on('unit-moved', () => engine.emit('statusbar-update'));
     }
 
     update() {
         // statusbar.getData();
-        this.element.querySelector('.year').innerHTML = Math.abs(game.year) + ' ' + ['BC','AD'][game.year < 0 ? 0 : 1];
-        this.element.querySelector('.year').title = 'Turn ' + game.turn;
+        this.element.querySelector('.year').innerHTML = Math.abs(engine.year) + ' ' + ['BC','AD'][engine.year < 0 ? 0 : 1];
+        this.element.querySelector('.year').title = 'Turn ' + engine.turn;
 
-        if (game.currentPlayer) {
-            var player = game.currentPlayer;
+        if (engine.currentPlayer) {
+            var player = engine.currentPlayer;
 
             if (player.activeUnit) {
                 var unit = player.activeUnit;
@@ -50,13 +50,13 @@ var Statusbar = global.Statusbar = class Statusbar {
             }
         }
         else {
-            console.log('No currentPlayer', game);
+            console.log('No currentPlayer', engine);
         }
     }
 };
 
-game.statusbar = new Statusbar();
+engine.statusbar = new Statusbar();
 
-game.on('start', function() {
-    game.statusbar.init();
+engine.on('start', function() {
+    engine.statusbar.init();
 });

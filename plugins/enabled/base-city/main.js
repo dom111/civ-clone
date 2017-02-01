@@ -87,6 +87,8 @@ extend(engine, {
             var city = this;
             extend(this, details || {});
 
+            city.build('militia');
+
             city.x = city.tile.x;
             city.y = city.tile.y;
             city.capital = (city.player.cities.length === 0);
@@ -204,6 +206,36 @@ extend(engine, {
 
         get surplusFood() {
             return this.food - (this.size * 2);
+        }
+
+        get availableBuildItems() {
+            // TODO
+            return [{
+                "unit": "settlers",
+                "progress": 0
+            }, {
+                "unit": "militia",
+                "progress": 0
+            }, {
+                "unit": "cavalry",
+                "progress": 0
+            }, {
+                "building": "barracks",
+                "progress": 0
+            }];
+        }
+
+        build(itemName) {
+            this.building = this.availableBuildItems.filter(function(item) {
+                if ('unit' in item) {
+                    return item.unit == itemName;
+                }
+                else if ('building' in item) {
+                    return item.building == itemName;
+                }
+            })[0];
+
+            console.log(JSON.stringify(this.building));
         }
 
         showCityScreen() {

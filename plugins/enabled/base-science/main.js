@@ -1,5 +1,5 @@
 // Add necessary properties to all 'Player' objects
-Player.extend({
+engine.Player.extend({
     setResearch: function(advance) {
         if (typeof advance === 'string') {
             this.getAvailableResearch().filter(function(availableAdvance) {
@@ -27,7 +27,7 @@ Player.extend({
     getAvailableResearch: function() {
         var player = this;
 
-        return game.advances.filter(function(advance) {
+        return engine.advances.filter(function(advance) {
             return !player.advances.some(function(acquiredAdvance) {
                 return acquiredAdvance.name === advance.name;
             });
@@ -56,7 +56,7 @@ Player.extend({
 });
 
 // Add 'science' property to all City objects
-City.prototype.__defineGetter__('science', function() {
+engine.City.prototype.__defineGetter__('science', function() {
     // TODO: library multiplier
     this.calculateRates();
 
@@ -64,30 +64,30 @@ City.prototype.__defineGetter__('science', function() {
 });
 
 // game properties and events
-game.availableTradeRates.push('science'); // add tax as a trade-rate
-game.advances = [];
+engine.availableTradeRates.push('science'); // add tax as a trade-rate
+engine.advances = [];
 
-game.on('start', function() {
-    Plugin.get('advances').forEach(function(pack) {
+engine.on('start', function() {
+    Engine.Plugin.get('advances').forEach(function(pack) {
         pack.contents.forEach(function(file) {
-            game.advances.push(game.loadJSON(file));
+            engine.advances.push(engine.loadJSON(file));
         });
     });
 });
 
-game.on('player-added', function(player) {
+engine.on('player-added', function(player) {
     player.science = 0;
     player.researching = false;
     player.advances = [];
 });
 
-game.on('turn-end', function() {
-    game.players.forEach(function(player) {
+engine.on('turn-end', function() {
+    engine.players.forEach(function(player) {
         player.cities.forEach(function(city) {
             player.science += city.science;
 
             if (player.science >= player.researching.cost) {
-                Notifications.add({
+                emgine.Notifications.add({
                     name: 'research_complete',
                     advance: player.researching,
                     player: player,
@@ -104,14 +104,14 @@ game.on('turn-end', function() {
     });
 });
 
-game.on('city-created', function(city) {
+engine.on('city-created', function(city) {
     var player = city.player;
 
     if (player.cities.length === 1) {
         city.capital = false;
 
         if (!player.researching) {
-            Notifications.add({
+            engine.Notifications.add({
                 name: 'choose_research',
                 player: player,
                 click: function() {

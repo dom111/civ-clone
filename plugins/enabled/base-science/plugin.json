@@ -32,5 +32,6 @@
                 "advances/writing.json"
             ]
         }
-    ]
+    ],
+    "weight": 200
 }

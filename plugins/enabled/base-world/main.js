@@ -19,7 +19,7 @@ engine.on('tile-seen', function(tile, player) {
     tile.seenBy[player.id] = 1;
 });
 
-exnted(engine, {
+extend(engine, {
     World: class World {
         constructor() {
             var map = this;
@@ -28,7 +28,7 @@ exnted(engine, {
 
             map.seed = Math.ceil(Math.random() * 1e7);
 
-            engine.plugin.get('terrain').forEach(function(terrain) {
+            Engine.Plugin.get('terrain').forEach(function(terrain) {
                 terrain.contents.forEach(function(file) {
                     var terrainDefinition = engine.loadJSON(file);
 
@@ -58,7 +58,7 @@ exnted(engine, {
 
             map.map = map.generate().map(function(row, y) {
                 return row.map(function(terrainId, x) {
-                    return new World.Tile({
+                    return new engine.World.Tile({
                         x: x,
                         y: y,
                         terrainId: terrainId,
@@ -333,4 +333,8 @@ extend(engine.World, {
             }
         }
     }
+});
+
+engine.on('build', function() {
+    engine.map = new engine.World();
 });

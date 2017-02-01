@@ -6,9 +6,7 @@ extend(engine, {
             var player = this;
 
             if (typeof details === 'undefined') {
-                details = engine.Civilizations.sort(function() {
-                    return Math.floor((Math.random() * 3) - 1);
-                })[0];
+                details = engine.Civilizations.pop();
             }
 
             extend(player, details || {});
@@ -66,4 +64,49 @@ extend(engine, {
             throw `No rate '${rate}'!`;
         }
     }
+});
+
+engine.__defineGetter__('isTurnEnd', function() {
+    return this.currentPlayer.actionsLeft === 0;
+});
+
+engine.on('build', function() {
+    engine.players = [];
+
+    // TODO: if randomize
+    engine.Civilizations = engine.Civilizations.sort(function() {
+        return Math.floor((Math.random() * 3) - 1);
+    });
+
+    // engine.addPlayers(); // TODO
+    // for (var i = 0; i < engine.options.players; i++) {
+    //     engine.players.push(new engine.Player());
+    // }
+
+    engine.players.push(new engine.Player());
+    engine.players.push(new engine.Player());
+
+    // TODO: this is testing data
+    engine.currentPlayer = engine.players[0];
+
+    new engine.Unit({
+        unit: 'settler',
+        tile: engine.map.get(3, 3),
+        player: engine.players[0]
+    });
+    new engine.Unit({
+        unit: 'cavalry',
+        tile: engine.map.get(3, 3),
+        player: engine.players[0]
+    });
+    new engine.Unit({
+        unit: 'settler',
+        tile: engine.map.get(11, 28),
+        player: engine.players[1]
+    });
+    new engine.Unit({
+        unit: 'cavalry',
+        tile: engine.map.get(11, 28),
+        player: engine.players[1]
+    });
 });

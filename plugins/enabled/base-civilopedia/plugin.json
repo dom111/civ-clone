@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "components": [
         {
-            "type": "civilopedia-articles",
+            "type": "civilopedia",
             "weight": 0,
             "contents": [
                 "civilopedia/base.json"

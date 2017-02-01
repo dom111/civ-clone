@@ -10,22 +10,22 @@
         "args": ["ne"]
     },
     {
-        "keys": ["right" ,"numpad6"],
+        "keys": ["right", "numpad6"],
         "action": "move",
         "args": ["e"]
     },
     {
-        "keys": ["pagedown" ,"numpad3"],
+        "keys": ["pagedown", "numpad3"],
         "action": "move",
         "args": ["se"]
     },
     {
-        "keys": ["down" ,"numpad2"],
+        "keys": ["down", "numpad2"],
         "action": "move",
         "args": ["s"]
     },
     {
-        "keys": ["end" ,"numpad1"],
+        "keys": ["end", "numpad1"],
         "action": "move",
         "args": ["sw"]
     },
@@ -39,9 +39,56 @@
         "action": "move",
         "args": ["nw"]
     },
+
+
+    {
+        "keys": ["space"],
+        "action": "action",
+        "args": ["noOrders"]
+    },
+    {
+        "keys": ["w"],
+        "action": "action",
+        "args": ["wait"]
+    },
+    {
+        "keys": ["b"],
+        "action": "action",
+        "args": ["buildCity"],
+        "include": ["settler"]
+    },
+    {
+        "keys": ["i"],
+        "action": "action",
+        "args": ["irrigate"],
+        "include": ["settler"]
+    },
+    {
+        "keys": ["m"],
+        "action": "action",
+        "args": ["mine"],
+        "include": ["settler"]
+    },
+    {
+        "keys": ["r"],
+        "action": "action",
+        "args": ["road"],
+        "include": ["settler"]
+    },
+    {
+        "keys": ["f"],
+        "action": "action",
+        "args": ["fortify"],
+        "exclude": ["settler"]
+    },
     {
         "keys": ["P"],
         "action": "action",
         "args": ["pillage"]
+    },
+    {
+        "keys": ["D"],
+        "action": "action",
+        "args": ["disband"]
     }
 ]

@@ -1,9 +1,9 @@
-var Civilopedia = game.civilopedia = {
+var Civilopedia = engine.Civilopedia = {
     categories: {},
     load: function() {
-        Plugin.get('civilopedia-articles').forEach(function(pack) {
+        Engine.Plugin.get('civilopedia').forEach(function(pack) {
             pack.contents.forEach(function(file) {
-                var article = game.loadJSON(file);
+                var article = engine.loadJSON(file);
 
                 if (!('category' in article)) {
                     article.category = {
@@ -28,6 +28,6 @@ var Civilopedia = game.civilopedia = {
     }
 };
 
-game.on('start', function() {
+engine.on('start', function() {
     Civilopedia.load();
 });

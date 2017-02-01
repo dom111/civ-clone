@@ -76,7 +76,7 @@
         }
     });
 
-    engine.extend({
+    extend(engine, {
         Unit: class Unit {
             constructor(details) {
                 var unit = this,
@@ -224,9 +224,9 @@
                 engine.emit('unit-destroyed', unit);
             }
         }
-    })
+    });
 
-    engine.Unit.extend({
+    extend(engine.Unit, {
         availableActions: {
             sentry: {
                 name: 'sentry',
@@ -246,10 +246,6 @@
                 name: 'fortify',
                 title: 'Fortify',
                 turns: 1,
-                key: 'f',
-                availableTo: {
-                    exclude: ['settler']
-                },
                 run: function(unit) {
                     unit.busy = -1;
                     unit.inactive = true;
@@ -260,8 +256,6 @@
                 name: 'disband',
                 title: 'Disband',
                 turns: 0,
-                key: 'shift+d',
-                availableTo: {},
                 run: function(unit) {
                     unit.destroy();
                 }
@@ -270,8 +264,6 @@
                 name: 'pillage',
                 title: 'Pillage',
                 turns: 1,
-                key: 'shift+p',
-                availableTo: {},
                 run: function(unit) {
                     engine.emit('tile-improvement-pillaged', unit.tile, unit.tile.improvements[0]);
                 }
@@ -280,8 +272,6 @@
                 name: 'noOrders',
                 title: 'No orders',
                 turns: 0,
-                key: 'space',
-                availableTo: {},
                 run: function(unit) {
                     unit.movesLeft = 0;
                 }
@@ -290,10 +280,6 @@
                 name: 'buildCity',
                 title: 'Build city',
                 turns: 0,
-                key: 'b',
-                availableTo: {
-                    include: ['settler']
-                },
                 run: function(unit) {
                     new engine.City({
                         player: unit.player,
@@ -378,13 +364,13 @@
         },
         units: [],
         getByName: function(name) {
-            return Unit.units.filter(function(unit) {
+            return engine.Unit.units.filter(function(unit) {
                 return unit.name === name;
             })[0];
         }
     });
 
-    engine.plugin.get('unit').forEach(function(unit) {
+    Engine.Plugin.get('unit').forEach(function(unit) {
         unit.contents.forEach(function(file) {
             engine.Unit.units.push(engine.loadJSON(file));
         });

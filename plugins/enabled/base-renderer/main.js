@@ -66,7 +66,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         renderer.canvas.addEventListener('mousedown', function(event) {
             var x = event.pageX,
             y = event.pageY,
-            tileSize = game.map.get(0, 0).terrain.size * game.scale;
+            tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
 
             x -= parseInt(renderer.canvas.width / 2) - parseInt(tileSize / 2);
             y -= parseInt(renderer.canvas.height / 2) - parseInt(tileSize / 2);
@@ -77,7 +77,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             x = renderer.center.x + x;
             y = renderer.center.y + y;
 
-            var tile = game.map.get(x, y);
+            var tile = engine.map.get(x, y);
 
             if (tile.city) {
                 tile.city.showCityScreen();
@@ -94,7 +94,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             if (event.shiftKey) {
                 var x = event.pageX,
                 y = event.pageY,
-                tileSize = game.map.get(0, 0).terrain.size * game.scale;
+                tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
 
                 x -= parseInt(renderer.canvas.width / 2) - parseInt(tileSize / 2);
                 y -= parseInt(renderer.canvas.height / 2) - parseInt(tileSize / 2);
@@ -105,7 +105,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                 x = renderer.center.x + x;
                 y = renderer.center.y + y;
 
-                var tile = game.map.get(x, y);
+                var tile = engine.map.get(x, y);
                 console.log(tile.x, tile.y);
             }
         });
@@ -115,21 +115,21 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             renderer.canvas.height = window.innerHeight;
             renderer.canvas.width = window.innerWidth;
 
-            game.emit('build-layer', 'all');
-            game.emit('update-display');
+            engine.emit('build-layer', 'all');
+            engine.emit('update-display');
         });
 
-        game.on('build-layer', function(layer) {
-            renderer.buildLayer(layer);
+        engine.on('build-layer', function(layer) {
+            renderer.buildLayer(layer || 'all');
         });
 
-        game.on('update-display', function(layersToProcess) {
+        engine.on('update-display', function(layersToProcess) {
             renderer.updateDisplay(layersToProcess);
         });
 
         renderer.hideFlag = false;
         renderer.interval = setInterval(function() {
-            game.emit('update-display', renderer.layerOrder.filter(function(layer) {
+            engine.emit('update-display', renderer.layerOrder.filter(function(layer) {
                 if ((layer === 'activeUnits') && renderer.hideFlag) {
                     return false;
                 }
@@ -144,73 +144,73 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
 
         document.body.style.cursor = 'url("' + __path + 'assets/cursor/torch.gif"), auto';
 
-        game.on('tile-improvement-built', function(tile, improvement) {
+        engine.on('tile-improvement-built', function(tile, improvement) {
             if (improvement === 'irrigation') {
-                game.emit('build-layer', improvement);
+                engine.emit('build-layer', improvement);
             }
             else {
-                game.emit('build-layer', 'otherImprovements');
+                engine.emit('build-layer', 'otherImprovements');
             }
         });
 
-        game.on('tile-improvement-pillaged', function(tile, improvement) {
+        engine.on('tile-improvement-pillaged', function(tile, improvement) {
             if (improvement === 'irrigation') {
-                game.emit('build-layer', improvement);
+                engine.emit('build-layer', improvement);
             }
             else {
-                game.emit('build-layer', 'otherImprovements');
+                engine.emit('build-layer', 'otherImprovements');
             }
         });
 
-        game.on('tile-seen', function(tile) {
-            game.emit('build-layer', 'visibility');
+        engine.on('tile-seen', function(tile) {
+            engine.emit('build-layer', 'visibility');
         });
 
-        game.on('city-created', function(city, tile) {
-            game.emit('build-layer', 'cities');
+        engine.on('city-created', function(city, tile) {
+            engine.emit('build-layer', 'cities');
         });
 
-        game.on('city-grow', function(city, tile) {
-            game.emit('build-layer', 'cities');
+        engine.on('city-grow', function(city, tile) {
+            engine.emit('build-layer', 'cities');
         });
 
-        game.on('unit-moved', function(unit, tile) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('unit-moved', function(unit, tile) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.on('unit-created', function(unit, tile) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('unit-created', function(unit, tile) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.on('unit-destroyed', function(unit, tile) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('unit-destroyed', function(unit, tile) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.on('unit-activated', function(unit, tile) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('unit-activated', function(unit, tile) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.on('turn-over', function(unit, tile) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('turn-over', function(unit, tile) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.on('unit-activate', function(unit) {
-            game.emit('build-layer', 'units');
-            game.emit('build-layer', 'activeUnits');
+        engine.on('unit-activate', function(unit) {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
         });
 
-        game.emit('bind-key', 'unit', 'c', function() {
-            if (game.currentPlayer && game.currentPlayer.activeUnit) {
-                renderer.center = game.currentPlayer.activeUnit.tile;
+        engine.emit('bind-key', 'unit', 'c', function() {
+            if (engine.currentPlayer && engine.currentPlayer.activeUnit) {
+                renderer.center = engine.currentPlayer.activeUnit.tile;
             }
         });
 
-        game.emit('build-layer', 'all');
+        engine.emit('build-layer', 'all');
     }
 
     buildLayer(layer) {
@@ -219,7 +219,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'land' || layer === 'all') {
             var tiles = [];
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
                     tiles.push({
                         images: (function() {
@@ -254,7 +254,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'irrigation' || layer === 'all') {
             var tiles = [];
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
                     if (tile.improvements.includes('irrigation')) {
                         tiles.push({
@@ -279,7 +279,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'baseTerrain' || layer === 'all') {
             var tiles = [];
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
                     var images = [];
 
@@ -390,7 +390,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'otherImprovements' || layer === 'all') {
             var tiles = [];
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
                     var otherImprovements = tile.improvements.filter(function(improvement) {
                         return improvement !== 'irrigation';
@@ -457,9 +457,9 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'units' || layer === 'all') {
             var tiles = [];
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
-                    if (!game.currentPlayer || !game.currentPlayer.activeUnit || game.currentPlayer.activeUnit.tile !== tile) {
+                    if (!engine.currentPlayer || !engine.currentPlayer.activeUnit || engine.currentPlayer.activeUnit.tile !== tile) {
                         var unit = tile.units.sort(function(a, b) {
                             return a.defence > b.defense ? -1 : a.defense == a.defense ? 0 : 1;
                         })[0],
@@ -485,8 +485,8 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                             images.push(image);
 
                             if (images.length) {
-                                var sourceColors = plugin.get('asset', 'units')[0].sourceColors;
-                                var replaceColors = unit.player.colors;
+                                var sourceColors = plugin.get('asset', 'units')[0].sourceColors,
+                                replaceColors = unit.player.colors;
 
                                 tiles.push({
                                     images: images.map(function(image) {
@@ -520,7 +520,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'cities' || layer === 'all') {
             var tiles = [];
 
-            game.players.forEach(function(player) {
+            engine.players.forEach(function(player) {
                 player.cities.forEach(function(city) {
                     tiles.push({
                         images: [__path + 'assets/map/city.gif'],
@@ -547,8 +547,8 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'activeUnits' || layer === 'all') {
             var tiles = [];
 
-            if (game.currentPlayer && game.currentPlayer.activeUnit) {
-                var unit = game.currentPlayer.activeUnit,
+            if (engine.currentPlayer && engine.currentPlayer.activeUnit) {
+                var unit = engine.currentPlayer.activeUnit,
                 tile = unit.tile,
                 images = [];
 
@@ -573,7 +573,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
 
                     if (images.length) {
                         var sourceColors = plugin.get('asset', 'units')[0].sourceColors;
-                        var replaceColors = game.currentPlayer.colors;
+                        var replaceColors = engine.currentPlayer.colors;
 
                         tiles.push({
                             images: images.map(function(image) {
@@ -600,9 +600,9 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
 
         if (layer === 'visibility' || layer === 'all') {
             var tiles = [],
-            player = game.currentPlayer;
+            player = engine.currentPlayer;
 
-            game.map.map.forEach(function(row) {
+            engine.map.map.forEach(function(row) {
                 row.forEach(function(tile) {
                     if (!tile.isVisible(player.id)) {
                         tiles.push({
@@ -728,23 +728,23 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         renderer.portal.height = window.innerHeight;
         renderer.portalContext = renderer.portal.getContext('2d');
 
-        game.scale = game.scale || 1;
+        engine.scale = engine.scale || 1;
 
         if (!renderer.center) {
-            renderer.center = game.currentPlayer && game.currentPlayer.activeUnit ?
-                game.currentPlayer.activeUnit.tile :
-                game.map.get(0, 0);
+            renderer.center = engine.currentPlayer && engine.currentPlayer.activeUnit ?
+                engine.currentPlayer.activeUnit.tile :
+                engine.map.get(0, 0);
         }
 
         renderer.portal.centerX = parseInt(renderer.portal.width / 2);
         renderer.portal.centerY = parseInt(renderer.portal.height / 2);
 
-        var tileSize = renderer.center.terrain.size * game.scale,
-        layerWidth = game.map.width * tileSize,
+        var tileSize = renderer.center.terrain.size * engine.scale,
+        layerWidth = engine.map.width * tileSize,
         centerX = (renderer.center.x * tileSize) + parseInt(tileSize / 2),
         startX = renderer.portal.centerX - centerX,
         endX = renderer.portal.centerX + layerWidth,
-        layerHeight = game.map.height * tileSize,
+        layerHeight = engine.map.height * tileSize,
         centerY = (renderer.center.y * tileSize) + parseInt(tileSize / 2),
         startY = renderer.portal.centerY - centerY,
         endY = renderer.portal.centerY + layerHeight;
@@ -766,9 +766,9 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         }
 
         (layersToProcess || renderer.layerOrder).forEach(function(layer) {
-            for (var x = startX; x < endX; x += layerWidth * game.scale) {
-                for (var y = startY; y < endY; y += layerHeight * game.scale) {
-                    renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * game.scale, layerHeight * game.scale);
+            for (var x = startX; x < endX; x += layerWidth * engine.scale) {
+                for (var y = startY; y < endY; y += layerHeight * engine.scale) {
+                    renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * engine.scale, layerHeight * engine.scale);
                 }
             }
         });
@@ -784,11 +784,11 @@ BaseRenderer.Layer = class BaseLayer {
 
         extend(layer, details);
 
-        layer.tileSize = game.map.terrainTypes[0].size;
+        layer.tileSize = engine.map.terrainTypes[0].size;
 
         layer.canvas = document.createElement('canvas');
-        layer.width = layer.canvas.width = game.map.width * layer.tileSize;
-        layer.height = layer.canvas.height = game.map.height * layer.tileSize;
+        layer.width = layer.canvas.width = engine.map.width * layer.tileSize;
+        layer.height = layer.canvas.height = engine.map.height * layer.tileSize;
         layer.context = layer.canvas.getContext('2d');
         layer.images = {};
 
@@ -835,7 +835,7 @@ BaseRenderer.Layer = class BaseLayer {
 
 // utility
 BaseRenderer.Extract = {
-    data: game.loadJSON(__path + 'extract-data.json'),
+    data: engine.loadJSON(__path + 'extract-data.json'),
     images: [],
     loadImages: function() {
         ['SP257.gif', 'TER257.gif'].forEach(function(file) {
@@ -904,6 +904,6 @@ BaseRenderer.Extract = {
 
 global.renderer = new BaseRenderer();
 
-game.on('start', function() {
+engine.on('start', function() {
     global.renderer.init();
 });

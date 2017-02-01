@@ -12,33 +12,50 @@ var _processKey = function(key) {
         'home': 36,
         'end': 35,
         'enter': 13,
-        'numpad0': 96,
-        'numpad1': 97,
-        'numpad2': 98,
-        'numpad3': 99,
-        'numpad4': 100,
-        'numpad5': 101,
-        'numpad6': 102,
-        'numpad7': 103,
-        'numpad8': 104,
-        'numpad9': 105
+        // windows?
+        // 'numpad0': 96,
+        // 'numpad1': 97,
+        // 'numpad2': 98,
+        // 'numpad3': 99,
+        // 'numpad4': 100,
+        // 'numpad5': 101,
+        // 'numpad6': 102,
+        // 'numpad7': 103,
+        // 'numpad8': 104,
+        // 'numpad9': 105
+        // mac.
+        'numpad0': 48,
+        'numpad1': 49,
+        'numpad2': 50,
+        'numpad3': 51,
+        'numpad4': 52,
+        'numpad5': 53,
+        'numpad6': 54,
+        'numpad7': 55,
+        'numpad8': 56,
+        'numpad9': 57
     },
     object = {};
 
     allKeys.forEach(function(key) {
         if (key.match(/ctrl|control/i)) {
+            key = key.replace(/(ctrl|control)\+|\+(ctrl|control)/, '');
             object.ctrlKey = true;
         }
-        else if (key.match(/shift/i)) {
+        if (key.match(/shift/i)) {
+            key = key.replace(/shift\+|\+shift/, '');
             object.shiftKey = true;
         }
-        else if (key.match(/alt/i)) {
+        if (key.match(/alt/i)) {
+            key = key.replace(/shift\+|\+shift/, '');
             object.altKey = true;
         }
-        else if (key.match(/cmd|command|win/i)) {
+        if (key.match(/cmd|command|win/i)) {
+            key = key.replace(/(cmd|command|win)\+|\+(cmd|command|win)/, '');
             object.metaKey = true;
         }
-        else if (key.match(/[A-Z]/i)) {
+
+        if (key.match(/[A-Z]/)) {
             object.shiftKey = true;
             object.keyCode = key.charCodeAt(0);
         }
@@ -89,14 +106,13 @@ engine.on('unbind-key', function(namespace, key) {
 });
 
 engine.on('start', function(unit) {
-    engine.Plugin.get('keybinds', 'unit').forEach(function(component) {
+    Engine.Plugin.get('keybinds', 'unit').forEach(function(component) {
         component.contents.forEach(function(assetPath) {
-            engine.loadJSON(assetPath).forEach(function(keyBind) {
+            engine.loadJSON(assetPath).forEach(function(keybind) {
                 keybind.keys.forEach(function(key) {
                     engine.emit('bind-key', 'unit', key, function() {
                         var unit = engine.currentPlayer.activeUnit,
                         call = true;
-
                         if (unit) {
                             if (keybind.include) {
                                 call = keybind.include.includes(unit.name);
@@ -115,47 +131,20 @@ engine.on('start', function(unit) {
             });
         });
     });
-    // [
-    //     ['up', 'n'],
-    //     ['pageup', 'ne'],
-    //     ['right', 'e'],
-    //     ['pagedown', 'se'],
-    //     ['down', 's'],
-    //     ['end', 'sw'],
-    //     ['left', 'w'],
-    //     ['home', 'nw'],
-    //     ['8', 'n'],
-    //     ['9', 'ne'],
-    //     ['6', 'e'],
-    //     ['3', 'se'],
-    //     ['2', 's'],
-    //     ['1', 'sw'],
-    //     ['4', 'w'],
-    //     ['7', 'nw']
-    // ].forEach(function(bind) {
-    //     engine.emit('bind-key', 'unit', bind[0], function() {
+
+    // TODO: include in each unit's definition file
+    // Object.keys(engine.Unit.availableActions).forEach(function(actionName) {
+    //     var action = engine.Unit.availableActions[actionName];
+
+    //     engine.emit('bind-key', 'unit', action.key, function() {
     //         // TODO
     //         var unit = engine.currentPlayer.activeUnit;
 
     //         if (unit) {
-    //             unit.move(bind[1]);
+    //             unit.action(action.name);
     //         }
     //     });
     // });
-
-    // TODO: include in each unit's definition file
-    Object.keys(Unit.availableActions).forEach(function(actionName) {
-        var action = Unit.availableActions[actionName];
-
-        engine.emit('bind-key', 'unit', action.key, function() {
-            // TODO
-            var unit = engine.currentPlayer.activeUnit;
-
-            if (unit) {
-                unit.action(action.name);
-            }
-        });
-    });
 
     // TODO: move game-wide shortcuts to config file
     engine.emit('bind-key', 'game', 'enter', function() {
