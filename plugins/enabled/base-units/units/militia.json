@@ -1,0 +1,12 @@
+{
+    "name": "militia",
+    "title": "Militia",
+    "cost": 10,
+    "attack": 1,
+    "defense": 1,
+    "movement": 1,
+    "image": "assets/militia.png",
+    "width": 15,
+    "height": 15,
+    "land": true
+}

@@ -9,10 +9,11 @@ window.addEventListener('load', function() {
     document.querySelector('#main-menu a.start-new-game').addEventListener('click', function(event) {
         event.preventDefault();
 
-        game.new();
-    });
+        if (game.started) {
+            return false;
+        }
 
-    document.addEventListener('keydown', () => {
-        game.emit('turn-end');
+        // TODO: options
+        game.start();
     });
 });

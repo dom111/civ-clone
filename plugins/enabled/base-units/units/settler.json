@@ -1,0 +1,13 @@
+{
+    "name": "settler",
+    "title": "Settler",
+    "cost": 40,
+    "attack": 0,
+    "defense": 1,
+    "movement": 1,
+    "image": "assets/settler.png",
+    "width": 15,
+    "height": 15,
+    "worker": true,
+    "land": true
+}

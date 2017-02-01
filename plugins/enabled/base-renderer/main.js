@@ -3,36 +3,55 @@
 var layerOrder = [
     'terrain',
     'improvements',
-    'cities'
+    'cities',
+    'units',
+    'activeUnits'
 ];
 
 game.on('start', function() {
     game.emit('build-layer', 'all');
-    game.emit('update-display');
-
-    game.map.map.forEach(function(row) {
-        row.forEach(function(tile) {
-            tile.on('improvement-built', function() {
-                game.emit('build-layer', 'improvements');
-                game.emit('update-display');
-            });
-        });
-    });
 });
 
 game.on('tile-improvement-built', function(tile, improvement) {
     game.emit('build-layer', 'improvements');
-    game.emit('update-display');
 });
 
 game.on('city-created', function(city, tile) {
     game.emit('build-layer', 'cities');
-    game.emit('update-display');
 });
 
 game.on('city-grow', function(city, tile) {
     game.emit('build-layer', 'cities');
-    game.emit('update-display');
+});
+
+game.on('unit-moved', function(unit, tile) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
+});
+
+game.on('unit-created', function(unit, tile) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
+});
+
+game.on('unit-destroyed', function(unit, tile) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
+});
+
+game.on('unit-activated', function(unit, tile) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
+});
+
+game.on('turn-over', function(unit, tile) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
+});
+
+game.on('unit-activate', function(unit) {
+    game.emit('build-layer', 'units');
+    game.emit('build-layer', 'activeUnits');
 });
 
 game.on('build-layer', function(layer) {
@@ -154,13 +173,82 @@ game.on('build-layer', function(layer) {
         // terrain layer
         layers.cities = cities.render();
     }
+
+    if (layer === 'units' || layer === 'all') {
+        var tiles = [];
+
+        game.players.forEach(function(player) {
+            player.units.forEach(function(unit) {
+                if (!unit.active && !unit.destroyed) {
+                    tiles.push({
+                        images: ['/Users/dom111/civ-one/plugins/enabled/base-units/' + unit.image],
+                        background: unit.player.colour,
+                        text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
+                        height: unit.height,
+                        width: unit.width,
+                        x: unit.tile.terrain.size * unit.tile.x,
+                        y: unit.tile.terrain.size * unit.tile.y
+                    });
+                }
+            });
+        });
+
+        var units = new Layer({
+            name: 'units',
+            tiles: tiles
+        });
+
+        // terrain layer
+        layers.units = units.render();
+    }
+
+    if (layer === 'activeUnits' || layer === 'all') {
+        var tiles = [];
+
+        game.players.forEach(function(player) {
+            player.units.forEach(function(unit) {
+                if (unit.active) {
+                    tiles.push({
+                        images: ['/Users/dom111/civ-one/plugins/enabled/base-units/' + unit.image],
+                        background: unit.player.colour,
+                        height: unit.height,
+                        width: unit.width,
+                        x: unit.tile.terrain.size * unit.tile.x,
+                        y: unit.tile.terrain.size * unit.tile.y
+                    });
+                }
+            });
+        });
+
+        var activeUnits = new Layer({
+            name: 'activeUnits',
+            tiles: tiles
+        });
+
+        // terrain layer
+        layers.activeUnits = activeUnits.render();
+    }
 });
 
-game.on('update-display', function(layer) {
+var hideFlag = false;
+
+var rendererInterval = setInterval(function() {
+    game.emit('update-display', layerOrder.filter(function(layer) {
+        if ((layer === 'activeUnits') && hideFlag) {
+            return false;
+        }
+
+        return true;
+    }));
+
+    hideFlag = !hideFlag;
+}, 150);
+
+game.on('update-display', function(layersToProcess) {
     // clear
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    layerOrder.forEach(function(layer, i) {
+    (layersToProcess || layerOrder).forEach(function(layer) {
         context.drawImage(layers[layer], 0, 0);
     });
 });
@@ -248,6 +336,15 @@ canvas.height = window.innerHeight;
 
 canvas.addEventListener('mousedown', function(event) {
     var tile = game.map.get(parseInt(event.pageX / 16), parseInt(event.pageY / 16));
-    console.log(tile);
+
+    if (tile.city) {
+        tile.city.showCityScreen();
+    }
+    else if (tile.units) {
+        console.log(tile.units);
+    }
+    else {
+        // TODO: center map
+    }
 });
 

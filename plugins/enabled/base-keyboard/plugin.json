@@ -1,0 +1,16 @@
+{
+    "name": "base-keyboard",
+    "title": "Base Keybiard",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "game-modifier",
+            "weight": 0,
+            "contents": [
+                "main.js"
+            ]
+        }
+    ],
+    "options": [],
+    "weight": 0
+}

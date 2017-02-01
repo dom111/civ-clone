@@ -7,7 +7,8 @@
     "improvements": {
         "mine": {
             "production": 3
-        }
+        },
+        "road": {}
     },
     "size": 16,
     "ocean": false,

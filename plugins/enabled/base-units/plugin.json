@@ -5,11 +5,16 @@
     "components": [
         {
             "type": "unit",
-            "weight": 0,
             "contents": [
+                "units/settler.json",
+                "units/militia.json"
+            ]
+        },
+        {
+            "type": "game-modifier",
+            "contents": [
+                "main.js"
             ]
         }
-    ],
-    "options": [],
-    "weight": 0
+    ]
 }
