@@ -1,0 +1,33 @@
+{
+    "name": "civ-one",
+    "version": "0.0.1",
+    "homepage": "https://github.com/dom111/civ-one",
+    "license": "TBD",
+    "description": "CivOne base libraries and plugin infrastructure.",
+    "main": "app/boot.js",
+    "scripts": {
+        "start": "electron app/boot.js",
+        "start-debug": "electron --debug-brk=5555 main.js"
+    },
+    "author": "dom111 <CivOne@dom111.uk>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dom111/civ-one.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dom111/civ-one/issues"
+    },
+    "keywords": [
+        "civ",
+        "civilization",
+        "civone",
+        "civ-one"
+    ],
+    "dependencies": {
+        "electron-prebuilt": "^0.36.0",
+        "mustache": "^2.0.0"
+    },
+    "devDependencies": {
+        "node-inspector": "*"
+    }
+}
