@@ -1,0 +1,11 @@
+Add map tiling - constraints (horizontal, vertical, both, neither)
+City Improvements/Wonders
+City Happiness
+Other players
+Non-human players
+Combat
+Civilizations
+Governments
+Add/fix scaling/zoom
+Add 'isVisible' method for tiles in renderer: if (!tile.isVisible) { renderer.center = tile; }
+Difficulties

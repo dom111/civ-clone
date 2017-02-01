@@ -1,6 +1,6 @@
 {
-    "name": "base-renderer",
-    "title": "Base Renderer",
+    "name": "base-statusbar",
+    "title": "Base Statusbar",
     "version": "0.0.1",
     "components": [
         {

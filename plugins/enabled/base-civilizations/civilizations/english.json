@@ -3,9 +3,9 @@
     "title": "English Civilization",
     "leaders": [
         {
-            "name": "Elizabeth I",
+            "name": "Elizabeth",
             "images": [
-                "civilizations/english-elizabeth.jpg"
+                "civilizations/images/english-elizabeth.jpg"
             ],
             "traits": {
                 "expansionist": true,
@@ -16,7 +16,7 @@
         {
             "name": "Victoria",
             "images": [
-                "civilizations/english-victoria.jpg"
+                "civilizations/images/english-victoria.jpg"
             ],
             "traits": {
                 "expansionist": true,
@@ -27,7 +27,7 @@
         {
             "name": "Winston Churchill",
             "images": [
-                "civilizations/english-churchill.jpg"
+                "civilizations/images/english-churchill.jpg"
             ],
             "traits": {
                 "expansionist": false,
