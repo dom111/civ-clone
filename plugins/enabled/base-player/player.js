@@ -99,12 +99,12 @@ engine.on('build', function() {
     });
     new engine.Unit({
         unit: 'settlers',
-        tile: engine.map.get(11, 28),
+        tile: engine.map.get(7, 3),
         player: engine.players[1]
     });
     new engine.Unit({
         unit: 'cavalry',
-        tile: engine.map.get(11, 28),
+        tile: engine.map.get(7, 3),
         player: engine.players[1]
     });
 });

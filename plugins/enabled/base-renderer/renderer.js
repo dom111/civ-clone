@@ -36,8 +36,6 @@ var BaseRenderer = class BaseRenderer {
         Engine.Plugin.filter({type: 'asset', package: 'base-renderer'}).forEach((component) => component.contents.forEach((assetPath) => renderer.preload.innerHTML += '<img src="file://' + assetPath + '"/>'));
 
         renderer.canvas = document.getElementById('display');
-        renderer.canvas.height = window.innerHeight;
-        renderer.canvas.width = window.innerWidth;
         renderer.context = renderer.canvas.getContext('2d');
 
         renderer.canvas.addEventListener('mousedown', (event) => {
@@ -137,21 +135,21 @@ var BaseRenderer = class BaseRenderer {
 
         engine.on('tile-seen', (tile) => engine.emit('build-layer', 'visibility'));
 
-        engine.on('city-created', (city, tile) => engine.emit('build-layer', 'cities'));
+        engine.on('city-created', (city) => engine.emit('build-layer', 'cities'));
 
-        engine.on('city-grow', (city, tile) => engine.emit('build-layer', 'cities'));
+        engine.on('city-grow', (city) => engine.emit('build-layer', 'cities'));
 
-        engine.on('unit-moved', (unit, tile) => {
+        engine.on('unit-moved', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-created', (unit, tile) => {
+        engine.on('unit-created', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-destroyed', (unit, tile) => {
+        engine.on('unit-destroyed', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
@@ -164,13 +162,11 @@ var BaseRenderer = class BaseRenderer {
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('player-turn-start', (unit, tile) => {
-            engine.emit('build-layer', 'visibility');
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
+        engine.on('player-turn-start', (unit) => {
+            engine.emit('build-layer', 'all');
         });
 
-        engine.on('turn-over', (unit, tile) => {
+        engine.on('turn-over', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
@@ -185,6 +181,9 @@ var BaseRenderer = class BaseRenderer {
                 renderer.center = engine.currentPlayer.activeUnit.tile;
             }
         });
+
+        renderer.canvas.height = window.innerHeight;
+        renderer.canvas.width = window.innerWidth;
 
         engine.emit('build-layer', 'all');
         engine.emit('update-display');

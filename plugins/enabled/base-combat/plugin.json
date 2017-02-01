@@ -1,0 +1,16 @@
+{
+    "name": "base-combat",
+    "title": "Base Combat",
+    "version": "0.0.1",
+    "dependencies": ["base-unit"],
+    "components": [
+        {
+            "type": "game-modifier",
+            "weight": 0,
+            "contents": [
+                "combat.js"
+            ]
+        }
+    ],
+    "weight": 100
+}
