@@ -37,6 +37,7 @@ engine.on('turn-end', function() {
 engine.on('turn-start', function() {
     engine.Notifications.add({
         name: 'date',
+        message: engine.year,
         year: engine.year
     });
 });

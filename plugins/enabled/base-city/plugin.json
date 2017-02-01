@@ -8,7 +8,22 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "main.js"
+                "city.js"
+            ]
+        },
+        {
+            "type": "style",
+            "weight": 0,
+            "contents": [
+                "style/style.css"
+            ]
+        },
+        {
+            "type": "template",
+            "label": "city-view",
+            "weight": 0,
+            "contents": [
+                "mustache/city-view.mustache"
             ]
         }
     ],

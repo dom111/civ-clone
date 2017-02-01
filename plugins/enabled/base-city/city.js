@@ -1,9 +1,9 @@
 'use strict';
 
 // bind events - could be in a static method of City?
-engine.on('turn-end', function() {
-    engine.players.forEach(function(player) {
-        player.cities.forEach(function(city) {
+engine.on('turn-end', () => {
+    engine.players.forEach((player) => {
+        player.cities.forEach((city) => {
             city.foodStorage += city.surplusFood;
 
             if (city.foodStorage >= ((city.size * 10) + 10)) {
@@ -44,42 +44,32 @@ engine.on('turn-end', function() {
 engine.on('city-captured', function(city, player) {
     var capturedCity = this;
 
-    city.player.cities = this.player.cities.filter(function(city) {
-        return (city !== capturedCity)
-    });
+    city.player.cities = this.player.cities.filter((city) => (city !== capturedCity));
     city.player = player;
     player.cities.push(this);
 });
 
-engine.on('city-destroyed', function(city, player) {
+engine.on('city-destroyed', (city, player) => {
     city.destroyed = true;
 
-    if (!city.player.cities.map(function(city) {
-        return city.destroyed;
-    }).some(function(value) {
-        return value === true;
-    })) {
+    if (!city.player.cities.map((city) => city.destroyed).some((value) => value === true)) {
         // TODO: all cities destroyed
     }
 
     // TODO: remove from map
 });
 
-engine.on('city-grow', function(city) {
+engine.on('city-grow', (city) => {
     city.autoAssignWorkers();
     city.calculateRates();
 });
 
-engine.on('city-shrink', function(city) {
+engine.on('city-shrink', (city) => {
     city.autoAssignWorkers();
     city.calculateRates();
 });
 
-engine.on('player-rate-change', function(player) {
-    player.cities.forEach(function(city) {
-        city.calculateRates();
-    });
-});
+engine.on('player-rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
 
 extend(engine, {
     City: class City {
@@ -135,12 +125,21 @@ extend(engine, {
             city.calculateRates();
         }
 
+        get ratesArray() {
+            var city = this,
+            trade = Array(city.trade).fill(1);
+
+            // TODO: check we have rates plugin available
+            return engine.availableTradeRates.map((rate) => ({
+                name: rate,
+                value: city.rates[rate]
+            }));
+        }
+
         autoAssignWorkers() {
             var city = this;
 
-            city.tilesWorked = city.tiles.filter(function(tile) {
-                return tile.isVisible(city.player.id);
-            }).map(function(square, id) {
+            city.tilesWorked = city.tiles.filter((tile) => tile.isVisible(city.player.id)).map((square, id) => {
                 return {
                     // TODO
                     weight: (
@@ -150,15 +149,7 @@ extend(engine, {
                     ),
                     id: id
                 }
-            }).sort(function(a, b) {
-                return (a.weight > b.weight) ?
-                    -1 :
-                    (a.weight === b.weight) ?
-                        0 :
-                        1
-            }).map(function(tile) {
-                return tile.id;
-            }).slice(0, this.size);
+            }).sort((a, b) => (a.weight > b.weight) ? -1 : (a.weight === b.weight) ? 0 : 1).map((tile) => tile.id).slice(0, this.size);
         }
 
         calculateRates() {
@@ -166,21 +157,15 @@ extend(engine, {
             trade = Array(city.trade).fill(1);
 
             // TODO: check we have rates plugin available
-            engine.availableTradeRates.forEach(function(rate) {
-                city.rates[rate] = trade.splice(0, Math.ceil(city.player.getRate(rate) * city.trade)).reduce(function(total, value) {
-                    return total + value;
-                }, 0);
+            engine.availableTradeRates.forEach((rate) => {
+                city.rates[rate] = trade.splice(0, Math.ceil(city.player.getRate(rate) * city.trade)).reduce((total, value) => total + value, 0);
             });
         }
 
         resource(type) {
             var city = this;
 
-            var total = city.tile[type] + city.tilesWorked.map(function(tileId) {
-                return city.tiles[tileId][type];
-            }).reduce(function(total, value) {
-                return total + value;
-            });
+            var total = city.tile[type] + city.tilesWorked.map((tileId) => city.tiles[tileId][type]).reduce((total, value) => total + value);
 
             // TODO: no hard-coded stuff!
             // Maybe something like:
@@ -212,21 +197,25 @@ extend(engine, {
             // TODO
             return [{
                 "unit": "settlers",
-                "progress": 0
+                "progress": 0,
+                "cost": 40
             }, {
                 "unit": "militia",
-                "progress": 0
+                "progress": 0,
+                "cost": 10
             }, {
                 "unit": "cavalry",
-                "progress": 0
+                "progress": 0,
+                "cost": 20
             }, {
                 "building": "barracks",
-                "progress": 0
+                "progress": 0,
+                "cost": 40
             }];
         }
 
         build(itemName) {
-            this.building = this.availableBuildItems.filter(function(item) {
+            this.building = this.availableBuildItems.filter((item) => {
                 if ('unit' in item) {
                     return item.unit == itemName;
                 }
@@ -239,7 +228,41 @@ extend(engine, {
         }
 
         showCityScreen() {
+            var city = this,
+            _show = () => {
+                // view = global.renderer.addToBody(engine.template(plugin.getFirst('template', 'city-view').contents[0], extend({}, city.valueOf())))
+                view = global.renderer.addToBody(engine.template(Engine.Plugin.filter({type: 'template', label: 'city-view', package: 'base-city'})[0].contents[0], extend({}, city.valueOf())))
 
+                // TODO: bind more clicks
+                view.querySelector('.close').addEventListener('click', _remove);
+
+                view.querySelector('.change').addEventListener('click', () => {
+                    city.building = city.availableBuildItems[Date.now()%city.availableBuildItems.length];
+                    _refresh();
+                });
+
+                return view;
+            },
+            _remove = () => view.parentNode.removeChild(view),
+            _refresh = () => {
+                _remove();
+                _show();
+            },
+            view;
+
+            _show();
+        }
+
+        valueOf() {
+            var city = this,
+            r = extend({}, this);
+
+            // getters
+            ['ratesArray', 'trade', 'food', 'production', 'surplusFood', 'availableBuildItems'].forEach((key) => {
+                r[key] = city[key];
+            });
+
+            return r;
         }
     }
 });

@@ -27,7 +27,7 @@ extend(engine, {
             });
         },
         display: function(notification) {
-            console.log(notification);
+            console.log(notification.name + ': ' + notification.message);
         }
     }
 });

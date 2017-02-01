@@ -8,13 +8,13 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "main.js"
+                "unit.js"
             ]
         },
         {
             "type": "unit",
             "contents": [
-                "units/settler.json",
+                "units/settlers.json",
                 "units/militia.json",
                 "units/cavalry.json"
             ]

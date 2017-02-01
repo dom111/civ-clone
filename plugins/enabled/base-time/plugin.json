@@ -6,7 +6,7 @@
         {
             "type": "game-modifier",
             "contents": [
-                "main.js"
+                "time.js"
             ]
         }
     ]

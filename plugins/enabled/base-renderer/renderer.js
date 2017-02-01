@@ -1,8 +1,14 @@
 'use strict';
 
-// TODO: renderer base class?
+var _stringToNode = (html) => ((el) => {
+    el.innerHTML = html;
+
+    return el.firstChild;
+})(document.createElement('div'));
+
+// TODO: renderer base class - set up prototype method that must be implemented?
 // global.BaseRenderer = class BaseRenderer extends Renderer {
-var BaseRenderer = global.BaseRenderer = class BaseRenderer {
+var BaseRenderer = class BaseRenderer {
     constructor() {
         var renderer = this;
 
@@ -18,52 +24,23 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         ];
 
         renderer.layers = {};
-
-        renderer.preload = document.getElementById('preload');
-
-        if (!renderer.preload) {
-            renderer.preload = (function(element) {
-                element.id = 'preload';
-                element.style.opacity = 0;
-                return element;
-            })(document.createElement('div'));
-
-            document.body.appendChild(renderer.preload);
-        }
-
-        plugin.get('asset').forEach(function(component) {
-            component.contents.forEach(function(assetPath) {
-                renderer.preload.innerHTML += '<img src="file://' + assetPath + '"/>';
-            });
-        });
     }
 
     init() {
         var renderer = this;
 
-        document.body.appendChild(
-            (function(element) {
-                element.id = 'game';
-                element.innerHTML = '<canvas id="display"></canvas>';
-                element.style.position = 'absolute';
-                element.style.top = '0px';
-                element.style.left = '0px';
-                element.style.zIndex = '1';
-                element.style.width = '100%';
-                element.style.height = '100%';
-                element.width = window.innerWidth;
-                element.height = window.innerHeight;
-                element.style.background = '#000 none';
-                return element;
-            })(document.createElement('section'))
-        );
+        renderer.addToBody(engine.template(Engine.Plugin.filter({type: 'template', package: 'base-renderer', label: 'layout'})[0].contents[0]));
 
-        renderer.canvas = document.getElementById('display'),
-        renderer.canvas.width = window.innerWidth;
+        renderer.preload = document.getElementById('preload');
+
+        Engine.Plugin.filter({type: 'asset', package: 'base-renderer'}).forEach((component) => component.contents.forEach((assetPath) => renderer.preload.innerHTML += '<img src="file://' + assetPath + '"/>'));
+
+        renderer.canvas = document.getElementById('display');
         renderer.canvas.height = window.innerHeight;
+        renderer.canvas.width = window.innerWidth;
         renderer.context = renderer.canvas.getContext('2d');
 
-        renderer.canvas.addEventListener('mousedown', function(event) {
+        renderer.canvas.addEventListener('mousedown', (event) => {
             var x = event.pageX,
             y = event.pageY,
             tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
@@ -90,7 +67,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             }
         });
 
-        renderer.canvas.addEventListener('mousemove', function(event) {
+        renderer.canvas.addEventListener('mousemove', (event) => {
             if (event.shiftKey) {
                 var x = event.pageX,
                 y = event.pageY,
@@ -111,7 +88,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         });
 
         // TODO: throttle
-        addEventListener('resize', function() {
+        addEventListener('resize', () => {
             renderer.canvas.height = window.innerHeight;
             renderer.canvas.width = window.innerWidth;
 
@@ -119,17 +96,13 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             engine.emit('update-display');
         });
 
-        engine.on('build-layer', function(layer) {
-            renderer.buildLayer(layer || 'all');
-        });
+        engine.on('build-layer', (layer) => renderer.buildLayer(layer || 'all'));
 
-        engine.on('update-display', function(layersToProcess) {
-            renderer.updateDisplay(layersToProcess);
-        });
+        engine.on('update-display', (layersToProcess) => renderer.updateDisplay(layersToProcess));
 
         renderer.hideFlag = false;
-        renderer.interval = setInterval(function() {
-            engine.emit('update-display', renderer.layerOrder.filter(function(layer) {
+        renderer.interval = setInterval(() => {
+            engine.emit('update-display', renderer.layerOrder.filter((layer) => {
                 if ((layer === 'activeUnits') && renderer.hideFlag) {
                     return false;
                 }
@@ -142,9 +115,9 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             // TODO: pallette cycling for coast/river animations
         }, 125);
 
-        document.body.style.cursor = 'url("' + __path + 'assets/cursor/torch.gif"), auto';
+        document.body.style.cursor = 'url("' + Engine.Plugin.getPath('base-renderer') + 'assets/cursor/torch.gif"), auto';
 
-        engine.on('tile-improvement-built', function(tile, improvement) {
+        engine.on('tile-improvement-built', (tile, improvement) => {
             if (improvement === 'irrigation') {
                 engine.emit('build-layer', improvement);
             }
@@ -153,7 +126,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             }
         });
 
-        engine.on('tile-improvement-pillaged', function(tile, improvement) {
+        engine.on('tile-improvement-pillaged', (tile, improvement) => {
             if (improvement === 'irrigation') {
                 engine.emit('build-layer', improvement);
             }
@@ -162,55 +135,69 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             }
         });
 
-        engine.on('tile-seen', function(tile) {
+        engine.on('tile-seen', (tile) => engine.emit('build-layer', 'visibility'));
+
+        engine.on('city-created', (city, tile) => engine.emit('build-layer', 'cities'));
+
+        engine.on('city-grow', (city, tile) => engine.emit('build-layer', 'cities'));
+
+        engine.on('unit-moved', (unit, tile) => {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
+        });
+
+        engine.on('unit-created', (unit, tile) => {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
+        });
+
+        engine.on('unit-destroyed', (unit, tile) => {
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
+        });
+
+        engine.on('unit-activate', (unit) => {
+            if (!renderer.tileIsVisible(unit.tile)) {
+                renderer.center = unit.tile;
+            }
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
+        });
+
+        engine.on('player-turn-start', (unit, tile) => {
             engine.emit('build-layer', 'visibility');
-        });
-
-        engine.on('city-created', function(city, tile) {
-            engine.emit('build-layer', 'cities');
-        });
-
-        engine.on('city-grow', function(city, tile) {
-            engine.emit('build-layer', 'cities');
-        });
-
-        engine.on('unit-moved', function(unit, tile) {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-created', function(unit, tile) {
+        engine.on('turn-over', (unit, tile) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-destroyed', function(unit, tile) {
+        engine.on('unit-activate', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-activated', function(unit, tile) {
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
-        });
-
-        engine.on('turn-over', function(unit, tile) {
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
-        });
-
-        engine.on('unit-activate', function(unit) {
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
-        });
-
-        engine.emit('bind-key', 'unit', 'c', function() {
+        engine.emit('bind-key', 'unit', 'c', () => {
             if (engine.currentPlayer && engine.currentPlayer.activeUnit) {
                 renderer.center = engine.currentPlayer.activeUnit.tile;
             }
         });
 
         engine.emit('build-layer', 'all');
+        engine.emit('update-display');
+    }
+
+    addToBody(element) {
+        if (typeof element === 'string') {
+            element = _stringToNode(element);
+        }
+
+        document.body.appendChild(element);
+
+        return element;
     }
 
     buildLayer(layer) {
@@ -219,17 +206,17 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'land' || layer === 'all') {
             var tiles = [];
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
+            engine.map.map.forEach((row) => {
+                row.forEach((tile) => {
                     tiles.push({
-                        images: (function() {
+                        images: (() => {
                             var images = [];
 
                             if (tile.isOcean) {
-                                images.push(__path + 'assets/terrain/ocean.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/ocean.gif');
                             }
                             else if (tile.isLand) {
-                                images.push(__path + 'assets/terrain/land.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/land.gif');
                             }
 
                             return images;
@@ -254,11 +241,11 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'irrigation' || layer === 'all') {
             var tiles = [];
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
+            engine.map.map.forEach((row) => {
+                row.forEach((tile) => {
                     if (tile.improvements.includes('irrigation')) {
                         tiles.push({
-                            images: [__path + 'assets/improvements/irrigation.gif'],
+                            images: [Engine.Plugin.getPath('base-renderer') + 'assets/improvements/irrigation.gif'],
                             height: tile.terrain.size,
                             width: tile.terrain.size,
                             x: tile.terrain.size * tile.x,
@@ -279,14 +266,14 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'baseTerrain' || layer === 'all') {
             var tiles = [];
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
+            engine.map.map.forEach((row) => {
+                row.forEach((tile) => {
                     var images = [];
 
                     if (tile.isOcean) {
                         if (tile.isCoast) {
                             var sprite = new global.Image();
-                            sprite.src = __path + 'assets/terrain/coast_sprite.gif';
+                            sprite.src = Engine.Plugin.getPath('base-renderer') + 'assets/terrain/coast_sprite.gif';
                             var image = document.createElement('canvas'),
                             imageContext = image.getContext('2d'),
 
@@ -326,42 +313,38 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
 
                             images.push(image);
 
-                            ['n', 'e', 's', 'w'].filter(function(direction) {
-                                return (tile.adjacent[direction].terrain.name === 'river')
-                            }).forEach(function(direction) {
-                                images.push(__path + 'assets/terrain/river_mouth_' + direction + '.gif');
-                            });
+                            ['n', 'e', 's', 'w']
+                                .filter((direction) => (tile.adjacent[direction].terrain.name === 'river'))
+                                .forEach((direction) => images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/river_mouth_' + direction + '.gif'));
                         }
 
                         if (tile.terrain.special) {
-                            images.push(__path + 'assets/terrain/' + tile.terrain.special.name + '.gif');
+                            images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.special.name + '.gif');
                         }
                     }
                     else {
                         if (tile.terrain.name === 'river') {
-                            var adjoining = ['n', 'e', 's', 'w'].filter(function(direction) {
-                                return (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))
-                            }).join('');
+                            var adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
 
                             if (adjoining) {
-                                images.push(__path + 'assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif');
                             }
                             else {
-                                images.push(__path + 'assets/terrain/' + tile.terrain.name + '.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.name + '.gif');
                             }
                         }
                         else {
                             var adjoining = tile.adjacentTerrain;
 
                             if (adjoining) {
-                                images.push(__path + 'assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif');
                             }
                             else {
-                                images.push(__path + 'assets/terrain/' + tile.terrain.name + '.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.name + '.gif');
                             }
 
                             if (tile.terrain.special) {
-                                images.push(__path + 'assets/terrain/' + tile.terrain.special.name + '.gif');
+                                images.push(Engine.Plugin.getPath('base-renderer') + 'assets/terrain/' + tile.terrain.special.name + '.gif');
                             }
                         }
                     }
@@ -390,48 +373,38 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'otherImprovements' || layer === 'all') {
             var tiles = [];
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
-                    var otherImprovements = tile.improvements.filter(function(improvement) {
-                        return improvement !== 'irrigation';
-                    });
+            engine.map.map.forEach((row) => {
+                row.forEach((tile) => {
+                    var otherImprovements = tile.improvements.filter((improvement) => improvement !== 'irrigation');
 
                     if (otherImprovements.length) {
                         tiles.push({
-                            images: (function() {
+                            images: (() => {
                                 var images = [];
 
-                                otherImprovements.forEach(function(improvement) {
+                                otherImprovements.forEach((improvement) => {
                                     if (improvement === 'road' && !otherImprovements.includes('railroad')) {
-                                        var adjoining = Object.keys(tile.neighbours).filter(function(direction) {
-                                            return tile.neighbours[direction].improvements.includes('road');
-                                        });
+                                        var adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
 
                                         if (adjoining.length) {
-                                            adjoining.forEach(function(direction) {
-                                                images.push(__path + 'assets/improvements/' + improvement + '_' + direction + '.gif');
-                                            });
+                                            adjoining.forEach((direction) => images.push(Engine.Plugin.getPath('base-renderer') + 'assets/improvements/' + improvement + '_' + direction + '.gif'));
                                         }
                                         else {
-                                            images.push(__path + 'assets/improvements/' + improvement + '.gif');
+                                            images.push(Engine.Plugin.getPath('base-renderer') + 'assets/improvements/' + improvement + '.gif');
                                         }
                                     }
                                     else if (improvement === 'railroad') {
-                                        var adjoining = Object.keys(tile.neighbours).filter(function(direction) {
-                                            return tile.neighbours[direction].improvements.includes('road');
-                                        });
+                                        var adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
 
                                         if (adjoining.length) {
-                                            adjoining.forEach(function(direction) {
-                                                images.push(__path + 'assets/improvements/' + improvement + '_' + direction + '.gif');
-                                            });
+                                            adjoining.forEach((direction) => images.push(Engine.Plugin.getPath('base-renderer') + 'assets/improvements/' + improvement + '_' + direction + '.gif'));
                                         }
                                         else {
-                                            images.push(__path + 'assets/improvements/' + improvement + '.gif');
+                                            images.push(Engine.Plugin.getPath('base-renderer') + 'assets/improvements/' + improvement + '.gif');
                                         }
                                     }
                                     else {
-                                        images.push(__path + 'assets/improvements/' + improvement + '.gif');
+                                        images.push(Engine.Plugin.getPath('base-renderer') + 'assets/improvements/' + improvement + '.gif');
                                     }
                                 });
 
@@ -457,19 +430,17 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'units' || layer === 'all') {
             var tiles = [];
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
+            engine.map.map.forEach((row) => {
+                row.forEach((tile) => {
                     if (!engine.currentPlayer || !engine.currentPlayer.activeUnit || engine.currentPlayer.activeUnit.tile !== tile) {
-                        var unit = tile.units.sort(function(a, b) {
-                            return a.defence > b.defense ? -1 : a.defense == a.defense ? 0 : 1;
-                        })[0],
+                        var unit = tile.units.sort((a, b) => a.defence > b.defense ? -1 : a.defense == a.defense ? 0 : 1)[0],
                         images = [];
 
                         if (tile.units.length) {
                             var image = document.createElement('canvas'),
                             imageContext = image.getContext('2d'),
                             unitImage = new global.Image;
-                            unitImage.src = 'file://' + __path + 'assets/units/' + unit.name + '.gif'; // TODO: have each unit details as a component
+                            unitImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/units/' + unit.name + '.gif'; // TODO: have each unit details as a component
                             image.width = unitImage.width;
                             image.height = unitImage.height;
 
@@ -485,18 +456,18 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                             images.push(image);
 
                             if (images.length) {
-                                var sourceColors = plugin.get('asset', 'units')[0].sourceColors,
+                                var sourceColors = Engine.Plugin.filter({type: 'asset', label: 'units'})[0].sourceColors,
                                 replaceColors = unit.player.colors;
 
                                 tiles.push({
-                                    images: images.map(function(image) {
+                                    images: images.map((image) => {
                                         if ('getContext' in image) {
                                             image = renderer.replaceColor(image, sourceColors, replaceColors)
                                         }
 
                                         return image;
                                     }),
-                                    text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
+                                    // text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
                                     height: unit.height,
                                     width: unit.width,
                                     x: unit.tile.terrain.size * unit.tile.x,
@@ -520,10 +491,25 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         if (layer === 'cities' || layer === 'all') {
             var tiles = [];
 
-            engine.players.forEach(function(player) {
-                player.cities.forEach(function(city) {
+            engine.players.forEach((player) => {
+                player.cities.forEach((city) => {
+                    var image = document.createElement('canvas'),
+                    imageContext = image.getContext('2d'),
+                    cityImage = new global.Image;
+                    cityImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/map/city.gif';
+                    replaceColors = city.player.colors;
+                    image.width = city.tile.terrain.size;
+                    image.height = city.tile.terrain.size;
+                    imageContext.beginPath();
+                    imageContext.rect(0, 0, city.tile.terrain.size, city.tile.terrain.size);
+                    imageContext.fillStyle = replaceColors[0];
+                    imageContext.fill();
+                    imageContext.drawImage(cityImage, 0, 0);
+
+                    image = renderer.replaceColor(image, ['#000'], [replaceColors[1]])
+
                     tiles.push({
-                        images: [__path + 'assets/map/city.gif'],
+                        images: [image],
                         background: city.player.colour,
                         text: city.size,
                         textBelow: city.name,
@@ -556,7 +542,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                     var image = document.createElement('canvas'),
                     imageContext = image.getContext('2d'),
                     unitImage = new global.Image;
-                    unitImage.src = 'file://' + __path + 'assets/units/' + unit.name + '.gif';
+                    unitImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/units/' + unit.name + '.gif';
                     image.width = unitImage.width;
                     image.height = unitImage.height;
 
@@ -572,14 +558,12 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                     images.push(image);
 
                     if (images.length) {
-                        var sourceColors = plugin.get('asset', 'units')[0].sourceColors;
+                        var sourceColors = Engine.Plugin.filter({package: 'base-renderer', type: 'asset', label: 'units'})[0].sourceColors;
                         var replaceColors = engine.currentPlayer.colors;
 
                         tiles.push({
-                            images: images.map(function(image) {
-                                return renderer.replaceColor(image, sourceColors, replaceColors);
-                            }),
-                            text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
+                            images: images.map((image) => renderer.replaceColor(image, sourceColors, replaceColors)),
+                            // text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
                             height: unit.height,
                             width: unit.width,
                             x: unit.tile.terrain.size * unit.tile.x,
@@ -600,47 +584,51 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
 
         if (layer === 'visibility' || layer === 'all') {
             var tiles = [],
-            player = engine.currentPlayer;
+            player;
 
-            engine.map.map.forEach(function(row) {
-                row.forEach(function(tile) {
-                    if (!tile.isVisible(player.id)) {
-                        tiles.push({
-                            background: '#000',
-                            height: tile.terrain.size,
-                            width: tile.terrain.size,
-                            x: tile.terrain.size * tile.x,
-                            y: tile.terrain.size * tile.y
-                        });
-                    }
-                    else {
-                        var images = [];
+            if (engine.currentPlayer) {
+                player = engine.currentPlayer;
 
-                        ['n', 'e', 's', 'w'].forEach(function(direction) {
-                            if (!tile.adjacent[direction].isVisible(player.id)) {
-                                images.push(__path + 'assets/map/fog_' + direction + '.gif');
-                            }
-                        });
-
-                        if (images.length) {
+                engine.map.map.forEach((row) => {
+                    row.forEach((tile) => {
+                        if (!tile.isVisible(player.id)) {
                             tiles.push({
-                                images: images,
+                                background: '#000',
                                 height: tile.terrain.size,
                                 width: tile.terrain.size,
                                 x: tile.terrain.size * tile.x,
                                 y: tile.terrain.size * tile.y
                             });
                         }
-                    }
+                        else {
+                            var images = [];
+
+                            ['n', 'e', 's', 'w'].forEach((direction) => {
+                                if (!tile.adjacent[direction].isVisible(player.id)) {
+                                    images.push(Engine.Plugin.getPath('base-renderer') + 'assets/map/fog_' + direction + '.gif');
+                                }
+                            });
+
+                            if (images.length) {
+                                tiles.push({
+                                    images: images,
+                                    height: tile.terrain.size,
+                                    width: tile.terrain.size,
+                                    x: tile.terrain.size * tile.x,
+                                    y: tile.terrain.size * tile.y
+                                });
+                            }
+                        }
+                    });
                 });
-            });
 
-            var visibility = new BaseRenderer.Layer({
-                name: 'visibility',
-                tiles: tiles
-            });
+                var visibility = new BaseRenderer.Layer({
+                    name: 'visibility',
+                    tiles: tiles
+                });
 
-            renderer.layers.visibility = visibility.render();
+                renderer.layers.visibility = visibility.render();
+            }
         }
 
         renderer.updateDisplay();
@@ -651,7 +639,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         context.save();
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-        var _getColor = function(input) {
+        var _getColor = (input) => {
             var match = [],
             color = {};
 
@@ -705,7 +693,7 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         replaceColors = replacement.map(_getColor);
 
         for (var i = 0; i < imageData.data.length; i += 4) {
-            sourceColors.forEach(function(color, n) {
+            sourceColors.forEach((color, n) => {
                 if (imageData.data[i] === color.r && imageData.data[i + 1] === color.g && imageData.data[i + 2] === color.b) {
                     imageData.data[i] = (replaceColors[n] || replaceColors[0]).r;
                     imageData.data[i + 1] = (replaceColors[n] || replaceColors[0]).g;
@@ -765,15 +753,22 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             endY += layerHeight;
         }
 
-        (layersToProcess || renderer.layerOrder).forEach(function(layer) {
+        (layersToProcess || renderer.layerOrder).forEach((layer) => {
             for (var x = startX; x < endX; x += layerWidth * engine.scale) {
                 for (var y = startY; y < endY; y += layerHeight * engine.scale) {
-                    renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * engine.scale, layerHeight * engine.scale);
+                    if (renderer.layers[layer]) {
+                        renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * engine.scale, layerHeight * engine.scale);
+                    }
                 }
             }
         });
 
         renderer.context.drawImage(renderer.portal, 0, 0);
+    }
+
+    // this fuzzes the visibility to be within 75% of visible space
+    tileIsVisible(tile) {
+        return (Math.abs(renderer.center.x - tile.x) < 20) && (Math.abs(renderer.center.y - tile.y) < 20);
     }
 };
 
@@ -792,8 +787,8 @@ BaseRenderer.Layer = class BaseLayer {
         layer.context = layer.canvas.getContext('2d');
         layer.images = {};
 
-        layer.tiles.forEach(function(tile) {
-            tile.images = (tile.images || []).map(function(image) {
+        layer.tiles.forEach((tile) => {
+            tile.images = (tile.images || []).map((image) => {
                 if (typeof image !== 'string') {
                     return image;
                 }
@@ -811,13 +806,13 @@ BaseRenderer.Layer = class BaseLayer {
     render() {
         var layer = this;
 
-        layer.tiles.forEach(function(tile) {
+        layer.tiles.forEach((tile) => {
             if (tile.background) {
                 layer.context.fillStyle = tile.background;
                 layer.context.fillRect(tile.x, tile.y, tile.width, tile.height);
             }
 
-            tile.images.forEach(function(image) {
+            tile.images.forEach((image) => {
                 layer.context.drawImage(image, tile.x + (Math.floor((tile.width - image.width) / 2)), tile.y + (Math.floor((tile.height - image.height) / 2)), image.width, image.height);
             });
 
@@ -834,76 +829,74 @@ BaseRenderer.Layer = class BaseLayer {
 };
 
 // utility
-BaseRenderer.Extract = {
-    data: engine.loadJSON(__path + 'extract-data.json'),
-    images: [],
-    loadImages: function() {
-        ['SP257.gif', 'TER257.gif'].forEach(function(file) {
-            var image = new global.Image();
-            image.src = 'file://' + __path + file;
+// BaseRenderer.Extract = {
+//     data: engine.loadJSON(Engine.Plugin.getPath('base-renderer') + 'extract-data.json'),
+//     images: [],
+//     loadImages: () => {
+//         ['SP257.gif', 'TER257.gif'].forEach((file) => {
+//             var image = new global.Image();
+//             image.src = 'file://' + Engine.Plugin.getPath('base-renderer') + file;
 
-            BaseRenderer.Extract.images.push({
-                element: image,
-                file: file
-            });
-        });
-    },
-    run: function() {
-        var canvas = document.createElement('canvas'),
-        context = canvas.getContext('2d');
+//             BaseRenderer.Extract.images.push({
+//                 element: image,
+//                 file: file
+//             });
+//         });
+//     },
+//     run: () => {
+//         var canvas = document.createElement('canvas'),
+//         context = canvas.getContext('2d');
 
-        BaseRenderer.Extract.images.forEach(function(image) {
-            Object.keys(BaseRenderer.Extract.data.files[image.file]).forEach(function(path) {
-                var definitions = BaseRenderer.Extract.data.files[image.file][path];
+//         BaseRenderer.Extract.images.forEach((image) => {
+//             Object.keys(BaseRenderer.Extract.data.files[image.file]).forEach((path) => {
+//                 var definitions = BaseRenderer.Extract.data.files[image.file][path];
 
-                definitions.forEach(function(definition) {
-                    definition.contents.forEach(function(content) {
-                        var object = extend({}, BaseRenderer.Extract.data.defaults, definition, content),
-                        filename = __path + 'assets/' + path + object.name + '.gif',
-                        dirname = filename.replace(/\/[^\/]+$/, '/');
+//                 definitions.forEach((definition) => {
+//                     definition.contents.forEach((content) => {
+//                         var object = extend({}, BaseRenderer.Extract.data.defaults, definition, content),
+//                         filename = Engine.Plugin.getPath('base-renderer') + 'assets/' + path + object.name + '.gif',
+//                         dirname = filename.replace(/\/[^\/]+$/, '/');
 
-                        canvas.width = object.width;
-                        canvas.height = object.height;
-                        context.clearRect(0, 0, canvas.width, canvas.height);
-                        context.drawImage(image.element, -object.x, -object.y);
+//                         canvas.width = object.width;
+//                         canvas.height = object.height;
+//                         context.clearRect(0, 0, canvas.width, canvas.height);
+//                         context.drawImage(image.element, -object.x, -object.y);
 
-                        for (var x = 0; x < canvas.width; x++) {
-                            for (var y = 0; y < canvas.height; y++) {
-                                var imageData = context.getImageData(x, y, 1, 1).data;
+//                         for (var x = 0; x < canvas.width; x++) {
+//                             for (var y = 0; y < canvas.height; y++) {
+//                                 var imageData = context.getImageData(x, y, 1, 1).data;
 
-                                if (imageData[0] == object.clear.r && imageData[1] == object.clear.g && imageData[2] == object.clear.b) {
-                                    context.clearRect(x, y, 1, 1);
-                                }
-                            }
-                        }
+//                                 if (imageData[0] == object.clear.r && imageData[1] == object.clear.g && imageData[2] == object.clear.b) {
+//                                     context.clearRect(x, y, 1, 1);
+//                                 }
+//                             }
+//                         }
 
-                        // ensure assets directory exists
-                        try {
-                            fs.accessSync(__path + 'assets/', fs.F_OK);
-                        }
-                        catch (e) {
-                            fs.mkdirSync(__path + 'assets/');
-                        };
+//                         // ensure assets directory exists
+//                         try {
+//                             fs.accessSync(Engine.Plugin.getPath('base-renderer') + 'assets/', fs.F_OK);
+//                         }
+//                         catch (e) {
+//                             fs.mkdirSync(Engine.Plugin.getPath('base-renderer') + 'assets/');
+//                         };
 
-                        try {
-                            fs.accessSync(dirname, fs.F_OK);
-                        }
-                        catch (e) {
-                            fs.mkdirSync(dirname);
-                        };
+//                         try {
+//                             fs.accessSync(dirname, fs.F_OK);
+//                         }
+//                         catch (e) {
+//                             fs.mkdirSync(dirname);
+//                         };
 
-                        var buffer = new Buffer(canvas.toDataURL('image/gif').split(/,/)[1], 'base64');
+//                         var buffer = new Buffer(canvas.toDataURL('image/gif').split(/,/)[1], 'base64');
 
-                        fs.writeFileSync(filename, buffer);
-                    });
-                });
-            });
-        });
-    }
-};
+//                         fs.writeFileSync(filename, buffer);
+//                     });
+//                 });
+//             });
+//         });
+//     }
+// };
 
 global.renderer = new BaseRenderer();
 
-engine.on('start', function() {
-    global.renderer.init();
-});
+engine.on('start', () => global.renderer.init());

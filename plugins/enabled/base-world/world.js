@@ -1,24 +1,5 @@
 'use strict';
 
-// events
-engine.on('tile-improvement-built', function(tile, improvement) {
-    if (!tile.improvements.includes(improvement)) {
-        tile.improvements.push(improvement);
-    }
-});
-
-engine.on('tile-improvement-pillaged', function(tile, improvement) {
-    if (tile.improvements.includes(improvement)) {
-        tile.improvements = tile.improvements.filter(function(currentImprovement) {
-            return currentImprovement !== improvement;
-        });
-    }
-});
-
-engine.on('tile-seen', function(tile, player) {
-    tile.seenBy[player.id] = 1;
-});
-
 extend(engine, {
     World: class World {
         constructor() {
@@ -28,8 +9,8 @@ extend(engine, {
 
             map.seed = Math.ceil(Math.random() * 1e7);
 
-            Engine.Plugin.get('terrain').forEach(function(terrain) {
-                terrain.contents.forEach(function(file) {
+            Engine.Plugin.get('terrain').forEach((terrain) => {
+                terrain.contents.forEach((file) => {
                     var terrainDefinition = engine.loadJSON(file);
 
                     if ('image' in terrainDefinition) {
@@ -37,13 +18,11 @@ extend(engine, {
                     }
 
                     if ('adjacentImages' in terrainDefinition) {
-                        Object.keys(terrainDefinition.adjacentImages).forEach(function(key) {
-                            terrainDefinition.adjacentImages[key] = terrain.__path + terrainDefinition.adjacentImages[key];
-                        });
+                        Object.keys(terrainDefinition.adjacentImages).forEach((key) => terrainDefinition.adjacentImages[key] = terrain.__path + terrainDefinition.adjacentImages[key]);
                     }
 
                     if ('special' in terrainDefinition) {
-                        terrainDefinition.special = terrainDefinition.special.map(function(special) {
+                        terrainDefinition.special = terrainDefinition.special.map((special) => {
                             if ('overlay' in special) {
                                 special.overlay = terrain.__path + special.overlay;
                             }
@@ -56,16 +35,14 @@ extend(engine, {
                 });
             });
 
-            map.map = map.generate().map(function(row, y) {
-                return row.map(function(terrainId, x) {
-                    return new engine.World.Tile({
-                        x: x,
-                        y: y,
-                        terrainId: terrainId,
-                        terrain: map.getTerrainType(terrainId),
-                        map: map
-                    });
-                });
+            map.map = map.generate().map((row, y) => {
+                return row.map((terrainId, x) => new engine.World.Tile({
+                    x: x,
+                    y: y,
+                    terrainId: terrainId,
+                    terrain: map.getTerrainType(terrainId),
+                    map: map
+                }));
             });
         }
 
@@ -213,7 +190,7 @@ extend(engine.World, {
             tile.seed = Math.ceil(Math.random() * 1e7);
 
             if ('special' in tile.terrain && Array.isArray(tile.terrain.special)) {
-                tile.terrain.special.forEach(function(special) {
+                tile.terrain.special.forEach((special) => {
                     if (Array.isArray(tile.terrain.special)) {
                         if ((tile.seed + tile.map.seed * ((tile.x + 1) + (tile.y + 1))) % 100 < special.chance) {
                             tile.terrain.special = special;
@@ -257,9 +234,7 @@ extend(engine.World, {
             adjacent = tile.adjacent,
             result = '';
 
-            return ['n', 'e', 's', 'w'].filter(function(position) {
-                return (adjacent[position].terrainId === tile.terrainId);
-            }).join('');
+            return ['n', 'e', 's', 'w'].filter((position) => (adjacent[position].terrainId === tile.terrainId)).join('');
         }
 
         get isOcean() {
@@ -270,19 +245,13 @@ extend(engine.World, {
             var tile = this;
 
             return tile.isOcean &&
-                Object.keys(tile.neighbours).map(function(direction) {
-                    return tile.neighbours[direction].isLand
-                }).some(function(value) {
-                    return value === true;
-                });
+                Object.keys(tile.neighbours).some((direction) => tile.neighbours[direction].isLand);
         }
 
         get coast() {
             var tile = this;
 
-            return Object.keys(this.neighbours).filter(function(direction) {
-                return tile.neighbours[direction].isLand;
-            });
+            return Object.keys(this.neighbours).filter((direction) => tile.neighbours[direction].isLand);
         }
 
         get isLand() {
@@ -300,11 +269,7 @@ extend(engine.World, {
                 tile.terrain[type] = tile.terrain[type](tile.map, tile.x, tile.y);
             }
 
-            return (this.terrain[type] + tile.improvements.map(function(improvement) {
-                return (tile.terrain.improvements[improvement] || {})[type] || 0;
-            }).reduce(function(total, value) {
-                return total + value;
-            }, 0)) || 0;
+            return (this.terrain[type] + tile.improvements.map((improvement) => (tile.terrain.improvements[improvement] || {})[type] || 0).reduce((total, value) => total + value, 0)) || 0;
         }
 
         get trade() {
@@ -335,6 +300,19 @@ extend(engine.World, {
     }
 });
 
-engine.on('build', function() {
-    engine.map = new engine.World();
+// events
+engine.on('tile-improvement-built', (tile, improvement) => {
+    if (!tile.improvements.includes(improvement)) {
+        tile.improvements.push(improvement);
+    }
 });
+
+engine.on('tile-improvement-pillaged', (tile, improvement) => {
+    if (tile.improvements.includes(improvement)) {
+        tile.improvements = tile.improvements.filter((currentImprovement) => currentImprovement !== improvement);
+    }
+});
+
+engine.on('tile-seen', (tile, player) => tile.seenBy[player.id] = 1);
+
+engine.on('build', () => engine.map = new engine.World());

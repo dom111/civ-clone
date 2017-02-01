@@ -4,7 +4,7 @@ var Statusbar = global.Statusbar = class Statusbar {
     init() {
         var statusbar = this;
 
-        this.element = (function(element) {
+        this.element = ((element) => {
             element.id = 'statusbar';
             element.innerHTML = '<div class="status"><ul><li class="year"></li></ul></div><div class="unit"></div>';
             element.style.position = 'absolute';
@@ -46,17 +46,15 @@ var Statusbar = global.Statusbar = class Statusbar {
                 this.element.querySelector('.unit').innerHTML = '<ul><li>' + player.people + ' ' + unit.title + '</li><li>' + unit.movesLeft + ' moves remaining</li></ul>';
             }
             else {
-                console.log('No activeUnit', player);
+                // console.log('No activeUnit', player);
             }
         }
         else {
-            console.log('No currentPlayer', engine);
+            // console.log('No currentPlayer', engine);
         }
     }
 };
 
 engine.statusbar = new Statusbar();
 
-engine.on('start', function() {
-    engine.statusbar.init();
-});
+engine.on('start', () => engine.statusbar.init());

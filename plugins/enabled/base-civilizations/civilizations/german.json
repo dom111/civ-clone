@@ -16,7 +16,7 @@
             }
         }
     ],
-    "cities": [
+    "cityNames": [
         "Berlin",
         "Hamburg",
         "Munich",

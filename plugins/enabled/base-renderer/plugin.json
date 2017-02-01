@@ -7,7 +7,23 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "main.js"
+                "renderer.js"
+            ]
+        },
+
+        {
+            "type": "template",
+            "label": "layout",
+            "weight": 0,
+            "contents": [
+                "mustache/layout.mustache"
+            ]
+        },
+        {
+            "type": "style",
+            "weight": 0,
+            "contents": [
+                "style/style.css"
             ]
         },
 
@@ -362,7 +378,7 @@
                 "assets/units/phalanx.gif",
                 "assets/units/rifleman.gif",
                 "assets/units/sail.gif",
-                "assets/units/settler.gif",
+                "assets/units/settlers.gif",
                 "assets/units/submarine.gif",
                 "assets/units/transport.gif"
             ],

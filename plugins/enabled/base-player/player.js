@@ -67,7 +67,7 @@ extend(engine, {
 });
 
 engine.__defineGetter__('isTurnEnd', function() {
-    return this.currentPlayer.actionsLeft === 0;
+    return this.playersToAction.length === 0 || this.currentPlayer.actionsLeft === 0;
 });
 
 engine.on('build', function() {
@@ -87,26 +87,46 @@ engine.on('build', function() {
     engine.players.push(new engine.Player());
 
     // TODO: this is testing data
-    engine.currentPlayer = engine.players[0];
+    new engine.Unit({
+        unit: 'settlers',
+        tile: engine.map.get(3, 3),
+        player: engine.players[0]
+    });
+    new engine.Unit({
+        unit: 'cavalry',
+        tile: engine.map.get(3, 3),
+        player: engine.players[0]
+    });
+    new engine.Unit({
+        unit: 'settlers',
+        tile: engine.map.get(11, 28),
+        player: engine.players[1]
+    });
+    new engine.Unit({
+        unit: 'cavalry',
+        tile: engine.map.get(11, 28),
+        player: engine.players[1]
+    });
+});
 
-    new engine.Unit({
-        unit: 'settler',
-        tile: engine.map.get(3, 3),
-        player: engine.players[0]
-    });
-    new engine.Unit({
-        unit: 'cavalry',
-        tile: engine.map.get(3, 3),
-        player: engine.players[0]
-    });
-    new engine.Unit({
-        unit: 'settler',
-        tile: engine.map.get(11, 28),
-        player: engine.players[1]
-    });
-    new engine.Unit({
-        unit: 'cavalry',
-        tile: engine.map.get(11, 28),
-        player: engine.players[1]
-    });
+engine.on('turn-start', () => {
+    engine.playersToAction = engine.players.slice(0);
+    engine.currentPlayer = engine.playersToAction.shift();
+
+    engine.emit('player-turn-start', engine.currentPlayer);
+});
+
+engine.on('player-turn-end', (player) => {
+    if (engine.isTurnEnd) {
+        if (engine.playersToAction.length) {
+            engine.currentPlayer = engine.playersToAction.shift();
+            engine.emit('player-turn-start', engine.currentPlayer);
+        }
+        else {
+            engine.emit('turn-end');
+        }
+    }
+    else {
+        console.log('Not turn end.');
+    }
 });

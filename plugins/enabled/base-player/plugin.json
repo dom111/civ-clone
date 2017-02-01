@@ -8,7 +8,7 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "main.js"
+                "player.js"
             ]
         }
     ],

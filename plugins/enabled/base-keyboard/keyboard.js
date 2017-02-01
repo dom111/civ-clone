@@ -149,7 +149,7 @@ engine.on('start', function(unit) {
     // TODO: move game-wide shortcuts to config file
     engine.emit('bind-key', 'game', 'enter', function() {
         if (engine.isTurnEnd) {
-            engine.emit('turn-end');
+            engine.emit('player-turn-end');
         }
         else {
             console.log(engine.currentPlayer.actionsLeft + ' action(s) left to perform.');

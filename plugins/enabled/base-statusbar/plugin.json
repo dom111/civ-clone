@@ -7,7 +7,15 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "main.js"
+                "statusbar.js"
+            ]
+        },
+        {
+            "type": "template",
+            "label": "layout",
+            "weight": 0,
+            "contents": [
+                "mustache/layout.mustache"
             ]
         }
     ]

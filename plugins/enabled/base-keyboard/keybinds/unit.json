@@ -55,31 +55,31 @@
         "keys": ["b"],
         "action": "action",
         "args": ["buildCity"],
-        "include": ["settler"]
+        "include": ["settlers"]
     },
     {
         "keys": ["i"],
         "action": "action",
         "args": ["irrigate"],
-        "include": ["settler"]
+        "include": ["settlers"]
     },
     {
         "keys": ["m"],
         "action": "action",
         "args": ["mine"],
-        "include": ["settler"]
+        "include": ["settlers"]
     },
     {
         "keys": ["r"],
         "action": "action",
         "args": ["road"],
-        "include": ["settler"]
+        "include": ["settlers"]
     },
     {
         "keys": ["f"],
         "action": "action",
         "args": ["fortify"],
-        "exclude": ["settler"]
+        "exclude": ["settlers"]
     },
     {
         "keys": ["P"],

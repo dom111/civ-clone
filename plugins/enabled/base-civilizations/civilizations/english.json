@@ -38,7 +38,7 @@
             }
         }
     ],
-    "cities": [
+    "cityNames": [
         "London",
         "Birmingham",
         "Liverpool",
