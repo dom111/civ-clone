@@ -36,8 +36,36 @@ extend(engine, {
             return this.unitsToAction.length + this.citiesToAction.length;
         }
 
-        static extend(object) {
-            return extend(this.prototype, object);
+        get visibleTiles() {
+            if (this._visibleTiles) {
+                return this._visibleTiles;
+            }
+
+            this._visibleTiles = [];
+
+            this.units.forEach((unit) => {
+                for (var x = -unit.visibility; x <= unit.visibility; x++) {
+                    for (var y = -unit.visibility; y <= unit.visibility; y++) {
+                        var _tile = engine.map.get(unit.tile.x + x, unit.tile.y + y);
+                        if (!this._visibleTiles.includes(_tile)) {
+                            this._visibleTiles.push(_tile);
+                        }
+                    }
+                }
+            });
+
+            this.cities.forEach((city) => {
+                for (var x = -2; x <= 2; x++) {
+                    for (var y = -2; y <= 2; y++) {
+                        var _tile = engine.map.get(city.tile.x + x, city.tile.y + y);
+                        if (!this._visibleTiles.includes(_tile)) {
+                            this._visibleTiles.push(_tile);
+                        }
+                    }
+                }
+            });
+
+            return this._visibleTiles;
         }
 
         assignRates() {
@@ -121,4 +149,10 @@ engine.on('player-turn-end', (player) => {
     else {
         console.log('Not turn end.');
     }
+});
+
+engine.on('player-visibility-changed', (player) => {
+    player._visibleTiles = false;
+    engine.emit('build-layer', 'visibility');
+    engine.emit('build-layer', 'activeVisibility');
 });

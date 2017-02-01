@@ -263,6 +263,10 @@ extend(engine.World, {
             return this.seenBy[playerId];
         }
 
+        isActivelyVisible(playerId) {
+            return engine.players[playerId].visibleTiles.includes(this);
+        }
+
         resource(type) {
             var tile = this;
 

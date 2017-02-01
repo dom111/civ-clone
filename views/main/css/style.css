@@ -25,3 +25,7 @@ body {
 img, canvas {
   image-rendering: pixelated;
 }
+
+#preload {
+    display: none;
+}

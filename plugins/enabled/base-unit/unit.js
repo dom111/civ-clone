@@ -31,11 +31,15 @@ extend(engine, {
         }
 
         applyVisibility() {
-            for (var x = this.tile.x - this.visibility; x <= this.tile.x + this.visibility; x++) {
-                for (var y = this.tile.y - this.visibility; y <= this.tile.y + this.visibility; y++) {
-                    engine.emit('tile-seen', engine.map.get(x, y), this.player);
+            var unit = this;
+
+            for (var x = unit.tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
+                for (var y = unit.tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
+                    engine.emit('tile-seen', engine.map.get(x, y), unit.player);
                 }
             }
+
+            engine.emit('player-visibility-changed', unit.player);
         }
 
         // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
@@ -121,7 +125,8 @@ extend(engine, {
         }
 
         resolveCombat(units) {
-            var defender = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence == b.defence ? 0 : 1),
+            var defender = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence == b.defence ? 0 : 1)[0],
+            // TODO: get current combat scheme and use that to resolve
             result = Unit.combat.resolve(this, defender);
 
             if (result) {
@@ -208,6 +213,8 @@ extend(engine.Unit, {
             turns: 0,
             run: (unit, action) => unit.movesLeft = 0
         },
+
+        // TODO: break this out into settlers/workers? 
         buildCity: {
             name: 'buildCity',
             title: 'Build city',
@@ -317,7 +324,8 @@ extend(engine.Unit, {
         destroyed: false,
         active: false,
         busy: false
-    }
+    },
+    available: {}
 });
 
 Engine.Plugin.get('unit').forEach((unit) => {
