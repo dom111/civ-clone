@@ -1,0 +1,638 @@
+{
+    "defaults": {
+        "height": 16,
+        "width": 16,
+        "clear": {
+            "r": 0,
+            "g": 170,
+            "b": 170
+        }
+    },
+    "files": {
+        "SP257.gif": {
+            "cursor/go": [{
+                "y": 33,
+                "x": 33,
+                "height": 12,
+                "width": 12,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/pollution": [{
+                "y": 32,
+                "x": 48,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "improvements/irrigation": [{
+                "y": 32,
+                "x": 64,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "improvements/mine": [{
+                "y": 32,
+                "x": 80,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "improvements/pollution": [{
+                "y": 32,
+                "x": 96,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "cursor/torch": [{
+                "y": 33,
+                "x": 113,
+                "height": 13,
+                "width": 13,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/food": [{
+                "y": 32,
+                "x": 128,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/shield": [{
+                "y": 32,
+                "x": 136,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/trade": [{
+                "y": 32,
+                "x": 144,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/gold": [{
+                "y": 32,
+                "x": 152,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/bulb": [{
+                "y": 40,
+                "x": 128,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/sad": [{
+                "y": 40,
+                "x": 136,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "city/luxury": [{
+                "y": 40,
+                "x": 144,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "terrain/": [{
+                "y": 40,
+                "x": 152,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "shield" }
+                ]
+            }],
+            "improvements/road": [{
+                "y": 48,
+                "contents": [
+                    { "name": "_n", "x": 0 },
+                    { "name": "_ne", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_se", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_sw", "x": 80 },
+                    { "name": "_w", "x": 96 },
+                    { "name": "_nw", "x": 112 }
+                ]
+            }],
+            "status/science": [{
+                "y": 48,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "_0", "x": 128 },
+                    { "name": "_25", "x": 136 },
+                    { "name": "_50", "x": 144 },
+                    { "name": "_75", "x": 152 }
+                ]
+            }],
+            "status/pollution": [{
+                "y": 56,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "_0", "x": 128 },
+                    { "name": "_25", "x": 136 },
+                    { "name": "_50", "x": 144 },
+                    { "name": "_75", "x": 152 }
+                ]
+            }],
+            "terrain/land": [{
+                "y": 64,
+                "contents": [
+                    { "name": "", "x": 0 }
+                ]
+            }],
+            "terrain/river": [{
+                "y": 64,
+                "contents": [
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 224 },
+                    { "name": "_nesw", "x": 240 }
+                ]
+            }],
+            "units/combat": [{
+                "y": 96,
+                "contents": [
+                    { "name": "_1", "x": 0 },
+                    { "name": "_2", "x": 16 },
+                    { "name": "_3", "x": 32 },
+                    { "name": "_4", "x": 48 },
+                    { "name": "_5", "x": 64 },
+                    { "name": "_6", "x": 80 },
+                    { "name": "_7", "x": 96 },
+                    { "name": "_8", "x": 112 }
+                ]
+            }],
+            "improvements/railroad": [{
+                "y": 96,
+                "contents": [
+                    { "name": "_n", "x": 128 },
+                    { "name": "_ne", "x": 144 },
+                    { "name": "_e", "x": 160 },
+                    { "name": "_es", "x": 176 },
+                    { "name": "_s", "x": 192 },
+                    { "name": "_sw", "x": 208 },
+                    { "name": "_w", "x": 224 },
+                    { "name": "_nw", "x": 240 }
+                ]
+            }],
+            "terrain/oasis": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 0 }
+                ]
+            }],
+            "terrain/horse": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 16 }
+                ]
+            }],
+            "terrain/doe": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 48 }
+                ]
+            }],
+            "terrain/coal": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 64 }
+                ]
+            }],
+            "terrain/gold": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 80 }
+                ]
+            }],
+            "terrain/stag": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 96 }
+                ]
+            }],
+            "terrain/seal": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 112 }
+                ]
+            }],
+            "terrain/oil": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 128 }
+                ]
+            }],
+            "terrain/gems": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 144 }
+                ]
+            }],
+            "terrain/fish": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 160 }
+                ]
+            }],
+            "map/city": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 192 }
+                ]
+            }],
+            "map/fortify": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 208 }
+                ]
+            }],
+            "map/fort": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 224 }
+                ]
+            }],
+            "map/hut": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 240 }
+                ]
+            }],
+            "city/people": [{
+                "y": 128,
+                "height": 16,
+                "width": 8,
+                "contents": [
+                    { "name": "_happy_m", "x": 0 },
+                    { "name": "_happy_f", "x": 8 },
+                    { "name": "_content_m", "x": 16 },
+                    { "name": "_content_f", "x": 24 },
+                    { "name": "_unhappy_m", "x": 32 },
+                    { "name": "_unhappy_f", "x": 40 },
+                    { "name": "_tax", "x": 48 },
+                    { "name": "_science", "x": 56 },
+                    { "name": "_luxury", "x": 64 }
+                ]
+            }],
+            "map/fog": [{
+                "y": 128,
+                "contents": [
+                    { "name": "_n", "x": 80 },
+                    { "name": "_e", "x": 96 },
+                    { "name": "_s", "x": 112 },
+                    { "name": "_w", "x": 128 }
+                ]
+            }],
+            "units/": [{
+                "y": 160,
+                "contents": [
+                    { "name": "settler", "x": 0 },
+                    { "name": "militia", "x": 16 },
+                    { "name": "phalanx", "x": 32 },
+                    { "name": "legion", "x": 48 },
+                    { "name": "musketeers", "x": 64 },
+                    { "name": "rifleman", "x": 80 },
+                    { "name": "cavalry", "x": 96 },
+                    { "name": "knights", "x": 112 },
+                    { "name": "catapult", "x": 128 },
+                    { "name": "cannon", "x": 144 },
+                    { "name": "chariot", "x": 160 },
+                    { "name": "armor", "x": 176 },
+                    { "name": "mechinf", "x": 192 },
+                    { "name": "artillery", "x": 208 },
+                    { "name": "fighter", "x": 224 },
+                    { "name": "bomber", "x": 240 },
+                    { "name": "tririme", "x": 256 },
+                    { "name": "sail", "x": 272 },
+                    { "name": "frigate", "x": 288 },
+                    { "name": "ironclad", "x": 304 }
+                ]
+            }, {
+                "y": 176,
+                "contents": [
+                    { "name": "cruiser", "x": 0 },
+                    { "name": "battleship", "x": 16 },
+                    { "name": "submarine", "x": 32 },
+                    { "name": "carrier", "x": 48 },
+                    { "name": "transport", "x": 64 },
+                    { "name": "nuclear", "x": 80 },
+                    { "name": "diplomat", "x": 96 },
+                    { "name": "caravan", "x": 112 }
+                ]
+            }],
+            "general/texture": [{
+                "y": 176,
+                "contents": [
+                    { "name": "_1", "x": 288 },
+                    { "name": "_2", "x": 304 }
+                ]
+            }]
+        },
+        "TER257.gif": {
+            "terrain/desert": [{
+                "y": 0,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/plains": [{
+                "y": 16,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/grassland": [{
+                "y": 32,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/forest": [{
+                "y": 48,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/hills": [{
+                "y": 64,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/mountains": [{
+                "y": 80,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/tundra": [{
+                "y": 96,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/arctic": [{
+                "y": 112,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/swamp": [{
+                "y": 128,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/jungle": [{
+                "y": 144,
+                "contents": [
+                    { "name": "", "x": 0 },
+                    { "name": "_n", "x": 16 },
+                    { "name": "_e", "x": 32 },
+                    { "name": "_ne", "x": 48 },
+                    { "name": "_s", "x": 64 },
+                    { "name": "_ns", "x": 80 },
+                    { "name": "_es", "x": 96 },
+                    { "name": "_nes", "x": 112 },
+                    { "name": "_w", "x": 128 },
+                    { "name": "_nw", "x": 144 },
+                    { "name": "_ew", "x": 160 },
+                    { "name": "_new", "x": 176 },
+                    { "name": "_sw", "x": 192 },
+                    { "name": "_nsw", "x": 208 },
+                    { "name": "_esw", "x": 222 },
+                    { "name": "_nesw", "x": 228 }
+                ]
+            }],
+            "terrain/ocean": [{
+                "y": 160,
+                "contents": [
+                    { "name": "", "x": 0 }
+                ]
+            }],
+            "terrain/coast": [{
+                "y": 176,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "_1", "x": 16 },
+                    { "name": "_2", "x": 24 },
+                    { "name": "_3", "x": 32 },
+                    { "name": "_4", "x": 40 },
+                    { "name": "_5", "x": 48 },
+                    { "name": "_6", "x": 56 },
+                    { "name": "_7", "x": 64 },
+                    { "name": "_8", "x": 72 }
+                ]
+            }, {
+                "y": 184,
+                "height": 8,
+                "width": 8,
+                "contents": [
+                    { "name": "_9", "x": 16 },
+                    { "name": "_10", "x": 24 },
+                    { "name": "_11", "x": 32 },
+                    { "name": "_12", "x": 40 },
+                    { "name": "_13", "x": 48 },
+                    { "name": "_14", "x": 56 },
+                    { "name": "_15", "x": 64 },
+                    { "name": "_16", "x": 72 }
+                ]
+            }],
+            "terrain/coast_sprite": [{
+                "x": 0,
+                "y": 176,
+                "height": 16,
+                "width": 128,
+                "contents": [
+                    { "name": "" }
+                ]
+            }],
+            "terrain/river": [{
+                "y": 176,
+                "contents": [
+                    { "name": "_mouth_n", "x": 128 },
+                    { "name": "_mouth_e", "x": 144 },
+                    { "name": "_mouth_s", "x": 160 },
+                    { "name": "_mouth_w", "x": 176 }
+                ]
+            }]
+        }
+    }
+}

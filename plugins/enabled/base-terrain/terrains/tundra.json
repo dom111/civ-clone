@@ -1,14 +1,11 @@
 {
-    "name": "hills",
-    "title": "Hills",
+    "name": "tundra",
+    "title": "Tundra",
     "food": 1,
     "trade": 0,
     "production": 0,
-    "movementCost": 2,
+    "movementCost": 1,
     "improvements": {
-        "mine": {
-            "production": 3
-        },
         "road": {}
     },
     "size": 16,
@@ -17,9 +14,9 @@
     "impassable": false,
     "special": [
         {
-            "name": "coal",
-            "title": "Coal",
-            "production": 2,
+            "name": "seal",
+            "title": "Seal",
+            "food": 2,
             "chance": 16
         }
     ]

@@ -1,7 +1,7 @@
 {
-    "name": "plains",
-    "title": "Plains",
-    "food": 1,
+    "name": "desert",
+    "title": "Desert",
+    "food": 0,
     "trade": 0,
     "production": 1,
     "movementCost": 1,
@@ -19,9 +19,14 @@
     "impassable": false,
     "special": [
         {
-            "name": "horse",
-            "title": "Horse",
-            "production": 3,
+            "name": "oasis",
+            "title": "Oasis",
+            "food": 2,
+            "improvements": {
+                "irrigation": {
+                    "food": 2
+                }
+            },
             "chance": 16
         }
     ]

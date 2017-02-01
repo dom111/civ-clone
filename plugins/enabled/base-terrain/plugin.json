@@ -7,11 +7,42 @@
             "type": "terrain",
             "weight": 0,
             "contents": [
-                "terrains/ocean.json",
+                "terrains/ocean.json"
+            ]
+        },
+        {
+            "type": "terrain",
+            "weight": 100,
+            "contents": [
                 "terrains/grassland.json",
-                "terrains/plains.json",
                 "terrains/river.json",
-                "terrains/hills.json"
+                "terrains/plains.json"
+            ]
+        },
+        {
+            "type": "terrain",
+            "weight": 200,
+            "contents": [
+                "terrains/desert.json",
+                "terrains/forest.json",
+                "terrains/jungle.json",
+                "terrains/swamp.json"
+            ]
+        },
+        {
+            "type": "terrain",
+            "weight": 300,
+            "contents": [
+                "terrains/hills.json",
+                "terrains/tundra.json"
+            ]
+        },
+        {
+            "type": "terrain",
+            "weight": 400,
+            "contents": [
+                "terrains/arctic.json",
+                "terrains/mountains.json"
             ]
         }
     ],

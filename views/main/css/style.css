@@ -1,3 +1,13 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+}
+
 #main-menu ul, #main-menu li {
     list-style: none;
     margin: 0;
@@ -10,4 +20,15 @@
 
 #main-menu ul li a.menu-button:hover {
     background: #eee;
+}
+
+img, canvas {
+  image-rendering: pixelated;
+}
+
+#preload {
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+    display: inline-block;
 }

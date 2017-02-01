@@ -4,6 +4,7 @@
     "food": 2,
     "trade": 0,
     "production": 1,
+    "movementCost": 1,
     "improvements": {
         "irrigation": {
             "food": 1
@@ -16,14 +17,12 @@
     "ocean": false,
     "land": true,
     "impassable": false,
-    "image": "assets/grassland.gif",
     "special": [
         {
-            "name": "grassland-shield",
-            "title": "Grassland (Shield)",
+            "name": "shield",
+            "title": "Shield",
             "production": 1,
-            "chance": 40,
-            "overlay": "assets/grassland_shield.gif"
+            "chance": 40
         }
     ]
 }

@@ -1,17 +1,12 @@
 {
-    "name": "plains",
-    "title": "Plains",
+    "name": "forest",
+    "title": "Forest",
     "food": 1,
     "trade": 0,
-    "production": 1,
-    "movementCost": 1,
+    "production": 3,
+    "movementCost": 2,
     "improvements": {
-        "irrigation": {
-            "food": 1
-        },
-        "road": {
-            "trade": 1
-        }
+        "road": {}
     },
     "size": 16,
     "ocean": false,
@@ -21,7 +16,7 @@
         {
             "name": "horse",
             "title": "Horse",
-            "production": 3,
+            "food": 3,
             "chance": 16
         }
     ]

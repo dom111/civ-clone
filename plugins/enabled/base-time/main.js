@@ -1,6 +1,7 @@
 game.on('start', function() {
     // TODO: controlled by options
-    this.year = -4000;
+    game.turn = 0;
+    game.year = -4000;
 });
 
 var ranges = [
@@ -18,13 +19,18 @@ var ranges = [
     },
     {
         year: 1850,
+        increment: 2
+    },
+    {
         increment: 1
     }
 ];
 
 game.on('turn-end', function() {
+    game.turn++;
+
     game.year += ranges.filter(function(range) {
-        return game.year < range.year;
+        return ('year' in range) ? game.year < range.year : true;
     })[0].increment;
 });
 

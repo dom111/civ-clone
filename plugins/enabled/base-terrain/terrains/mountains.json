@@ -1,13 +1,13 @@
 {
-    "name": "hills",
-    "title": "Hills",
-    "food": 1,
+    "name": "mountains",
+    "title": "Mountains",
+    "food": 0,
     "trade": 0,
-    "production": 0,
-    "movementCost": 2,
+    "production": 1,
+    "movementCost": 3,
     "improvements": {
         "mine": {
-            "production": 3
+            "production": 1
         },
         "road": {}
     },
@@ -17,9 +17,9 @@
     "impassable": false,
     "special": [
         {
-            "name": "coal",
-            "title": "Coal",
-            "production": 2,
+            "name": "gold",
+            "title": "Gold",
+            "trade": 5,
             "chance": 16
         }
     ]
