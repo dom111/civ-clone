@@ -1,6 +1,6 @@
 {
-    "name": "base-currency-gold",
-    "title": "Base Currency - Gold",
+    "name": "base-currency",
+    "title": "Base Currency",
     "version": "0.0.1",
     "components": [
         {
@@ -15,7 +15,7 @@
             "type": "game-modifier",
             "weight": 0,
             "contents": [
-                "events.js"
+                "main.js"
             ]
         }
     ],

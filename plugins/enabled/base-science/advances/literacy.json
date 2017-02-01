@@ -1,0 +1,8 @@
+{
+    "name": "literacy",
+    "baseCost": 25,
+    "requires": [
+        "code-of-laws",
+        "writing"
+    ]
+}

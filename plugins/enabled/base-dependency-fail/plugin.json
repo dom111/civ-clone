@@ -1,0 +1,17 @@
+{
+    "name": "base-dependency-fail",
+    "version": "0.0.1",
+    "weight": 0,
+    "dependencies": [
+        "base-non-existant-plugin"
+    ],
+    "components": [
+        {
+            "type": "game-modifier",
+            "weight": 0,
+            "contents": [
+                "main.js"
+            ]
+        }
+    ]
+}

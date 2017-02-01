@@ -2,5 +2,6 @@
     "load_game": "Load Game",
     "main_menu": "Main Menu",
     "quit": "Quit",
-    "start_new_game": "Start New Game"
+    "start_new_game": "Start New Game",
+    "colour": "Colour"
 }

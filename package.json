@@ -1,10 +1,9 @@
 {
+    "productName": "Civ One",
     "name": "civ-one",
     "version": "0.0.1",
     "homepage": "https://github.com/dom111/civ-one",
-    "license": "TBD",
     "description": "CivOne base libraries and plugin infrastructure.",
-    "main": "boot.js",
     "scripts": {
         "start": "electron boot.js"
     },
@@ -25,10 +24,6 @@
     "dependencies": {
         "electron-prebuilt": "^0.36.0",
         "extend": "~3.0.0",
-        "mustache": "^2.0.0",
-        "sqlite3": "^3.0.0"
-    },
-    "devDependencies": {
-        "node-inspector": "*"
+        "mustache": "^2.0.0"
     }
 }

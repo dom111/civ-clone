@@ -1,0 +1,8 @@
+{
+    "name": "republic",
+    "baseCost": 30,
+    "requires": [
+        "literacy",
+        "code-of-laws"
+    ]
+}

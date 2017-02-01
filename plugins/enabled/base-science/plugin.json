@@ -1,0 +1,38 @@
+{
+    "name": "base-science",
+    "title": "Base Science",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "translation",
+            "weight": 0,
+            "language": "en_GB",
+            "contents": [
+                "language/en_GB.json"
+            ]
+        },
+        {
+            "type": "game-modifier",
+            "weight": 0,
+            "contents": [
+                "main.js"
+            ]
+        },
+        {
+            "type": "advances",
+            "weight": 0,
+            "contents": [
+                "advances/alphabet.json",
+                "advances/code-of-laws.json",
+                "advances/literacy.json",
+                "advances/masonry.json",
+                "advances/mathematics.json",
+                "advances/republic.json",
+                "advances/wheel.json",
+                "advances/writing.json"
+            ]
+        }
+    ],
+    "options": [],
+    "weight": 0
+}

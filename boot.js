@@ -1,16 +1,28 @@
 'use strict';
 
 const electron = require('electron');
-global.app = electron.app;
-global.Plugin = require('./lib/plugin');
+const app = electron.app;
+const ipc = electron.ipcMain;
 
-Plugin.load(); // processes all enabled plugins before initialising the game object
-// TODO: move the above into Game::constructor
+// ipc listeners
+ipc.on('app.getPath', function(event, name) {
+    event.returnValue = app.getPath(name);
+});
 
-global.Game = require('./lib/game');
-global.View = require('./lib/view');
+ipc.on('app.getLocale', function(event) {
+    event.returnValue = app.getLocale();
+});
 
-app.on('window-all-closed', app.quit);
+app.on('window-all-closed', app.quit); // Yes, even on Mac OS X...
 app.on('ready', () => {
-    Game.menu.main();
+    global.MainWindow = new electron.BrowserWindow({
+        title: `civ-clone`
+    });
+
+    MainWindow.loadURL(`file:///${__dirname}/views/main/html/index.html`);
+
+    // commandline argument debug?
+    if (true) {
+        MainWindow.webContents.openDevTools();
+    }
 });

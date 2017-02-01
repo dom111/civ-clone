@@ -1,0 +1,7 @@
+{
+    "name": "code-of-laws",
+    "baseCost": 15,
+    "requires": [
+        "alphabet"
+    ]
+}
