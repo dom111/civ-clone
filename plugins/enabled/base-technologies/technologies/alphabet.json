@@ -1,0 +1,54 @@
+{
+    "name": "alphabet",
+    "title": "Alphabet",
+    "type": "technology",
+    "baseCost": 20,
+    "prerequisites": [],
+    "provides": [
+        {
+            "name": "militia",
+            "type": "unit"
+        },
+        {
+            "name": "despotism",
+            "type": "government"
+        },
+        {
+            "name": "irrigation",
+            "type": "improvement"
+        },
+        {
+            "name": "barracks",
+            "type": "building"
+        }
+    ],
+    // "provides": {
+    //     "militia": {
+    //         "alsoRequires": []
+    //     }
+    // },
+    "obseletes": {
+
+    },
+    // "leadsTo": {
+    //     "mathematics": {
+    //         "alsoRequires": [
+    //             "masonry"
+    //         ]
+    //     },
+    //     "writing": {
+    //         "alsoRequires": []
+    //     },
+    //     "code-of-laws": {
+    //         "alsoRequires": [
+    //             "writing"
+    //         ]
+    //     }
+    //     // etc.
+    // }
+    "leadsTo": [
+        "mathematics",
+        "writing",
+        "code-of-laws"
+    ]
+}

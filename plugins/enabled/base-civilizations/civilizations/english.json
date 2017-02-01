@@ -1,0 +1,45 @@
+{
+    "name": "english-civilization",
+    "title": "English Civilization",
+    "leaders": [
+        {
+            "name": "Elizabeth I",
+            "images": [
+                "civilizations/english-elizabeth.jpg"
+            ],
+            "traits": {
+                "expansionist": true,
+                "civilized": true,
+                "militaristic": true
+            }
+        },
+        {
+            "name": "Victoria",
+            "images": [
+                "civilizations/english-victoria.jpg"
+            ],
+            "traits": {
+                "expansionist": true,
+                "civilized": true,
+                "militaristic": true
+            }
+        },
+        {
+            "name": "Winston Churchill",
+            "images": [
+                "civilizations/english-churchill.jpg"
+            ],
+            "traits": {
+                "expansionist": false,
+                "civilized": false,
+                "militaristic": true
+            }
+        }
+    ],
+    "priority-technologies": [
+        "alphabet",
+        "mapmaking",
+        "bronze-working",
+        "the-wheel"
+    ]
+}

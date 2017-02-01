@@ -4,10 +4,9 @@
     "homepage": "https://github.com/dom111/civ-one",
     "license": "TBD",
     "description": "CivOne base libraries and plugin infrastructure.",
-    "main": "app/boot.js",
+    "main": "boot.js",
     "scripts": {
-        "start": "electron app/boot.js",
-        "start-debug": "electron --debug-brk=5555 main.js"
+        "start": "electron boot.js"
     },
     "author": "dom111 <CivOne@dom111.uk>",
     "repository": {
@@ -25,7 +24,9 @@
     ],
     "dependencies": {
         "electron-prebuilt": "^0.36.0",
-        "mustache": "^2.0.0"
+        "extend": "~3.0.0",
+        "mustache": "^2.0.0",
+        "sqlite3": "^3.0.0"
     },
     "devDependencies": {
         "node-inspector": "*"
