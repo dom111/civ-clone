@@ -6,9 +6,9 @@
         {
             "type": "translation",
             "weight": 0,
-            "language": "en_GB",
+            "language": "en",
             "contents": [
-                "language/en_GB.json"
+                "language/en.json"
             ]
         },
         {

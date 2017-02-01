@@ -1,0 +1,43 @@
+{
+    "name": "hills",
+    "title": "Hills",
+    "food": 1,
+    "trade": 0,
+    "production": 0,
+    "improvements": {
+        "mine": {
+            "production": 3
+        }
+    },
+    "size": 16,
+    "ocean": false,
+    "land": true,
+    "impassable": false,
+    "image": "assets/hills.gif",
+    "adjacentImages": {
+        "n": "assets/hills_n.gif",
+        "e": "assets/hills_e.gif",
+        "s": "assets/hills_s.gif",
+        "w": "assets/hills_w.gif",
+        "ne": "assets/hills_ne.gif",
+        "ns": "assets/hills_ns.gif",
+        "nw": "assets/hills_nw.gif",
+        "es": "assets/hills_es.gif",
+        "ew": "assets/hills_ew.gif",
+        "sw": "assets/hills_sw.gif",
+        "nes": "assets/hills_nes.gif",
+        "nsw": "assets/hills_nsw.gif",
+        "new": "assets/hills_new.gif",
+        "esw": "assets/hills_esw.gif",
+        "nesw": "assets/hills_nesw.gif"
+    },
+    "special": [
+        {
+            "name": "coal",
+            "title": "Coal",
+            "production": 2,
+            "chance": 16,
+            "overlay": "assets/coal.gif"
+        }
+    ]
+}

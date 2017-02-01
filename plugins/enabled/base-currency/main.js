@@ -1,7 +1,7 @@
-Game.availableTradeRates.push('tax'); // add tax as a trade-rate
+game.availableTradeRates.push('tax'); // add tax as a trade-rate
 
-Game.on('player-added', (player) => {
-    player.treasury = (Game.options.difficulty === 0 ? 50 : 0);
+game.on('player-added', function(player) {
+    player.treasury = (game.options.difficulty === 0 ? 50 : 0);
 });
 
 // City.prototype
@@ -12,8 +12,26 @@ City.prototype.__defineGetter__('tax', function() {
     return this.rates.tax;
 });
 
-Game.on('city-created', function(city) {
-    city.on('turn-end', function() {
-        this.player.treasury += this.tax;
+game.on('turn-end', function() {
+    game.players.forEach(function(player) {
+        player.cities.forEach(function(city) {
+            player.treasury += city.tax;
+
+            var cost = city.maintenance;
+
+            if (player.treasury >= cost) {
+                player.treasury -= cost;
+
+                // TODO
+                // if (player.tresaury < 100) {
+                //     game.emit('treasury-low')
+                //     Notification
+                // }
+            }
+            else {
+                // TODO: sell improvements, trigger event
+            }
+
+        });
     });
 });

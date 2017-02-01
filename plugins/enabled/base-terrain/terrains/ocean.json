@@ -1,0 +1,39 @@
+{
+    "name": "ocean",
+    "title": "Ocean",
+    "food": 1,
+    "trade": 3,
+    "production": 0,
+    "improvements": {},
+    "size": 16,
+    "ocean": true,
+    "land": false,
+    "impassable": false,
+    "image": "assets/ocean_none.gif",
+    "adjacentImages": {
+        "n": "assets/ocean_n.gif",
+        "e": "assets/ocean_e.gif",
+        "s": "assets/ocean_s.gif",
+        "w": "assets/ocean_w.gif",
+        "ne": "assets/ocean_ne.gif",
+        "ns": "assets/ocean_ns.gif",
+        "nw": "assets/ocean_nw.gif",
+        "es": "assets/ocean_es.gif",
+        "ew": "assets/ocean_ew.gif",
+        "sw": "assets/ocean_sw.gif",
+        "nes": "assets/ocean_nes.gif",
+        "nsw": "assets/ocean_nsw.gif",
+        "new": "assets/ocean_new.gif",
+        "esw": "assets/ocean_esw.gif",
+        "nesw": "assets/ocean_nesw.gif"
+    },
+    "special": [
+        {
+            "name": "fish",
+            "title": "Fish",
+            "food": 3,
+            "chance": 16,
+            "overlay": "assets/ocean_fish.gif"
+        }
+    ]
+}

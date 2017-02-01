@@ -1,0 +1,8 @@
+{
+    "name": "basic_gameplay",
+    "weight": 0,
+    "category": {
+        "name": "miscellaneous"
+    },
+    "content": "<h3>{{translation.blah}}"
+}

@@ -1,0 +1,20 @@
+{
+    "name": "base-terrain",
+    "title": "Base Terrain",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "terrain",
+            "weight": 0,
+            "contents": [
+                "terrains/ocean.json",
+                "terrains/grassland.json",
+                "terrains/plains.json",
+                "terrains/river.json",
+                "terrains/hills.json"
+            ]
+        }
+    ],
+    "options": [],
+    "weight": 0
+}

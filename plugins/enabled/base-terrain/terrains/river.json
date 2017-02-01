@@ -1,0 +1,40 @@
+{
+    "name": "river",
+    "title": "River",
+    "food": 2,
+    "trade": 1,
+    "production": 0,
+    "improvements": {
+        "irrigation": {
+            "food": 1
+        }
+    },
+    "size": 16,
+    "ocean": false,
+    "land": true,
+    "impassable": false,
+    "image": "assets/river.gif",
+    "adjacentImages": {
+        "n": "assets/river_n.gif",
+        "e": "assets/river_e.gif",
+        "s": "assets/river_s.gif",
+        "w": "assets/river_w.gif",
+        "ne": "assets/river_ne.gif",
+        "ns": "assets/river_ns.gif",
+        "nw": "assets/river_nw.gif",
+        "es": "assets/river_es.gif",
+        "ew": "assets/river_ew.gif",
+        "sw": "assets/river_sw.gif",
+        "nes": "assets/river_nes.gif",
+        "nsw": "assets/river_nsw.gif",
+        "new": "assets/river_new.gif",
+        "esw": "assets/river_esw.gif",
+        "nesw": "assets/river_nesw.gif"
+    },
+    "special": [
+        {
+            "production": 1,
+            "chance": 40
+        }
+    ]
+}

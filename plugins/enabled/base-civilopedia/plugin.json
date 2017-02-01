@@ -1,8 +1,15 @@
 {
-    "name": "base-language-en",
-    "title": "Base Language - English",
+    "name": "base-civilopedia",
+    "title": "Base Civilopedia",
     "version": "0.0.1",
     "components": [
+        {
+            "type": "civilopedia-articles",
+            "weight": 0,
+            "contents": [
+                "civilopedia/base.json"
+            ]
+        },
         {
             "type": "translation",
             "weight": 0,
@@ -12,12 +19,10 @@
             ]
         },
         {
-            "type": "translation",
-            "weight": 100,
-            "language": "en",
-            "country": "US",
+            "type": "game-modifier",
+            "weight": 0,
             "contents": [
-                "language/en-US.json"
+                "main.js"
             ]
         }
     ],
