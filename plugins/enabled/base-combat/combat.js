@@ -21,7 +21,7 @@ else {
         combat: {
             package: 'base-combat',
             resolve: (attacker, defender) => {
-                return (this.getAttack(attacker) * Math.random()) > (this.getDefence(defender) * Math.random());
+                return (engine.Unit.combat.getAttack(attacker) * Math.random()) > (engine.Unit.combat.getDefence(defender) * Math.random());
             },
             getAttack: (unit) => {
                 var attack = unit.attack;

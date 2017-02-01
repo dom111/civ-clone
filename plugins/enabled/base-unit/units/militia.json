@@ -3,10 +3,8 @@
     "title": "Militia",
     "cost": 10,
     "attack": 1,
-    "defense": 1,
+    "defence": 1,
     "movement": 1,
     "visibility": 1,
-    "width": 16,
-    "height": 16,
     "land": true
 }

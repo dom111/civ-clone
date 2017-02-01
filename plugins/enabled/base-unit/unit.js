@@ -39,6 +39,7 @@ extend(engine, {
             }
         }
 
+        // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
         validateMove(to) {
             if (!to) {
                 return false;
@@ -55,17 +56,18 @@ extend(engine, {
                 return false;
             }
 
-            if (to.terrain.ocean && unit.land) {
+            // TODO: exclude cities
+            if (to.terrain.ocean && !unit.ocean) {
                 return false;
             }
 
-            if (to.terrain.land && unit.ocean) {
+            if (to.terrain.land && !unit.land) {
                 // TODO: transportation units
                 return false;
             }
 
             if (to.units.length && to.units[0].player != unit.player) {
-                return this.resolveCombat(to.units);
+                return unit.resolveCombat(to.units);
             }
 
             if (to.city && to.city.player != unit.player) {
@@ -78,9 +80,9 @@ extend(engine, {
             // TODO
             var movementCost = unit.tile.movementCost(to);
 
-            if (movementCost > this.movesLeft) {
-                if ((Math.random() * 1.5) < (this.movesLeft / movementCost)) {
-                    this.movesLeft = 0;
+            if (movementCost > unit.movesLeft) {
+                if ((Math.random() * 1.5) < (unit.movesLeft / movementCost)) {
+                    unit.movesLeft = 0;
 
                     return false;
                 }
@@ -107,7 +109,7 @@ extend(engine, {
 
                 unit.movesLeft -= movementCost;
 
-                if (unit.movesLeft < 0.1) {
+                if (unit.movesLeft <= 0.1) {
                     unit.movesLeft = 0;
                 }
 
@@ -120,7 +122,7 @@ extend(engine, {
         }
 
         resolveCombat(units) {
-            var defender = units.sort((a,b) => a.defense > b.defense ? -1 : a.defense == b.defense ? 0 : 1),
+            var defender = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence == b.defence ? 0 : 1),
             result = Unit.combat.resolve(this, defender);
 
             if (result) {
@@ -128,11 +130,11 @@ extend(engine, {
                     defender.destroy();
                 }
                 else {
-                    unit.tile.units.forEach((unit) => unit.destroy());
+                    defender.tile.units.forEach((unit) => unit.destroy());
                 }
             }
             else {
-                this.desroy();
+                this.destroy();
             }
 
             return result;
@@ -220,8 +222,7 @@ extend(engine.Unit, {
                 new engine.City({
                     player: unit.player,
                     tile: unit.tile,
-                    // TODO
-                    name: unit.player.cityNames.shift()
+                    name: unit.player.cityNames.shift() // TODO: input box/confirmation
                 });
 
                 unit.destroy();
@@ -242,6 +243,9 @@ extend(engine.Unit, {
                     unit.busy = this.turns;
                     unit.movesLeft = 0;
                     unit.currentAction = this;
+                }
+                else {
+                    // TODO: alert, no access to water, etc
                 }
             },
             complete: (unit) => {
@@ -297,22 +301,24 @@ extend(engine.Unit, {
     units: [],
     getByName: (name) => {
         return engine.Unit.units.filter((unit) => unit.name === name)[0];
+    },
+    baseUnit: {
+        attack: 0,
+        defence: 0,
+        movement: 1,
+        visibility: 1,
+        // basic size, should be consistent
+        width: 16,
+        height: 16,
+        land: true,
+        ocean: false,
+        veteran: false
     }
 });
 
 Engine.Plugin.get('unit').forEach((unit) => {
     unit.contents.forEach((file) => {
-        engine.Unit.units.push(extend({
-            attack: 0,
-            defense: 0,
-            movement: 1,
-            visibility: 1,
-            width: 16,
-            height: 16,
-            land: true,
-            ocean: false,
-            veteran: false
-        }, engine.loadJSON(file)));
+        engine.Unit.units.push(extend({}, engine.Unit.baseUnit, engine.loadJSON(file)));
     });
 });
 
@@ -367,13 +373,11 @@ engine.on('unit-moved', (unit, from, to) => {
 });
 
 engine.on('unit-destroyed', (unit) => {
-    if ((engine.activePlayer === unit.player) && (unit.player.activeUnit === unit)) {
-        unit.player.activeUnit = false;
-    }
-
-    unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
-
     if (engine.activePlayer === unit.player) {
+        if (unit.player.activeUnit === unit) {
+            unit.player.activeUnit = false;
+        }
+
         engine.emit('unit-activate-next', unit.player);
     }
 });

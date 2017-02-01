@@ -25,15 +25,11 @@ extend(engine, {
         }
 
         get unitsToAction() {
-            return this.units.filter(function(unit) {
-                return !unit.busy && unit.movesLeft;
-            });
+            return this.units.filter((unit) => !unit.busy && unit.movesLeft);
         }
 
         get citiesToAction() {
-            return this.cities.filter(function(city) {
-                return !city.building;
-            });
+            return this.cities.filter((city) => !city.building);
         }
 
         get actionsLeft() {
@@ -48,7 +44,7 @@ extend(engine, {
             var player = this,
             remaining = 1;
 
-            player.availableRates.forEach(function(rate) {
+            player.availableRates.forEach((rate) => {
                 player.rates[rate] = Math.ceil((1 / player.availableRates.length) * 100) / 100;
                 remaining -= player.rates[rate];
             });
@@ -66,17 +62,13 @@ extend(engine, {
     }
 });
 
-engine.__defineGetter__('isTurnEnd', function() {
-    return this.playersToAction.length === 0 || this.currentPlayer.actionsLeft === 0;
-});
+engine.__defineGetter__('isTurnEnd', () => this.currentPlayer.actionsLeft === 0);
 
-engine.on('build', function() {
+engine.on('build', () => {
     engine.players = [];
 
-    // TODO: if randomize
-    engine.Civilizations = engine.Civilizations.sort(function() {
-        return Math.floor((Math.random() * 3) - 1);
-    });
+    // TODO: allow choices instead of random
+    engine.Civilizations = engine.Civilizations.sort(() => Math.floor((Math.random() * 3) - 1));
 
     // engine.addPlayers(); // TODO
     // for (var i = 0; i < engine.options.players; i++) {

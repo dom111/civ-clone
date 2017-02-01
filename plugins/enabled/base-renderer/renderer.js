@@ -136,15 +136,25 @@ var BaseRenderer = class BaseRenderer {
         engine.on('tile-seen', (tile) => engine.emit('build-layer', 'visibility'));
 
         engine.on('city-created', (city) => engine.emit('build-layer', 'cities'));
-
         engine.on('city-grow', (city) => engine.emit('build-layer', 'cities'));
+        engine.on('city-captured', (city) => engine.emit('build-layer', 'cities'));
+        engine.on('city-destroyed', (city) => engine.emit('build-layer', 'cities'));
 
-        engine.on('unit-moved', (unit) => {
+        engine.on('unit-created', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-created', (unit) => {
+        engine.on('unit-activate', (unit) => {
+            if (!renderer.tileIsVisible(unit.tile)) {
+                renderer.center = unit.tile;
+            }
+
+            engine.emit('build-layer', 'units');
+            engine.emit('build-layer', 'activeUnits');
+        });
+
+        engine.on('unit-moved', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
@@ -154,24 +164,17 @@ var BaseRenderer = class BaseRenderer {
             engine.emit('build-layer', 'activeUnits');
         });
 
-        engine.on('unit-activate', (unit) => {
-            if (!renderer.tileIsVisible(unit.tile)) {
-                renderer.center = unit.tile;
-            }
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
+        engine.on('turn-start', (unit) => {
+            engine.emit('build-layer');
+            engine.emit('update-display');
         });
 
         engine.on('player-turn-start', (unit) => {
-            engine.emit('build-layer', 'all');
+            engine.emit('build-layer');
+            engine.emit('update-display');
         });
 
         engine.on('turn-over', (unit) => {
-            engine.emit('build-layer', 'units');
-            engine.emit('build-layer', 'activeUnits');
-        });
-
-        engine.on('unit-activate', (unit) => {
             engine.emit('build-layer', 'units');
             engine.emit('build-layer', 'activeUnits');
         });
@@ -185,7 +188,7 @@ var BaseRenderer = class BaseRenderer {
         renderer.canvas.height = window.innerHeight;
         renderer.canvas.width = window.innerWidth;
 
-        engine.emit('build-layer', 'all');
+        engine.emit('build-layer');
         engine.emit('update-display');
     }
 
@@ -432,16 +435,16 @@ var BaseRenderer = class BaseRenderer {
             engine.map.map.forEach((row) => {
                 row.forEach((tile) => {
                     if (!engine.currentPlayer || !engine.currentPlayer.activeUnit || engine.currentPlayer.activeUnit.tile !== tile) {
-                        var unit = tile.units.sort((a, b) => a.defence > b.defense ? -1 : a.defense == a.defense ? 0 : 1)[0],
+                        var unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
                         images = [];
 
                         if (tile.units.length) {
                             var image = document.createElement('canvas'),
                             imageContext = image.getContext('2d'),
-                            unitImage = new global.Image;
+                            unitImage = new global.Image();
                             unitImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/units/' + unit.name + '.gif'; // TODO: have each unit details as a component
-                            image.width = unitImage.width;
-                            image.height = unitImage.height;
+                            image.width = unit.width;
+                            image.height = unit.height;
 
                             if (tile.units.length > 1) {
                                 image.width = unitImage.width + 1;
@@ -459,18 +462,12 @@ var BaseRenderer = class BaseRenderer {
                                 replaceColors = unit.player.colors;
 
                                 tiles.push({
-                                    images: images.map((image) => {
-                                        if ('getContext' in image) {
-                                            image = renderer.replaceColor(image, sourceColors, replaceColors)
-                                        }
-
-                                        return image;
-                                    }),
+                                    images: images.map((image) => renderer.replaceColor(image, sourceColors, replaceColors)),
                                     // text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
                                     height: unit.height,
                                     width: unit.width,
-                                    x: unit.tile.terrain.size * unit.tile.x,
-                                    y: unit.tile.terrain.size * unit.tile.y
+                                    x: (unit.tile.terrain.size * unit.tile.x) + unit.offsetX,
+                                    y: (unit.tile.terrain.size * unit.tile.y) + unit.offsetY
                                 });
                             }
                         }
@@ -494,7 +491,7 @@ var BaseRenderer = class BaseRenderer {
                 player.cities.forEach((city) => {
                     var image = document.createElement('canvas'),
                     imageContext = image.getContext('2d'),
-                    cityImage = new global.Image;
+                    cityImage = new global.Image();
                     cityImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/map/city.gif';
                     replaceColors = city.player.colors;
                     image.width = city.tile.terrain.size;
@@ -540,7 +537,7 @@ var BaseRenderer = class BaseRenderer {
                 if (tile.units.length) {
                     var image = document.createElement('canvas'),
                     imageContext = image.getContext('2d'),
-                    unitImage = new global.Image;
+                    unitImage = new global.Image();
                     unitImage.src = 'file://' + Engine.Plugin.getPath('base-renderer') + 'assets/units/' + unit.name + '.gif';
                     image.width = unitImage.width;
                     image.height = unitImage.height;

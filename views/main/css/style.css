@@ -25,10 +25,3 @@ body {
 img, canvas {
   image-rendering: pixelated;
 }
-
-#preload {
-    opacity: 0;
-    height: 0px;
-    width: 0px;
-    display: inline-block;
-}

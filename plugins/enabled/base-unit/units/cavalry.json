@@ -1,12 +1,10 @@
 {
     "name": "cavalry",
     "title": "Cavalry",
-    "cost": 10,
+    "cost": 20,
     "attack": 2,
-    "defense": 1,
+    "defence": 1,
     "movement": 2,
     "visibility": 1,
-    "width": 16,
-    "height": 16,
     "land": true
 }
