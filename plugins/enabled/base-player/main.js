@@ -1,23 +1,27 @@
 'use strict';
 
-const extend = require('extend');
-
-module.exports = (function() {
-    return class Player {
+extend(engine, {
+    Player: class Player {
         constructor(details) {
             var player = this;
 
+            if (typeof details === 'undefined') {
+                details = engine.Civilizations.sort(function() {
+                    return Math.floor((Math.random() * 3) - 1);
+                })[0];
+            }
+
             extend(player, details || {});
 
-            player.id = game.players.length;
+            player.id = engine.players.length;
             player.cities = [];
             player.units = [];
-            player.availableRates = game.availableTradeRates;
+            player.availableRates = engine.availableTradeRates;
             player.rates = {};
             player.availableUnits = [];
             player.availableImprovements = [];
 
-            game.emit('player-added', player);
+            engine.emit('player-added', player);
 
             player.assignRates();
         }
@@ -61,6 +65,5 @@ module.exports = (function() {
 
             throw `No rate '${rate}'!`;
         }
-    };
-})();
-
+    }
+});

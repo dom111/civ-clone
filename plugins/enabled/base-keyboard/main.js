@@ -1,5 +1,3 @@
-// this is probably better a main module, or set of methods in game.js
-// it's probably better to use something existing, but it'll do for now
 var keys = [];
 
 var _processKey = function(key) {
@@ -13,7 +11,17 @@ var _processKey = function(key) {
         'pagedown': 34,
         'home': 36,
         'end': 35,
-        'enter': 13
+        'enter': 13,
+        'numpad0': 96,
+        'numpad1': 97,
+        'numpad2': 98,
+        'numpad3': 99,
+        'numpad4': 100,
+        'numpad5': 101,
+        'numpad6': 102,
+        'numpad7': 103,
+        'numpad8': 104,
+        'numpad9': 105
     },
     object = {};
 
@@ -30,7 +38,7 @@ var _processKey = function(key) {
         else if (key.match(/cmd|command|win/i)) {
             object.metaKey = true;
         }
-        else if (key.match(/[A-Z]/)) {
+        else if (key.match(/[A-Z]/i)) {
             object.shiftKey = true;
             object.keyCode = key.charCodeAt(0);
         }
@@ -57,7 +65,7 @@ var _compare = function(key, event) {
     return match;
 };
 
-game.on('bind-key', function(namespace, key, method) {
+engine.on('bind-key', function(namespace, key, method) {
     keys.push({
         namespace: namespace,
         keyData: _processKey(key),
@@ -65,7 +73,7 @@ game.on('bind-key', function(namespace, key, method) {
     });
 });
 
-game.on('unbind-key', function(namespace, key) {
+engine.on('unbind-key', function(namespace, key) {
     var keysCopy = keys.slice(0);
     keys = [];
     keysCopy.forEach(function(currentKey) {
@@ -80,41 +88,68 @@ game.on('unbind-key', function(namespace, key) {
     });
 });
 
-game.on('start', function(unit) {
-    [
-        ['up', 'n'],
-        ['pageup', 'ne'],
-        ['right', 'e'],
-        ['pagedown', 'se'],
-        ['down', 's'],
-        ['end', 'sw'],
-        ['left', 'w'],
-        ['home', 'nw'],
-        ['8', 'n'],
-        ['9', 'ne'],
-        ['6', 'e'],
-        ['3', 'se'],
-        ['2', 's'],
-        ['1', 'sw'],
-        ['4', 'w'],
-        ['7', 'nw']
-    ].forEach(function(bind) {
-        game.emit('bind-key', 'unit', bind[0], function() {
-            // TODO
-            var unit = game.currentPlayer.activeUnit;
+engine.on('start', function(unit) {
+    engine.Plugin.get('keybinds', 'unit').forEach(function(component) {
+        component.contents.forEach(function(assetPath) {
+            engine.loadJSON(assetPath).forEach(function(keyBind) {
+                keybind.keys.forEach(function(key) {
+                    engine.emit('bind-key', 'unit', key, function() {
+                        var unit = engine.currentPlayer.activeUnit,
+                        call = true;
 
-            if (unit) {
-                unit.move(bind[1]);
-            }
+                        if (unit) {
+                            if (keybind.include) {
+                                call = keybind.include.includes(unit.name);
+                            }
+                            else if (keybind.exclude) {
+                                call = !keybind.exclude.includes(unit.name);
+                            }
+                            // TODO: more advanced filtering, perhaps move to unit logic?
+
+                            if (call) {
+                                unit[keybind.action].apply(unit, keybind.args);
+                            }
+                        }
+                    });
+                });
+            });
         });
     });
+    // [
+    //     ['up', 'n'],
+    //     ['pageup', 'ne'],
+    //     ['right', 'e'],
+    //     ['pagedown', 'se'],
+    //     ['down', 's'],
+    //     ['end', 'sw'],
+    //     ['left', 'w'],
+    //     ['home', 'nw'],
+    //     ['8', 'n'],
+    //     ['9', 'ne'],
+    //     ['6', 'e'],
+    //     ['3', 'se'],
+    //     ['2', 's'],
+    //     ['1', 'sw'],
+    //     ['4', 'w'],
+    //     ['7', 'nw']
+    // ].forEach(function(bind) {
+    //     engine.emit('bind-key', 'unit', bind[0], function() {
+    //         // TODO
+    //         var unit = engine.currentPlayer.activeUnit;
 
+    //         if (unit) {
+    //             unit.move(bind[1]);
+    //         }
+    //     });
+    // });
+
+    // TODO: include in each unit's definition file
     Object.keys(Unit.availableActions).forEach(function(actionName) {
         var action = Unit.availableActions[actionName];
 
-        game.emit('bind-key', 'unit', action.key, function() {
+        engine.emit('bind-key', 'unit', action.key, function() {
             // TODO
-            var unit = game.currentPlayer.activeUnit;
+            var unit = engine.currentPlayer.activeUnit;
 
             if (unit) {
                 unit.action(action.name);
@@ -122,12 +157,13 @@ game.on('start', function(unit) {
         });
     });
 
-    game.emit('bind-key', 'game', 'enter', function() {
-        if (game.isTurnEnd) {
-            game.emit('turn-end');
+    // TODO: move game-wide shortcuts to config file
+    engine.emit('bind-key', 'game', 'enter', function() {
+        if (engine.isTurnEnd) {
+            engine.emit('turn-end');
         }
         else {
-            console.log(game.currentPlayer.actionsLeft + ' action(s) left to perform.');
+            console.log(engine.currentPlayer.actionsLeft + ' action(s) left to perform.');
         }
     });
 });

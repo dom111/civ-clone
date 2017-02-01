@@ -2,5 +2,22 @@
     "name": "base-civilizations",
     "version": "0.0.1",
     "weight": 0,
-    "components": []
+    "components": [
+        {
+            "type": "game-modifier",
+            "weight": 0,
+            "contents": [
+                "main.js"
+            ]
+        },
+        {
+            "type": "civilization",
+            "weight": 0,
+            "contents": [
+                "civilizations/babylonian.json",
+                "civilizations/english.json",
+                "civilizations/german.json"
+            ]
+        }
+    ]
 }

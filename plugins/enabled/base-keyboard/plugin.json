@@ -9,6 +9,15 @@
             "contents": [
                 "main.js"
             ]
+        },
+        {
+            "description": "Basic keybinds for all units.",
+            "type": "keybinds",
+            "label": "unit",
+            "weight": 0,
+            "contents": [
+                "keybinds/unit.json"
+            ]
         }
     ],
     "options": [],

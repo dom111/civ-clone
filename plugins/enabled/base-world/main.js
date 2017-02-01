@@ -1,15 +1,13 @@
 'use strict';
 
-const extend = require('extend');
-
 // events
-game.on('tile-improvement-built', function(tile, improvement) {
+engine.on('tile-improvement-built', function(tile, improvement) {
     if (!tile.improvements.includes(improvement)) {
         tile.improvements.push(improvement);
     }
 });
 
-game.on('tile-improvement-pillaged', function(tile, improvement) {
+engine.on('tile-improvement-pillaged', function(tile, improvement) {
     if (tile.improvements.includes(improvement)) {
         tile.improvements = tile.improvements.filter(function(currentImprovement) {
             return currentImprovement !== improvement;
@@ -17,153 +15,12 @@ game.on('tile-improvement-pillaged', function(tile, improvement) {
     }
 });
 
-game.on('tile-seen', function(tile, player) {
+engine.on('tile-seen', function(tile, player) {
     tile.seenBy[player.id] = 1;
 });
 
-module.exports = (function() {
-    var Tile = class Tile {
-        constructor(details) {
-            var tile = this;
-
-            extend(tile, details);
-
-            // keep this as its own instance
-            tile.terrain = extend({}, tile.terrain);
-
-            if (!(tile.map instanceof World)) {
-                throw "Invalid Tile definition.";
-            }
-
-            tile.improvements = [];
-            tile.city = false;
-            tile.units = [];
-            tile.seenBy = {};
-
-            tile.seed = Math.ceil(Math.random() * 1e7);
-
-            if ('special' in tile.terrain && Array.isArray(tile.terrain.special)) {
-                tile.terrain.special.forEach(function(special) {
-                    if (Array.isArray(tile.terrain.special)) {
-                        if ((tile.seed + tile.map.seed * ((tile.x + 1) + (tile.y + 1))) % 100 < special.chance) {
-                            tile.terrain.special = special;
-
-                            return false; // TODO: check this breaks out early...
-                        }
-                    }
-                });
-            }
-
-            if (Array.isArray(tile.terrain.special)) {
-                tile.terrain.special = false;
-            }
-        }
-
-        get neighbours() {
-            return {
-                n: this.map.get(this.x, this.y - 1),
-                ne: this.map.get(this.x + 1, this.y - 1),
-                e: this.map.get(this.x + 1, this.y),
-                se: this.map.get(this.x + 1, this.y + 1),
-                s: this.map.get(this.x, this.y + 1),
-                sw: this.map.get(this.x - 1, this.y + 1),
-                w: this.map.get(this.x - 1, this.y),
-                nw: this.map.get(this.x - 1, this.y - 1)
-            };
-        }
-
-        get adjacent() {
-            return {
-                n: this.map.get(this.x, this.y - 1),
-                e: this.map.get(this.x + 1, this.y),
-                w: this.map.get(this.x - 1, this.y),
-                s: this.map.get(this.x, this.y + 1)
-            };
-        }
-
-        get adjacentTerrain() {
-            var tile = this,
-            adjacent = tile.adjacent,
-            result = '';
-
-            return ['n', 'e', 's', 'w'].filter(function(position) {
-                return (adjacent[position].terrainId === tile.terrainId);
-            }).join('');
-        }
-
-        get isOcean() {
-            return this.terrain.ocean;
-        }
-
-        get isCoast() {
-            var tile = this;
-
-            return tile.isOcean &&
-                Object.keys(tile.neighbours).map(function(direction) {
-                    return tile.neighbours[direction].isLand
-                }).some(function(value) {
-                    return value === true;
-                });
-        }
-
-        get coast() {
-            var tile = this;
-
-            return Object.keys(this.neighbours).filter(function(direction) {
-                return tile.neighbours[direction].isLand;
-            });
-        }
-
-        get isLand() {
-            return this.terrain.land;
-        }
-
-        isVisible(playerId) {
-            return this.seenBy[playerId];
-        }
-
-        resource(type) {
-            var tile = this;
-
-            if ((typeof tile.terrain[type] === 'function')) {
-                tile.terrain[type] = tile.terrain[type](tile.map, tile.x, tile.y);
-            }
-
-            return (this.terrain[type] + tile.improvements.map(function(improvement) {
-                return (tile.terrain.improvements[improvement] || {})[type] || 0;
-            }).reduce(function(total, value) {
-                return total + value;
-            }, 0)) || 0;
-        }
-
-        get trade() {
-            return this.resource('trade');
-        }
-
-        get food() {
-            return this.resource('food');
-        }
-
-        get production() {
-            return this.resource('production');
-        }
-
-        movementCost(to) {
-            // TODO: these defined separately, improvement plugins?
-            if (this.improvements.includes('railroad') && to.improvements.includes('railroad')) {
-                // TODO: unless goto...
-                return 0;
-            }
-            else if (this.improvements.includes('road') && to.improvements.includes('road')) {
-                return 1 / 3;
-            }
-            else {
-                return to.terrain.movementCost;
-            }
-        }
-    };
-
-    var World = class World {
+exnted(engine, {
+    World: class World {
         constructor() {
             var map = this;
 
@@ -171,9 +28,9 @@ module.exports = (function() {
 
             map.seed = Math.ceil(Math.random() * 1e7);
 
-            game.plugin.get('terrain').forEach(function(terrain) {
+            engine.plugin.get('terrain').forEach(function(terrain) {
                 terrain.contents.forEach(function(file) {
-                    var terrainDefinition = game.loadJSON(file);
+                    var terrainDefinition = engine.loadJSON(file);
 
                     if ('image' in terrainDefinition) {
                         terrainDefinition.image = terrain.__path + terrainDefinition.image;
@@ -201,7 +58,7 @@ module.exports = (function() {
 
             map.map = map.generate().map(function(row, y) {
                 return row.map(function(terrainId, x) {
-                    return new Tile({
+                    return new World.Tile({
                         x: x,
                         y: y,
                         terrainId: terrainId,
@@ -331,8 +188,149 @@ module.exports = (function() {
         load() {
             // TODO
         }
-    };
+    }
+});
 
-    return World;
-})();
+extend(engine.World, {
+    Tile: class Tile {
+        constructor(details) {
+            var tile = this;
 
+            extend(tile, details);
+
+            // keep this as its own instance
+            tile.terrain = extend({}, tile.terrain);
+
+            if (!(tile.map instanceof engine.World)) {
+                throw "Invalid Tile definition.";
+            }
+
+            tile.improvements = [];
+            tile.city = false;
+            tile.units = [];
+            tile.seenBy = {};
+
+            tile.seed = Math.ceil(Math.random() * 1e7);
+
+            if ('special' in tile.terrain && Array.isArray(tile.terrain.special)) {
+                tile.terrain.special.forEach(function(special) {
+                    if (Array.isArray(tile.terrain.special)) {
+                        if ((tile.seed + tile.map.seed * ((tile.x + 1) + (tile.y + 1))) % 100 < special.chance) {
+                            tile.terrain.special = special;
+
+                            return false; // TODO: check this breaks out early...
+                        }
+                    }
+                });
+            }
+
+            if (Array.isArray(tile.terrain.special)) {
+                tile.terrain.special = false;
+            }
+        }
+
+        get neighbours() {
+            return {
+                n: this.map.get(this.x, this.y - 1),
+                ne: this.map.get(this.x + 1, this.y - 1),
+                e: this.map.get(this.x + 1, this.y),
+                se: this.map.get(this.x + 1, this.y + 1),
+                s: this.map.get(this.x, this.y + 1),
+                sw: this.map.get(this.x - 1, this.y + 1),
+                w: this.map.get(this.x - 1, this.y),
+                nw: this.map.get(this.x - 1, this.y - 1)
+            };
+        }
+
+        get adjacent() {
+            return {
+                n: this.map.get(this.x, this.y - 1),
+                e: this.map.get(this.x + 1, this.y),
+                w: this.map.get(this.x - 1, this.y),
+                s: this.map.get(this.x, this.y + 1)
+            };
+        }
+
+        // this is used to help with rendering contiguous terrain types
+        get adjacentTerrain() {
+            var tile = this,
+            adjacent = tile.adjacent,
+            result = '';
+
+            return ['n', 'e', 's', 'w'].filter(function(position) {
+                return (adjacent[position].terrainId === tile.terrainId);
+            }).join('');
+        }
+
+        get isOcean() {
+            return this.terrain.ocean;
+        }
+
+        get isCoast() {
+            var tile = this;
+
+            return tile.isOcean &&
+                Object.keys(tile.neighbours).map(function(direction) {
+                    return tile.neighbours[direction].isLand
+                }).some(function(value) {
+                    return value === true;
+                });
+        }
+
+        get coast() {
+            var tile = this;
+
+            return Object.keys(this.neighbours).filter(function(direction) {
+                return tile.neighbours[direction].isLand;
+            });
+        }
+
+        get isLand() {
+            return this.terrain.land;
+        }
+
+        isVisible(playerId) {
+            return this.seenBy[playerId];
+        }
+
+        resource(type) {
+            var tile = this;
+
+            if ((typeof tile.terrain[type] === 'function')) {
+                tile.terrain[type] = tile.terrain[type](tile.map, tile.x, tile.y);
+            }
+
+            return (this.terrain[type] + tile.improvements.map(function(improvement) {
+                return (tile.terrain.improvements[improvement] || {})[type] || 0;
+            }).reduce(function(total, value) {
+                return total + value;
+            }, 0)) || 0;
+        }
+
+        get trade() {
+            return this.resource('trade');
+        }
+
+        get food() {
+            return this.resource('food');
+        }
+
+        get production() {
+            return this.resource('production');
+        }
+
+        movementCost(to) {
+            // TODO: these defined separately, improvement plugins?
+            if (this.improvements.includes('railroad') && to.improvements.includes('railroad')) {
+                // TODO: unless goto...
+                return 0;
+            }
+            else if (this.improvements.includes('road') && to.improvements.includes('road')) {
+                return 1 / 3;
+            }
+            else {
+                return to.terrain.movementCost;
+            }
+        }
+    }
+});

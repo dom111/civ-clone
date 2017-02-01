@@ -1,0 +1,47 @@
+[
+    {
+        "keys": ["up", "numpad8"],
+        "action": "move",
+        "args": ["n"]
+    },
+    {
+        "keys": ["pageup", "numpad9"],
+        "action": "move",
+        "args": ["ne"]
+    },
+    {
+        "keys": ["right" ,"numpad6"],
+        "action": "move",
+        "args": ["e"]
+    },
+    {
+        "keys": ["pagedown" ,"numpad3"],
+        "action": "move",
+        "args": ["se"]
+    },
+    {
+        "keys": ["down" ,"numpad2"],
+        "action": "move",
+        "args": ["s"]
+    },
+    {
+        "keys": ["end" ,"numpad1"],
+        "action": "move",
+        "args": ["sw"]
+    },
+    {
+        "keys": ["left", "numpad4"],
+        "action": "move",
+        "args": ["w"]
+    },
+    {
+        "keys": ["home", "numpad7"],
+        "action": "move",
+        "args": ["nw"]
+    },
+    {
+        "keys": ["P"],
+        "action": "action",
+        "args": ["pillage"]
+    }
+]

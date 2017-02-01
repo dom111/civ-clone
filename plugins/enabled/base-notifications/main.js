@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = (function() {
-    var Notifications = {
+extend(engine, {
+    Notifications: {
         notifications: [],
         add: function(data) {
             this.notifications.push(data);
@@ -27,7 +27,5 @@ module.exports = (function() {
         display: function(notification) {
             console.log(notification);
         }
-    };
-
-    return Notifications;
-})();
+    }
+});
