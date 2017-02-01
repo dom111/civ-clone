@@ -31,16 +31,10 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
             document.body.appendChild(renderer.preload);
         }
 
-        fs.readdirSync(__path + 'assets/').forEach(function(path) {
-            var stat = fs.statSync(__path + 'assets/' + path);
-
-            if (stat.isDirectory()) {
-                fs.readdirSync(__path + 'assets/' + path).forEach(function(file) {
-                    if (file.match(/(png|gif|jpe?g)$/i)) {
-                        renderer.preload.innerHTML += '<img src="file://' + __path + 'assets/' + path + '/' + file + '"/>';
-                    }
-                });
-            }
+        plugin.get('asset').forEach(function(component) {
+            component.contents.forEach(function(assetPath) {
+                renderer.preload.innerHTML += '<img src="file://' + assetPath + '"/>';
+            });
         });
     }
 
@@ -467,37 +461,48 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                 row.forEach(function(tile) {
                     if (!game.currentPlayer || !game.currentPlayer.activeUnit || game.currentPlayer.activeUnit.tile !== tile) {
                         var unit = tile.units.sort(function(a, b) {
-                            return a.defence > b.defense ?
-                                -1 : a.defense == a.defense ?
-                                    0 : 1;
+                            return a.defence > b.defense ? -1 : a.defense == a.defense ? 0 : 1;
                         })[0],
                         images = [];
 
-                        if (tile.units.length > 1) {
+                        if (tile.units.length) {
                             var image = document.createElement('canvas'),
                             imageContext = image.getContext('2d'),
                             unitImage = new global.Image;
-                            unitImage.src = 'file://' + __path + 'assets/units/' + unit.name + '.gif';
-                            image.width = unitImage.width + 1;
-                            image.height = unitImage.height + 1;
-                            imageContext.drawImage(unitImage, 1, 1);
+                            unitImage.src = 'file://' + __path + 'assets/units/' + unit.name + '.gif'; // TODO: have each unit details as a component
+                            image.width = unitImage.width;
+                            image.height = unitImage.height;
+
+                            if (tile.units.length > 1) {
+                                image.width = unitImage.width + 1;
+                                image.height = unitImage.height + 1;
+                                imageContext.drawImage(unitImage, 1, 1);
+                            }
+
                             imageContext.drawImage(unitImage, 0, 0);
+                            imageContext.save();
 
                             images.push(image);
-                        }
-                        else if (tile.units.length) {
-                            images.push(__path + 'assets/units/' + unit.name + '.gif');
-                        }
 
-                        if (images.length) {
-                            tiles.push({
-                                images: images,
-                                text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
-                                height: unit.height,
-                                width: unit.width,
-                                x: unit.tile.terrain.size * unit.tile.x,
-                                y: unit.tile.terrain.size * unit.tile.y
-                            });
+                            if (images.length) {
+                                var sourceColors = plugin.get('asset', 'units')[0].sourceColors;
+                                var replaceColors = unit.player.colors;
+
+                                tiles.push({
+                                    images: images.map(function(image) {
+                                        if ('getContext' in image) {
+                                            image = renderer.replaceColor(image, sourceColors, replaceColors)
+                                        }
+
+                                        return image;
+                                    }),
+                                    text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
+                                    height: unit.height,
+                                    width: unit.width,
+                                    x: unit.tile.terrain.size * unit.tile.x,
+                                    y: unit.tile.terrain.size * unit.tile.y
+                                });
+                            }
                         }
                     }
                 });
@@ -547,31 +552,40 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
                 tile = unit.tile,
                 images = [];
 
-                if (tile.units.length > 1) {
+                if (tile.units.length) {
                     var image = document.createElement('canvas'),
                     imageContext = image.getContext('2d'),
                     unitImage = new global.Image;
                     unitImage.src = 'file://' + __path + 'assets/units/' + unit.name + '.gif';
-                    image.width = unitImage.width + 1;
-                    image.height = unitImage.height + 1;
-                    imageContext.drawImage(unitImage, 1, 1);
+                    image.width = unitImage.width;
+                    image.height = unitImage.height;
+
+                    if (tile.units.length > 1) {
+                        image.width = unitImage.width + 1;
+                        image.height = unitImage.height + 1;
+                        imageContext.drawImage(unitImage, 1, 1);
+                    }
+
                     imageContext.drawImage(unitImage, 0, 0);
+                    imageContext.save();
 
                     images.push(image);
-                }
-                else {
-                    images.push(__path + 'assets/units/' + unit.name + '.gif');
-                }
 
-                if (images.length) {
-                    tiles.push({
-                        images: images,
-                        text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
-                        height: unit.height,
-                        width: unit.width,
-                        x: unit.tile.terrain.size * unit.tile.x,
-                        y: unit.tile.terrain.size * unit.tile.y
-                    });
+                    if (images.length) {
+                        var sourceColors = plugin.get('asset', 'units')[0].sourceColors;
+                        var replaceColors = game.currentPlayer.colors;
+
+                        tiles.push({
+                            images: images.map(function(image) {
+                                return renderer.replaceColor(image, sourceColors, replaceColors);
+                            }),
+                            text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
+                            height: unit.height,
+                            width: unit.width,
+                            x: unit.tile.terrain.size * unit.tile.x,
+                            y: unit.tile.terrain.size * unit.tile.y
+                        });
+                    }
                 }
             }
 
@@ -630,6 +644,80 @@ var BaseRenderer = global.BaseRenderer = class BaseRenderer {
         }
 
         renderer.updateDisplay();
+    }
+
+    replaceColor(canvas, source, replacement) {
+        var context = canvas.getContext('2d');
+        context.save();
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        var _getColor = function(input) {
+            var match = [],
+            color = {};
+
+            if (typeof(input) === 'string') {
+                if (match = input.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/)) {
+                    color = {
+                        r: parseInt(match[1], 16),
+                        g: parseInt(match[2], 16),
+                        b: parseInt(match[3], 16),
+                        a: 1
+                    };
+                }
+                else if (match = input.match(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/)) {
+                    color = {
+                        r: parseInt(match[1] + match[1], 16),
+                        g: parseInt(match[2] + match[2], 16),
+                        b: parseInt(match[3] + match[3], 16),
+                        a: 1
+                    };
+                }
+                else if (match = input.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/)) {
+                    color = {
+                        r: parseInt(match[1]),
+                        g: parseInt(match[2]),
+                        b: parseInt(match[3]),
+                        a: 1
+                    };
+                }
+                else if (match = input.match(/^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+|\d+\.|\.\d+|\d+\.\d+)\s*\)\s*$/)) {
+                    color = {
+                        r: parseInt(match[1]),
+                        g: parseInt(match[2]),
+                        b: parseInt(match[3]),
+                        a: parseFloat(match[4])
+                    };
+                }
+            }
+            else if ('length' in input) {
+                color = {
+                    r: input[0] || 0,
+                    g: input[1] || 0,
+                    b: input[2] || 0,
+                    a: input[3] || 1
+                };
+            }
+
+            return color;
+        };
+
+        var sourceColors = source.map(_getColor),
+        replaceColors = replacement.map(_getColor);
+
+        for (var i = 0; i < imageData.data.length; i += 4) {
+            sourceColors.forEach(function(color, n) {
+                if (imageData.data[i] === color.r && imageData.data[i + 1] === color.g && imageData.data[i + 2] === color.b) {
+                    imageData.data[i] = (replaceColors[n] || replaceColors[0]).r;
+                    imageData.data[i + 1] = (replaceColors[n] || replaceColors[0]).g;
+                    imageData.data[i + 2] = (replaceColors[n] || replaceColors[0]).b;
+                    imageData.data[i + 3] = parseInt((replaceColors[n] || replaceColors[0]).a * 255);
+                }
+            });
+        }
+
+        context.putImageData(imageData, 0, 0);
+
+        return canvas;
     }
 
     updateDisplay(layersToProcess) {
