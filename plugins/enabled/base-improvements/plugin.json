@@ -1,0 +1,22 @@
+{
+    "name": "base-improvements",
+    "title": "Base Improvements",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "game-modifier",
+            "weight": 500,
+            "contents": [
+                "improvements.js"
+            ]
+        },
+        {
+            "type": "game-modifier",
+            "weight": 1000,
+            "contents": [
+                "improvements/barracks.js",
+                "improvements/granary.js"
+            ]
+        }
+    ]
+}

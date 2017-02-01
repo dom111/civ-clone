@@ -20,6 +20,14 @@
             ]
         },
         {
+            "type": "template",
+            "label": "debug",
+            "weight": 0,
+            "contents": [
+                "mustache/debug.mustache"
+            ]
+        },
+        {
             "type": "style",
             "weight": 0,
             "contents": [

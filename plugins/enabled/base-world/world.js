@@ -7,7 +7,8 @@ extend(engine, {
 
             map.terrain = [];
 
-            map.seed = Math.ceil(Math.random() * 1e7);
+            // map.seed = Math.ceil(Math.random() * 1e7);
+            map.seed = 615489;
 
             Engine.Plugin.get('terrain').forEach((terrain) => {
                 terrain.contents.forEach((file) => {
@@ -35,15 +36,13 @@ extend(engine, {
                 });
             });
 
-            map.map = map.generate().map((row, y) => {
-                return row.map((terrainId, x) => new engine.World.Tile({
-                    x: x,
-                    y: y,
-                    terrainId: terrainId,
-                    terrain: map.getTerrainType(terrainId),
-                    map: map
-                }));
-            });
+            map.map = map.generate().map((row, y) => row.map((terrainId, x) => new engine.World.Tile({
+                x: x,
+                y: y,
+                terrainId: terrainId,
+                terrain: map.getTerrainType(terrainId),
+                map: map
+            })));
         }
 
         visibility(playerId, x, y) {
@@ -187,7 +186,9 @@ extend(engine.World, {
             tile.units = [];
             tile.seenBy = {};
 
-            tile.seed = Math.ceil(Math.random() * 1e7);
+            // when generating use this:
+            // tile.seed = Math.ceil(Math.random() * 1e7);
+            tile.seed = tile.seed || (tile.x * tile.y * tile.terrainId);
 
             if ('special' in tile.terrain && Array.isArray(tile.terrain.special)) {
                 tile.terrain.special.forEach((special) => {

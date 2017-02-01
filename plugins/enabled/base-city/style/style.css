@@ -6,7 +6,8 @@
     top: 10%;
     background: #fff;
     padding: 2em;
-    z-index: 1;
+    border: 1px solid #000;
+    z-index: 11;
 }
 
 .city-view .close {

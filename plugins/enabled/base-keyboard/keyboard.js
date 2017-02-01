@@ -3,26 +3,16 @@ var keys = [];
 var _processKey = function(key) {
     var allKeys = key.split(/\+/),
     lookup = {
-        'up': 38,
-        'down': 40,
-        'left': 37,
-        'right': 39,
+        'enter': 13,
+        'space': 32,
         'pageup': 33,
         'pagedown': 34,
-        'home': 36,
         'end': 35,
-        'enter': 13,
-        // windows?
-        // 'numpad0': 96,
-        // 'numpad1': 97,
-        // 'numpad2': 98,
-        // 'numpad3': 99,
-        // 'numpad4': 100,
-        // 'numpad5': 101,
-        // 'numpad6': 102,
-        // 'numpad7': 103,
-        // 'numpad8': 104,
-        // 'numpad9': 105
+        'home': 36,
+        'left': 37,
+        'up': 38,
+        'right': 39,
+        'down': 40,
         // mac.
         'numpad0': 48,
         'numpad1': 49,
@@ -34,6 +24,17 @@ var _processKey = function(key) {
         'numpad7': 55,
         'numpad8': 56,
         'numpad9': 57
+        // windows?
+        // 'numpad0': 96,
+        // 'numpad1': 97,
+        // 'numpad2': 98,
+        // 'numpad3': 99,
+        // 'numpad4': 100,
+        // 'numpad5': 101,
+        // 'numpad6': 102,
+        // 'numpad7': 103,
+        // 'numpad8': 104,
+        // 'numpad9': 105
     },
     object = {};
 

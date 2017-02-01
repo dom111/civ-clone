@@ -1,0 +1,10 @@
+<div id="layerDebug">
+    <ul>
+        <li><input name="dummyWhite" type="checkbox" value="1" id="renderLayer_dummyWhite"/> <label for="renderLayer_dummyWhite">dummyWhite</label></li>
+        <li><input name="dummyBlack" type="checkbox" value="1" id="renderLayer_dummyBlack"/> <label for="renderLayer_dummyBlack">dummyBlack</label></li>
+
+        {{#layerOrder}}
+            <li><input name="{{.}}" type="checkbox" value="1" checked="checked" id="renderLayer_{{.}}"/> <label for="renderLayer_{{.}}">{{.}}</label></li>
+        {{/layerOrder}}
+    </ul>
+</div>

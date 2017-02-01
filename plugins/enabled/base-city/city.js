@@ -1,76 +1,5 @@
 'use strict';
 
-// bind events - could be in a static method of City?
-engine.on('turn-end', () => {
-    engine.players.forEach((player) => {
-        player.cities.forEach((city) => {
-            city.foodStorage += city.surplusFood;
-
-            if (city.foodStorage >= ((city.size * 10) + 10)) {
-                city.size++;
-                city.foodStorage = 0;
-
-                engine.emit('city-grow', city);
-            }
-
-            city.building.progress += city.production;
-
-            if (city.building.progress >= city.building.cost) {
-                if (city.building.unit) {
-                    new engine.Unit({
-                        tile: city.tile,
-                        player: city.player,
-                        unit: city.building.unit,
-                        city: city
-                    });
-
-                    city.building = false;
-                }
-                else if (city.building.improvement) {
-                    new engine.Improvement({
-                        city: city
-                    });
-
-                    city.building = false;
-                }
-                else {
-                    // city.building.action()
-                }
-            }
-        });
-    });
-});
-
-engine.on('city-captured', function(city, player) {
-    var capturedCity = this;
-
-    city.player.cities = this.player.cities.filter((city) => (city !== capturedCity));
-    city.player = player;
-    player.cities.push(this);
-});
-
-engine.on('city-destroyed', (city, player) => {
-    city.destroyed = true;
-
-    if (!city.player.cities.map((city) => city.destroyed).some((value) => value === true)) {
-        // TODO: all cities destroyed
-    }
-
-    // TODO: remove from map
-});
-
-engine.on('city-grow', (city) => {
-    city.autoAssignWorkers();
-    city.calculateRates();
-});
-
-engine.on('city-shrink', (city) => {
-    city.autoAssignWorkers();
-    city.calculateRates();
-});
-
-engine.on('player-rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
-
 extend(engine, {
     City: class City {
         constructor(details) {
@@ -85,6 +14,7 @@ extend(engine, {
             city.destroyed = false;
             city.size = 1;
             city.rates = {};
+            city.improvements = [];
             city.foodStorage = 0;
             city.building = false;
 
@@ -194,6 +124,8 @@ extend(engine, {
         }
 
         get availableBuildItems() {
+            var city = this;
+            return [].concat(city.availableUnits).concat(city.availableImprovements).concat(city.availableWonders).concat(city.availableProjects);
             // TODO
             return [{
                 "unit": "settlers",
@@ -214,6 +146,22 @@ extend(engine, {
             }];
         }
 
+        get availableUnits() {
+            return [];
+        }
+
+        get availableImprovements() {
+            return [];
+        }
+
+        get availableProjects() {
+            return [];
+        }
+
+        get availableWonders() {
+            return [];
+        }
+
         build(itemName) {
             this.building = this.availableBuildItems.filter((item) => {
                 if ('unit' in item) {
@@ -223,8 +171,6 @@ extend(engine, {
                     return item.building == itemName;
                 }
             })[0];
-
-            console.log(JSON.stringify(this.building));
         }
 
         showCityScreen() {
@@ -237,7 +183,7 @@ extend(engine, {
                 view.querySelector('.close').addEventListener('click', _remove);
 
                 view.querySelector('.change').addEventListener('click', () => {
-                    city.building = city.availableBuildItems[Date.now()%city.availableBuildItems.length];
+                    extend(city.building, city.availableBuildItems[Date.now()%city.availableBuildItems.length]);
                     _refresh();
                 });
 
@@ -266,3 +212,79 @@ extend(engine, {
         }
     }
 });
+
+// bind events - could be in a static method of City?
+engine.on('turn-end', () => {
+    engine.players.forEach((player) => {
+        player.cities.forEach((city) => {
+            city.foodStorage += city.surplusFood;
+
+            if (city.foodStorage >= ((city.size * 10) + 10)) {
+                city.size++;
+                city.foodStorage = 0;
+
+                engine.emit('city-grow', city);
+            }
+
+            if (city.building) {
+                city.building.progress += city.production;
+
+                if (city.building.progress >= city.building.cost) {
+                    if (city.building.unit) {
+                        // TODO: event?
+                        new engine.Unit({
+                            tile: city.tile,
+                            player: city.player,
+                            unit: city.building.unit,
+                            city: city
+                        });
+
+                        city.building = false;
+                    }
+                    else if (city.building.improvement) {
+                        // TODO: event?
+                        new (engine.City.Improvement.get(city.building.improvement))({
+                            city: city
+                        });
+
+                        city.building = false;
+                    }
+                    else {
+                        // TODO: stuff like 'wealth'
+                        // city.building.action();
+                    }
+                }
+            }
+        });
+    });
+});
+
+engine.on('city-captured', function(city, player) {
+    var capturedCity = this;
+
+    city.player.cities = this.player.cities.filter((city) => (city !== capturedCity));
+    city.player = player;
+    player.cities.push(this);
+});
+
+engine.on('city-destroyed', (city, player) => {
+    city.destroyed = true;
+
+    if (!city.player.cities.map((city) => city.destroyed).some((value) => value === true)) {
+        // TODO: all cities destroyed
+    }
+
+    // TODO: remove from map
+});
+
+engine.on('city-grow', (city) => {
+    city.autoAssignWorkers();
+    city.calculateRates();
+});
+
+engine.on('city-shrink', (city) => {
+    city.autoAssignWorkers();
+    city.calculateRates();
+});
+
+engine.on('player-rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));

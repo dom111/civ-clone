@@ -1,5 +1,6 @@
 'use strict';
 
+// TODO: split this out like improvements - maybe?
 extend(engine, {
     Unit: class Unit {
         constructor(details) {
@@ -13,8 +14,6 @@ extend(engine, {
             extend(unit, baseUnit);
             extend(unit, details);
             unit.actions = {};
-
-            unit.destroyed = false;
 
             unit.player.units.push(unit);
 
@@ -142,9 +141,9 @@ extend(engine, {
 
         action(action) {
             if (this.can(action)) {
-                this.actions[action].run(this);
+                this.actions[action].run(this, this.actions[action]);
 
-                engine.emit('unit-moved', this, this.tile, this.tile);
+                engine.emit('unit-action', this, this.actions[action]);
             }
             else {
                 console.log("Can't call action " + action + " on " + this.player.people + " " + this.title);
@@ -156,16 +155,11 @@ extend(engine, {
         }
 
         destroy() {
-            var unit = this;
+            if (global.debug) {
+                console.log(this.player.people + ' ' + this.name + ' destroyed.');
+            }
 
-            unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
-
-            unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
-
-            unit.active = false;
-            unit.destroyed = true;
-
-            engine.emit('unit-destroyed', unit);
+            engine.emit('unit-destroyed', this);
         }
     }
 });
@@ -178,9 +172,9 @@ extend(engine.Unit, {
             turns: 0,
             key: 's',
             availableTo: {},
-            run: (unit) => {
+            run: (unit, action) => {
                 unit.busy = -1;
-                unit.inactive = true;
+                unit.active = false;
                 unit.style = {
                     opacity:.5
                 };
@@ -190,9 +184,9 @@ extend(engine.Unit, {
             name: 'fortify',
             title: 'Fortify',
             turns: 1,
-            run: (unit) => {
+            run: (unit, action) => {
                 unit.busy = -1;
-                unit.inactive = true;
+                unit.active = false;
                 unit.fortified = true;
             }
         },
@@ -200,25 +194,25 @@ extend(engine.Unit, {
             name: 'disband',
             title: 'Disband',
             turns: 0,
-            run: (unit) => unit.destroy()
+            run: (unit, action) => unit.destroy()
         },
         pillage: {
             name: 'pillage',
             title: 'Pillage',
             turns: 1,
-            run: (unit) => engine.emit('tile-improvement-pillaged', unit.tile, unit.tile.improvements[0])
+            run: (unit, action) => engine.emit('tile-improvement-pillaged', unit.tile, unit.tile.improvements[0])
         },
         noOrders: {
             name: 'noOrders',
             title: 'No orders',
             turns: 0,
-            run: (unit) => unit.movesLeft = 0
+            run: (unit, action) => unit.movesLeft = 0
         },
         buildCity: {
             name: 'buildCity',
             title: 'Build city',
             turns: 0,
-            run: (unit) => {
+            run: (unit, action) => {
                 new engine.City({
                     player: unit.player,
                     tile: unit.tile,
@@ -236,13 +230,13 @@ extend(engine.Unit, {
             availableTo: {
                 include: ['settlers']
             },
-            run: (unit) => {
+            run: (unit, action) => {
                 if (!unit.tile.improvements.includes('irrigation') && unit.tile.terrain.improvements.irrigation && (Object.keys(unit.tile.adjacent).map((direction) => unit.tile.adjacent[direction]).filter((tile) => tile.terrain.name === 'river' || (tile.improvements.includes('irrigation') && !tile.city) || tile.terrain.ocean).length || unit.tile.terrain.name === 'river')) {
-                    unit.status = this.key;
+                    unit.status = action.key;
                     // TODO: terrain modifier
-                    unit.busy = this.turns;
+                    unit.busy = action.turns;
                     unit.movesLeft = 0;
-                    unit.currentAction = this;
+                    unit.currentAction = action;
                 }
                 else {
                     // TODO: alert, no access to water, etc
@@ -261,13 +255,13 @@ extend(engine.Unit, {
             availableTo: {
                 include: ['settlers']
             },
-            run: (unit) => {
+            run: (unit, action) => {
                 if (!unit.tile.improvements.includes('road') && unit.tile.terrain.improvements.road) {
-                    unit.status = this.key;
+                    unit.status = action.key;
                     // TODO: terrain modifier
-                    unit.busy = this.turns;
+                    unit.busy = action.turns;
                     unit.movesLeft = 0;
-                    unit.currentAction = this;
+                    unit.currentAction = action;
                 }
             },
             complete: (unit) => {
@@ -283,13 +277,13 @@ extend(engine.Unit, {
             availableTo: {
                 include: ['settlers']
             },
-            run: (unit) => {
+            run: (unit, action) => {
                 if (!unit.tile.improvements.includes('mine') && unit.tile.terrain.improvements.mine) {
-                    unit.status = this.key;
+                    unit.status = action.key;
                     // TODO: terrain modifier
-                    unit.busy = this.turns;
+                    unit.busy = action.turns;
                     unit.movesLeft = 0;
-                    unit.currentAction = this;
+                    unit.currentAction = action;
                 }
             },
             complete: (unit) => {
@@ -307,12 +301,22 @@ extend(engine.Unit, {
         defence: 0,
         movement: 1,
         visibility: 1,
+
         // basic size, should be consistent
         width: 16,
         height: 16,
+
+        offsetX: 0,
+        offsetY: 0,
+
         land: true,
         ocean: false,
-        veteran: false
+
+        veteran: false,
+
+        destroyed: false,
+        active: false,
+        busy: false
     }
 });
 
@@ -334,11 +338,16 @@ engine.on('player-turn-start', (player) => {
                 if (unit.busy <= 0) {
                     unit.currentAction.complete(unit);
                 }
+                else {
+                    unit.movesLeft = 0;
+                }
             }
         }
 
-        unit.movesLeft = unit.movement;
-        unit.inactive = false;
+        if (!unit.busy) {
+            unit.movesLeft = unit.movement;
+            unit.active = true;
+        }
     });
 
     engine.emit('unit-activate-next', player);
@@ -355,7 +364,6 @@ engine.on('unit-created', (unit) => {
 engine.on('unit-activate', (unit) => {
     unit.player.activeUnit = unit;
     unit.active = true;
-    unit.inactive = false;
 });
 
 engine.on('unit-moved', (unit, from, to) => {
@@ -363,17 +371,30 @@ engine.on('unit-moved', (unit, from, to) => {
 
     from.units = from.units.filter((tileUnit) => tileUnit !== unit);
 
-    if (unit.movesLeft <= 0.1) {
+    if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
         unit.player.activeUnit = false;
         unit.active = false;
-        unit.inactive = true;
+
+        engine.emit('unit-activate-next', unit.player);
+    }
+});
+
+engine.on('unit-action', (unit, action) => {
+    if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
+        unit.player.activeUnit = false;
+        unit.active = false;
 
         engine.emit('unit-activate-next', unit.player);
     }
 });
 
 engine.on('unit-destroyed', (unit) => {
-    if (engine.activePlayer === unit.player) {
+    unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
+    unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
+    unit.active = false;
+    unit.destroyed = true;
+
+    if (engine.currentPlayer === unit.player) {
         if (unit.player.activeUnit === unit) {
             unit.player.activeUnit = false;
         }
