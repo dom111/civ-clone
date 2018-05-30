@@ -6,11 +6,11 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 100,
             "contents": [
                 "player.js"
             ]
         }
     ],
-    "weight": 100
+    "priority": 100
 }

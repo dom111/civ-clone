@@ -5,14 +5,14 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 500,
+            "priority": 500,
             "contents": [
                 "improvements.js"
             ]
         },
         {
             "type": "game-modifier",
-            "weight": 1000,
+            "priority": 1000,
             "contents": [
                 "improvements/barracks.js",
                 "improvements/granary.js"

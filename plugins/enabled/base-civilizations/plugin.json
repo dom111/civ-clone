@@ -1,18 +1,18 @@
 {
     "name": "base-civilizations",
     "version": "0.0.1",
-    "weight": 0,
+    "priority": 0,
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "civilizations.js"
             ]
         },
         {
             "type": "civilization",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "civilizations/babylonian.json",
                 "civilizations/english.json",

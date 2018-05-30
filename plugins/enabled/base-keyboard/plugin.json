@@ -5,7 +5,7 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "keyboard.js"
             ]
@@ -14,12 +14,12 @@
             "description": "Basic keybinds for all units.",
             "type": "keybinds",
             "label": "unit",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "keybinds/unit.json"
             ]
         }
     ],
     "options": [],
-    "weight": 0
+    "priority": 0
 }

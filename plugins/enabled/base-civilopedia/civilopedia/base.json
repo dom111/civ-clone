@@ -1,6 +1,6 @@
 {
     "name": "basic_gameplay",
-    "weight": 0,
+    "priority": 0,
     "category": {
         "name": "miscellaneous"
     },

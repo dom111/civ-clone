@@ -5,7 +5,7 @@
     "components": [
         {
             "type": "translation",
-            "weight": 0,
+            "priority": 0,
             "language": "en",
             "contents": [
                 "language/en.json"
@@ -13,7 +13,7 @@
         },
         {
             "type": "translation",
-            "weight": 100,
+            "priority": 100,
             "language": "en",
             "country": "US",
             "contents": [
@@ -22,5 +22,5 @@
         }
     ],
     "options": [],
-    "weight": 0
+    "priority": 0
 }

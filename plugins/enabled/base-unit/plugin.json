@@ -6,7 +6,7 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "unit.js"
             ]
@@ -20,5 +20,5 @@
             ]
         }
     ],
-    "weight": 0
+    "priority": 0
 }

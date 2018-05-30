@@ -13,9 +13,16 @@
         {
             "type": "game-modifier",
             "contents": [
-                "science.js",
+                "science.js"
+            ],
+            "priority": 200
+        },
+        {
+            "type": "game-modifier",
+            "contents": [
                 "advance.js"
-            ]
+            ],
+            "priority": 201
         },
         {
             "type": "advance",
@@ -44,5 +51,5 @@
             ]
         }
     ],
-    "weight": 200
+    "priority": 200
 }

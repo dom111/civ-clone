@@ -5,7 +5,7 @@
     "components": [
         {
             "type": "translation",
-            "weight": 0,
+            "priority": 0,
             "language": "en",
             "contents": [
                 "language/en.json"
@@ -13,12 +13,12 @@
         },
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "currency.js"
             ]
         }
     ],
     "options": [],
-    "weight": 0
+    "priority": 0
 }

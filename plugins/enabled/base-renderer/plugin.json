@@ -5,7 +5,7 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "renderer.js"
             ]
@@ -14,7 +14,7 @@
         {
             "type": "template",
             "label": "layout",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "mustache/layout.mustache"
             ]
@@ -22,14 +22,14 @@
         {
             "type": "template",
             "label": "debug",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "mustache/debug.mustache"
             ]
         },
         {
             "type": "style",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "style/style.css"
             ]
@@ -38,7 +38,7 @@
         {
             "type": "asset",
             "label": "city",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/city/bulb.gif",
                 "assets/city/food.gif",
@@ -62,7 +62,7 @@
         {
             "type": "asset",
             "label": "cursor",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/cursor/go.gif",
                 "assets/cursor/torch.gif"
@@ -71,7 +71,7 @@
         {
             "type": "asset",
             "label": "general",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/general/texture_1.gif",
                 "assets/general/texture_2.gif"
@@ -80,7 +80,7 @@
         {
             "type": "asset",
             "label": "improvements",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/improvements/irrigation.gif",
                 "assets/improvements/mine.gif",
@@ -106,7 +106,7 @@
         {
             "type": "asset",
             "label": "map",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/map/city.gif",
                 "assets/map/fog_e.gif",
@@ -121,7 +121,7 @@
         {
             "type": "asset",
             "label": "status",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/status/pollution_0.gif",
                 "assets/status/pollution_25.gif",
@@ -136,7 +136,7 @@
         {
             "type": "asset",
             "label": "terrain",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/terrain/arctic.gif",
                 "assets/terrain/arctic_e.gif",
@@ -352,7 +352,7 @@
         {
             "type": "asset",
             "label": "units",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "assets/units/armor.gif",
                 "assets/units/artillery.gif",

@@ -6,11 +6,11 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "combat.js"
             ]
         }
     ],
-    "weight": 100
+    "priority": 100
 }

@@ -6,12 +6,12 @@
     "components": [
         {
             "type": "game-modifier",
-            "weight": 0,
+            "priority": 0,
             "contents": [
                 "world.js"
             ]
         }
     ],
     "options": [],
-    "weight": 0
+    "priority": 0
 }
