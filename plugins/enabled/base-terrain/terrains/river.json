@@ -21,5 +21,14 @@
             "production": 1,
             "chance": 40
         }
+    ],
+    "distribution": [
+        {
+            "from": 0.1,
+            "to": 0.9,
+            "coverage": 0.05,
+            "clustered": false,
+            "path": true
+        }
     ]
 }

@@ -3,7 +3,7 @@
     "title": "Grassland",
     "food": 2,
     "trade": 0,
-    "production": 1,
+    "production": 0,
     "movementCost": 1,
     "improvements": {
         "irrigation": {
@@ -23,6 +23,13 @@
             "title": "Shield",
             "production": 1,
             "chance": 40
+        },
+        {
+            "name": "cow",
+            "title": "Cow",
+            "food": 3,
+            "production": 1,
+            "chance": 5
         }
     ]
 }

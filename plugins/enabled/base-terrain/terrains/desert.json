@@ -29,5 +29,14 @@
             },
             "chance": 16
         }
+    ],
+    "distribution": [
+        {
+            "from": 0.4,
+            "to": 0.6,
+            "coverage": 0.4,
+            "clustered": true,
+            "path": false
+        }
     ]
 }

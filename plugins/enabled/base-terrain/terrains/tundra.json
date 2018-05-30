@@ -19,5 +19,21 @@
             "food": 2,
             "chance": 16
         }
+    ],
+    "distribution": [
+        {
+            "from": 0.02,
+            "to": 0.15,
+            "coverage": 0.3,
+            "clustered": true,
+            "path": false
+        },
+        {
+            "from": 0.85,
+            "to": 0.98,
+            "coverage": 0.3,
+            "clustered": true,
+            "path": false
+        }
     ]
 }

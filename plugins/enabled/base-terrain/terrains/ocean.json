@@ -12,10 +12,19 @@
     "impassable": false,
     "special": [
         {
+            "name": "whale",
+            "title": "Whale",
+            "food": 3,
+            "trade": 4,
+            "production": 1,
+            "chance": 16
+        },
+        {
             "name": "fish",
             "title": "Fish",
             "food": 3,
-            "chance": 16
+            "trade": 4,
+            "chance": 20
         }
     ]
 }

@@ -19,5 +19,21 @@
             "trade": 3,
             "chance": 16
         }
+    ],
+    "distribution": [
+        {
+            "from": 0.2,
+            "to": 0.45,
+            "coverage": 0.2,
+            "clustered": true,
+            "path": false
+        },
+        {
+            "from": 0.55,
+            "to": 0.8,
+            "coverage": 0.2,
+            "clustered": true,
+            "path": false
+        }
     ]
 }
