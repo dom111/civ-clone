@@ -23,4 +23,5 @@ _Currently requires original assets to be extracted from the original Civilizati
   - Store map for each user so changes behind 'fog of war' cannot be observed
   - Leader interactions
   - Improve world building - perhaps investigate existing mechanisms?
+  - Fix intermittent issue with plugins loading out of order
   - So much more...
