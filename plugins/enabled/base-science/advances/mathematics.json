@@ -1,8 +1,0 @@
-{
-    "name": "mathematics",
-    "baseCost": 30,
-    "requires": [
-        "alphabet",
-        "masonry"
-    ]
-}

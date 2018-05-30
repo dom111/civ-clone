@@ -1,7 +1,0 @@
-{
-    "name": "writing",
-    "baseCost": 15,
-    "requires": [
-        "alphabet"
-    ]
-}

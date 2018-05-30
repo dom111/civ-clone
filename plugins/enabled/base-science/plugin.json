@@ -5,7 +5,6 @@
     "components": [
         {
             "type": "translation",
-            "weight": 0,
             "language": "en",
             "contents": [
                 "language/en-GB.json"
@@ -13,23 +12,35 @@
         },
         {
             "type": "game-modifier",
-            "weight": 0,
             "contents": [
-                "science.js"
+                "science.js",
+                "advance.js"
             ]
         },
         {
-            "type": "advances",
-            "weight": 0,
+            "type": "advance",
             "contents": [
-                "advances/alphabet.json",
-                "advances/code-of-laws.json",
-                "advances/literacy.json",
-                "advances/masonry.json",
-                "advances/mathematics.json",
-                "advances/republic.json",
-                "advances/wheel.json",
-                "advances/writing.json"
+                "advances/alphabet.js",
+                "advances/code-of-laws.js",
+                "advances/literacy.js",
+                "advances/masonry.js",
+                "advances/mathematics.js",
+                "advances/republic.js",
+                "advances/wheel.js",
+                "advances/writing.js"
+            ]
+        },
+        {
+            "type": "template",
+            "label": "research-selector",
+            "contents": [
+                "assets/mustache/research-selector.mustache"
+            ]
+        },
+        {
+            "type": "style",
+            "contents": [
+                "assets/style/style.css"
             ]
         }
     ],
