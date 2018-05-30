@@ -1,16 +1,16 @@
 'use strict';
 
-var _stringToNode = (html) => ((el) => {
+let _stringToNode = (html) => ((el) => {
     el.innerHTML = html;
 
     return el.firstChild;
 })(document.createElement('div'));
 
 // TODO: renderer base class - set up prototype method that must be implemented?
-// var BaseRenderer = class BaseRenderer extends Renderer {
-var BaseRenderer = class BaseRenderer {
+// let BaseRenderer = class BaseRenderer extends Renderer {
+let BaseRenderer = class BaseRenderer {
     constructor() {
-        var renderer = this;
+        let renderer = this;
 
         renderer.layerOrder = [
             'land',
@@ -28,14 +28,14 @@ var BaseRenderer = class BaseRenderer {
     }
 
     init() {
-        var renderer = this;
+        let renderer = this;
 
         renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'layout'})));
 
         if (global.debug) {
             renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'debug'}), renderer));
 
-            var layerDebug = document.getElementById('layerDebug');
+            let layerDebug = document.getElementById('layerDebug');
             Array.from(layerDebug.querySelectorAll('input[type="checkbox"]')).forEach((el) => {
                 el.addEventListener('change', (event) => {
                     renderer.layerOrder = Array.from(layerDebug.querySelectorAll('input[type="checkbox"]')).filter((el) => el.checked).map((el) => el.name);
@@ -51,7 +51,7 @@ var BaseRenderer = class BaseRenderer {
         renderer.context = renderer.canvas.getContext('2d');
 
         renderer.canvas.addEventListener('mousedown', (event) => {
-            var x = event.pageX,
+            let x = event.pageX,
             y = event.pageY,
             tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
 
@@ -64,7 +64,7 @@ var BaseRenderer = class BaseRenderer {
             x = renderer.center.x + x;
             y = renderer.center.y + y;
 
-            var tile = engine.map.get(x, y);
+            let tile = engine.map.get(x, y);
 
             if (tile.city) {
                 tile.city.showCityScreen();
@@ -79,7 +79,7 @@ var BaseRenderer = class BaseRenderer {
 
         renderer.canvas.addEventListener('mousemove', (event) => {
             if (event.shiftKey) {
-                var x = event.pageX,
+                let x = event.pageX,
                 y = event.pageY,
                 tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
 
@@ -92,7 +92,7 @@ var BaseRenderer = class BaseRenderer {
                 x = renderer.center.x + x;
                 y = renderer.center.y + y;
 
-                var tile = engine.map.get(x, y);
+                let tile = engine.map.get(x, y);
                 console.log(tile.x, tile.y);
             }
         });
@@ -192,7 +192,7 @@ var BaseRenderer = class BaseRenderer {
     }
 
     buildLayer(layer) {
-        var renderer = this,
+        let renderer = this,
         tiles = {};
 
         engine.map.map.forEach((row) => {
@@ -204,7 +204,7 @@ var BaseRenderer = class BaseRenderer {
 
                     tiles.land.push({
                         images: (() => {
-                            var images = [];
+                            let images = [];
 
                             if (tile.isOcean) {
                                 images.push(renderer._getPreloadedImage('assets/terrain/ocean.gif'));
@@ -246,11 +246,11 @@ var BaseRenderer = class BaseRenderer {
                         tiles.baseTerrain = [];
                     }
 
-                    var images = [];
+                    let images = [];
 
                     if (tile.isOcean) {
                         if (tile.isCoast) {
-                            var sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.gif'),
+                            let sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.gif'),
                             image = renderer._createPreloadCanvas(),
                             imageContext = image.getContext('2d'),
 
@@ -277,7 +277,7 @@ var BaseRenderer = class BaseRenderer {
                                 // significant bits for the top left subtile and shift the mask to the right as we
                                 // are going around the tile. This way we are "rotating" our bitmask. The result
                                 // are our x offsets into ter257.pic
-                                var topLeftSubtileOffset = (bitmask & 7),
+                                let topLeftSubtileOffset = (bitmask & 7),
                                 topRightSubtileOffset = ((bitmask >> 2) & 7),
                                 bottomRightSubtileOffset = ((bitmask >> 4) & 7),
                                 bottomLeftSubtileOffset = ((bitmask >> 6) & 7)|((bitmask & 1) << 2);
@@ -301,7 +301,7 @@ var BaseRenderer = class BaseRenderer {
                     }
                     else {
                         if (tile.terrain.name === 'river') {
-                            var adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
+                            let adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
 
                             if (adjoining) {
                                 images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif'));
@@ -311,7 +311,7 @@ var BaseRenderer = class BaseRenderer {
                             }
                         }
                         else {
-                            var adjoining = tile.adjacentTerrain;
+                            let adjoining = tile.adjacentTerrain;
 
                             if (adjoining) {
                                 images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif'));
@@ -342,12 +342,12 @@ var BaseRenderer = class BaseRenderer {
                         tiles.otherImprovements = [];
                     }
 
-                    var otherImprovements = tile.improvements.filter((improvement) => improvement !== 'irrigation');
+                    let otherImprovements = tile.improvements.filter((improvement) => improvement !== 'irrigation');
 
                     if (otherImprovements.length) {
                         tiles.otherImprovements.push({
                             images: (() => {
-                                var images = [],
+                                let images = [],
                                 adjoining;
 
                                 otherImprovements.forEach((improvement) => {
@@ -393,7 +393,7 @@ var BaseRenderer = class BaseRenderer {
 
                     if (tile.units.length) {
                         if (!engine.currentPlayer || !engine.currentPlayer.activeUnit || !tile.units.includes(engine.currentPlayer.activeUnit)) {
-                            var unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
+                            let unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
                             image = renderer._createPreloadCanvas(),
                             imageContext = image.getContext('2d'),
                             unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.gif'), // TODO: have each unit details as a component
@@ -432,7 +432,7 @@ var BaseRenderer = class BaseRenderer {
                     }
 
                     if (tile.city) {
-                        var city = tile.city,
+                        let city = tile.city,
                         image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d'),
                         cityImage = renderer._getPreloadedImage('assets/map/city.gif'),
@@ -467,7 +467,7 @@ var BaseRenderer = class BaseRenderer {
                     }
 
                     if (engine.currentPlayer && engine.currentPlayer.activeUnit && tile.units.includes(engine.currentPlayer.activeUnit)) {
-                        var unit = engine.currentPlayer.activeUnit,
+                        let unit = engine.currentPlayer.activeUnit,
                         tile = unit.tile,
                         image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d'),
@@ -485,7 +485,7 @@ var BaseRenderer = class BaseRenderer {
                         imageContext.drawImage(unitImage, 0, 0);
                         imageContext.save();
 
-                        var sourceColors = Engine.Plugin.first({package: 'base-renderer', type: 'asset', label: 'units'}).sourceColors,
+                        let sourceColors = Engine.Plugin.first({package: 'base-renderer', type: 'asset', label: 'units'}).sourceColors,
                         replaceColors = engine.currentPlayer.colors;
 
                         tiles.activeUnits.push({
@@ -503,7 +503,7 @@ var BaseRenderer = class BaseRenderer {
                         tiles.visibility = [];
                     }
 
-                    var player;
+                    let player;
 
                     if (engine.currentPlayer) {
                         player = engine.currentPlayer;
@@ -518,7 +518,7 @@ var BaseRenderer = class BaseRenderer {
                             });
                         }
                         else {
-                            var images = [];
+                            let images = [];
 
                             ['n', 'e', 's', 'w'].forEach((direction) => {
                                 if (!tile.adjacent[direction].isVisible(player.id)) {
@@ -544,7 +544,7 @@ var BaseRenderer = class BaseRenderer {
                         tiles.activeVisibility = [];
                     }
 
-                    var player;
+                    let player;
 
                     if (engine.currentPlayer) {
                         player = engine.currentPlayer;
@@ -559,7 +559,7 @@ var BaseRenderer = class BaseRenderer {
                             });
                         }
                         else {
-                            var images = [];
+                            let images = [];
 
                             ['n', 'e', 's', 'w'].forEach((direction) => {
                                 if (!tile.adjacent[direction].isActivelyVisible(player.id)) {
@@ -584,7 +584,7 @@ var BaseRenderer = class BaseRenderer {
                     if (!tiles.grid) {
                         tiles.grid = [];
 
-                        var image = renderer._createPreloadCanvas(),
+                        let image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d');
 
                         image.width = tile.terrain.size;
@@ -610,7 +610,7 @@ var BaseRenderer = class BaseRenderer {
 
         renderer.layerOrder.forEach((layerName) => {
             if ((layer === layerName) || (layer === 'all')) {
-                var layerObject = new BaseRenderer.Layer({
+                let layerObject = new BaseRenderer.Layer({
                     name: layerName,
                     tiles: tiles[layerName]
                 });
@@ -620,7 +620,7 @@ var BaseRenderer = class BaseRenderer {
         });
 
         if (global.debug) {
-            var dummyWhite = new BaseRenderer.Layer({
+            let dummyWhite = new BaseRenderer.Layer({
                 name: 'dummyWhite',
                 tiles: []
             });
@@ -628,7 +628,7 @@ var BaseRenderer = class BaseRenderer {
             dummyWhite.context.fillRect(0, 0, dummyWhite.width, dummyWhite.height);
             renderer.layers.dummyWhite = dummyWhite.render();
 
-            var dummyBlack = new BaseRenderer.Layer({
+            let dummyBlack = new BaseRenderer.Layer({
                 name: 'dummyBlack',
                 tiles: []
             });
@@ -641,7 +641,7 @@ var BaseRenderer = class BaseRenderer {
     }
 
     _createPreloadCanvas() {
-        var renderer = this,
+        let renderer = this,
         canvas = document.createElement('canvas');
 
         renderer.preload.appendChild(canvas);
@@ -650,7 +650,7 @@ var BaseRenderer = class BaseRenderer {
     }
 
     _cleanupPreloadCanvas() {
-        var renderer = this;
+        let renderer = this;
 
         Array.from(renderer.preload.querySelectorAll('canvas')).forEach((node) => {
             renderer.preload.removeChild(node);
@@ -660,7 +660,7 @@ var BaseRenderer = class BaseRenderer {
     }
 
     _getPreloadedImage(path) {
-        var renderer = this;
+        let renderer = this;
 
         if (!path.match(/^\//)) {
             path = Engine.Plugin.getPath('base-renderer') + path;
@@ -670,12 +670,12 @@ var BaseRenderer = class BaseRenderer {
     }
 
     replaceColor(canvas, source, replacement) {
-        var context = canvas.getContext('2d');
+        let context = canvas.getContext('2d');
         context.save();
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-        var _getColor = (input) => {
-            var match = [],
+        let _getColor = (input) => {
+            let match = [],
             color = {};
 
             if (typeof(input) === 'string') {
@@ -724,10 +724,10 @@ var BaseRenderer = class BaseRenderer {
             return color;
         };
 
-        var sourceColors = source.map(_getColor),
+        let sourceColors = source.map(_getColor),
         replaceColors = replacement.map(_getColor);
 
-        for (var i = 0; i < imageData.data.length; i += 4) {
+        for (let i = 0; i < imageData.data.length; i += 4) {
             sourceColors.forEach((color, n) => {
                 if (imageData.data[i] === color.r && imageData.data[i + 1] === color.g && imageData.data[i + 2] === color.b) {
                     imageData.data[i] = (replaceColors[n] || replaceColors[0]).r;
@@ -744,7 +744,7 @@ var BaseRenderer = class BaseRenderer {
     }
 
     updateDisplay(layersToProcess) {
-        var renderer = this;
+        let renderer = this;
 
         renderer.portal = document.createElement('canvas');
         renderer.portal.width = window.innerWidth;
@@ -762,7 +762,7 @@ var BaseRenderer = class BaseRenderer {
         renderer.portal.centerX = parseInt(renderer.portal.width / 2);
         renderer.portal.centerY = parseInt(renderer.portal.height / 2);
 
-        var tileSize = renderer.center.terrain.size * engine.scale,
+        let tileSize = renderer.center.terrain.size * engine.scale,
         layerWidth = engine.map.width * tileSize,
         centerX = (renderer.center.x * tileSize) + parseInt(tileSize / 2),
         startX = renderer.portal.centerX - centerX,
@@ -789,8 +789,8 @@ var BaseRenderer = class BaseRenderer {
         }
 
         (layersToProcess || renderer.layerOrder).forEach((layer) => {
-            for (var x = startX; x < endX; x += layerWidth * engine.scale) {
-                for (var y = startY; y < endY; y += layerHeight * engine.scale) {
+            for (let x = startX; x < endX; x += layerWidth * engine.scale) {
+                for (let y = startY; y < endY; y += layerHeight * engine.scale) {
                     if (renderer.layers[layer]) {
                         renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * engine.scale, layerHeight * engine.scale);
                     }
@@ -810,7 +810,7 @@ var BaseRenderer = class BaseRenderer {
 };
 
 // to be used for assumptions on each layer
-var layerDefaults = {
+let layerDefaults = {
     activeVisibility: {
         globalAlpha: 0.33
     }
@@ -819,7 +819,7 @@ var layerDefaults = {
 // global.BaseRenderer.Layer = class BaseLayer extends Layer {
 BaseRenderer.Layer = class BaseLayer {
     constructor(details) {
-        var layer = this;
+        let layer = this;
 
         extend(layer, details);
 
@@ -840,7 +840,7 @@ BaseRenderer.Layer = class BaseLayer {
     }
 
     render() {
-        var layer = this;
+        let layer = this;
 
         if (layer.globalAlpha) {
             layer.context.globalAlpha = layer.globalAlpha;
@@ -854,7 +854,7 @@ BaseRenderer.Layer = class BaseLayer {
 
             tile.images.forEach((image) => {
                 if (!image) {
-                    console.log(`image:${image}, name:${layer.name}, x:${tile.x}, y:${tile.y}`);
+                    // console.log(`image:${image}, name:${layer.name}, x:${tile.x}, y:${tile.y}`);
                 }
                 else {
                     layer.context.drawImage(image, tile.x + (Math.floor((tile.width - image.width) / 2)), tile.y + (Math.floor((tile.height - image.height) / 2)), image.width, image.height);
@@ -894,7 +894,7 @@ BaseRenderer.Layer = class BaseLayer {
 //     images: [],
 //     loadImages: () => {
 //         ['SP257.gif', 'TER257.gif'].forEach((file) => {
-//             var image = new global.Image();
+//             let image = new global.Image();
 //             image.src = 'file://' + Engine.Plugin.getPath('base-renderer') + file;
 
 //             BaseRenderer.Extract.images.push({
@@ -904,16 +904,16 @@ BaseRenderer.Layer = class BaseLayer {
 //         });
 //     },
 //     run: () => {
-//         var canvas = document.createElement('canvas'),
+//         let canvas = document.createElement('canvas'),
 //         context = canvas.getContext('2d');
 
 //         BaseRenderer.Extract.images.forEach((image) => {
 //             Object.keys(BaseRenderer.Extract.data.files[image.file]).forEach((path) => {
-//                 var definitions = BaseRenderer.Extract.data.files[image.file][path];
+//                 let definitions = BaseRenderer.Extract.data.files[image.file][path];
 
 //                 definitions.forEach((definition) => {
 //                     definition.contents.forEach((content) => {
-//                         var object = extend({}, BaseRenderer.Extract.data.defaults, definition, content),
+//                         let object = extend({}, BaseRenderer.Extract.data.defaults, definition, content),
 //                         filename = Engine.Plugin.getPath('base-renderer') + 'assets/' + path + object.name + '.gif',
 //                         dirname = filename.replace(/\/[^\/]+$/, '/');
 
@@ -922,9 +922,9 @@ BaseRenderer.Layer = class BaseLayer {
 //                         context.clearRect(0, 0, canvas.width, canvas.height);
 //                         context.drawImage(image.element, -object.x, -object.y);
 
-//                         for (var x = 0; x < canvas.width; x++) {
-//                             for (var y = 0; y < canvas.height; y++) {
-//                                 var imageData = context.getImageData(x, y, 1, 1).data;
+//                         for (let x = 0; x < canvas.width; x++) {
+//                             for (let y = 0; y < canvas.height; y++) {
+//                                 let imageData = context.getImageData(x, y, 1, 1).data;
 
 //                                 if (imageData[0] == object.clear.r && imageData[1] == object.clear.g && imageData[2] == object.clear.b) {
 //                                     context.clearRect(x, y, 1, 1);
@@ -947,7 +947,7 @@ BaseRenderer.Layer = class BaseLayer {
 //                             fs.mkdirSync(dirname);
 //                         };
 
-//                         var buffer = new Buffer(canvas.toDataURL('image/gif').split(/,/)[1], 'base64');
+//                         let buffer = new Buffer(canvas.toDataURL('image/gif').split(/,/)[1], 'base64');
 
 //                         fs.writeFileSync(filename, buffer);
 //                     });
