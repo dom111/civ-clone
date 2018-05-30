@@ -22,29 +22,7 @@ extend(engine, {
 
             // main city tile, always worked
             city.tile.city = city;
-            // TODO: check for map plugin? Perhaps make a method in map to get tiles based on a matrix and a start offset...
-            city.tiles = [
-                engine.map.get(city.x, city.y - 1),
-                engine.map.get(city.x - 1, city.y),
-                engine.map.get(city.x, city.y + 1),
-                engine.map.get(city.x + 1, city.y),
-                engine.map.get(city.x + 1, city.y - 1),
-                engine.map.get(city.x + 1, city.y + 1),
-                engine.map.get(city.x - 1, city.y + 1),
-                engine.map.get(city.x - 1, city.y - 1),
-                engine.map.get(city.x, city.y - 2),
-                engine.map.get(city.x + 2, city.y),
-                engine.map.get(city.x, city.y + 2),
-                engine.map.get(city.x - 2, city.y),
-                engine.map.get(city.x + 1, city.y - 2),
-                engine.map.get(city.x + 2, city.y - 1),
-                engine.map.get(city.x + 2, city.y + 1),
-                engine.map.get(city.x + 1, city.y + 2),
-                engine.map.get(city.x - 1, city.y + 2),
-                engine.map.get(city.x - 2, city.y + 1),
-                engine.map.get(city.x - 2, city.y - 1),
-                engine.map.get(city.x - 1, city.y - 2)
-            ];
+            city.tiles = city.tile.surroundingArea;
 
             engine.emit('tile-improvement-built', city.tile, 'irrigation');
             engine.emit('tile-improvement-built', city.tile, 'road');
@@ -69,17 +47,12 @@ extend(engine, {
         autoAssignWorkers() {
             var city = this;
 
-            city.tilesWorked = city.tiles.filter((tile) => tile.isVisible(city.player.id)).map((square, id) => {
+            city.tilesWorked = city.tiles.filter((tile) => tile.isVisible(city.player.id)).map((tile, id) => {
                 return {
-                    // TODO
-                    weight: (
-                        (square.food * 8) +
-                        (square.production * 4) +
-                        (square.trade * 2)
-                    ),
+                    score: tile.score,
                     id: id
                 }
-            }).sort((a, b) => (a.weight > b.weight) ? -1 : (a.weight === b.weight) ? 0 : 1).map((tile) => tile.id).slice(0, this.size);
+            }).sort((a, b) => (a.score > b.score) ? -1 : (a.score === b.score) ? 0 : 1).map((tile) => tile.id).slice(0, this.size);
         }
 
         calculateRates() {

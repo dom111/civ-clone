@@ -321,6 +321,41 @@ extend(engine.World, {
             return this.resource('production');
         }
 
+        get score() {
+            return this.food * 8 + this.production * 4 + this.trade * 2;
+        }
+
+        get surroundingArea() {
+            // TODO: make this take an argument of the layout and return the surrounding tiles based on that
+            let map = this.map;
+            let x = this.x;
+            let y = this.y;
+
+            return [
+                map.get(x - 1, y - 2),
+                map.get(x, y - 2),
+                map.get(x + 1, y - 2),
+                map.get(x - 2, y - 1),
+                map.get(x - 1, y - 1),
+                map.get(x, y - 1),
+                map.get(x + 1, y - 1),
+                map.get(x + 2, y - 1),
+                map.get(x - 2, y),
+                map.get(x - 1, y),
+                map.get(x, y),
+                map.get(x + 1, y),
+                map.get(x + 2, y),
+                map.get(x - 2, y + 1),
+                map.get(x - 1, y + 1),
+                map.get(x, y + 1),
+                map.get(x + 1, y + 1),
+                map.get(x + 2, y + 1),
+                map.get(x - 1, y + 2),
+                map.get(x, y + 2),
+                map.get(x + 1, y + 2)
+            ];
+        }
+
         movementCost(to) {
             // TODO: these defined separately, improvement plugins?
             if (this.improvements.includes('railroad') && to.improvements.includes('railroad')) {
