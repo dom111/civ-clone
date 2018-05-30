@@ -4,7 +4,7 @@
 extend(engine, {
     Unit: class Unit {
         constructor(details) {
-            var unit = this,
+            let unit = this,
             baseUnit = Unit.getByName(details.unit);
 
             if (!baseUnit) {
@@ -18,7 +18,7 @@ extend(engine, {
             unit.player.units.push(unit);
 
             Object.keys(Unit.availableActions).forEach((actionName) => {
-                var action = Unit.availableActions[actionName];
+                let action = Unit.availableActions[actionName];
 
                 if (!action.availableTo || ((!action.availableTo.include || (!action.availableTo.include.length || action.availableTo.include.includes(unit.name))) && (!action.availableTo.exclude || (!action.availableTo.exclude.length || !action.availableTo.exclude.includes(unit.name))))) {
                     unit.actions[action.name] = action;
@@ -31,10 +31,10 @@ extend(engine, {
         }
 
         applyVisibility() {
-            var unit = this;
+            let unit = this;
 
-            for (var x = unit.tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
-                for (var y = unit.tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
+            for (let x = unit.tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
+                for (let y = unit.tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
                     engine.emit('tile-seen', engine.map.get(x, y), unit.player);
                 }
             }
@@ -48,7 +48,7 @@ extend(engine, {
                 return false;
             }
 
-            var unit = this,
+            let unit = this,
             neighbours = unit.tile.neighbours;
 
             if (unit.movesLeft <= 0.1) {
@@ -81,7 +81,7 @@ extend(engine, {
             // TODO: adjacency rules
 
             // TODO
-            var movementCost = unit.tile.movementCost(to);
+            let movementCost = unit.tile.movementCost(to);
 
             if (movementCost > unit.movesLeft) {
                 if ((Math.random() * 1.5) < (unit.movesLeft / movementCost)) {
@@ -95,14 +95,14 @@ extend(engine, {
         }
 
         move(to) {
-            var unit = this,
+            let unit = this,
             from = unit.tile;
 
             if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(to)) {
                 to = unit.tile.neighbours[to];
             }
 
-            var movementCost = unit.validateMove(to);
+            let movementCost = unit.validateMove(to);
 
             if (movementCost !== false) {
                 unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
@@ -125,7 +125,9 @@ extend(engine, {
         }
 
         resolveCombat(units) {
-            var defender = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence == b.defence ? 0 : 1)[0],
+            let unit = this;
+            let defender = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence == b.defence ? 0 : 1)[0],
+
             // TODO: get current combat scheme and use that to resolve
             result = Unit.combat.resolve(this, defender);
 
