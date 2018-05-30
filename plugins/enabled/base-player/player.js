@@ -90,7 +90,22 @@ extend(engine, {
     }
 });
 
+extend(engine.Player, {
+    AI: class AI extends engine.Player {
+        // TODO: basic AI implementation, or at least methods to be called from another AI implementation
+    }
+});
+
 engine.__defineGetter__('isTurnEnd', () => (!this.currentPlayer) || (this.currentPlayer.actionsLeft === 0));
+
+engine.on('turn-over', () => {
+    if (engine.isTurnEnd) {
+        engine.emit('turn-end');
+    }
+    else {
+        console.log('No auto end-turn because there are actions left: ' + engine.currentPlayer.actionsLeft);
+    }
+});
 
 engine.on('build', () => {
     engine.players = [];
