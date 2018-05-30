@@ -2,7 +2,7 @@
 
 engine.availableTradeRates.push('tax'); // add tax as a trade-rate
 
-engine.on('player-added', function(player) {
+engine.on('player-added', (player) => {
     player.treasury = (engine.options.difficulty === 0 ? 50 : 0);
 });
 
@@ -16,26 +16,24 @@ if ('City' in engine) {
     });
 }
 
-engine.on('turn-end', function() {
-    engine.players.forEach(function(player) {
-        player.cities.forEach(function(city) {
+engine.on('turn-end', () => {
+    engine.players.forEach((player) => {
+        player.cities.forEach((city) => {
             player.treasury += city.tax;
 
             var cost = city.maintenance;
+            player.treasury -= cost;
 
-            if (player.treasury >= cost) {
-                player.treasury -= cost;
-
+            if (player.treasury < 100) {
                 // TODO
                 // if (player.tresaury < 100) {
                 //     engine.emit('treasury-low')
                 //     Notification
                 // }
             }
-            else {
+            else if (player.treasury < 0) {
                 // TODO: sell improvements, trigger event
             }
-
         });
     });
 });

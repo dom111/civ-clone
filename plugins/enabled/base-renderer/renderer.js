@@ -30,10 +30,10 @@ var BaseRenderer = class BaseRenderer {
     init() {
         var renderer = this;
 
-        renderer.addToBody(engine.template(Engine.Plugin.filter({type: 'template', package: 'base-renderer', label: 'layout'})[0].contents[0]));
+        renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'layout'})));
 
         if (global.debug) {
-            renderer.addToBody(engine.template(Engine.Plugin.filter({type: 'template', package: 'base-renderer', label: 'debug'})[0].contents[0], renderer));
+            renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'debug'}), renderer));
 
             var layerDebug = document.getElementById('layerDebug');
             Array.from(layerDebug.querySelectorAll('input[type="checkbox"]')).forEach((el) => {
@@ -485,7 +485,7 @@ var BaseRenderer = class BaseRenderer {
                         imageContext.drawImage(unitImage, 0, 0);
                         imageContext.save();
 
-                        var sourceColors = Engine.Plugin.filter({package: 'base-renderer', type: 'asset', label: 'units'})[0].sourceColors,
+                        var sourceColors = Engine.Plugin.first({package: 'base-renderer', type: 'asset', label: 'units'}).sourceColors,
                         replaceColors = engine.currentPlayer.colors;
 
                         tiles.activeUnits.push({

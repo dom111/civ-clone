@@ -1,37 +1,50 @@
-'use strict';
+(() => {
+    'use strict';
 
-extend(engine, {
-    Notifications: {
-        notifications: [],
-        add: function(data) {
-            this.notifications.push(data);
-        },
-        check: function() {
-            var self = this;
+    extend(engine, {
+        Notifications: {
+            notifications: [],
 
-            var notifications = this.notifications.filter(function(notification) {
-                if ('when' in notification) {
-                    return notification.when.call(notification);
+            add(data) {
+                this.notifications.push(data);
+            },
+
+            check() {
+                const self = this;
+
+                const notifications = this.notifications.filter((notification) => {
+                    if (('when' in notification) && (
+                        typeof notification.when === 'function')) {
+                        return notification.when(notification);
+                    }
+                    else {
+                        return true;
+                    }
+                });
+
+                this.notifications = this.notifications.filter(
+                    (notification) => !notifications.includes(notification));
+
+                notifications.forEach((notification) => {
+                    self.display(notification);
+                });
+            },
+
+            display(notification) {
+                if (notification.type === 'research') {
+                    /** @todo something different for different types of notifications */
                 }
-                else {
-                    return true;
-                }
-            });
 
-            this.notifications = this.notifications.filter(function(notification) {
-                return !notifications.includes(notification);
-            });
-
-            notifications.forEach(function(notification) {
-                self.display(notification);
-            });
-        },
-        display: function(notification) {
-            console.log(notification.name + ': ' + notification.message);
+                console.log(notification.name + ': ' + notification.message);
+            }
         }
-    }
-});
+    });
 
-engine.on('turn-start', function() {
-    engine.Notifications.check();
-});
+    engine.on('turn-start', () => {
+        engine.Notifications.check();
+    });
+
+    engine.on('notification', (data) => {
+        engine.Notifications.add(data);
+    });
+})();

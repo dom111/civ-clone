@@ -99,34 +99,26 @@ engine.on('build', () => {
     engine.Civilizations = engine.Civilizations.sort(() => Math.floor((Math.random() * 3) - 1));
 
     // engine.addPlayers(); // TODO
-    // for (var i = 0; i < engine.options.players; i++) {
-    //     engine.players.push(new engine.Player());
-    // }
+    let startingSquares = engine.map.getBy(tile => tile.food >= 2);
+    startingSquares.sort(() => Math.floor(3 * Math.random()) - 1);
 
-    engine.players.push(new engine.Player());
-    engine.players.push(new engine.Player());
+    for (var i = 0; i < engine.options.players; i++) {
+        let player = new engine.Player();
+        let startSquare = startingSquares.shift();
 
-    // TODO: this is testing data
-    new engine.Unit({
-        unit: 'settlers',
-        tile: engine.map.get(3, 3),
-        player: engine.players[0]
-    });
-    new engine.Unit({
-        unit: 'cavalry',
-        tile: engine.map.get(3, 3),
-        player: engine.players[0]
-    });
-    new engine.Unit({
-        unit: 'settlers',
-        tile: engine.map.get(8, 3),
-        player: engine.players[1]
-    });
-    new engine.Unit({
-        unit: 'cavalry',
-        tile: engine.map.get(8, 3),
-        player: engine.players[1]
-    });
+        engine.players.push(player);
+
+        new engine.Unit({
+            unit: 'settlers',
+            tile: startSquare,
+            player: player
+        });
+        new engine.Unit({
+            unit: 'cavalry',
+            tile: startSquare,
+            player: player
+        });
+    }
 });
 
 engine.on('turn-start', () => {
