@@ -22,7 +22,6 @@
         "civ-one"
     ],
     "dependencies": {
-        "electron-prebuilt": "^0.36.0",
         "extend": "~3.0.0",
         "mustache": "^2.0.0"
     }

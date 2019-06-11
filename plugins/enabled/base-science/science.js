@@ -122,7 +122,10 @@
     engine.availableTradeRates.push('science'); // add science as a trade-rate
 
     /** Load and execute all the `advance` plugins. */
-    engine.loadPlugins('advance');
+    // TODO: delay this...
+    engine.on('start', () => engine.loadPlugins('advance'));
+    // 
+    // 
 
     /**
      * When a player is added, initialise the science related properties.

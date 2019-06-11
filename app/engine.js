@@ -3,8 +3,6 @@
 // external objects
 const EventEmitter = require('events');
 const util = require('util');
-const electron = require('electron');
-const ipc = electron.ipcRenderer;
 const extend = require('extend');
 const mustache = require('mustache');
 const fs = require('fs');
@@ -25,7 +23,7 @@ module.exports = (() => {
             _paths[name] = path;
         }
 
-        return (name in _paths) ? _paths[name] : ipc.sendSync('app.getPath', name);
+        return (name in _paths) ? _paths[name] : '';
     },
     _loadJSON = (file) => {
         file = (file.substr(0, 1) === '/') ? file : _path('base') + file;
@@ -47,18 +45,26 @@ module.exports = (() => {
             this.templateVars = {};
 
             // set up useful paths
-            _path('base', `${__dirname}/../../`);
+            // _path('base', `${__dirname}/../../`);
+            _path('base', './');
             _path('views', _path('base') + 'views/');
             _path('plugins', _path('base') + 'plugins/');
+            // _path('userHome', process.env.HOME);
             _path('enabledPlugins', _path('plugins') + 'enabled/');
-            _path('settingsFile', _path('userData') + '/settings.json');
+
+            // TODO: store in userHome/userData
+            _path('settingsFile', _path('base') + 'civ.settings.json');
 
             // load Settings
+            if (! fs.existsSync(_path('settingsFile'))) {
+                this.saveJSON(_path('settingsFile'), {})
+            }
+
             extend(_settings, this.loadJSON(_path('settingsFile')) || {});
 
             // get or set default locale to load correct language
             // TODO: this will load no text in most locales, need to set a default?
-            this.setting('locale', ipc.sendSync('app.getLocale'));
+            this.setting('locale', 'en-GB');
 
             Engine.Plugin.loadAll();
             this.loadPlugins('game-modifier');
@@ -84,7 +90,7 @@ module.exports = (() => {
                 this.saveJSON(_path('settingsFile'), _settings)
             }
 
-            return settings[key];
+            return _settings[key];
         }
 
         loadPlugins(type) {
@@ -113,7 +119,8 @@ module.exports = (() => {
                     },
                     // TODO: I'm clearly not supposed to do this...
                     addEventListener(event, method) {
-                        global.addEventListener(event, method);
+                        console.log('Nope...');
+                        throw 'fail';
                     },
                     // TODO: ...or this...
                     setInterval(code, delay) {
@@ -129,18 +136,19 @@ module.exports = (() => {
                 Engine.Plugin.apply(type, engine.context);
             }
 
-            Engine.Plugin.get('style').forEach((plugin) => {
-                (plugin.contents || []).forEach((component) => {
-                    document.head.appendChild(((link) => {
-                        link.rel = 'stylesheet';
-                        link.type = 'text/css';
-                        link.href = 'file://' + component;
-                        link.setAttribute('data-package', plugin.package);
+            // TODO: re-implement
+            // Engine.Plugin.get('style').forEach((plugin) => {
+            //     (plugin.contents || []).forEach((component) => {
+            //         document.head.appendChild(((link) => {
+            //             link.rel = 'stylesheet';
+            //             link.type = 'text/css';
+            //             link.href = 'file://' + component;
+            //             link.setAttribute('data-package', plugin.package);
 
-                        return link;
-                    })(document.createElement('link')))
-                });
-            });
+            //             return link;
+            //         })(document.createElement('link')))
+            //     });
+            // });
         }
 
         start(options) {

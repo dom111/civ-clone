@@ -57,4 +57,5 @@ var Statusbar = global.Statusbar = class Statusbar {
 
 engine.statusbar = new Statusbar();
 
-engine.on('start', () => engine.statusbar.init());
+// TODO
+// engine.on('start', () => engine.statusbar.init());
