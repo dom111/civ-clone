@@ -119,8 +119,7 @@ module.exports = (() => {
                     },
                     // TODO: I'm clearly not supposed to do this...
                     addEventListener(event, method) {
-                        console.log('Nope...');
-                        throw 'fail';
+                        // throw 'fail';
                     },
                     // TODO: ...or this...
                     setInterval(code, delay) {

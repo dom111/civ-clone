@@ -4,6 +4,7 @@
 extend(engine, {
     Unit: class Unit {
         constructor(details) {
+            // Add all the simple properties we expect into here as class properties
             let unit = this,
             baseUnit = Unit.getByName(details.unit);
 
@@ -13,6 +14,8 @@ extend(engine, {
 
             extend(unit, baseUnit);
             extend(unit, details);
+
+            // TODO: make this an array of action names
             unit.actions = {};
 
             unit.player.units.push(unit);
@@ -20,6 +23,7 @@ extend(engine, {
             Object.keys(Unit.availableActions).forEach((actionName) => {
                 let action = Unit.availableActions[actionName];
 
+                // make action a value object
                 if (!action.availableTo || ((!action.availableTo.include || (!action.availableTo.include.length || action.availableTo.include.includes(unit.name))) && (!action.availableTo.exclude || (!action.availableTo.exclude.length || !action.availableTo.exclude.includes(unit.name))))) {
                     unit.actions[action.name] = action;
                 }
@@ -214,92 +218,92 @@ extend(engine.Unit, {
             title: 'No orders',
             turns: 0,
             run: (unit, action) => unit.movesLeft = 0
-        },
+        }// ,
 
-        // TODO: break this out into settlers/workers? 
-        buildCity: {
-            name: 'buildCity',
-            title: 'Build city',
-            turns: 0,
-            run: (unit, action) => {
-                new engine.City({
-                    player: unit.player,
-                    tile: unit.tile,
-                    name: unit.player.cityNames.shift() // TODO: input box/confirmation
-                });
+        // // TODO: break this out into settlers/workers? 
+        // buildCity: {
+        //     name: 'buildCity',
+        //     title: 'Build city',
+        //     turns: 0,
+        //     run: (unit, action) => {
+        //         new engine.City({
+        //             player: unit.player,
+        //             tile: unit.tile,
+        //             name: unit.player.cityNames.shift() // TODO: input box/confirmation
+        //         });
 
-                unit.destroy();
-            }
-        },
-        irrigate: {
-            name: 'irrigate',
-            title: 'Build irrigation',
-            turns: 2,
-            key: 'i',
-            availableTo: {
-                include: ['settlers']
-            },
-            run: (unit, action) => {
-                if (!unit.tile.improvements.includes('irrigation') && unit.tile.terrain.improvements.irrigation && (Object.keys(unit.tile.adjacent).map((direction) => unit.tile.adjacent[direction]).filter((tile) => tile.terrain.name === 'river' || (tile.improvements.includes('irrigation') && !tile.city) || tile.terrain.ocean).length || unit.tile.terrain.name === 'river')) {
-                    unit.status = action.key;
-                    // TODO: terrain modifier
-                    unit.busy = action.turns;
-                    unit.movesLeft = 0;
-                    unit.currentAction = action;
-                }
-                else {
-                    // TODO: alert, no access to water, etc
-                }
-            },
-            complete: (unit) => {
-                unit.currentAction = unit.busy = false;
-                engine.emit('tile-improvement-built', unit.tile, 'irrigation');
-            }
-        },
-        road: {
-            name: 'road',
-            title: 'Build road',
-            turns: 1,
-            key: 'r',
-            availableTo: {
-                include: ['settlers']
-            },
-            run: (unit, action) => {
-                if (!unit.tile.improvements.includes('road') && unit.tile.terrain.improvements.road) {
-                    unit.status = action.key;
-                    // TODO: terrain modifier
-                    unit.busy = action.turns;
-                    unit.movesLeft = 0;
-                    unit.currentAction = action;
-                }
-            },
-            complete: (unit) => {
-                unit.currentAction = unit.busy = false;
-                engine.emit('tile-improvement-built', unit.tile, 'road');
-            }
-        },
-        mine: {
-            name: 'mine',
-            title: 'Build mine',
-            turns: 3,
-            key: 'm',
-            availableTo: {
-                include: ['settlers']
-            },
-            run: (unit, action) => {
-                if (!unit.tile.improvements.includes('mine') && unit.tile.terrain.improvements.mine) {
-                    unit.status = action.key;
-                    // TODO: terrain modifier
-                    unit.busy = action.turns;
-                    unit.movesLeft = 0;
-                    unit.currentAction = action;
-                }
-            },
-            complete: (unit) => {
-                unit.currentAction = unit.busy = false;
-                engine.emit('tile-improvement-built', unit.tile, 'mine');
-            }
-        }
+        //         unit.destroy();
+        //     }
+        // },
+        // irrigate: {
+        //     name: 'irrigate',
+        //     title: 'Build irrigation',
+        //     turns: 2,
+        //     key: 'i',
+        //     availableTo: {
+        //         include: ['settlers']
+        //     },
+        //     run: (unit, action) => {
+        //         if (!unit.tile.improvements.includes('irrigation') && unit.tile.terrain.improvements.irrigation && (Object.keys(unit.tile.adjacent).map((direction) => unit.tile.adjacent[direction]).filter((tile) => tile.terrain.name === 'river' || (tile.improvements.includes('irrigation') && !tile.city) || tile.terrain.ocean).length || unit.tile.terrain.name === 'river')) {
+        //             unit.status = action.key;
+        //             // TODO: terrain modifier
+        //             unit.busy = action.turns;
+        //             unit.movesLeft = 0;
+        //             unit.currentAction = action;
+        //         }
+        //         else {
+        //             // TODO: alert, no access to water, etc
+        //         }
+        //     },
+        //     complete: (unit) => {
+        //         unit.currentAction = unit.busy = false;
+        //         engine.emit('tile-improvement-built', unit.tile, 'irrigation');
+        //     }
+        // },
+        // road: {
+        //     name: 'road',
+        //     title: 'Build road',
+        //     turns: 1,
+        //     key: 'r',
+        //     availableTo: {
+        //         include: ['settlers']
+        //     },
+        //     run: (unit, action) => {
+        //         if (!unit.tile.improvements.includes('road') && unit.tile.terrain.improvements.road) {
+        //             unit.status = action.key;
+        //             // TODO: terrain modifier
+        //             unit.busy = action.turns;
+        //             unit.movesLeft = 0;
+        //             unit.currentAction = action;
+        //         }
+        //     },
+        //     complete: (unit) => {
+        //         unit.currentAction = unit.busy = false;
+        //         engine.emit('tile-improvement-built', unit.tile, 'road');
+        //     }
+        // },
+        // mine: {
+        //     name: 'mine',
+        //     title: 'Build mine',
+        //     turns: 3,
+        //     key: 'm',
+        //     availableTo: {
+        //         include: ['settlers']
+        //     },
+        //     run: (unit, action) => {
+        //         if (!unit.tile.improvements.includes('mine') && unit.tile.terrain.improvements.mine) {
+        //             unit.status = action.key;
+        //             // TODO: terrain modifier
+        //             unit.busy = action.turns;
+        //             unit.movesLeft = 0;
+        //             unit.currentAction = action;
+        //         }
+        //     },
+        //     complete: (unit) => {
+        //         unit.currentAction = unit.busy = false;
+        //         engine.emit('tile-improvement-built', unit.tile, 'mine');
+        //     }
+        // }
     },
     units: [],
     getByName: (name) => {
@@ -330,11 +334,13 @@ extend(engine.Unit, {
     available: {}
 });
 
-Engine.Plugin.get('unit').forEach((unit) => {
-    unit.contents.forEach((file) => {
-        engine.Unit.units.push(extend({}, engine.Unit.baseUnit, engine.loadJSON(file)));
-    });
-});
+// Engine.Plugin.get('unit').forEach((unit) => {
+//     unit.contents.forEach((file) => {
+//         engine.Unit.units.push(extend({}, engine.Unit.baseUnit, engine.loadJSON(file)));
+//     });
+// });
+engine.on('start', () => engine.loadPlugins('unit'));
+
 
 engine.on('player-turn-start', (player) => {
     player.units.forEach((unit) => {
