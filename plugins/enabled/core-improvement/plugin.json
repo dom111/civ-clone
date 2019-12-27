@@ -1,0 +1,14 @@
+{
+    "name": "core-improvement",
+    "title": "Core Improvement",
+    "version": "0.0.1",
+    "dependencies": [
+        "core-city"
+    ],
+    "components": [
+        {
+            "type": "script",
+            "file": "Improvement.js"
+        }
+    ]
+}

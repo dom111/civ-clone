@@ -1,0 +1,11 @@
+{
+  "name": "core-turn-based-game",
+  "title": "Core Turn Based Game",
+  "version": "0.0.1",
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

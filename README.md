@@ -1,27 +1,30 @@
 # civ-clone
 
-Open source, plugin-based, clone of the original Civilization, written in JavaScript and utilising electron for cross platform implementation.
+Open source, plugin-driven, 4x games, written in JavaScript (node).
 
----
+Every component of the game is defined by 'plugins' so the core part of the game itself is just a mechanism for plugin
+management and dependency loading.
 
-## Done
+## Aims
 
-Currently just the beginnings of the game engine, including:
+The aims for this project are to:
 
-  - Plugin system to allow easy extension
-  - Unit movement and basic combat resolution
-  - City building
-  - Basic world generator
-  - Framework for research, currency, units
+- build a working clone of the original Civilization.
+- make the engine extensible enough that concepts from any Civilization game can be written and included.
+- make the engine decoupled from a renderer so that it's possible to run a headless, AI-driven game, as well as a single
+  or multi-player game driven via either a rich GUI or even command-line.
+- allow third-party contributed plugins to augment the game.
 
-_Currently requires original assets to be extracted from the original Civilization files which is a little laborious at present._
+## Set-up
 
-## TODO:
+Clone the repository, run:
 
-  - City screen
-  - Tax/science/luxury rate management
-  - Store map for each user so changes behind 'fog of war' cannot be observed
-  - Leader interactions
-  - Improve world building - perhaps investigate existing mechanisms?
-  - Fix intermittent issue with plugins loading out of order
-  - So much more...
+```sh
+yarn install # or npm install
+yarn start # or npm start
+```
+
+## Contributing
+
+The contribute to the project, fork the repo, create a branch and make your changes. Once you are happy with them,
+ensure that `yarn lint # or npm run lint` returns successfully and open a PR!

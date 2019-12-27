@@ -1,0 +1,11 @@
+{
+    "name": "core-unit",
+    "title": "Core Unit",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "script",
+            "file": "Unit.js"
+        }
+    ]
+}

@@ -2,21 +2,13 @@
     "name": "base-unit",
     "title": "Base Unit",
     "version": "0.0.1",
-    "dependencies": [],
+    "dependencies": [
+        "core-unit"
+    ],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "unit.js"
-            ]
-        },
-        {
-            "type": "unit",
-            "contents": [
-                "units/settlers.js"
-            ]
+            "type": "script",
+            "file": "Settlers.js"
         }
-    ],
-    "priority": 0
+    ]
 }

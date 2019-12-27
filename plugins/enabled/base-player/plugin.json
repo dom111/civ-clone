@@ -2,15 +2,17 @@
     "name": "base-player",
     "title": "Base Player",
     "version": "0.0.1",
-    "dependencies": [],
+    "dependencies": [
+        "core-civilization",
+        "core-player",
+        "core-unit",
+        "base-civilizations",
+        "base-world"
+    ],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 100,
-            "contents": [
-                "player.js"
-            ]
+            "type": "script",
+            "file": "init.js"
         }
-    ],
-    "priority": 100
+    ]
 }

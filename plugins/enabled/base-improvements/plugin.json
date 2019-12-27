@@ -2,21 +2,18 @@
     "name": "base-improvements",
     "title": "Base Improvements",
     "version": "0.0.1",
+    "dependencies": [
+        "core-city",
+        "core-improvement"
+    ],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 500,
-            "contents": [
-                "improvements.js"
-            ]
-        },
+            "type": "script",
+           "file": "Barracks.js"
+         },
         {
-            "type": "game-modifier",
-            "priority": 1000,
-            "contents": [
-                "improvements/barracks.js",
-                "improvements/granary.js"
-            ]
+            "type": "script",
+            "file": "Granary.js"
         }
     ]
 }

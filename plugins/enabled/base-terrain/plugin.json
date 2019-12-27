@@ -4,23 +4,12 @@
     "version": "0.0.1",
     "components": [
         {
-            "type": "terrain",
-            "priority": 0,
-            "contents": [
-                "terrains/ocean.json",
-                "terrains/grassland.json",
-                "terrains/river.json",
-                "terrains/plains.json",
-                "terrains/desert.json",
-                "terrains/forest.json",
-                "terrains/jungle.json",
-                "terrains/swamp.json",
-                "terrains/hills.json",
-                "terrains/tundra.json",
-                "terrains/arctic.json",
-                "terrains/mountains.json"
-            ]
+            "type": "script",
+            "file": "Terrain.js"
+        },
+        {
+            "type": "script",
+            "file": "Grassland.js"
         }
-    ],
-    "priority": 0
+    ]
 }

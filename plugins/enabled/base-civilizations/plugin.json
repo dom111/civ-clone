@@ -1,23 +1,25 @@
 {
-    "name": "base-civilizations",
+    "name": "base-civilization",
     "version": "0.0.1",
-    "priority": 0,
+    "dependencies": [
+        "core-civilization"
+    ],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "civilizations.js"
-            ]
+            "type": "script",
+            "file": "Babylonian.js"
         },
         {
-            "type": "civilization",
-            "priority": 0,
-            "contents": [
-                "civilizations/babylonian.json",
-                "civilizations/english.json",
-                "civilizations/german.json"
-            ]
+            "type": "script",
+            "file": "English.js"
+        },
+        {
+            "type": "script",
+            "file": "German.js"
+        },
+        {
+            "type": "script",
+            "file": "init.js"
         }
     ]
 }

@@ -2,16 +2,14 @@
     "name": "base-notifications",
     "title": "Base Notifications",
     "version": "0.0.1",
-    "dependencies": [],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "notifications.js"
-            ]
+            "type": "script",
+            "file": "Notifications.js"
+        },
+        {
+            "type": "script",
+            "file": "init.js"
         }
-    ],
-    "options": [],
-    "priority": 0
+    ]
 }

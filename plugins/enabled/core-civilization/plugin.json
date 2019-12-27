@@ -1,0 +1,10 @@
+{
+    "name": "core-civilization",
+    "version": "0.0.1",
+    "components": [
+        {
+            "type": "script",
+            "file": "Civilization.js"
+        }
+    ]
+}

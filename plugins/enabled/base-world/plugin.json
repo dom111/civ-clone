@@ -2,16 +2,21 @@
     "name": "base-world",
     "title": "Base World",
     "version": "0.0.1",
-    "dependencies": [],
+    "dependencies": [
+        "base-terrain"
+    ],
     "components": [
         {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "world.js"
-            ]
+            "type": "script",
+            "file": "Tile.js"
+        },
+        {
+            "type": "script",
+            "file": "World.js"
+        },
+        {
+            "type": "script",
+            "file": "init.js"
         }
-    ],
-    "options": [],
-    "priority": 0
+    ]
 }

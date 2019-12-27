@@ -1,13 +1,18 @@
 {
-    "productName": "Civ One",
-    "name": "civ-one",
+    "productName": "civ-clone",
+    "name": "civ-clone",
     "version": "0.0.1",
     "homepage": "https://github.com/dom111/civ-one",
-    "description": "CivOne base libraries and plugin infrastructure.",
+    "description": "civ-clone base library and plugin infrastructure.",
+    "type": "module",
     "scripts": {
-        "start": "electron boot.js"
+        "eslint": "eslint src plugins",
+        "eslint:fix": "npm run eslint -- --fix",
+        "jsonlint": "find ./ -name \\*.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -t -n1 jsonlint -q",
+        "lint": "npm run jsonlint && npm run eslint",
+        "start": "node --experimental-vm-modules ./boot.js"
     },
-    "author": "dom111 <CivOne@dom111.uk>",
+    "author": "dom111 <dom111@users.noreply.github.com>",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dom111/civ-one.git"
@@ -21,8 +26,10 @@
         "civone",
         "civ-one"
     ],
-    "dependencies": {
-        "extend": "~3.0.0",
-        "mustache": "^2.0.0"
+    "dependencies": {},
+    "devDependencies": {
+        "babel-eslint": "^10.0.3",
+        "eslint": "^6.8.0",
+        "jsonlint": "^1.6.3"
     }
 }
