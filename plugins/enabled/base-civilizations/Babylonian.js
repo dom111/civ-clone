@@ -1,7 +1,6 @@
 import Civilization from 'core-civilization/Civilization.js';
 
 export class Babylonian extends Civilization {
-  name = 'babylonian';
   people = 'Babylonian';
   nation = 'Babylon';
   colors = ['#63e367', '#2f7b00', '#fff'];

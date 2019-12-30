@@ -25,13 +25,16 @@ engine.on('build', () => {
   // engine.addPlayers(); // TODO
   const startingSquares = engine.map.getBy((tile) => tile.food >= 2);
 
+  let availableCivilizations = Civilization.civilizations;
+
   startingSquares.sort(() => Math.floor(3 * Math.random()) - 1);
 
   for (let i = 0; i < engine.options.players; i++) {
     const player = new AIPlayer();
 
     // TODO: use Civilization.available or something
-    player.chooseCivilization(Civilization.civilizations);
+    player.chooseCivilization(availableCivilizations);
+    availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
 
     const startSquare = startingSquares.shift();
 
@@ -61,19 +64,19 @@ engine.on('player:turn-start', async (player) => {
 });
 
 engine.on('player:turn-end', () => {
-  if (engine.isTurnEnd()) {
-    if (engine.playersToAction.length) {
-      engine.currentPlayer = engine.playersToAction.shift();
-      engine.emit('player:turn-start', engine.currentPlayer);
-    }
-    else {
-      engine.emit('turn:end');
-    }
+  // if (engine.isTurnEnd()) {
+  if (engine.playersToAction.length) {
+    engine.currentPlayer = engine.playersToAction.shift();
+    engine.emit('player:turn-start', engine.currentPlayer);
   }
   else {
-    // TODO: use notifications
-    console.log('Not turn end.');
+    engine.emit('turn:end');
   }
+  // }
+  // else {
+  //   // TODO: use notifications
+  //   console.log('Not turn end.');
+  // }
 });
 
 engine.on('player:visibility-changed', (player) => {
@@ -181,6 +184,6 @@ engine.on('unit:activate-next', () => {
     engine.emit('unit:activate', engine.currentPlayer.unitsToAction[0]);
   }
   else {
-    engine.emit('player:turn-over');
+    engine.emit('player:turn-end');
   }
 });

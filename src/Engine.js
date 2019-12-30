@@ -15,6 +15,7 @@ export class Engine extends EventEmitter {
   // TODO: remove
   templateVars = {};
 
+  #debug = global.debug || true;
   #options = {};
   #paths = {};
   #pluginManager;
@@ -35,6 +36,12 @@ export class Engine extends EventEmitter {
     this.path('settingsFile', this.path('base'), 'civ.settings.json');
     // this.path('userHome', process.env.HOME);
     // this.path('settingsFile', this.path('userHome'), 'civ.settings.json');
+  }
+
+  emit(event, ...args) {
+    console.log(`event ${event}`);
+
+    super.emit(event, ...args);
   }
 
   async loadPlugins() {

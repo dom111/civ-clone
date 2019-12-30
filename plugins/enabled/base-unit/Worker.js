@@ -1,8 +1,6 @@
 import Unit from 'core-unit/Unit.js';
 
 export class Worker extends Unit {
-  static name = 'worker';
-  name = 'worker';
   title = 'Worker';
   cost = 20;
   attack = 0;

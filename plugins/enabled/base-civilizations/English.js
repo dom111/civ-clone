@@ -1,7 +1,6 @@
 import Civilization from 'core-civilization/Civilization.js';
 
 export class English extends Civilization {
-  name = 'english';
   people = 'English';
   nation = 'England';
   colors = ['#fd5dfc', '#832317', '#fff'];
