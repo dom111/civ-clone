@@ -39,6 +39,7 @@ export class Plugin {
     if (! this.data) {
       console.error(this);
     }
+
     return this.data.name;
   }
 

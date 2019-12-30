@@ -32,7 +32,7 @@ export class Worker extends Unit {
       this.delayedAction({
         status: 'irrigating',
         action: () => {
-          engine.emit('tile:improvement-built', this.tile, 'irrigation')
+          engine.emit('tile:improvement-built', this.tile, 'irrigation');
         },
         // TODO: calculate moves needed
         completeTurn: engine.turn + 3
@@ -48,7 +48,7 @@ export class Worker extends Unit {
       this.delayedAction({
         status: 'road',
         action: () => {
-          engine.emit('tile:improvement-built', this.tile, 'road')
+          engine.emit('tile:improvement-built', this.tile, 'road');
         },
         completeTurn: engine.turn + 1
       });

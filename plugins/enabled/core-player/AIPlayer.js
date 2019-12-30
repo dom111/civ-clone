@@ -14,11 +14,12 @@ export class AIPlayer extends Player {
   }
 
   takeTurn() {
-    return promiseFactory((resolve, reject) => {
+    return promiseFactory((resolve) => {
       console.log(this);
 
       while (this.activeUnit) {
         const unit = this.activeUnit;
+
         console.log(unit);
 
         if (unit instanceof Settlers) {

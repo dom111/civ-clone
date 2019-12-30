@@ -80,7 +80,7 @@ export class Player {
   takeTurn() {
     return promiseFactory((resolve, reject) => {
       reject('Not implemented.');
-    })
+    });
   }
 }
 

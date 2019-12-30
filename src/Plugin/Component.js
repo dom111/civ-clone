@@ -57,6 +57,7 @@ export class Component {
     if (! this.plugin) {
       console.error(this);
     }
+
     return this.plugin.name;
   }
 

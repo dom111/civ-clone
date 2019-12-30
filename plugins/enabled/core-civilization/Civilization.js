@@ -6,7 +6,7 @@ export default class Civilization {
       throw new TypeError(`Unknown Civilization: '${name}'.`);
     }
 
-    return new (this.#civilizations[name])();
+    return new (this.#civilizations[name])(...args);
   }
 
   static register(constructor) {

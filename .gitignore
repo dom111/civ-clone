@@ -1,3 +1,4 @@
+.idea
 node_modules/*
 civ.settings.json
 yarn-error.log
