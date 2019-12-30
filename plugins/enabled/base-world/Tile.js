@@ -73,7 +73,8 @@ export class Tile {
     const tile = this;
 
     return tile.isOcean &&
-      Object.keys(tile.neighbours).some((direction) => tile.neighbours[direction].isLand);
+      Object.keys(tile.neighbours).some((direction) => tile.neighbours[direction].isLand)
+    ;
   }
 
   get coast() {
@@ -84,6 +85,12 @@ export class Tile {
 
   get isLand() {
     return this.terrain.land;
+  }
+
+  isNeighbourOf(tile) {
+    return Object.values(this.neighbours)
+      .includes(tile)
+    ;
   }
 
   isVisible(playerId) {

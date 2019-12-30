@@ -2,7 +2,7 @@
 
 (function() {
   const translations = {},
-    locale = (engine.setting('language') || 'en').split(/[-_]/),
+    locale = (engine.setting('language', 'en')).split(/[-_]/),
     language = locale[0],
     country = locale[1];
 

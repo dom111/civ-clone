@@ -1,9 +1,7 @@
-import Notifications from 'base-notifications/Notifications.js';
+let year = null;
 
 engine.on('start', () => {
-  // TODO: controlled by options
-  engine.turn = 0;
-  engine.year = -4000;
+  year = engine.option('start-year', -4000);
 });
 
 const ranges = [
@@ -24,22 +22,14 @@ const ranges = [
     increment: 2
   },
   {
+    year: Infinity,
     increment: 1
   }
 ];
 
-engine.on('turn-end', () => {
-  engine.turn++;
+engine.on('turn:end', () => {
+  const [detail] = ranges.filter((range) => engine.year < range.year);
 
-  engine.year += ranges.filter((range) => {
-    return ('year' in range) ? engine.year < range.year : true;
-  })[0].increment;
-});
-
-engine.on('turn-start', () => {
-  Notifications.add({
-    name: 'date',
-    message: engine.year,
-    year: engine.year
-  });
+  year += detail.increment;
+  engine.emit('time:year-updated', year);
 });

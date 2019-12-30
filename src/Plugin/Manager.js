@@ -17,13 +17,18 @@ export class Manager {
         ...obj,
         [key]: (...args) => console[key](...args)
       }), {}),
+      promiseFactory,
       engine
     });
   }
 
   // TODO: this is big, break it down into re-usable chunks
   get(pluginName) {
+    const debug = global.debug || false;
+
     if (! (pluginName in this.#plugins)) {
+      debug && console.log(`loading ${pluginName}`);
+
       this.#plugins[pluginName] = promiseFactory(async (resolve, reject) => {
         try {
           const pluginPath = path.join(
@@ -35,6 +40,8 @@ export class Manager {
 
           await fs.access(pluginJSONPath);
 
+          debug && console.log(`loading ${pluginName}'s dependencies`);
+
           const pluginData = await loadJSON(pluginJSONPath),
             plugin = new Plugin({
               ...pluginData,
@@ -43,55 +50,69 @@ export class Manager {
             dependencies = await Promise.all(plugin.dependencies.map((dependency) => this.get(dependency)))
           ;
 
+          debug && console.log(`loading ${pluginName}'s components`);
+
           await Promise.all(
             plugin.components.map((component) => promiseFactory(async (resolve, reject) => {
               try {
                 await component.run(this.#context, (specifier) => {
+                  debug && console.log(`resolving ${specifier}`);
+
                   return promiseFactory(async (resolve, reject) => {
-                    const [dependencyName, componentName] = specifier.replace(/^\.\//, `${plugin.name}/`).split(/\//),
-                      [dependency] = [...dependencies, plugin].filter((dependency) => dependency.name === dependencyName)
-                    ;
-
-                    if (! dependency) {
-                      throw new TypeError(`${pluginName}: Unable to find plugin '${dependencyName}'.`);
-                    }
-
-                    const [component] = dependency.components.filter((component) => component.file === componentName)                    ;
-
-                    if (! component) {
-                      throw new TypeError(`${pluginName}: Unable to find component '${componentName}' in '${dependencyName}'.`);
-                    }
-
-                    if (! component.result) {
-                      throw new TypeError(`${pluginName}: Result of '${componentName}' in '${dependencyName}' is '${typeof component.result}'. Aborting.`);
-                    }
-
                     try {
+                      const [dependencyName, componentName] = specifier.replace(/^\.\//, `${plugin.name}/`).split(/\//),
+                        [dependency] = [...dependencies, plugin].filter((dependency) => dependency.name === dependencyName)
+                      ;
+
+                      if (! dependency) {
+                        return reject(new TypeError(`${pluginName}: Unable to find plugin '${dependencyName}'.`));
+                      }
+
+                      const [component] = dependency.components.filter((component) => component.file === componentName);
+
+                      if (! component) {
+                        return reject(new TypeError(`${pluginName}: Unable to find component '${componentName}' in '${dependencyName}'.`));
+                      }
+
+                      if (! component.result) {
+                        return reject(new TypeError(`${pluginName}: Result of '${componentName}' in '${dependencyName}' is '${typeof component.result}'. Aborting.`));
+                      }
+
                       const result = await component.result;
 
                       if (! (result instanceof vm.Module)) {
                         return reject(new TypeError(`${pluginName}: '${componentName}' in '${dependencyName}' is '${typeof component}'. Aborting.`));
                       }
 
+                      debug && console.log(`resolved ${specifier}`);
+
                       resolve(result);
                     }
                     catch (e) {
+                      debug && console.log(`rejected ${specifier}`);
+
                       reject(e);
                     }
                   });
                 });
+                debug && console.log(`resolved ${plugin.name}/${component.file}`);
 
                 resolve(component.result);
               }
               catch (e) {
+                debug && console.log(`rejected ${plugin.name}/${component.file}`);
+
                 reject(e);
               }
             }))
           );
 
+          debug && console.log(`loading ${pluginName} complete`);
+
           resolve(plugin);
         }
         catch (e) {
+          debug && console.log(`rejected ${pluginName}`);
           reject(e);
         }
       });
@@ -101,15 +122,27 @@ export class Manager {
   }
 
   load() {
+    const debug = global.debug || false;
+
     return promiseFactory(async (resolve, reject) => {
       try {
         const enabledPlugins = await fs.readdir(this.#engine.path('enabledPlugins')),
-          loadedPlugins = await Promise.all(enabledPlugins.map((pluginName) => this.get(pluginName)))
+          pluginPromises = Promise.all(enabledPlugins.map((pluginName) => this.get(pluginName))),
+          timeoutId = debug && setTimeout(() => {
+            console.log(enabledPlugins.map((pluginName) => [pluginName, this.get(pluginName)]));
+          }, 500),
+          loadedPlugins = await pluginPromises
         ;
+
+        // This will show which plugins aren't loading.
+        debug && clearTimeout(timeoutId);
+
+        debug && console.log(loadedPlugins.map((plugin) => [plugin.name, plugin]));
 
         resolve(loadedPlugins);
       }
       catch (e) {
+        console.error(e);
         reject(e);
       }
     });

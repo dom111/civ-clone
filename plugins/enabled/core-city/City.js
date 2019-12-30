@@ -1,5 +1,9 @@
 export default class City {
-  constructor({player, tile, name}) {
+  constructor({
+    player,
+    tile,
+    name
+  }) {
     this.player = player;
     this.tile = tile;
     this.name = name;
@@ -22,9 +26,9 @@ export default class City {
     this.tile.this = this;
     this.tiles = this.tile.surroundingArea;
 
-    engine.emit('tile-improvement-built', this.tile, 'irrigation');
-    engine.emit('tile-improvement-built', this.tile, 'road');
-    engine.emit('this-created', this, this.tile);
+    engine.emit('tile:improvement-built', this.tile, 'irrigation');
+    engine.emit('tile:improvement-built', this.tile, 'road');
+    engine.emit('city:created', this, this.tile);
 
     // setup
     this.autoAssignWorkers();
@@ -130,7 +134,7 @@ export default class City {
     //       engine.template(
     //         Engine.Plugin.filter({
     //           type: 'template',
-    //           label: 'city-view',
+    //           label: 'city:view',
     //           package: 'base-city'
     //         })[0].contents[0],
     //         {

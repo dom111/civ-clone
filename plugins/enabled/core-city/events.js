@@ -1,5 +1,5 @@
 // bind events - could be in a static method of City?
-engine.on('turn-end', () => {
+engine.on('turn:end', () => {
   engine.players.forEach((player) => {
     player.cities.forEach((city) => {
       city.foodStorage += city.surplusFood;
@@ -8,7 +8,7 @@ engine.on('turn-end', () => {
         city.size++;
         city.foodStorage = 0;
 
-        engine.emit('city-grow', city);
+        engine.emit('city:grow', city);
       }
 
       if (city.building) {
@@ -44,7 +44,7 @@ engine.on('turn-end', () => {
   });
 });
 
-engine.on('city-captured', function(city, player) {
+engine.on('city:captured', function(city, player) {
   const capturedCity = this;
 
   city.player.cities = this.player.cities.filter((city) => (city !== capturedCity));
@@ -52,7 +52,7 @@ engine.on('city-captured', function(city, player) {
   player.cities.push(this);
 });
 
-engine.on('city-destroyed', (city, player) => {
+engine.on('city:destroyed', (city, player) => {
   city.destroyed = {
     turn: engine.turn,
     by: player
@@ -65,14 +65,14 @@ engine.on('city-destroyed', (city, player) => {
   // TODO: remove from map
 });
 
-engine.on('city-grow', (city) => {
+engine.on('city:grow', (city) => {
   city.autoAssignWorkers();
   city.calculateRates();
 });
 
-engine.on('city-shrink', (city) => {
+engine.on('city:shrink', (city) => {
   city.autoAssignWorkers();
   city.calculateRates();
 });
 
-engine.on('player-rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
+engine.on('player:rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));

@@ -1,17 +1,21 @@
 export default class Civilization {
-  static #civilizations = [];
+  static #civilizations = {};
 
-  static fromName(name) {
-    return this.#civilizations.filter((civilization) => civilization.name === name)[0];
+  static fromName(name, ...args) {
+    if (! (name in this.#civilizations)) {
+      throw new TypeError(`Unknown Civilization: '${name}'.`);
+    }
+
+    return new (this.#civilizations[name])();
   }
 
-  static register(civilization) {
-    this.#civilizations.push(civilization);
+  static register(constructor) {
+    this.#civilizations[constructor.name] = constructor;
   }
 
   static get civilizations() {
     return [
-      ...this.#civilizations
+      ...Object.values(this.#civilizations)
     ];
   }
 }

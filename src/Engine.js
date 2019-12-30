@@ -15,6 +15,7 @@ export class Engine extends EventEmitter {
   // TODO: remove
   templateVars = {};
 
+  #options = {};
   #paths = {};
   #pluginManager;
   #settings = {};
@@ -53,12 +54,12 @@ export class Engine extends EventEmitter {
     const settings = await this.loadJSON(this.path('settingsFile'));
 
     Object.entries(settings)
-      .forEach(([key, value]) => this.setting(key, value))
+      .forEach(([key, value]) => this.setSetting(key, value))
     ;
 
     // get or set default locale to load correct language
     // TODO: detect default locale
-    this.setting('locale', 'en-GB');
+    this.setSetting('locale', 'en-GB');
   }
 
   path(key, ...parts) {
@@ -69,22 +70,32 @@ export class Engine extends EventEmitter {
     return (key in this.#paths) ? this.#paths[key] : '';
   }
 
-  setting(key, value) {
-    return this.settings[key] || (value ? this.setSetting(key, value) : value);
+  // settings are persistent game settings that are saved
+  setting(key, defaultValue) {
+    return this.#settings[key] || defaultValue;
   }
 
   setSetting(key, value) {
-    if (this.settings[key] !== value) {
-      this.settings[key] = value;
+    if (this.#settings[key] !== value) {
+      this.#settings[key] = value;
 
-      this.saveJSON(this.settings, this.path('settingsFile'));
+      this.saveJSON(this.#settings, this.path('settingsFile'));
+
+      this.emit('setting:changed', key, value);
     }
-
-    return this.settings[key];
   }
 
-  get settings() {
-    return this.#settings;
+  // options are per-game settings that affect only the current game
+  option(key, defaultValue) {
+    return this.#options[key] || defaultValue;
+  }
+
+  setOption(key, value) {
+    if (this.#options[key] !== value) {
+      this.#options[key] = value;
+
+      this.emit('option:changed', key, value);
+    }
   }
 
   async start(options) {
@@ -101,9 +112,9 @@ export class Engine extends EventEmitter {
       ...this.defaultOptions,
       ...options
     };
-
     this.emit('build');
     this.emit('start');
+    console.log('events triggered');
     this.started = true;
   }
 

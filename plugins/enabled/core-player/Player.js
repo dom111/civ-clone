@@ -11,7 +11,7 @@ export class Player {
     this.availableUnits = [];
     this.availableImprovements = [];
 
-    engine.emit('player-added', this);
+    engine.emit('player:added', this);
 
     this.assignRates();
   }
@@ -75,6 +75,12 @@ export class Player {
     }
 
     throw `No rate '${rate}'!`;
+  }
+
+  takeTurn() {
+    return promiseFactory((resolve, reject) => {
+      reject('Not implemented.');
+    })
   }
 }
 

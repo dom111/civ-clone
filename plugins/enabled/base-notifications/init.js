@@ -1,6 +1,6 @@
 import Notifications from './Notifications.js';
 
-engine.on('turn-start', () => {
+engine.on('turn:start', () => {
   Notifications.check();
 });
 

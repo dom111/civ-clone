@@ -17,7 +17,7 @@ Object.defineProperty(City.improvements, 'barracks', {
   value: Barracks
 });
 
-engine.on('unit-created', (unit) => {
+engine.on('unit:created', (unit) => {
   if (unit.city && unit.city.improvements.filter((improvement) => improvement instanceof Barracks).length) {
     // TODO: define and apply a unit upgrade rather than setting a flag
     unit.veteran = true;

@@ -1,4 +1,9 @@
 export class Unit {
+  static #units = {};
+
+  #player;
+  #tile;
+
   attack = 0;
   defence = 0;
   movement = 1;
@@ -7,191 +12,138 @@ export class Unit {
   offsetX = 0;
   offsetY = 0;
 
-  land = true;
-  ocean = false;
-
-  veteran = false;
+  // TODO: This should be a valueObject collection with ValueObjects for each bonus
+  bonuses = [];
 
   destroyed = false;
   active = false;
   busy = false;
+  status = null;
 
-  // TODO: actions should be classes
-  static availableActions = {
-    sentry: {
-      name: 'sentry',
-      title: 'Sentry',
-      turns: 0,
-      key: 's',
-      availableTo: {},
-      run: (unit) => {
-        unit.busy = -1;
-        unit.active = false;
-        unit.style = {
-          opacity:.5
-        };
+  // TODO: could this be replaced by a Promise?
+  delayedAction({
+    action,
+    completeTurn,
+    status
+  }) {
+    this.status = status;
+
+    const turnStartHandler = (player) => {
+      if (player === this.player && engine.turn === completeTurn) {
+        this.currentAction = this.busy = false;
+
+        action();
+
+        engine.off('turn:start', turnStartHandler);
       }
-    },
-    fortify: {
-      name: 'fortify',
-      title: 'Fortify',
-      turns: 1,
-      run: (unit,) => {
-        unit.busy = -1;
-        unit.active = false;
-        unit.fortified = true;
+    };
+
+    engine.on('unit:activate', (unit) => {
+      if (unit === this) {
+        engine.off('turn:start', turnStartHandler);
       }
-    },
-    disband: {
-      name: 'disband',
-      title: 'Disband',
-      turns: 0,
-      run: (unit) => unit.destroy()
-    },
-    pillage: {
-      name: 'pillage',
-      title: 'Pillage',
-      turns: 1,
-      run: (unit) => engine.emit('tile-improvement-pillaged', unit.tile, unit.tile.improvements[0])
-    },
-    noOrders: {
-      name: 'noOrders',
-      title: 'No orders',
-      turns: 0,
-      run: (unit) => unit.movesLeft = 0
-    }// ,
+    });
 
-    // // TODO: break this out into settlers/workers?
-    // buildCity: {
-    //     name: 'buildCity',
-    //     title: 'Build city',
-    //     turns: 0,
-    //     run: (unit, action) => {
-    //         new engine.City({
-    //             player: unit.player,
-    //             tile: unit.tile,
-    //             name: unit.player.cityNames.shift() // TODO: input box/confirmation
-    //         });
+    engine.on('turn:start', turnStartHandler);
+  }
 
-    //         unit.destroy();
-    //     }
-    // },
-    // irrigate: {
-    //     name: 'irrigate',
-    //     title: 'Build irrigation',
-    //     turns: 2,
-    //     key: 'i',
-    //     availableTo: {
-    //         include: ['settlers']
-    //     },
-    //     run: (unit, action) => {
-    //         if (!unit.tile.improvements.includes('irrigation') && unit.tile.terrain.improvements.irrigation && (Object.keys(unit.tile.adjacent).map((direction) => unit.tile.adjacent[direction]).filter((tile) => tile.terrain.name === 'river' || (tile.improvements.includes('irrigation') && !tile.city) || tile.terrain.ocean).length || unit.tile.terrain.name === 'river')) {
-    //             unit.status = action.key;
-    //             // TODO: terrain modifier
-    //             unit.busy = action.turns;
-    //             unit.movesLeft = 0;
-    //             unit.currentAction = action;
-    //         }
-    //         else {
-    //             // TODO: alert, no access to water, etc
-    //         }
-    //     },
-    //     complete: (unit) => {
-    //         unit.currentAction = unit.busy = false;
-    //         engine.emit('tile-improvement-built', unit.tile, 'irrigation');
-    //     }
-    // },
-    // road: {
-    //     name: 'road',
-    //     title: 'Build road',
-    //     turns: 1,
-    //     key: 'r',
-    //     availableTo: {
-    //         include: ['settlers']
-    //     },
-    //     run: (unit, action) => {
-    //         if (!unit.tile.improvements.includes('road') && unit.tile.terrain.improvements.road) {
-    //             unit.status = action.key;
-    //             // TODO: terrain modifier
-    //             unit.busy = action.turns;
-    //             unit.movesLeft = 0;
-    //             unit.currentAction = action;
-    //         }
-    //     },
-    //     complete: (unit) => {
-    //         unit.currentAction = unit.busy = false;
-    //         engine.emit('tile-improvement-built', unit.tile, 'road');
-    //     }
-    // },
-    // mine: {
-    //     name: 'mine',
-    //     title: 'Build mine',
-    //     turns: 3,
-    //     key: 'm',
-    //     availableTo: {
-    //         include: ['settlers']
-    //     },
-    //     run: (unit, action) => {
-    //         if (!unit.tile.improvements.includes('mine') && unit.tile.terrain.improvements.mine) {
-    //             unit.status = action.key;
-    //             // TODO: terrain modifier
-    //             unit.busy = action.turns;
-    //             unit.movesLeft = 0;
-    //             unit.currentAction = action;
-    //         }
-    //     },
-    //     complete: (unit) => {
-    //         unit.currentAction = unit.busy = false;
-    //         engine.emit('tile-improvement-built', unit.tile, 'mine');
-    //     }
-    // }
-  };
+  pillage() {
+    // TODO: investigate using promises here instead...
+    this.delayedAction({
+      status: 'pillaging',
+      action: () => {
+        engine.emit('tile:improvement-pillaged', this.tile, [...this.tile.improvements].pop());
+        engine.emit('unit:activate', this);
+      },
+      completeTurn: engine.turn + 1
+    });
+  }
+
+  sleep() {
+    this.busy = true;
+    this.action = 'sentry';
+  }
+
+  fortify() {
+    this.busy = true;
+    this.action = 'fortify';
+
+    this.delayedAction({
+      status: 'fortify',
+      action: () => {
+        // TODO
+        // this.bonuses.add(new Fortified());
+      },
+      completeTurn: engine.turn + 1
+    });
+  }
+
+  disband() {
+    this.destroy();
+    engine.emit('unit:disbanded', this);
+  }
+
+  noOrders() {
+    this.delayedAction({
+      status: 'noOrders',
+      action: () => {
+        this.busy = false;
+      },
+      completeTurn: engine.turn + 1
+    });
+  }
 
   static units = [];
   static available = {};
 
-  constructor(details) {
-    // Add all the simple properties we expect into here as class properties
-    const unit = this,
-      baseUnit = Unit.getByName(details.unit)
-    ;
 
-    if (! baseUnit) {
-      throw `Unknown unit '${details.unit}'.`;
+  static fromDefinition({
+    unit,
+    player,
+    tile
+  }) {
+    if (! (unit in this.#units)) {
+      throw new TypeError(`Unknown Unit: '${unit}'.`);
     }
 
-    Object.entries(details).forEach(([key, value]) => this[key] = value);
-
-    // TODO: make this an array of action names
-    unit.actions = {};
-
-    unit.player.units.push(unit);
-
-    Object.keys(Unit.availableActions).forEach((actionName) => {
-      const action = Unit.availableActions[actionName];
-
-      // TODO: separate method to validate this
-      // make action a value object
-      if (! action.availableTo || ((! action.availableTo.include || (! action.availableTo.include.length || action.availableTo.include.includes(unit.name))) && (! action.availableTo.exclude || (! action.availableTo.exclude.length || ! action.availableTo.exclude.includes(unit.name))))) {
-        unit.actions[action.name] = action;
-      }
+    return new (this.#units[unit])({
+      player,
+      tile
     });
+  }
 
-    unit.applyVisibility();
+  static register(constructor) {
+    this.#units[constructor.name] = constructor;
+  }
 
-    engine.emit('unit-created', unit);
+  constructor({
+    player,
+    tile
+  }) {
+    this.#player = player;
+    this.#tile   = tile;
+
+    player.units.push(this);
+
+    this.applyVisibility();
+
+    engine.emit('unit:created', this);
   }
 
   applyVisibility() {
     const unit = this;
 
-    for (let x = unit.tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
-      for (let y = unit.tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
-        engine.emit('tile-seen', engine.map.get(x, y), unit.player);
+    for (let x = this.#tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
+      for (let y = this.#tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
+        engine.emit('tile:seen', this.#tile.map.get(x, y), this.#player);
       }
     }
 
-    engine.emit('player-visibility-changed', unit.player);
+    engine.emit('player:visibility-changed', this.#player);
+  }
+
+  canMoveTo(to) {
+    return this.tile.isNeighbourOf(to);
   }
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
@@ -201,23 +153,18 @@ export class Unit {
     }
 
     const unit = this,
-      {neighbours} = unit.tile;
+      {neighbours} = unit.tile
+    ;
+
+    if (! this.canMoveTo(to)) {
+      return false;
+    }
 
     if (unit.movesLeft <= 0.1) {
       return false;
     }
 
     if (! Object.keys(neighbours).map((position) => neighbours[position]).includes(to)) {
-      return false;
-    }
-
-    // TODO: exclude cities
-    if (to.terrain.ocean && ! unit.ocean) {
-      return false;
-    }
-
-    if (to.terrain.land && ! unit.land) {
-      // TODO: transportation units
       return false;
     }
 
@@ -268,22 +215,23 @@ export class Unit {
         unit.movesLeft = 0;
       }
 
-      engine.emit('unit-moved', unit, from, to);
+      engine.emit('unit:moved', unit, from, to);
     }
     else {
       // TODO: use notifications
       console.log(`Can't move ${unit.player.people} ${unit.title} from ${unit.tile.x},${unit.tile.y} to ${to.x},${to.y}`);
-      // play sound
     }
   }
 
+  // TODO: make it so that a combat free version of the game can
   resolveCombat(units) {
     const unit = this;
 
     const [defender] = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence === b.defence ? 0 : 1),
 
       // TODO: get current combat scheme and use that to resolve
-      result = Unit.combat.resolve(this, defender);
+      result = Unit.combat.resolve(this, defender)
+    ;
 
     if (result) {
       if (unit.tile.city || unit.tile.improvements.includes('fortress')) {
@@ -304,7 +252,7 @@ export class Unit {
     if (this.can(action)) {
       this.actions[action].run(this, this.actions[action]);
 
-      engine.emit('unit-action', this, this.actions[action]);
+      engine.emit('unit:action', this, this.actions[action]);
     }
     else {
       // TODO: use notifications or squelch
@@ -317,98 +265,16 @@ export class Unit {
   }
 
   destroy() {
-    engine.emit('unit-destroyed', this);
+    engine.emit('unit:destroyed', this);
   }
 
-  static getByName(name) {
-    return this.units.filter((unit) => unit.name === name)[0];
+  get tile() {
+    return this.#tile;
+  }
+
+  get player() {
+    return this.#player;
   }
 }
 
 export default Unit;
-
-engine.on('player-turn-start', (player) => {
-  player.units.forEach((unit) => {
-    if (unit.busy) {
-      if (unit.busy < 0) {
-        // sentry/fortify
-      }
-      else {
-        unit.busy--;
-
-        if (unit.busy <= 0) {
-          unit.currentAction.complete(unit);
-        }
-        else {
-          unit.movesLeft = 0;
-        }
-      }
-    }
-
-    if (! unit.busy) {
-      unit.movesLeft = unit.movement;
-      unit.active = true;
-    }
-  });
-
-  engine.emit('unit-activate-next', player);
-});
-
-engine.on('unit-created', (unit) => {
-  if (! unit.player.activeUnit) {
-    unit.player.activeUnit = unit;
-  }
-
-  unit.tile.units.push(unit);
-});
-
-engine.on('unit-activate', (unit) => {
-  unit.player.activeUnit = unit;
-  unit.active = true;
-});
-
-engine.on('unit-moved', (unit, from) => {
-  unit.applyVisibility();
-
-  from.units = from.units.filter((tileUnit) => tileUnit !== unit);
-
-  if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
-    unit.player.activeUnit = false;
-    unit.active = false;
-
-    engine.emit('unit-activate-next', unit.player);
-  }
-});
-
-engine.on('unit-action', (unit) => {
-  if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
-    unit.player.activeUnit = false;
-    unit.active = false;
-
-    engine.emit('unit-activate-next', unit.player);
-  }
-});
-
-engine.on('unit-destroyed', (unit) => {
-  unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
-  unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
-  unit.active = false;
-  unit.destroyed = true;
-
-  if (engine.currentPlayer === unit.player) {
-    if (unit.player.activeUnit === unit) {
-      unit.player.activeUnit = false;
-    }
-
-    engine.emit('unit-activate-next', unit.player);
-  }
-});
-
-engine.on('unit-activate-next', () => {
-  if (engine.currentPlayer.unitsToAction.length) {
-    engine.emit('unit-activate', engine.currentPlayer.unitsToAction[0]);
-  }
-  else {
-    engine.emit('player-turn-over');
-  }
-});

@@ -2,7 +2,9 @@
     "name": "core-player",
     "title": "Core Player",
     "version": "0.0.1",
-    "dependencies": [],
+    "dependencies": [
+        "base-unit"
+    ],
     "components": [
         {
             "type": "script",

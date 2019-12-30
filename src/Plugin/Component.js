@@ -54,6 +54,9 @@ export class Component {
   }
 
   get name() {
+    if (! this.plugin) {
+      console.error(this);
+    }
     return this.plugin.name;
   }
 

@@ -25,6 +25,10 @@ export class Notifications {
 
   // TODO: This should be a concern of the renderer
   static display(notification) {
+    if (! notification) {
+      throw new TypeError(`Invalid notification: '${notification}'.`);
+    }
+
     if (notification.type === 'research') {
       // TODO: something different for different types of notifications?
       //  Could register a notificationHandler?

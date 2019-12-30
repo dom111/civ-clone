@@ -8,6 +8,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Worker.js"
+        },
+        {
+            "type": "script",
             "file": "Settlers.js"
         }
     ]

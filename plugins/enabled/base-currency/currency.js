@@ -1,7 +1,7 @@
 // TODO: make this a baseClass and implementation to enable other rates to be added easily
 engine.availableTradeRates.push('tax'); // add tax as a trade-rate
 
-engine.on('player-added', (player) => {
+engine.on('player:added', (player) => {
   player.treasury = (engine.options.difficulty === 0 ? 50 : 0);
 });
 
@@ -15,7 +15,7 @@ if ('City' in engine) {
   });
 }
 
-engine.on('turn-end', () => {
+engine.on('turn:end', () => {
   engine.players.forEach((player) => {
     player.cities.forEach((city) => {
       player.treasury += city.tax;

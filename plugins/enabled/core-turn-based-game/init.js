@@ -1,5 +1,7 @@
-engine.on('build', () => {
-  engine.on('start', () => engine.emit('turn-start'));
+let turn = 0;
 
-  engine.on('turn-end', () => engine.emit('turn-start'));
-});
+['start', 'turn:end'].forEach((event) => engine.on(event, () => {
+  // TODO: use engine.defineProperty or something.
+  engine.turn = ++turn;
+  engine.emit('turn:start', turn);
+}));
