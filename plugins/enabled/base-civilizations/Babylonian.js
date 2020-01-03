@@ -1,4 +1,4 @@
-import Civilization from 'core-civilization/Civilization.js';
+import Civilization from '../core-civilization/Civilization.js';
 
 export class Babylonian extends Civilization {
   people = 'Babylonian';
@@ -7,9 +7,6 @@ export class Babylonian extends Civilization {
   leaders = [
     {
       name: 'Hammurabi',
-      images: [
-        'civilizations/images/babylon-hammurabi.jpg'
-      ],
       traits: {
         expansionist: true,
         civilized: true,

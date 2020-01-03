@@ -1,12 +1,15 @@
 export class Unit {
   static #units = {};
 
+  #city;
+  #data = {};
   #player;
   #tile;
 
   attack = 0;
   defence = 0;
   movement = 1;
+  movesLeft = 0;
   visibility = 1;
 
   offsetX = 0;
@@ -16,112 +19,37 @@ export class Unit {
   bonuses = [];
 
   destroyed = false;
-  active = false;
+  active = true;
   busy = false;
   status = null;
-
-  // TODO: could this be replaced by a Promise?
-  delayedAction({
-    action,
-    completeTurn,
-    status
-  }) {
-    this.status = status;
-
-    const turnStartHandler = (player) => {
-      if (player === this.player && engine.turn === completeTurn) {
-        this.currentAction = this.busy = false;
-
-        action();
-
-        engine.off('turn:start', turnStartHandler);
-      }
-    };
-
-    engine.on('unit:activate', (unit) => {
-      if (unit === this) {
-        engine.off('turn:start', turnStartHandler);
-      }
-    });
-
-    engine.on('turn:start', turnStartHandler);
-  }
-
-  pillage() {
-    // TODO: investigate using promises here instead...
-    this.delayedAction({
-      status: 'pillaging',
-      action: () => {
-        engine.emit('tile:improvement-pillaged', this.tile, [...this.tile.improvements].pop());
-        engine.emit('unit:activate', this);
-      },
-      completeTurn: engine.turn + 1
-    });
-  }
-
-  sleep() {
-    this.busy = true;
-    this.action = 'sentry';
-  }
-
-  fortify() {
-    this.busy = true;
-    this.action = 'fortify';
-
-    this.delayedAction({
-      status: 'fortify',
-      action: () => {
-        // TODO
-        // this.bonuses.add(new Fortified());
-      },
-      completeTurn: engine.turn + 1
-    });
-  }
-
-  disband() {
-    this.destroy();
-    engine.emit('unit:disbanded', this);
-  }
-
-  noOrders() {
-    this.delayedAction({
-      status: 'noOrders',
-      action: () => {
-        this.busy = false;
-      },
-      completeTurn: engine.turn + 1
-    });
-  }
 
   static units = [];
   static available = {};
 
-
-  static fromDefinition({
-    unit,
-    player,
-    tile
-  }) {
+  static fromName(unit, ...args) {
     if (! (unit in this.#units)) {
       throw new TypeError(`Unknown Unit: '${unit}'.`);
     }
 
-    return new (this.#units[unit])({
-      player,
-      tile
-    });
+    return new (this.#units[unit])(...args);
   }
 
   static register(constructor) {
     this.#units[constructor.name] = constructor;
+
+    engine.emit('unit:registered', constructor);
   }
 
-  constructor({
-    player,
-    tile
-  }) {
+  constructor({player, city, tile}) {
+    if (! tile) {
+      throw new Error('tile is undefined');
+    }
+
     this.#player = player;
+    this.#city   = city;
     this.#tile   = tile;
+    // TODO: private with getter
+    this.movesLeft = this.movement;
 
     player.units.push(this);
 
@@ -143,7 +71,79 @@ export class Unit {
   }
 
   canMoveTo(to) {
-    return this.tile.isNeighbourOf(to);
+    // TODO: use World#directions for compatibility of hex based `World`s
+    if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(to)) {
+      to = this.tile.neighbours[to];
+    }
+
+    // TODO: check if land/water and validate unit can move there
+    return this.tile.isNeighbourOf(to) && to.isLand;
+  }
+
+  data(key, value = null) {
+    if (value === null) {
+      return this.#data[key];
+    }
+
+    this.#data[key] = value;
+  }
+
+  // TODO: could this be replaced by a UnitAction entity?
+  delayedAction({
+    action,
+    turns,
+    status
+  }) {
+    this.busy = turns;
+    this.status = status;
+    this.active = false;
+    this.actionOnComplete = action;
+  }
+
+  disband() {
+    this.destroy();
+    engine.emit('unit:disbanded', this);
+  }
+
+  fortify() {
+    this.busy = true;
+    this.action = 'fortify';
+
+    this.delayedAction({
+      status: 'fortify',
+      action: () => {
+        // TODO
+        // this.bonuses.add(new Fortified());
+      },
+      turns: 1
+    });
+  }
+
+  noOrders() {
+    this.delayedAction({
+      status: 'noOrders',
+      action: () => {
+        this.busy = false;
+      },
+      turns: 1
+    });
+  }
+
+  pillage() {
+    // TODO: investigate using promises here instead...
+    this.delayedAction({
+      status: 'pillaging',
+      action: () => {
+        engine.emit('tile:improvement-pillaged', this.tile, [...this.tile.improvements].pop());
+        engine.emit('unit:activate', this);
+      },
+      turns: 1
+    });
+  }
+
+  sleep() {
+    this.busy = true;
+    this.action = 'sentry';
   }
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
@@ -152,15 +152,13 @@ export class Unit {
       return false;
     }
 
-    const unit = this,
-      {neighbours} = unit.tile
-    ;
+    const {neighbours} = this.tile;
 
     if (! this.canMoveTo(to)) {
       return false;
     }
 
-    if (unit.movesLeft <= 0.1) {
+    if (this.movesLeft <= 0.1) {
       return false;
     }
 
@@ -168,11 +166,11 @@ export class Unit {
       return false;
     }
 
-    if (to.units.length && to.units[0].player !== unit.player) {
-      return unit.resolveCombat(to.units);
+    if (to.units.length && to.units[0].player !== this.player) {
+      return this.resolveCombat(to.units);
     }
 
-    if (to.city && to.city.player !== unit.player) {
+    if (to.city && to.city.player !== this.player) {
       // TODO: interact
       return false;
     }
@@ -180,11 +178,11 @@ export class Unit {
     // TODO: adjacency rules
 
     // TODO
-    const movementCost = unit.tile.movementCost(to);
+    const movementCost = this.tile.movementCost(to);
 
-    if (movementCost > unit.movesLeft) {
-      if ((Math.random() * 1.5) < (unit.movesLeft / movementCost)) {
-        unit.movesLeft = 0;
+    if (movementCost > this.movesLeft) {
+      if ((Math.random() * 1.5) < (this.movesLeft / movementCost)) {
+        this.movesLeft = 0;
 
         return false;
       }
@@ -194,32 +192,31 @@ export class Unit {
   }
 
   move(to) {
-    const unit = this,
-      from = unit.tile;
+    const from = this.tile;
 
     if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(to)) {
-      to = unit.tile.neighbours[to];
+      to = this.tile.neighbours[to];
     }
 
-    const movementCost = unit.validateMove(to);
+    const movementCost = this.validateMove(to);
 
     if (movementCost !== false) {
-      unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
+      this.tile.units = this.tile.units.filter((tileUnit) => tileUnit !== this);
 
-      unit.tile = to;
-      unit.tile.units.push(unit);
+      this.#tile = to;
+      to.units.push(this);
 
-      unit.movesLeft -= movementCost;
+      this.movesLeft -= movementCost;
 
-      if (unit.movesLeft <= 0.1) {
-        unit.movesLeft = 0;
+      if (this.movesLeft <= 0.1) {
+        this.movesLeft = 0;
       }
 
-      engine.emit('unit:moved', unit, from, to);
+      engine.emit('unit:moved', this, from, to);
     }
     else {
       // TODO: use notifications
-      console.log(`Can't move ${unit.player.people} ${unit.title} from ${unit.tile.x},${unit.tile.y} to ${to.x},${to.y}`);
+      engine.emit('unit:move-failed', `Can't move ${this.player.civilization.people} ${this.title} from ${this.tile.x},${this.tile.y} to ${to.x},${to.y}`);
     }
   }
 

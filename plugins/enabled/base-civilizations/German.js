@@ -1,4 +1,4 @@
-import Civilization from 'core-civilization/Civilization.js';
+import Civilization from '../core-civilization/Civilization.js';
 
 export class German extends Civilization {
   people = 'German';
@@ -7,9 +7,6 @@ export class German extends Civilization {
   leaders = [
     {
       name: 'Frederik',
-      images: [
-        'civilizations/images/germany-frederik.jpg'
-      ],
       traits: {
         expansionist: false,
         civilized: true,

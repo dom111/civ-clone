@@ -1,11 +1,13 @@
-import City from 'core-city/City.js';
-import Improvement from 'core-improvement/Improvement.js';
+import City from '../core-city/City.js';
+import Improvement from '../core-city-improvement/Improvement.js';
 
-export default class Barracks extends Improvement {
+export class Barracks extends Improvement {
   name = 'barracks';
   title = 'Barracks';
   cost = 40;
 }
+
+export default Barracks;
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(Improvement, 'Barracks', {

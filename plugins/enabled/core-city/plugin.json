@@ -9,7 +9,7 @@
         },
         {
             "type": "script",
-            "file": "events.js"
+            "file": "init.js"
         }
     ]
 }

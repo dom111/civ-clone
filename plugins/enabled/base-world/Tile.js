@@ -1,3 +1,5 @@
+import Tileset from './Tileset.js';
+
 export class Tile {
   constructor(details) {
     const tile = this;
@@ -5,33 +7,19 @@ export class Tile {
     Object.entries(details).forEach(([key, value]) => this[key] = value);
 
     // keep this as its own instance
-    tile.terrain = {
-      ...tile.terrain
-    };
+    // tile.terrain = {
+    //   ...tile.terrain
+    // };
 
     tile.improvements = [];
     tile.city = false;
     tile.units = [];
-    tile.seenBy = {};
+    tile.seenBy = [];
 
     // when generating use this:
     // tile.seed = Math.ceil(Math.random() * 1e7);
-    // tile.seed = tile.seed || (tile.x * tile.y * (tile.terrainId || 255));
-    tile.seed = tile.seed || (tile.x ^ tile.y + (tile.terrainId || 255));
-
-    if ('special' in tile.terrain && Array.isArray(tile.terrain.special)) {
-      if (Array.isArray(tile.terrain.special) && tile.terrain.special.length) {
-        const special = tile.terrain.special[Math.floor(tile.terrain.special.length * Math.random())];
-
-        if ((tile.seed + tile.map.seed * ((tile.x + 1) + (tile.y + 1))) % 100 < special.chance) {
-          tile.terrain.special = special;
-        }
-      }
-    }
-
-    if (Array.isArray(tile.terrain.special)) {
-      tile.terrain.special = false;
-    }
+    // tile.seed = tile.seed || (tile.x * tile.y);
+    tile.seed = tile.seed || (tile.x ^ tile.y);
   }
 
   get neighbours() {
@@ -62,7 +50,7 @@ export class Tile {
       {adjacent} = tile
     ;
 
-    return ['n', 'e', 's', 'w'].filter((position) => (adjacent[position].terrainId === tile.terrainId)).join('');
+    return ['n', 'e', 's', 'w'].filter((position) => (adjacent[position].name === tile.name)).join('');
   }
 
   get isOcean() {
@@ -93,12 +81,12 @@ export class Tile {
     ;
   }
 
-  isVisible(playerId) {
-    return this.seenBy[playerId];
+  isVisible(player) {
+    return this.seenBy.includes(player);
   }
 
-  isActivelyVisible(playerId) {
-    return engine.players[playerId].visibleTiles.includes(this);
+  isActivelyVisible(player) {
+    return player.visibleTiles.includes(this);
   }
 
   resource(type) {
@@ -123,41 +111,19 @@ export class Tile {
     return this.resource('production');
   }
 
-  get score() {
-    return this.food * 8 + this.production * 4 + this.trade * 2;
+  score({
+    food = 4,
+    production = 2,
+    trade = 1
+  } = {}) {
+    return (this.food * food) +
+      (this.production * production) +
+      (this.trade * trade)
+    ;
   }
 
   get surroundingArea() {
-    // TODO: make this take an argument of the layout and return the surrounding tiles based on that
-    const {map} = this;
-
-    const {x} = this;
-
-    const {y} = this;
-
-    return [
-      map.get(x - 1, y - 2),
-      map.get(x, y - 2),
-      map.get(x + 1, y - 2),
-      map.get(x - 2, y - 1),
-      map.get(x - 1, y - 1),
-      map.get(x, y - 1),
-      map.get(x + 1, y - 1),
-      map.get(x + 2, y - 1),
-      map.get(x - 2, y),
-      map.get(x - 1, y),
-      map.get(x, y),
-      map.get(x + 1, y),
-      map.get(x + 2, y),
-      map.get(x - 2, y + 1),
-      map.get(x - 1, y + 1),
-      map.get(x, y + 1),
-      map.get(x + 1, y + 1),
-      map.get(x + 2, y + 1),
-      map.get(x - 1, y + 2),
-      map.get(x, y + 2),
-      map.get(x + 1, y + 2)
-    ];
+    return Tileset.fromSurrounding(this, 2);
   }
 
   movementCost(to) {

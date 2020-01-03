@@ -303,7 +303,10 @@ const BaseRenderer = class BaseRenderer {
           }
           else {
             if (tile.terrain.name === 'river') {
-              const adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
+              const adjoining = ['n', 'e', 's', 'w']
+                .filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrain.name === tile.terrain.name)))
+                .join('')
+              ;
 
               if (adjoining) {
                 images.push(renderer._getPreloadedImage(`assets/terrain/${tile.terrain.name}_${adjoining}.gif`));

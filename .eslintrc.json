@@ -9,6 +9,9 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": [
+    "import"
+  ],
   "reportUnusedDisableDirectives": true,
   "root": true,
   "rules": {
@@ -16,6 +19,8 @@
     "arrow-spacing": "error",
     "curly": ["error", "all"],
     "eqeqeq": "error",
+    "import/extensions": ["warn", "always"],
+    "import/first": ["warn", "always"],
     "indent": ["warn", 2],
     "linebreak-style": ["error", "unix"],
     "no-trailing-spaces": "error",

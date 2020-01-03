@@ -1,14 +1,21 @@
+import Notification from './Notification.js';
+
 export class Notifications {
   static notifications = [];
 
-  static add(data) {
-    this.notifications.push(data);
+  static add(notification) {
+    if (! (notification instanceof Notification)) {
+      throw new TypeError(`Invalid notification: '${notification}'.`);
+    }
+
+    this.notifications.push(notification);
   }
 
   static check() {
     const notifications = this.notifications.filter((notification) => {
       if (('when' in notification) && (
-        typeof notification.when === 'function')) {
+        typeof notification.when === 'function')
+      ) {
         return notification.when(notification);
       }
       else {
@@ -25,13 +32,8 @@ export class Notifications {
 
   // TODO: This should be a concern of the renderer
   static display(notification) {
-    if (! notification) {
+    if (! (notification instanceof Notification)) {
       throw new TypeError(`Invalid notification: '${notification}'.`);
-    }
-
-    if (notification.type === 'research') {
-      // TODO: something different for different types of notifications?
-      //  Could register a notificationHandler?
     }
 
     console.log(`${notification.name}: ${notification.message}`);

@@ -5,6 +5,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Notification.js"
+        },
+        {
+            "type": "script",
             "file": "Notifications.js"
         },
         {

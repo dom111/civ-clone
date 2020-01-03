@@ -9,11 +9,27 @@
     "components": [
         {
             "type": "script",
+            "file": "Cavalry.js"
+        },
+        {
+            "type": "script",
+            "file": "Militia.js"
+        },
+        {
+            "type": "script",
             "file": "Worker.js"
         },
         {
             "type": "script",
             "file": "Settlers.js"
+        },
+        {
+            "type": "script",
+            "file": "Units.js"
+        },
+        {
+            "type": "script",
+            "file": "init.js"
         }
     ]
 }

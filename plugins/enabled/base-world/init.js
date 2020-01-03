@@ -13,7 +13,5 @@ engine.on('tile:improvement-pillaged', (tile, improvement) => {
   }
 });
 
-engine.on('tile:seen', (tile, player) => tile.seenBy[player.id] = 1);
-engine.on('build', () => {
-  engine.map = new World();
-});
+engine.on('tile:seen', (tile, player) => tile.seenBy.push(player));
+engine.on('build', () => engine.emit('world:built', new World()));

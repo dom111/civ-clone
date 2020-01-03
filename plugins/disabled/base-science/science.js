@@ -115,6 +115,10 @@ else {
   /** @todo notification that City wasn't updated?? */
 }
 
+if (! ('availableTradeRates' in engine)) {
+  engine.availableTradeRates = [];
+}
+
 /** Add `science` rate to the current {Engine} instance */
 engine.availableTradeRates.push('science'); // add science as a trade-rate
 

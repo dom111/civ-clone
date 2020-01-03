@@ -9,7 +9,55 @@
         },
         {
             "type": "script",
+            "file": "Ocean.js"
+        },
+        {
+            "type": "script",
             "file": "Grassland.js"
+        },
+        {
+            "type": "script",
+            "file": "Arctic.js"
+        },
+        {
+            "type": "script",
+            "file": "Desert.js"
+        },
+        {
+            "type": "script",
+            "file": "Forest.js"
+        },
+        {
+            "type": "script",
+            "file": "Hills.js"
+        },
+        {
+            "type": "script",
+            "file": "Jungle.js"
+        },
+        {
+            "type": "script",
+            "file": "Mountains.js"
+        },
+        {
+            "type": "script",
+            "file": "Plains.js"
+        },
+        {
+            "type": "script",
+            "file": "River.js"
+        },
+        {
+            "type": "script",
+            "file": "Swamp.js"
+        },
+        {
+            "type": "script",
+            "file": "Tundra.js"
+        },
+        {
+            "type": "script",
+            "file": "Terrains.js"
         }
     ]
 }

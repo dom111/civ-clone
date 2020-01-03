@@ -1,23 +1,14 @@
-'use strict';
-
 import Engine from './src/Engine.js';
 
-process.on('unhandledRejection', error => {
-  // Will print "unhandledRejection err is not defined"
-  console.log('unhandledRejection', error.stack);
+// This helps track down unhandled promise rejections
+process.on('unhandledRejection', (error) => {
+  console.error(error.stack);
 });
 
-
+// global.debug = true;
 
 (async () => {
-  try {
-    const engine = new Engine();
-    await engine.start()
-      .catch((err) => console.error(err))
-    ;
-    console.log('engine started');
-  }
-  catch (e) {
-    throw e;
-  }
+  const engine = new Engine();
+
+  await engine.start();
 })();

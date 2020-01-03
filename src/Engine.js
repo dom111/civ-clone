@@ -6,16 +6,8 @@ import path from 'path';
 import saveJSON from './lib/saveJSON.js';
 
 export class Engine extends EventEmitter {
-  // TODO: remove
-  availableTradeRates = [];
-  // TODO: remove
-  defaultOptions = {
-    players: 3
-  };
-  // TODO: remove
-  templateVars = {};
-
-  #debug = global.debug || true;
+  #data = {};
+  #debug = global.debug || false;
   #options = {};
   #paths = {};
   #pluginManager;
@@ -39,7 +31,7 @@ export class Engine extends EventEmitter {
   }
 
   emit(event, ...args) {
-    console.log(`event ${event}`);
+    this.#debug && console.log(`${event}: ${args}`);
 
     super.emit(event, ...args);
   }
@@ -105,7 +97,20 @@ export class Engine extends EventEmitter {
     }
   }
 
-  async start(options) {
+  // data is ethereal game data used in the current game
+  data(key, defaultValue) {
+    return this.#data[key] || defaultValue;
+  }
+
+  setData(key, value) {
+    if (this.#data[key] !== value) {
+      this.#data[key] = value;
+
+      this.emit('data:changed', key, value);
+    }
+  }
+
+  async start() {
     if (this.started) {
       return;
     }
@@ -115,13 +120,8 @@ export class Engine extends EventEmitter {
 
     this.started = true;
 
-    this.options = {
-      ...this.defaultOptions,
-      ...options
-    };
     this.emit('build');
     this.emit('start');
-    console.log('events triggered');
     this.started = true;
   }
 

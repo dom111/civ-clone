@@ -1,7 +1,8 @@
-let turn = 0;
+import Time from './Time.js';
 
 ['start', 'turn:end'].forEach((event) => engine.on(event, () => {
-  // TODO: use engine.defineProperty or something.
-  engine.turn = ++turn;
-  engine.emit('turn:start', turn);
+  engine.emit('turn:start', Time.increment());
 }));
+//
+// engine.on('start', () => engine.emit('turn:start', Time));
+// engine.on('turn:end', () => engine.emit('turn:start', Time.increment()));

@@ -1,58 +1,25 @@
-// TODO: automate this acquisition
-import Grassland from 'base-terrain/Grassland.js';
+import Terrain from '../base-terrain/Terrain.js';
 import Tile from './Tile.js';
 
 export class World {
   constructor() {
-    const map = this;
+    this.terrain = [];
 
-    map.terrain = [];
+    this.seed = Math.ceil(Math.random() * 1e7);
+    // this.seed = 615489;
 
-    // map.seed = Math.ceil(Math.random() * 1e7);
-    map.seed = 615489;
-
-    // TODO: fix this, register terrain types via classes... or something...
-    // Engine.Plugin.get('terrain').forEach((terrain) => {e
-    // [grassland].forEach((terrain) => {
-    [new Grassland()].forEach((terrainDefinition) => {
-      // terrain.contents.forEach((file) => {
-      //   const terrainDefinition = engine.loadJSON(file);
-      //
-      //   if ('image' in terrainDefinition) {
-      //     terrainDefinition.image = terrain.path + terrainDefinition.image;
-      //   }
-
-      // if ('adjacentImages' in terrainDefinition) {
-      //   Object.keys(terrainDefinition.adjacentImages).forEach((key) => terrainDefinition.adjacentImages[key] = terrain.path + terrainDefinition.adjacentImages[key]);
-      // }
-
-      if ('special' in terrainDefinition) {
-        terrainDefinition.special = terrainDefinition.special.map((special) => {
-          // if ('overlay' in special) {
-          //   special.overlay = terrain.path + special.overlay;
-          // }
-
-          return special;
-        });
-      }
-
-      terrainDefinition.id = map.terrain.length;
-
-      map.terrain.push(terrainDefinition);
-      // });
+    Terrain.terrains.forEach((terrainDefinition) => {
+      this.terrain.push(terrainDefinition);
     });
 
-    map.map = map.generate().map((row, y) => row.map((terrainId, x) => new Tile({
-      x: x,
-      y: y,
-      terrainId: terrainId,
-      terrain: map.getTerrainType(terrainId),
-      map: map
-    })));
-  }
-
-  visibility(playerId, x, y) {
-    return this.map[x][y].isVisible(playerId);
+    this.map = this.generate()
+      .map((row, y) => row.map((terrain, x) => new Tile({
+        x,
+        y,
+        terrain,
+        map: this
+      })))
+    ;
   }
 
   get width() {
@@ -95,99 +62,150 @@ export class World {
   }
 
   generate(options) {
-    const map = this;
+    // const map = this;
 
+    // TODO: use Engine#options
     options = options || {};
 
-    const mapHeight = options.height || 100;
-
-    const mapWidth = options.width || 160;
-
-    const seedDensity = options.seedDenisity || 3; // controls how many seed locations there are
-
-    const iterations = options.iterations || 45; // iterations of applying neighbouring land
-
-    const chanceToBecomeLand = options.chanceToBecomeLand || 0.02; // chance to become land
-
-    const clusterChance = options.clusterChance || 0.66; // chance for adjacent tiles to cluster
-
-    const pathChance = options.pathChance || 0.66; // chance for directly adjacent tiles to be part of the path
-
-    const coverageScale = options.coverageScale || 0.66; // this scales the coverage, this could (and should) be factored in to the coverage for each tile
+    const mapHeight = options.height || 100,
+      mapWidth = options.width || 160,
+      landCoverage = options.landCoverage || .66,
+      chanceToBecomeLand = options.chanceToBecomeLand || .05, // chance to become land
+      clusterChance = options.clusterChance || .66, // chance for adjacent tiles to cluster
+      pathChance = options.pathChance || .66, // chance for directly adjacent tiles to be part of the path
+      coverageScale = options.coverageScale || .66 // this scales the coverage, this could (and should) be factored in to the coverage for each tile
+    ;
 
     //
-    const _getNeighbours = (n, h, w, d) => {
+    const getNeighbours = (index, height, width, directNeighbours = false) => {
       // TODO: this needs to handle wrapping
-      return (d ? [n - w, n - 1, n + 1, n + w] : [n - (w + 1), n - w, n - (w - 1), n - 1, n + 1, n + (w - 1), n + w, n + (w + 1)]).filter((x) => x < (w * h) && x > -1);
+      const total = height * width;
+
+      let n = index - width,
+        ne = index - (width - 1),
+        e = index + 1,
+        se = index + (width + 1),
+        s = index + width,
+        sw = index + (width - 1),
+        w = index - 1,
+        nw = index - (width + 1)
+      ;
+
+      n += n < 0 ? total : 0;
+      e -= e % total === 0 ? width : 0;
+      s -= s > total ? total : 0;
+      w += w % total === 0 ? width : 0;
+
+      return (
+        directNeighbours ?
+          [n, e, s, w] :
+          [n, ne, e, se, s, sw, w, nw]
+      )
+        .map((n) => n = n % (height * width))
+        // .filter((x) => x < (width * height) && x > -1)
+      ;
     };
 
     // Build land masses
-    const generateLand = (h, w) => {
-      const m = Array(h * w).fill(0);
+    const generateLand = (height, width, map = Array(height * width).fill(0)) => {
+      const seen = [],
+        toProcess = [],
+        seedTile = Math.floor(height * width * Math.random()),
+        seedX = seedTile % width,
+        seedY = Math.floor(seedTile / width)
+      ;
 
-      let t = iterations;
-
-      let s = Math.ceil(Math.sqrt(h * w) * seedDensity);
-      while (s-- > 0) {
-        m[Math.floor(Math.random() * (h * w))] = 1;
+      if (map[seedTile]) {
+        return generateLand(height, width, map);
       }
 
-      while (t-- > 0) {
-        m.map((v, i) => v ? i : false).filter((v) => v).forEach((n) => {
-          _getNeighbours(n, h, w).filter((n) => ! m[n]).forEach((n) => {
-            if (Math.random() < chanceToBecomeLand) {
-              m[n] = 1;
-            }
-          });
-        });
+      map[seedTile] = 1;
+
+      seen.push(seedTile);
+
+      toProcess.push(...getNeighbours(seedTile, height, width, true));
+
+      while (toProcess.length) {
+        const currentTile = toProcess.shift();
+
+        if (! seen.includes(currentTile)) {
+          const x = currentTile % width,
+            y = Math.floor(currentTile / width),
+            distance = Math.hypot(seedX - x, seedY - y)
+          ;
+
+          if (
+            (Math.random() / distance) > chanceToBecomeLand ||
+            getNeighbours(currentTile, height, width).reduce((total, n) => total + map[n], 0) > (distance / 3)
+          ) {
+            map[currentTile] = 1;
+
+            toProcess.push(...getNeighbours(currentTile, height, width));
+          }
+
+          seen.push(currentTile);
+        }
       }
 
-      return m;
+      const [ocean, land] = [0, 1].map((land) => map.filter((flag) => flag === land).length);
+
+      if (land / ocean < landCoverage) {
+        return generateLand(height, width, map);
+      }
+
+      return map;
     };
 
     //
-    const populateTerrain = (m, h, w) => {
-      const landCells = m.map((v, i) => i).filter((v) => m[v]);
+    // const populateTerrain = (m, h, w) => {
+    const populateTerrain = (mapData, height, width) => {
+      const landCells = mapData.map((value, index) => index).filter((index) => mapData[index] === 1),
+        oceanCells = mapData.map((value, index) => index).filter((index) => mapData[index] === 0)
+      ;
 
-      map.terrainTypes.forEach((terrain) => {
-        // TODO: have custom water tiles and check if land/ocean
+      oceanCells.forEach((index) => {
+        mapData[index] = new (this.terrain[0])();
+      });
+
+      landCells.forEach((index) => {
+        mapData[index] = new (this.terrain[1])();
+      });
+
+      this.terrain.forEach((terrain) => {
         if (terrain.distribution) {
-          terrain.distribution.forEach((d) => {
-            let rangeCells = landCells.filter((n) => n >= ((d.from * h) * w) && n <= ((d.to * h) * w));
-            // alternatively, && m[n] != 0 to change existing changed land
-            // TODO: fudgeFactor
-            let max = (rangeCells.length * d.coverage) * coverageScale;
-            rangeCells = rangeCells.filter((n) => m[n] === 1);
+          terrain.distribution.forEach((distributionData) => {
+            const rangeCells = landCells.filter((n) => n >= ((distributionData.from * height) * width) && n <= ((distributionData.to * height) * width));
 
-            max = Math.floor(Math.min(max, rangeCells.length));
+            // TODO: fudgeFactor
+            let max = (rangeCells.length * distributionData.coverage) * coverageScale;
 
             while (max > 0) {
               const n = rangeCells[Math.floor(Math.random() * rangeCells.length)];
 
-              m[n] = terrain.id;
+              mapData[n] = new terrain();
               max--;
 
               let neighbours = [];
 
-              if (d.clustered || d.path) {
-                neighbours = _getNeighbours(n, h, w).filter((k) => rangeCells.includes(k));
+              if (distributionData.clustered || distributionData.path) {
+                neighbours = getNeighbours(n, height, width).filter((k) => rangeCells.includes(k));
               }
 
-              if (d.clustered) {
+              if (distributionData.clustered) {
                 neighbours.forEach((k) => {
                   // TODO: clusterChance
                   if (Math.random() < clusterChance) {
-                    m[k] = terrain.id;
+                    mapData[k] = new Terrain();
                     max--;
                   }
                 });
               }
-              else if (d.path) {
+              else if (distributionData.path) {
                 while (neighbours.length && Math.random() < pathChance) {
                   const cell = neighbours[Math.floor(Math.random() * neighbours.length)];
 
-                  m[cell] = terrain.id;
-                  neighbours = _getNeighbours(cell, h, w, true).filter((k) => rangeCells.includes(k));
+                  mapData[cell] = new terrain();
+                  neighbours = getNeighbours(cell, height, width, true).filter((k) => rangeCells.includes(k));
                 }
               }
             }
@@ -195,17 +213,15 @@ export class World {
         }
       });
 
-      return m;
+      return mapData;
     };
 
     const mapData = populateTerrain(generateLand(mapHeight, mapWidth), mapHeight, mapWidth);
 
     const r = [];
 
-    let i = 0;
-
-    for (; i < mapHeight; i++) {
-      r.push(mapData.slice(i * mapHeight, (i + 1) * mapHeight));
+    for (let i = 0; i < mapHeight; i++) {
+      r.push(mapData.splice(0, mapWidth));
     }
 
     return r;

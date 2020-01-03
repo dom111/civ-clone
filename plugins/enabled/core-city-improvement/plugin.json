@@ -1,6 +1,6 @@
 {
-    "name": "core-improvement",
-    "title": "Core Improvement",
+    "name": "core-city-improvement",
+    "title": "Core City Improvement",
     "version": "0.0.1",
     "dependencies": [
         "core-city"

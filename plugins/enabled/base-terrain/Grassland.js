@@ -1,12 +1,17 @@
 import Terrain from './Terrain.js';
 
-class Grassland extends Terrain {
+export class Grassland extends Terrain {
+  constructor() {
+    super();
+
+    this.applySpecial();
+  }
+
   name = 'grassland';
   title = 'Grassland';
   food = 2;
   trade = 0;
   production = 0;
-  movementCost = 1;
   improvements = {
     irrigation: {
       food: 1
@@ -21,19 +26,21 @@ class Grassland extends Terrain {
   impassable = false;
   special = [
     {
-      name: 'shield',
-      title: 'Shield',
+      name: 'grassland-shield',
+      title: 'Grassland (Shield)',
       production: 1,
-      chance: 40
+      chance: .4
     },
     {
-      name: 'cow',
-      title: 'Cow',
+      name: 'grassland-cow',
+      title: 'Grassland (Cow)',
       food: 3,
       production: 1,
-      chance: 5
+      chance: .05
     }
   ];
 }
 
 export default Grassland;
+
+Terrain.register(Grassland);

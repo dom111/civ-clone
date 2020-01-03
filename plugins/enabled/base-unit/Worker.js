@@ -1,16 +1,13 @@
-import Unit from 'core-unit/Unit.js';
+import Unit from '../core-unit/Unit.js';
 
 export class Worker extends Unit {
+  static cost = 20;
   title = 'Worker';
-  cost = 20;
   attack = 0;
   defence = 1;
-  movement = 1;
-  visibility = 1;
   land = true;
 
   irrigate() {
-    console.log('called irrigate');
     if (
       ! this.tile.improvements.includes('irrigation') &&
       this.tile.terrain.improvements.irrigation &&
@@ -33,7 +30,7 @@ export class Worker extends Unit {
           engine.emit('tile:improvement-built', this.tile, 'irrigation');
         },
         // TODO: calculate moves needed
-        completeTurn: engine.turn + 3
+        turns: 3
       });
     }
     else {
@@ -41,14 +38,26 @@ export class Worker extends Unit {
     }
   }
 
-  buildRoad() {
+  mine() {
+    if (! this.tile.improvements.includes('mine')) {
+      this.delayedAction({
+        status: 'mine',
+        action: () => {
+          engine.emit('tile:improvement-built', this.tile, 'mine');
+        },
+        turns: 3
+      });
+    }
+  }
+
+  road() {
     if (! this.tile.improvements.includes('road')) {
       this.delayedAction({
         status: 'road',
         action: () => {
           engine.emit('tile:improvement-built', this.tile, 'road');
         },
-        completeTurn: engine.turn + 1
+        turns: 1
       });
     }
   }

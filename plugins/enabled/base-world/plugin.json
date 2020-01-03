@@ -8,6 +8,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Tileset.js"
+        },
+        {
+            "type": "script",
             "file": "Tile.js"
         },
         {

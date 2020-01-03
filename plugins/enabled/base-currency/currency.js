@@ -1,39 +1,48 @@
+import Treasury from './Treasury.js';
+
 // TODO: make this a baseClass and implementation to enable other rates to be added easily
+if (! ('availableTradeRates' in engine)) {
+  engine.availableTradeRates = [];
+}
+
+const treasuries = new Map();
+
 engine.availableTradeRates.push('tax'); // add tax as a trade-rate
 
 engine.on('player:added', (player) => {
-  player.treasury = (engine.options.difficulty === 0 ? 50 : 0);
+  const treasury = new Treasury();
+
+  treasury.add(engine.option('difficulty') === 0 ? 50 : 0);
+  treasuries.set(player, treasury);
 });
 
-if ('City' in engine) {
-  // City.prototype
-  engine.City.prototype.__defineGetter__('tax', function() {
-    // TODO: marketplace multiplier
-    this.calculateRates();
+// TODO: sort a mechanism for this
+// if ('City' in engine) {
+//   // City.prototype
+//   engine.City.prototype.__defineGetter__('tax', function() {
+//     // TODO: marketplace multiplier, etc
+//     this.calculateRates();
+//
+//     return this.rates.tax;
+//   });
+// }
 
-    return this.rates.tax;
-  });
-}
+engine.on('player:turn-start', (player) => {
+  player.cities.forEach((city) => {
+    const treasury = treasuries.get(player);
 
-engine.on('turn:end', () => {
-  engine.players.forEach((player) => {
-    player.cities.forEach((city) => {
-      player.treasury += city.tax;
+    treasury.add(city.trade);
 
-      const cost = city.maintenance;
+    const cost = city.maintenance;
 
-      player.treasury -= cost;
+    treasury.remove(cost);
 
-      if (player.treasury < 100) {
-        // TODO
-        // if (player.tresaury < 100) {
-        //     engine.emit('treasury-low')
-        //     Notification
-        // }
-      }
-      else if (player.treasury < 0) {
-        // TODO: sell improvements, trigger event
-      }
-    });
+    if (treasury < 100) {
+      engine.emit('player:treasury-low', player, treasury);
+    }
+    else if (treasury < 0) {
+      engine.emit('player:treasury-exhausted', player, treasury);
+      // TODO: sell improvements, disband units
+    }
   });
 });

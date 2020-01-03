@@ -47,8 +47,21 @@ export class Manager {
               ...pluginData,
               path: pluginPath
             }),
-            dependencies = await Promise.all(plugin.dependencies.map((dependency) => this.get(dependency)))
+            cyclicDependencies = (plugin.dependencies || []).filter((dependency) => (dependency.dependencies || []).includes(pluginName))
           ;
+
+          if (cyclicDependencies.length > 0) {
+            return reject(
+              new TypeError(
+                `Cyclic dependencies exist: ${
+                  cyclicDependencies.map((dependency) => `${pluginName} => ${dependency.name} => ${pluginName}`)
+                    .join(', ')
+                }.`
+              )
+            );
+          }
+
+          const dependencies = await Promise.all(plugin.dependencies.map((dependency) => this.get(dependency)));
 
           debug && console.log(`loading ${pluginName}'s components`);
 
@@ -60,7 +73,13 @@ export class Manager {
 
                   return promiseFactory(async (resolve, reject) => {
                     try {
-                      const [dependencyName, componentName] = specifier.replace(/^\.\//, `${plugin.name}/`).split(/\//),
+                      const [dependencyName, componentName] = specifier
+                          // strip out relative paths
+                          .replace(/^\.\.\//, '')
+                          // replace current path with explicit plugin name
+                          .replace(/^\.\//, `${plugin.name}/`)
+                          .split(/\//)
+                        ,
                         [dependency] = [...dependencies, plugin].filter((dependency) => dependency.name === dependencyName)
                       ;
 

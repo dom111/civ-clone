@@ -5,6 +5,10 @@
   "components": [
     {
       "type": "script",
+      "file": "Time.js"
+    },
+    {
+      "type": "script",
       "file": "init.js"
     }
   ]

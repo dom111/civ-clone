@@ -1,35 +1,29 @@
-import AIPlayer from 'core-player/AIPlayer.js';
-import Civilization from 'core-civilization/Civilization.js';
-import Unit from 'core-unit/Unit.js';
+import AIPlayer from '../core-player/AIPlayer.js';
+import Civilization from '../core-civilization/Civilization.js';
+import Unit from '../core-unit/Unit.js';
 
-// TODO: stop defining things on engine
-Object.defineProperty(engine, 'isTurnEnd', {
-  value() {
-    return (! this.currentPlayer) || (this.currentPlayer.actionsLeft === 0);
+// TODO: rather than do this, maybe have a `Players` class that can be used instead, so that `engine` can be immutable
+const players = [],
+  playersToAction = []
+;
+
+let currentPlayer;
+
+engine.on('world:built', (map) => {
+  const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150),
+    numberOfPlayers = engine.option('players', 3)
+  ;
+
+  if (! startingSquares.length > numberOfPlayers) {
+    // TODO: ensure this at generation stage
+    throw new TypeError(`Invalid World, not enough valid starting squares ${startingSquares.length}.`);
   }
-});
-
-engine.on('turn:over', () => {
-  if (engine.isTurnEnd()) {
-    engine.emit('turn:end');
-  }
-  else {
-    // TODO: use notifications
-    console.log(`No auto end-turn because there are actions left: ${engine.currentPlayer.actionsLeft}`);
-  }
-});
-
-engine.on('build', () => {
-  engine.players = [];
-
-  // engine.addPlayers(); // TODO
-  const startingSquares = engine.map.getBy((tile) => tile.food >= 2);
 
   let availableCivilizations = Civilization.civilizations;
 
   startingSquares.sort(() => Math.floor(3 * Math.random()) - 1);
 
-  for (let i = 0; i < engine.options.players; i++) {
+  for (let i = 0; i < numberOfPlayers; i++) {
     const player = new AIPlayer();
 
     // TODO: use Civilization.available or something
@@ -38,57 +32,20 @@ engine.on('build', () => {
 
     const startSquare = startingSquares.shift();
 
-    engine.players.push(player);
+    players.push(player);
 
-    Unit.fromDefinition({
-      unit: 'Settlers',
-      tile: startSquare,
-      player: player
+    Unit.fromName('Settlers', {
+      player,
+      tile: startSquare
     });
   }
 });
 
-engine.on('turn:start', () => {
-  engine.playersToAction = engine.players.slice(0);
-  engine.currentPlayer = engine.playersToAction.shift();
+engine.on('turn:start', (Time) => {
+  playersToAction.push(...players);
+  currentPlayer = playersToAction.shift();
 
-  engine.emit('player:turn-start', engine.currentPlayer);
-});
-
-engine.on('player:turn-start', async (player) => {
-  console.log(`${player}'s turn.`);
-
-  await player.takeTurn();
-
-  engine.emit('player:turn-end');
-});
-
-engine.on('player:turn-end', () => {
-  // if (engine.isTurnEnd()) {
-  if (engine.playersToAction.length) {
-    engine.currentPlayer = engine.playersToAction.shift();
-    engine.emit('player:turn-start', engine.currentPlayer);
-  }
-  else {
-    engine.emit('turn:end');
-  }
-  // }
-  // else {
-  //   // TODO: use notifications
-  //   console.log('Not turn end.');
-  // }
-});
-
-engine.on('player:visibility-changed', (player) => {
-  // clear the visibility
-  player.visibleTiles.splice(0, player.visibleTiles.length);
-  engine.emit('build-layer', 'visibility');
-  engine.emit('build-layer', 'activeVisibility');
-});
-
-// unit related
-engine.on('turn:start', () => {
-  engine.players.forEach((player) => {
+  players.forEach((player) => {
     player.units.forEach((unit) => {
       if (unit.busy > 0) {
         unit.busy--;
@@ -97,36 +54,86 @@ engine.on('turn:start', () => {
       if (unit.busy === 0) {
         unit.busy = false;
         unit.active = true;
+
+        unit.movesLeft = unit.movement;
+        unit.active = true;
+      }
+    });
+  });
+
+  engine.emit('player:turn-start', currentPlayer);
+});
+
+engine.on('player:turn-start', async (player) => {
+  await player.takeTurn();
+
+  engine.emit('player:turn-end', player);
+});
+
+engine.on('player:turn-end', async () => {
+  if (playersToAction.length) {
+    currentPlayer = playersToAction.shift();
+    engine.emit('player:turn-start', currentPlayer);
+  }
+  else {
+    engine.emit('turn:end');
+  }
+});
+
+engine.on('turn:end', () => {
+  players.forEach((player) => {
+    player.cities.forEach((city) => {
+      city.foodStorage += city.surplusFood;
+
+      if (city.foodStorage >= ((city.size * 10) + 10)) {
+        city.size++;
+        city.foodStorage = 0;
+
+        engine.emit('city:grow', city);
+      }
+      else if (city.foodStorage < 1) {
+        city.size--;
+        city.foodStorage = ((city.size * 10) + 10);
+
+        engine.emit('city:shrink', city);
+      }
+
+      if (city.building) {
+        city.buildProgress += city.production;
+
+        if (city.buildProgress >= city.building.cost) {
+          new (city.building)({
+            player,
+            city,
+            tile: city.tile
+          });
+
+          engine.emit('city:built', city, city.building);
+
+          city.building = false;
+        }
+      }
+    });
+
+    player.units.forEach((unit) => {
+      if (unit.budy) {
+        unit.busy--;
+      }
+
+      if (! unit.busy) {
+        if (unit.actionOnComplete) {
+          unit.actionOnComplete();
+        }
+
+        unit.active = true;
       }
     });
   });
 });
 
-engine.on('player:turn-start', (player) => {
-  player.units.forEach((unit) => {
-    if (unit.busy) {
-      if (unit.busy < 0) {
-        // sentry/fortify
-      }
-      else {
-        unit.busy--;
-
-        if (unit.busy <= 0) {
-          unit.currentAction.complete(unit);
-        }
-        else {
-          unit.movesLeft = 0;
-        }
-      }
-    }
-
-    if (! unit.busy) {
-      unit.movesLeft = unit.movement;
-      unit.active = true;
-    }
-  });
-
-  engine.emit('unit:activate-next', player);
+engine.on('player:visibility-changed', (player) => {
+  // clear the visibility
+  player.visibleTiles.splice(0, player.visibleTiles.length);
 });
 
 engine.on('unit:created', (unit) => {
@@ -147,7 +154,7 @@ engine.on('unit:moved', (unit, from) => {
 
   from.units = from.units.filter((tileUnit) => tileUnit !== unit);
 
-  if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
+  if ((unit.movesLeft <= 0.1) && (currentPlayer.activeUnit === unit)) {
     unit.player.activeUnit = false;
     unit.active = false;
 
@@ -156,7 +163,7 @@ engine.on('unit:moved', (unit, from) => {
 });
 
 engine.on('unit:action', (unit) => {
-  if ((unit.movesLeft <= 0.1) && (engine.currentPlayer.activeUnit === unit)) {
+  if ((unit.movesLeft <= 0.1) && (currentPlayer.activeUnit === unit)) {
     unit.player.activeUnit = false;
     unit.active = false;
 
@@ -170,7 +177,7 @@ engine.on('unit:destroyed', (unit) => {
   unit.active = false;
   unit.destroyed = true;
 
-  if (engine.currentPlayer === unit.player) {
+  if (currentPlayer === unit.player) {
     if (unit.player.activeUnit === unit) {
       unit.player.activeUnit = false;
     }
@@ -180,8 +187,8 @@ engine.on('unit:destroyed', (unit) => {
 });
 
 engine.on('unit:activate-next', () => {
-  if (engine.currentPlayer.unitsToAction.length) {
-    engine.emit('unit:activate', engine.currentPlayer.unitsToAction[0]);
+  if (currentPlayer.unitsToAction.length) {
+    engine.emit('unit:activate', currentPlayer.unitsToAction[0]);
   }
   else {
     engine.emit('player:turn-end');

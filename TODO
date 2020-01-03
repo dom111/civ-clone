@@ -1,34 +1,33 @@
 # TODO
 
-## Core Engine functionality
 - [x] Remove electron requirement.
 - [x] Add ESlint
 - [x] Separate renderer logic from data and models.
 - [x] Switch plugins to being ES modules.
 - [x] Re-do plugin system to remove 'priority' and rely on dependencies directly.
-- [ ] Get AI players to move units.
-- [ ] Convert all raw data files to JS classes.
+- [x] Get AI players to move units.
+- [x] Convert all raw data files to JS classes.
+- [x] Re-do world generation.
+- [ ] Abstract World class to allow implementation of hexes rather than squares
 - [ ] Remove reliance on augmenting Engine directly.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Break all plugins into `core` (parent classes/interfaces/rules) and `base` (implementations).
 - [ ] Convert to TypeScript.
 - [ ] Re-work the 'trade' mechanism to not be hard-coded.
 - [ ] Write tests.
-
-## Game concepts and components
-
+- [ ] Work on city build list.
 - [ ] Renderer interface.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.
-- [ ] Re-do world generation.
 - [ ] Add map tiling - constraints (horizontal, vertical, both, neither).
 - [ ] City Improvements/Wonders.
 - [ ] City Happiness.
-- [ ] Other players.
 - [ ] Non-human players.
+- [ ] Remote network players.
 - [ ] Combat.
-- [ ] Civilizations.
+- [ ] More civilizations.
 - [ ] Governments.
 - [ ] Add/fix scaling/zoom.
 - [ ] Add 'isVisible' method for tiles in renderer: if (!tile.isVisible) { renderer.center = tile; }.
 - [ ] Difficulties.
+- [ ] Add optional dependencies to plugins.

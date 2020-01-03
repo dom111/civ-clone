@@ -1,4 +1,4 @@
-import Unit from 'core-unit/Unit.js';
+import Unit from '../core-unit/Unit.js';
 
 const combatModifiers = {
   attack: {

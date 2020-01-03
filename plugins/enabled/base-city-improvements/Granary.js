@@ -1,7 +1,7 @@
-import City from 'core-city/City.js';
-import Improvement from 'core-improvement/Improvement.js';
+import City from '../core-city/City.js';
+import Improvement from '../core-city-improvement/Improvement.js';
 
-class Granary extends Improvement {
+export class Granary extends Improvement {
   name = 'granary';
   title = 'Granary';
   cost = 60;
@@ -10,6 +10,8 @@ class Granary extends Improvement {
     // (player) => !! player.advances.filter((advance) => advance.name === 'pottery').length
   ];
 }
+
+export default Granary;
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(Improvement, 'Granary', {

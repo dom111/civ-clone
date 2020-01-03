@@ -1,9 +1,11 @@
 export class Player {
+  static id = 0;
+
   #availableRates;
   #visibleTiles = [];
 
   constructor() {
-    this.id = engine.players.length;
+    this.id = Player.id++;
     this.cities = [];
     this.units = [];
     this.#availableRates = [...engine.availableTradeRates];
@@ -14,6 +16,13 @@ export class Player {
     engine.emit('player:added', this);
 
     this.assignRates();
+  }
+
+  get actions() {
+    return [
+      ...this.citiesToAction,
+      ...this.unitsToAction,
+    ];
   }
 
   get unitsToAction() {
@@ -33,7 +42,7 @@ export class Player {
       this.units.forEach((unit) => {
         for (let x = -unit.visibility; x <= unit.visibility; x++) {
           for (let y = -unit.visibility; y <= unit.visibility; y++) {
-            const tile = engine.map.get(unit.tile.x + x, unit.tile.y + y);
+            const tile = unit.tile.map.get(unit.tile.x + x, unit.tile.y + y);
 
             if (! this.#visibleTiles.includes(tile)) {
               this.#visibleTiles.push(tile);
@@ -45,7 +54,7 @@ export class Player {
       this.cities.forEach((city) => {
         for (let x = -2; x <= 2; x++) {
           for (let y = -2; y <= 2; y++) {
-            const tile = engine.map.get(city.tile.x + x, city.tile.y + y);
+            const tile = city.tile.map.get(city.tile.x + x, city.tile.y + y);
 
             if (! this.#visibleTiles.includes(tile)) {
               this.#visibleTiles.push(tile);

@@ -1,4 +1,4 @@
-import Civilization from 'core-civilization/Civilization.js';
+import Civilization from '../core-civilization/Civilization.js';
 
 export class English extends Civilization {
   people = 'English';
@@ -7,9 +7,6 @@ export class English extends Civilization {
   leaders = [
     {
       name: 'Elizabeth',
-      images: [
-        'civilizations/images/english-elizabeth.jpg'
-      ],
       traits: {
         expansionist: true,
         civilized: true,
@@ -18,9 +15,6 @@ export class English extends Civilization {
     },
     {
       name: 'Victoria',
-      images: [
-        'civilizations/images/english-victoria.jpg'
-      ],
       traits: {
         expansionist: true,
         civilized: true,
@@ -29,9 +23,6 @@ export class English extends Civilization {
     },
     {
       name: 'Winston Churchill',
-      images: [
-        'civilizations/images/english-churchill.jpg'
-      ],
       traits: {
         expansionist: false,
         civilized: false,

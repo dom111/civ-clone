@@ -1,11 +1,11 @@
-import City from 'core-city/City.js';
+import City from '../core-city/City.js';
 
 export default class Improvement {
   #built;
   #city;
 
-  constructor(city) {
-    this.#built = engine.turn;
+  constructor({city}) {
+    // this.#built = engine.turn; // TODO: import Time and use Time.turn
     this.#city = city;
 
     city.improvements.push(this);

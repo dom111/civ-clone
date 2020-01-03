@@ -5,6 +5,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Treasury.js"
+        },
+        {
+            "type": "script",
             "file": "currency.js"
         }
     ]
