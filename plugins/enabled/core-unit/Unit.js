@@ -53,6 +53,10 @@ export class Unit {
 
     player.units.push(this);
 
+    if (city) {
+      city.units.push(this);
+    }
+
     this.applyVisibility();
 
     engine.emit('unit:created', this);

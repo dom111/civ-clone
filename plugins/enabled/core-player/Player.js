@@ -4,6 +4,8 @@ export class Player {
   #availableRates;
   #visibleTiles = [];
 
+  civilization;
+
   constructor() {
     this.id = Player.id++;
     this.cities = [];

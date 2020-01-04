@@ -171,9 +171,9 @@ export class World {
         mapData[index] = new (this.terrain[1])();
       });
 
-      this.terrain.forEach((terrain) => {
-        if (terrain.distribution) {
-          terrain.distribution.forEach((distributionData) => {
+      this.terrain.forEach((TerrainType) => {
+        if (TerrainType.distribution) {
+          TerrainType.distribution.forEach((distributionData) => {
             const rangeCells = landCells.filter((n) => n >= ((distributionData.from * height) * width) && n <= ((distributionData.to * height) * width));
 
             // TODO: fudgeFactor
@@ -182,7 +182,7 @@ export class World {
             while (max > 0) {
               const n = rangeCells[Math.floor(Math.random() * rangeCells.length)];
 
-              mapData[n] = new terrain();
+              mapData[n] = new TerrainType();
               max--;
 
               let neighbours = [];
@@ -195,7 +195,7 @@ export class World {
                 neighbours.forEach((k) => {
                   // TODO: clusterChance
                   if (Math.random() < clusterChance) {
-                    mapData[k] = new Terrain();
+                    mapData[k] = new TerrainType();
                     max--;
                   }
                 });
@@ -204,7 +204,7 @@ export class World {
                 while (neighbours.length && Math.random() < pathChance) {
                   const cell = neighbours[Math.floor(Math.random() * neighbours.length)];
 
-                  mapData[cell] = new terrain();
+                  mapData[cell] = new TerrainType();
                   neighbours = getNeighbours(cell, height, width, true).filter((k) => rangeCells.includes(k));
                 }
               }

@@ -21,7 +21,9 @@ export class AIPlayer extends Player {
   moveUnit(unit) {
     unit.noOrders();
 
-    unit.move(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'][Math.floor(8 * Math.random())]);
+    while (unit.movesLeft > 0) {
+      unit.move(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'][Math.floor(8 * Math.random())]);
+    }
 
     // TODO: break this out
     // const currentStrategy = item.data('strategy');

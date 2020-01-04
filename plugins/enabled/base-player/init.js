@@ -30,7 +30,11 @@ engine.on('world:built', (map) => {
     player.chooseCivilization(availableCivilizations);
     availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
 
-    const startSquare = startingSquares.shift();
+    const [startSquare] = startingSquares.splice(Math.floor(startingSquares.length * Math.random()), 1);
+
+    if (! startSquare) {
+      throw new TypeError(`startSquare is ${startSquare}.`);
+    }
 
     players.push(player);
 
@@ -81,7 +85,11 @@ engine.on('turn:start', (Time) => {
       }
 
       if (city.building) {
-        city.buildProgress += city.production;
+        city.buildProgress += Math.max(city.production -
+          // TODO: this needs to be controlled via some kind of a PlayerEffect
+          Math.max(city.units.length - city.size, 0),
+        Math.round(Math.random()))
+        ;
 
         if (city.buildProgress >= city.building.cost) {
           new (city.building)({
@@ -99,30 +107,49 @@ engine.on('turn:start', (Time) => {
   });
 
   if ((Time.turn % 50) === 0) {
-    const {map} = players[0].units[0].tile,
-      mapData = map.map.map((row) => row.map((tile) => ({
-        terrain: tile.terrain.constructor.name,
-        units: tile.units.map((unit) => ({
-          player: unit.player.civilization.people,
-          name: unit.constructor.name,
-        })),
-        city: tile.city && {
-          player: tile.city.player.civilization.people,
-          name: tile.city.name,
-        },
-      })))
+    const {map} = players[0].cities[0].tile,
+      mapData = map.map.map((row) => row.map((tile) => (
+        {
+          terrain: tile.terrain.constructor.name,
+          units: tile.units.map((unit) => (
+            {
+              player: unit.player.civilization.people,
+              name: unit.constructor.name,
+            }
+          )),
+          city: tile.city && {
+            player: tile.city.player.civilization.people,
+            name: tile.city.name,
+          },
+        }
+      )))
     ;
 
-    console.log(mapData.map((row) => row.map((tile) => tile.terrain === 'Ocean' ?
-      ' ' :
-      tile.city ?
-        '#' :
-        tile.units.length ?
-          tile.units[0].name.substr(0, 1) :
-          '~'
-    ).join('')).join('\n'));
+    const lookup = {
+      Babylonian: '\u001b[38;5;233;48;5;47m',
+      English: '\u001b[38;5;255;48;5;164m',
+      German: '\u001b[38;5;255;48;5;20m',
+      Arctic: '\u001b[48;5;254m',
+      Desert: '\u001b[48;5;229m',
+      Forest: '\u001b[48;5;22m',
+      Grassland: '\u001b[48;5;41m',
+      Hills: '\u001b[48;5;101m',
+      Jungle: '\u001b[48;5;72m',
+      Mountains: '\u001b[48;5;243m',
+      Ocean: '\u001b[48;5;18m',
+      Plains: '\u001b[48;5;144m',
+      River: '\u001b[48;5;27m',
+      Swamp: '\u001b[48;5;130m',
+      Tundra: '\u001b[48;5;223m',
+      Terrain: '\u001b[0m',
+    };
 
-    engine.saveJSON({mapData}, engine.path('base'), `game-state-${Time.turn}.json`);
+    console.log(mapData.map((row) => row.map((tile) => tile.city ?
+      `${lookup[tile.city.player]}#\u001b[0m` :
+      tile.units.length ?
+        `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
+        `${lookup[tile.terrain] || tile.terrain} \u001b[0m`
+    ).join('')).join('\n'));
   }
 
   engine.emit('player:turn-start', currentPlayer);
@@ -162,6 +189,12 @@ engine.on('unit:activate', (unit) => {
   unit.active = true;
 });
 
+engine.on('city:shrink', (city) => {
+  if (city.production + city.size < city.units.length) {
+    city.units.splice(0, city.units.length - (city.production + city.size)).forEach((unit) => unit.disband());
+  }
+});
+
 engine.on('unit:moved', (unit, from) => {
   unit.applyVisibility();
 
@@ -189,6 +222,10 @@ engine.on('unit:destroyed', (unit) => {
   unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
   unit.active = false;
   unit.destroyed = true;
+
+  if (unit.city) {
+    unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
+  }
 
   if (currentPlayer === unit.player) {
     if (unit.player.activeUnit === unit) {

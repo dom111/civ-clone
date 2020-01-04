@@ -31,3 +31,4 @@
 - [ ] Add 'isVisible' method for tiles in renderer: if (!tile.isVisible) { renderer.center = tile; }.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
+- [ ] When building World, ensure there are enough starting squares.

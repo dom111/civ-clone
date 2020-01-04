@@ -21,15 +21,15 @@ engine.on('city:destroyed', (city, player) => {
 
 engine.on('city:grow', (city) => {
   city.autoAssignWorkers();
-  city.calculateRates();
+  // city.calculateRates();
 });
 
 engine.on('city:shrink', (city) => {
   city.autoAssignWorkers();
-  city.calculateRates();
+  // city.calculateRates();
 });
 
-engine.on('player:rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
+// engine.on('player:rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
 
 engine.on('unit:registered', (unit) => {
   City.registerBuildItem(unit);
