@@ -7,7 +7,7 @@
     height: 100%;
     background: #000 none;
 
-    cursor: url("../assets/cursor/torch.gif"), auto;
+    cursor: url("../assets/cursor/torch.png"), auto;
 }
 
 #display {

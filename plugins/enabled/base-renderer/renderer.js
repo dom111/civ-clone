@@ -207,10 +207,10 @@ let BaseRenderer = class BaseRenderer {
                             let images = [];
 
                             if (tile.isOcean) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/ocean.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/ocean.png'));
                             }
                             else if (tile.isLand) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/land.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/land.png'));
                             }
                             else {
                                 console.log(`tile at ${tile.x}, ${tile.y} is not land or ocean...`);
@@ -232,7 +232,7 @@ let BaseRenderer = class BaseRenderer {
 
                     if (tile.improvements.includes('irrigation')) {
                         tiles.irrigation.push({
-                            images: [renderer._getPreloadedImage('assets/improvements/irrigation.gif')],
+                            images: [renderer._getPreloadedImage('assets/improvements/irrigation.png')],
                             height: tile.terrain.size,
                             width: tile.terrain.size,
                             x: tile.terrain.size * tile.x,
@@ -250,7 +250,7 @@ let BaseRenderer = class BaseRenderer {
 
                     if (tile.isOcean) {
                         if (tile.isCoast) {
-                            let sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.gif'),
+                            let sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.png'),
                             image = renderer._createPreloadCanvas(),
                             imageContext = image.getContext('2d'),
 
@@ -292,11 +292,11 @@ let BaseRenderer = class BaseRenderer {
 
                             ['n', 'e', 's', 'w']
                                 .filter((direction) => (tile.adjacent[direction].terrain.name === 'river'))
-                                .forEach((direction) => images.push(renderer._getPreloadedImage('assets/terrain/river_mouth_' + direction + '.gif')));
+                                .forEach((direction) => images.push(renderer._getPreloadedImage('assets/terrain/river_mouth_' + direction + '.png')));
                         }
 
                         if (tile.terrain.special) {
-                            images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.gif'));
+                            images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.png'));
                         }
                     }
                     else {
@@ -304,24 +304,24 @@ let BaseRenderer = class BaseRenderer {
                             let adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
 
                             if (adjoining) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.png'));
                             }
                             else {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.png'));
                             }
                         }
                         else {
                             let adjoining = tile.adjacentTerrain;
 
                             if (adjoining) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.png'));
                             }
                             else {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.png'));
                             }
 
                             if (tile.terrain.special) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.gif'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.png'));
                             }
                         }
                     }
@@ -355,24 +355,24 @@ let BaseRenderer = class BaseRenderer {
                                         adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
 
                                         if (adjoining.length) {
-                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.gif')));
+                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.png')));
                                         }
                                         else {
-                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.gif'));
+                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
                                         }
                                     }
                                     else if (improvement === 'railroad') {
                                         adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
 
                                         if (adjoining.length) {
-                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.gif')));
+                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.png')));
                                         }
                                         else {
-                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.gif'));
+                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
                                         }
                                     }
                                     else {
-                                        images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.gif'));
+                                        images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
                                     }
                                 });
 
@@ -396,7 +396,7 @@ let BaseRenderer = class BaseRenderer {
                             let unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
                             image = renderer._createPreloadCanvas(),
                             imageContext = image.getContext('2d'),
-                            unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.gif'), // TODO: have each unit details as a component
+                            unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.png'), // TODO: have each unit details as a component
                             sourceColors = Engine.Plugin.filter({type: 'asset', label: 'units'})[0].sourceColors,
                             replaceColors = unit.player.colors;
 
@@ -435,7 +435,7 @@ let BaseRenderer = class BaseRenderer {
                         let city = tile.city,
                         image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d'),
-                        cityImage = renderer._getPreloadedImage('assets/map/city.gif'),
+                        cityImage = renderer._getPreloadedImage('assets/map/city.png'),
                         replaceColors = city.player.colors;
 
                         image.width = city.tile.terrain.size;
@@ -471,7 +471,7 @@ let BaseRenderer = class BaseRenderer {
                         tile = unit.tile,
                         image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d'),
-                        unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.gif');
+                        unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.png');
 
                         image.width = unitImage.width;
                         image.height = unitImage.height;
@@ -522,7 +522,7 @@ let BaseRenderer = class BaseRenderer {
 
                             ['n', 'e', 's', 'w'].forEach((direction) => {
                                 if (!tile.adjacent[direction].isVisible(player.id)) {
-                                    images.push(renderer._getPreloadedImage('assets/map/fog_' + direction + '.gif'));
+                                    images.push(renderer._getPreloadedImage('assets/map/fog_' + direction + '.png'));
                                 }
                             });
 
@@ -563,7 +563,7 @@ let BaseRenderer = class BaseRenderer {
 
                             ['n', 'e', 's', 'w'].forEach((direction) => {
                                 if (!tile.adjacent[direction].isActivelyVisible(player.id)) {
-                                    images.push(renderer._getPreloadedImage('assets/map/fog_' + direction + '.gif'));
+                                    images.push(renderer._getPreloadedImage('assets/map/fog_' + direction + '.png'));
                                 }
                             });
 
@@ -887,75 +887,6 @@ BaseRenderer.Layer = class BaseLayer {
         return layer.canvas;
     }
 };
-
-// utility
-// BaseRenderer.Extract = {
-//     data: engine.loadJSON(Engine.Plugin.getPath('base-renderer') + 'extract-data.json'),
-//     images: [],
-//     loadImages: () => {
-//         ['SP257.gif', 'TER257.gif'].forEach((file) => {
-//             let image = new global.Image();
-//             image.src = 'file://' + Engine.Plugin.getPath('base-renderer') + file;
-
-//             BaseRenderer.Extract.images.push({
-//                 element: image,
-//                 file: file
-//             });
-//         });
-//     },
-//     run: () => {
-//         let canvas = document.createElement('canvas'),
-//         context = canvas.getContext('2d');
-
-//         BaseRenderer.Extract.images.forEach((image) => {
-//             Object.keys(BaseRenderer.Extract.data.files[image.file]).forEach((path) => {
-//                 let definitions = BaseRenderer.Extract.data.files[image.file][path];
-
-//                 definitions.forEach((definition) => {
-//                     definition.contents.forEach((content) => {
-//                         let object = extend({}, BaseRenderer.Extract.data.defaults, definition, content),
-//                         filename = Engine.Plugin.getPath('base-renderer') + 'assets/' + path + object.name + '.gif',
-//                         dirname = filename.replace(/\/[^\/]+$/, '/');
-
-//                         canvas.width = object.width;
-//                         canvas.height = object.height;
-//                         context.clearRect(0, 0, canvas.width, canvas.height);
-//                         context.drawImage(image.element, -object.x, -object.y);
-
-//                         for (let x = 0; x < canvas.width; x++) {
-//                             for (let y = 0; y < canvas.height; y++) {
-//                                 let imageData = context.getImageData(x, y, 1, 1).data;
-
-//                                 if (imageData[0] == object.clear.r && imageData[1] == object.clear.g && imageData[2] == object.clear.b) {
-//                                     context.clearRect(x, y, 1, 1);
-//                                 }
-//                             }
-//                         }
-
-//                         // ensure assets directory exists
-//                         try {
-//                             fs.accessSync(Engine.Plugin.getPath('base-renderer') + 'assets/', fs.F_OK);
-//                         }
-//                         catch (e) {
-//                             fs.mkdirSync(Engine.Plugin.getPath('base-renderer') + 'assets/');
-//                         };
-
-//                         try {
-//                             fs.accessSync(dirname, fs.F_OK);
-//                         }
-//                         catch (e) {
-//                             fs.mkdirSync(dirname);
-//                         };
-
-//                         let buffer = new Buffer(canvas.toDataURL('image/gif').split(/,/)[1], 'base64');
-
-//                         fs.writeFileSync(filename, buffer);
-//                     });
-//                 });
-//             });
-//         });
-//     }
-// };
 
 global.renderer = new BaseRenderer();
 

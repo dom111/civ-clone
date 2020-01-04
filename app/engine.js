@@ -47,7 +47,7 @@ module.exports = (() => {
             this.templateVars = {};
 
             // set up useful paths
-            _path('base', `${__dirname}/../../`);
+            _path('base', `${__dirname}/../`);
             _path('views', _path('base') + 'views/');
             _path('plugins', _path('base') + 'plugins/');
             _path('enabledPlugins', _path('plugins') + 'enabled/');

@@ -1,6 +1,6 @@
 'use strict';
 
-const Engine = require('app/engine');
+const Engine = require('../../../app/engine.js');
 
 window.addEventListener('load', function() {
     global.debug = (window.location.href.indexOf('debug=true') > -1);

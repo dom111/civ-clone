@@ -9,7 +9,7 @@
         }
     },
     "files": {
-        "SP257.gif": {
+        "SP257.png": {
             "cursor/go": [{
                 "y": 33,
                 "x": 33,
@@ -327,7 +327,7 @@
             "units/": [{
                 "y": 160,
                 "contents": [
-                    { "name": "settler", "x": 0 },
+                    { "name": "settlers", "x": 0 },
                     { "name": "militia", "x": 16 },
                     { "name": "phalanx", "x": 32 },
                     { "name": "legion", "x": 48 },
@@ -369,7 +369,7 @@
                 ]
             }]
         },
-        "TER257.gif": {
+        "TER257.png": {
             "terrain/desert": [{
                 "y": 0,
                 "contents": [
