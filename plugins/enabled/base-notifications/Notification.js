@@ -8,7 +8,7 @@ export class Notification {
     message,
     name,
     type,
-    when
+    when,
   }) {
     this.#message = message;
     this.#name    = name;

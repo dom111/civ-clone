@@ -11,12 +11,12 @@ export default Barracks;
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(Improvement, 'Barracks', {
-  value: Barracks
+  value: Barracks,
 });
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(City.improvements, 'barracks', {
-  value: Barracks
+  value: Barracks,
 });
 
 engine.on('unit:created', (unit) => {

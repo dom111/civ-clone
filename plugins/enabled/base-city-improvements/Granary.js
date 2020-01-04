@@ -15,12 +15,12 @@ export default Granary;
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(Improvement, 'Granary', {
-  value: Granary
+  value: Granary,
 });
 
 // TODO: expose this via Improvement.register or something
 Object.defineProperty(City.improvements, 'granary', {
-  value: Granary
+  value: Granary,
 });
 
 engine.on('city:grow', (city) => {

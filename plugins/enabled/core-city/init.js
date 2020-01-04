@@ -9,7 +9,7 @@ engine.on('city:captured', (capturedCity, player) => {
 engine.on('city:destroyed', (city, player) => {
   city.destroyed = {
     // turn: engine.turn, // TODO: import Time and use Time.turn
-    by: player
+    by: player,
   };
 
   if (! city.player.cities.filter((city) => !! city.destroyed).some((value) => value === true)) {

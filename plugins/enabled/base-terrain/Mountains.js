@@ -15,9 +15,9 @@ export class Mountains extends Terrain {
   movementCost = 3;
   improvements = {
     mine: {
-      production: 1
+      production: 1,
     },
-    road: {}
+    road: {},
   };
   size = 16;
   ocean = false;
@@ -28,8 +28,8 @@ export class Mountains extends Terrain {
       name: 'gold',
       title: 'Gold',
       trade: 5,
-      chance: 16
-    }
+      chance: 16,
+    },
   ];
   static distribution = [
     {
@@ -37,8 +37,8 @@ export class Mountains extends Terrain {
       to: 0.9,
       coverage: 0.05,
       clustered: false,
-      path: true
-    }
+      path: true,
+    },
   ];
 }
 

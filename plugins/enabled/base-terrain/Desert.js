@@ -15,11 +15,11 @@ export class Desert extends Terrain {
   movementCost = 1;
   improvements = {
     irrigation: {
-      food: 1
+      food: 1,
     },
     road: {
-      trade: 1
-    }
+      trade: 1,
+    },
   };
   size = 16;
   ocean = false;
@@ -32,11 +32,11 @@ export class Desert extends Terrain {
       food: 2,
       improvements: {
         irrigation: {
-          food: 2
-        }
+          food: 2,
+        },
       },
-      chance: 16
-    }
+      chance: 16,
+    },
   ];
   static distribution = [
     {
@@ -44,8 +44,8 @@ export class Desert extends Terrain {
       to: 0.6,
       coverage: 0.4,
       clustered: true,
-      path: false
-    }
+      path: false,
+    },
   ];
 }
 

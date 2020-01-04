@@ -4,7 +4,7 @@ export default class City {
   constructor({
     player,
     tile,
-    name
+    name,
   }) {
     this.player = player;
     this.tile = tile;
@@ -44,7 +44,7 @@ export default class City {
     // TODO: check we have rates plugin available
     return engine.availableTradeRates.map((rate) => ({
       name: rate,
-      value: this.rates[rate]
+      value: this.rates[rate],
     }));
   }
 
@@ -124,9 +124,9 @@ export default class City {
   valueOf() {
     return ['ratesArray', 'trade', 'food', 'production', 'surplusFood', 'availableBuildItems'].reduce((city, key) => ({
       ...city,
-      [key]: city[key]
+      [key]: city[key],
     }), {
-      ...this
+      ...this,
     });
   }
 

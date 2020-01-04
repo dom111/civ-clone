@@ -30,8 +30,8 @@ export default class Improvement {
 }
 
 Object.defineProperty(City, 'Improvement', {
-  value: Improvement
+  value: Improvement,
 });
 Object.defineProperty(City, 'improvements', {
-  value: []
+  value: [],
 });

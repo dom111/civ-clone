@@ -28,7 +28,7 @@ export class Terrain {
 
   static get terrains() {
     return [
-      ...Object.values(this.#terrains)
+      ...Object.values(this.#terrains),
     ];
   }
 

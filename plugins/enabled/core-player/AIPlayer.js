@@ -61,7 +61,7 @@ export class AIPlayer extends Player {
                   'desert',
                   'grassland',
                   'plains',
-                  'river'
+                  'river',
                 ].includes(unit.tile.terrain.name) &&
                 ! unit.tile.improvements.includes('irrigation') &&
                 unit.tile.surroundingArea.filter(
@@ -77,7 +77,7 @@ export class AIPlayer extends Player {
               else if (
                 [
                   'hills',
-                  'mountains'
+                  'mountains',
                 ].includes(unit.tile.terrain.name) &&
                 ! unit.tile.improvements.includes('mine') &&
                 unit.tile.surroundingArea.filter(

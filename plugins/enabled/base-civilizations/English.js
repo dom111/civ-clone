@@ -10,25 +10,25 @@ export class English extends Civilization {
       traits: {
         expansionist: true,
         civilized: true,
-        militaristic: true
-      }
+        militaristic: true,
+      },
     },
     {
       name: 'Victoria',
       traits: {
         expansionist: true,
         civilized: true,
-        militaristic: true
-      }
+        militaristic: true,
+      },
     },
     {
       name: 'Winston Churchill',
       traits: {
         expansionist: false,
         civilized: false,
-        militaristic: true
-      }
-    }
+        militaristic: true,
+      },
+    },
   ];
   cityNames = [
     'London',
@@ -86,13 +86,13 @@ export class English extends Civilization {
     'St Helens',
     'Woking',
     'Chesterfield',
-    'Crawley'
+    'Crawley',
   ];
   priorityTechnologies = [
     'alphabet',
     'mapmaking',
     'bronze-working',
-    'the-wheel'
+    'the-wheel',
   ];
 }
 

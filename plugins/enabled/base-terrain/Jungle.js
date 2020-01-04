@@ -14,7 +14,7 @@ export class Jungle extends Terrain {
   production = 0;
   movementCost = 2;
   improvements = {
-    road: {}
+    road: {},
   };
   size = 16;
   ocean = false;
@@ -25,8 +25,8 @@ export class Jungle extends Terrain {
       name: 'gems',
       title: 'Gems',
       trade: 3,
-      chance: 16
-    }
+      chance: 16,
+    },
   ];
   static distribution = [
     {
@@ -34,15 +34,15 @@ export class Jungle extends Terrain {
       to: 0.45,
       coverage: 0.2,
       clustered: true,
-      path: false
+      path: false,
     },
     {
       from: 0.55,
       to: 0.8,
       coverage: 0.2,
       clustered: true,
-      path: false
-    }
+      path: false,
+    },
   ];
 }
 

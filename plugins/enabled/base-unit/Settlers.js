@@ -7,12 +7,12 @@ export class Settlers extends Worker {
   title = 'Settlers';
 
   buildCity({
-    name = this.player.civilization.cityNames.shift()
+    name = this.player.civilization.cityNames.shift(),
   } = {}) {
     new City({
       player: this.player,
       tile: this.tile,
-      name
+      name,
     });
 
     this.destroy();

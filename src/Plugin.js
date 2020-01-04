@@ -7,7 +7,7 @@ export class Plugin {
   constructor(data) {
     this.#data = {
       dependencies: [],
-      ...data
+      ...data,
     };
   }
 

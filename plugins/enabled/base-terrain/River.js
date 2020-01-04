@@ -15,8 +15,8 @@ export class River extends Terrain {
   movementCost = 1;
   improvements = {
     irrigation: {
-      food: 1
-    }
+      food: 1,
+    },
   };
   size = 16;
   ocean = false;
@@ -27,8 +27,8 @@ export class River extends Terrain {
       name: 'shield',
       title: 'Shield',
       production: 1,
-      chance: 40
-    }
+      chance: 40,
+    },
   ];
   static distribution = [
     {
@@ -36,8 +36,8 @@ export class River extends Terrain {
       to: 0.9,
       coverage: 0.05,
       clustered: false,
-      path: true
-    }
+      path: true,
+    },
   ];
 }
 

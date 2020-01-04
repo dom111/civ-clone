@@ -10,9 +10,9 @@ export class Babylonian extends Civilization {
       traits: {
         expansionist: true,
         civilized: true,
-        militaristic: false
-      }
-    }
+        militaristic: false,
+      },
+    },
   ];
   cityNames = [
     'Babilim',
@@ -45,12 +45,12 @@ export class Babylonian extends Civilization {
     'Kuara',
     'Eridu',
     'Akshak',
-    'Akkad'
+    'Akkad',
   ];
   priorityTechnologies = [
     'alphabet',
     'writing',
-    'code-of-laws'
+    'code-of-laws',
   ];
 }
 

@@ -17,6 +17,14 @@
   "rules": {
     "arrow-parens": "error",
     "arrow-spacing": "error",
+    "brace-style": ["error", "stroustrup"],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never"
+    }],
     "curly": ["error", "all"],
     "eqeqeq": "error",
     "import/extensions": ["warn", "always"],

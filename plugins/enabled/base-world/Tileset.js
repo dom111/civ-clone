@@ -76,12 +76,12 @@ export class Tileset {
   score({
     food = 4,
     production = 2,
-    trade = 1
+    trade = 1,
   } = {}) {
     return this.map((tile) => tile.score({
       food,
       production,
-      trade
+      trade,
     }))
       .reduce((total, score) => total + score, 0)
     ;

@@ -6,7 +6,7 @@ export const executeScript = (code, context, resolver, script) => {
     try {
       const module = new vm.SourceTextModule(code, {
         identifier: script,
-        context
+        context,
       });
 
       await module.link(resolver);

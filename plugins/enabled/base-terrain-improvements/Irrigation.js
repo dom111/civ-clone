@@ -10,7 +10,7 @@ export class Irrigation extends Improvement {
     Grassland,
     Hills,
     Plains,
-    River
+    River,
   ];
 }
 

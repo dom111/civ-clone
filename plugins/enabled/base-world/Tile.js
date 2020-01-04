@@ -31,7 +31,7 @@ export class Tile {
       s: this.map.get(this.x, this.y + 1),
       sw: this.map.get(this.x - 1, this.y + 1),
       w: this.map.get(this.x - 1, this.y),
-      nw: this.map.get(this.x - 1, this.y - 1)
+      nw: this.map.get(this.x - 1, this.y - 1),
     };
   }
 
@@ -40,7 +40,7 @@ export class Tile {
       n: this.map.get(this.x, this.y - 1),
       e: this.map.get(this.x + 1, this.y),
       w: this.map.get(this.x - 1, this.y),
-      s: this.map.get(this.x, this.y + 1)
+      s: this.map.get(this.x, this.y + 1),
     };
   }
 
@@ -114,7 +114,7 @@ export class Tile {
   score({
     food = 4,
     production = 2,
-    trade = 1
+    trade = 1,
   } = {}) {
     return (this.food * food) +
       (this.production * production) +

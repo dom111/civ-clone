@@ -36,7 +36,7 @@ engine.on('world:built', (map) => {
 
     Unit.fromName('Settlers', {
       player,
-      tile: startSquare
+      tile: startSquare,
     });
   }
 });
@@ -49,39 +49,21 @@ engine.on('turn:start', (Time) => {
     player.units.forEach((unit) => {
       if (unit.busy > 0) {
         unit.busy--;
+
+        if (unit.busy === 0) {
+          if (unit.actionOnComplete) {
+            unit.actionOnComplete();
+          }
+        }
       }
 
-      if (unit.busy === 0) {
+      if (! unit.busy) {
         unit.busy = false;
         unit.active = true;
-
         unit.movesLeft = unit.movement;
-        unit.active = true;
       }
     });
-  });
 
-  engine.emit('player:turn-start', currentPlayer);
-});
-
-engine.on('player:turn-start', async (player) => {
-  await player.takeTurn();
-
-  engine.emit('player:turn-end', player);
-});
-
-engine.on('player:turn-end', async () => {
-  if (playersToAction.length) {
-    currentPlayer = playersToAction.shift();
-    engine.emit('player:turn-start', currentPlayer);
-  }
-  else {
-    engine.emit('turn:end');
-  }
-});
-
-engine.on('turn:end', () => {
-  players.forEach((player) => {
     player.cities.forEach((city) => {
       city.foodStorage += city.surplusFood;
 
@@ -105,7 +87,7 @@ engine.on('turn:end', () => {
           new (city.building)({
             player,
             city,
-            tile: city.tile
+            tile: city.tile,
           });
 
           engine.emit('city:built', city, city.building);
@@ -114,21 +96,52 @@ engine.on('turn:end', () => {
         }
       }
     });
-
-    player.units.forEach((unit) => {
-      if (unit.budy) {
-        unit.busy--;
-      }
-
-      if (! unit.busy) {
-        if (unit.actionOnComplete) {
-          unit.actionOnComplete();
-        }
-
-        unit.active = true;
-      }
-    });
   });
+
+  if ((Time.turn % 50) === 0) {
+    const {map} = players[0].units[0].tile,
+      mapData = map.map.map((row) => row.map((tile) => ({
+        terrain: tile.terrain.constructor.name,
+        units: tile.units.map((unit) => ({
+          player: unit.player.civilization.people,
+          name: unit.constructor.name,
+        })),
+        city: tile.city && {
+          player: tile.city.player.civilization.people,
+          name: tile.city.name,
+        },
+      })))
+    ;
+
+    console.log(mapData.map((row) => row.map((tile) => tile.terrain === 'Ocean' ?
+      ' ' :
+      tile.city ?
+        '#' :
+        tile.units.length ?
+          tile.units[0].name.substr(0, 1) :
+          '~'
+    ).join('')).join('\n'));
+
+    engine.saveJSON({mapData}, engine.path('base'), `game-state-${Time.turn}.json`);
+  }
+
+  engine.emit('player:turn-start', currentPlayer);
+});
+
+engine.on('player:turn-start', async (player) => {
+  await player.takeTurn();
+
+  engine.emit('player:turn-end', player);
+});
+
+engine.on('player:turn-end', async () => {
+  if (playersToAction.length) {
+    currentPlayer = playersToAction.shift();
+    engine.emit('player:turn-start', currentPlayer);
+  }
+  else {
+    engine.emit('turn:end');
+  }
 });
 
 engine.on('player:visibility-changed', (player) => {

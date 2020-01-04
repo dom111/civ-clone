@@ -16,7 +16,7 @@ export class Road extends Improvement {
     Plains,
     River,
     Swamp,
-    Tundra
+    Tundra,
   ];
 }
 

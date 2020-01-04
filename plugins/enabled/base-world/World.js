@@ -17,7 +17,7 @@ export class World {
         x,
         y,
         terrain,
-        map: this
+        map: this,
       })))
     ;
   }

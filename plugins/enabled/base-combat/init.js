@@ -2,15 +2,15 @@ import Unit from '../core-unit/Unit.js';
 
 const combatModifiers = {
   attack: {
-    veteran: .5
+    veteran: .5,
   },
   defence: {
     river: .5,
     fortified: 1,
     mountain: 2,
     hills: 1,
-    fort: 1.5
-  }
+    fort: 1.5,
+  },
 };
 
 // TODO: make this a baseClass and implementation
@@ -33,6 +33,6 @@ Object.defineProperty(Unit, 'combat', {
       Object.keys(combatModifiers.defence).forEach((key) => defence += unit[key] ? (unit.defence * combatModifiers.defence[key]) : 0);
 
       return defence;
-    }
-  }
+    },
+  },
 });

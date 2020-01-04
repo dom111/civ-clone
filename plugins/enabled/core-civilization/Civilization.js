@@ -15,7 +15,7 @@ export default class Civilization {
 
   static get civilizations() {
     return [
-      ...Object.values(this.#civilizations)
+      ...Object.values(this.#civilizations),
     ];
   }
 }

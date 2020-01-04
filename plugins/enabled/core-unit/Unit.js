@@ -92,7 +92,7 @@ export class Unit {
   delayedAction({
     action,
     turns,
-    status
+    status,
   }) {
     this.busy = turns;
     this.status = status;
@@ -115,7 +115,7 @@ export class Unit {
         // TODO
         // this.bonuses.add(new Fortified());
       },
-      turns: 1
+      turns: 1,
     });
   }
 
@@ -125,7 +125,7 @@ export class Unit {
       action: () => {
         this.busy = false;
       },
-      turns: 1
+      turns: 1,
     });
   }
 
@@ -137,7 +137,7 @@ export class Unit {
         engine.emit('tile:improvement-pillaged', this.tile, [...this.tile.improvements].pop());
         engine.emit('unit:activate', this);
       },
-      turns: 1
+      turns: 1,
     });
   }
 

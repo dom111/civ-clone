@@ -6,7 +6,7 @@ export default (file) => {
     try {
       await fs.access(file);
       const content = await fs.readFile(file, {
-        encoding: 'utf8'
+        encoding: 'utf8',
       });
 
       resolve(content);

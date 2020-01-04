@@ -15,9 +15,9 @@ export class Hills extends Terrain {
   movementCost = 2;
   improvements = {
     mine: {
-      production: 3
+      production: 3,
     },
-    road: {}
+    road: {},
   };
   size = 16;
   ocean = false;
@@ -28,8 +28,8 @@ export class Hills extends Terrain {
       name: 'coal',
       title: 'Coal',
       production: 2,
-      chance: 16
-    }
+      chance: 16,
+    },
   ];
   static distribution = [
     {
@@ -37,8 +37,8 @@ export class Hills extends Terrain {
       to: 0.9,
       coverage: 0.08,
       clustered: false,
-      path: true
-    }
+      path: true,
+    },
   ];
 }
 

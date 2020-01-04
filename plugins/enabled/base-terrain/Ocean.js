@@ -19,15 +19,15 @@ export class Ocean extends Terrain {
       food: 3,
       trade: 4,
       production: 1,
-      chance: 16
+      chance: 16,
     },
     {
       name: 'fish',
       title: 'Fish',
       food: 3,
       trade: 4,
-      chance: 20
-    }
+      chance: 20,
+    },
   ];
 }
 

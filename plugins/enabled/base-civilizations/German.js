@@ -10,9 +10,9 @@ export class German extends Civilization {
       traits: {
         expansionist: false,
         civilized: true,
-        militaristic: true
-      }
-    }
+        militaristic: true,
+      },
+    },
   ];
   cityNames = [
     'Berlin',
@@ -64,12 +64,12 @@ export class German extends Civilization {
     'Oldenburg',
     'Leverkusen',
     'Osnabrück',
-    'Solingen'
+    'Solingen',
   ];
   priorityTechnologies = [
     'bronze-working',
     'iron-working',
-    'masonry'
+    'masonry',
   ];
 }
 

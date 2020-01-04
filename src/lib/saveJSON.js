@@ -4,7 +4,7 @@ import promiseFactory from './promiseFactory.js';
 export default (file, data) => promiseFactory(async (resolve, reject) => {
   try {
     await fs.writeFile(file, JSON.stringify(data), {
-      encoding: 'utf8'
+      encoding: 'utf8',
     });
 
     resolve();

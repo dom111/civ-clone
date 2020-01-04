@@ -15,10 +15,10 @@ export class Manager {
     this.#context = vm.createContext({
       console: ['log', 'warn', 'error'].reduce((obj, key) => ({
         ...obj,
-        [key]: (...args) => console[key](...args)
+        [key]: (...args) => console[key](...args),
       }), {}),
       promiseFactory,
-      engine
+      engine,
     });
   }
 
@@ -45,7 +45,7 @@ export class Manager {
           const pluginData = await loadJSON(pluginJSONPath),
             plugin = new Plugin({
               ...pluginData,
-              path: pluginPath
+              path: pluginPath,
             }),
             cyclicDependencies = (plugin.dependencies || []).filter((dependency) => (dependency.dependencies || []).includes(pluginName))
           ;

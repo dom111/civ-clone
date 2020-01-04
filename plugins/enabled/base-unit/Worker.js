@@ -30,7 +30,7 @@ export class Worker extends Unit {
           engine.emit('tile:improvement-built', this.tile, 'irrigation');
         },
         // TODO: calculate moves needed
-        turns: 3
+        turns: 3,
       });
     }
     else {
@@ -45,7 +45,7 @@ export class Worker extends Unit {
         action: () => {
           engine.emit('tile:improvement-built', this.tile, 'mine');
         },
-        turns: 3
+        turns: 3,
       });
     }
   }
@@ -57,7 +57,7 @@ export class Worker extends Unit {
         action: () => {
           engine.emit('tile:improvement-built', this.tile, 'road');
         },
-        turns: 1
+        turns: 1,
       });
     }
   }
