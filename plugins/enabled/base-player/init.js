@@ -7,12 +7,17 @@ const players = [],
   playersToAction = []
 ;
 
-let currentPlayer;
+let currentPlayer,
+  worldMap
+;
 
 engine.on('world:built', (map) => {
   const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150),
-    numberOfPlayers = engine.option('players', 3)
+    numberOfPlayers = engine.option('players', 6),
+    usedStartSquares = []
   ;
+
+  worldMap = map;
 
   if (! startingSquares.length > numberOfPlayers) {
     // TODO: ensure this at generation stage
@@ -21,8 +26,6 @@ engine.on('world:built', (map) => {
 
   let availableCivilizations = Civilization.civilizations;
 
-  startingSquares.sort(() => Math.floor(3 * Math.random()) - 1);
-
   for (let i = 0; i < numberOfPlayers; i++) {
     const player = new AIPlayer();
 
@@ -30,17 +33,25 @@ engine.on('world:built', (map) => {
     player.chooseCivilization(availableCivilizations);
     availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
 
-    const [startSquare] = startingSquares.splice(Math.floor(startingSquares.length * Math.random()), 1);
+    const [startingSquare] = startingSquares
+      .sort((a, b) =>
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(b))) -
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(a)))
+      )
+      .splice(Math.floor(startingSquares.length * Math.random()), 1)
+    ;
 
-    if (! startSquare) {
-      throw new TypeError(`startSquare is ${startSquare}.`);
+    usedStartSquares.push(startingSquare);
+
+    if (! startingSquare) {
+      throw new TypeError(`startSquare is ${startingSquare}.`);
     }
 
     players.push(player);
 
     Unit.fromName('Settlers', {
       player,
-      tile: startSquare,
+      tile: startingSquare,
     });
   }
 });
@@ -107,8 +118,7 @@ engine.on('turn:start', (Time) => {
   });
 
   if ((Time.turn % 50) === 0) {
-    const {map} = players[0].cities[0].tile,
-      mapData = map.map.map((row) => row.map((tile) => (
+    const mapData = worldMap.map.map((row) => row.map((tile) => (
         {
           terrain: tile.terrain.constructor.name,
           units: tile.units.map((unit) => (
@@ -129,6 +139,9 @@ engine.on('turn:start', (Time) => {
       Babylonian: '\u001b[38;5;233;48;5;47m',
       English: '\u001b[38;5;255;48;5;164m',
       German: '\u001b[38;5;255;48;5;20m',
+      Roman: '\u001b[38;5;244;48;5;15m',
+      Russian: '\u001b[38;5;244;48;5;254m',
+      Spanish: '\u001b[38;5;233;48;5;173m',
       Arctic: '\u001b[48;5;254m',
       Desert: '\u001b[48;5;229m',
       Forest: '\u001b[48;5;22m',
@@ -204,8 +217,20 @@ engine.on('unit:moved', (unit, from) => {
     unit.player.activeUnit = false;
     unit.active = false;
 
-    engine.emit('unit:activate-next', unit.player);
+    // engine.emit('unit:activate-next', unit.player);
   }
+});
+
+engine.on('city:captured', (capturedCity, player) => {
+  capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
+
+  if (capturedCity.player.cities.length === 0) {
+    capturedCity.player.units.forEach((unit) => unit.destroy());
+    engine.emit('player:defeated', capturedCity.player, player);
+  }
+
+  capturedCity.player = player;
+  player.cities.push(capturedCity);
 });
 
 engine.on('unit:action', (unit) => {
@@ -213,7 +238,7 @@ engine.on('unit:action', (unit) => {
     unit.player.activeUnit = false;
     unit.active = false;
 
-    engine.emit('unit:activate-next', unit.player);
+    // engine.emit('unit:activate-next', unit.player);
   }
 });
 
@@ -226,14 +251,14 @@ engine.on('unit:destroyed', (unit) => {
   if (unit.city) {
     unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
   }
-
-  if (currentPlayer === unit.player) {
-    if (unit.player.activeUnit === unit) {
-      unit.player.activeUnit = false;
-    }
-
-    engine.emit('unit:activate-next', unit.player);
-  }
+  //
+  // if (currentPlayer === unit.player) {
+  //   if (unit.player.activeUnit === unit) {
+  //     unit.player.activeUnit = false;
+  //   }
+  //
+  //   engine.emit('unit:activate-next', unit.player);
+  // }
 });
 
 engine.on('unit:activate-next', () => {

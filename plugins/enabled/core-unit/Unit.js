@@ -81,7 +81,9 @@ export class Unit {
     }
 
     // TODO: check if land/water and validate unit can move there
-    return this.tile.isNeighbourOf(to) && to.isLand;
+    return this.tile.isNeighbourOf(to) &&
+      to.isLand
+    ;
   }
 
   data(key, value = null) {
@@ -98,6 +100,7 @@ export class Unit {
     turns,
     status,
   }) {
+    engine.emit('unit:action', this, action);
     this.busy = turns;
     this.status = status;
     this.active = false;
@@ -105,14 +108,12 @@ export class Unit {
   }
 
   disband() {
+    engine.emit('unit:action', this, 'disband');
     this.destroy();
     engine.emit('unit:disbanded', this);
   }
 
   fortify() {
-    this.busy = true;
-    this.action = 'fortify';
-
     this.delayedAction({
       status: 'fortify',
       action: () => {
@@ -146,8 +147,9 @@ export class Unit {
   }
 
   sleep() {
+    engine.emit('unit:action', this, 'sleep');
     this.busy = true;
-    this.action = 'sentry';
+    this.action = 'sleep';
   }
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
@@ -171,17 +173,23 @@ export class Unit {
     }
 
     if (to.units.length && to.units[0].player !== this.player) {
-      return this.resolveCombat(to.units);
+      this.resolveCombat(to.units);
+
+      return true;
     }
 
     if (to.city && to.city.player !== this.player) {
-      // TODO: interact
-      return false;
+      if (to.units.length > 0) {
+        this.resolveCombat(to.units);
+
+        return true;
+      }
+
+      return engine.emit('city:captured', to.city, this.player);
     }
 
     // TODO: adjacency rules
 
-    // TODO
     const movementCost = this.tile.movementCost(to);
 
     if (movementCost > this.movesLeft) {
@@ -212,7 +220,7 @@ export class Unit {
 
       this.movesLeft -= movementCost;
 
-      if (this.movesLeft <= 0.1) {
+      if (this.movesLeft <= .1) {
         this.movesLeft = 0;
       }
 
@@ -228,7 +236,7 @@ export class Unit {
   resolveCombat(units) {
     const unit = this;
 
-    const [defender] = units.sort((a,b) => a.defence > b.defence ? -1 : a.defence === b.defence ? 0 : 1),
+    const [defender] = units.sort((a,b) => b.defence - a.defence),
 
       // TODO: get current combat scheme and use that to resolve
       result = Unit.combat.resolve(this, defender)
@@ -247,18 +255,6 @@ export class Unit {
     }
 
     return result;
-  }
-
-  action(action) {
-    if (this.can(action)) {
-      this.actions[action].run(this, this.actions[action]);
-
-      engine.emit('unit:action', this, this.actions[action]);
-    }
-    else {
-      // TODO: use notifications or squelch
-      console.log(`Can't call action ${action} on ${this.player.people} ${this.title}`);
-    }
   }
 
   can(action) {

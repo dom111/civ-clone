@@ -1,5 +1,6 @@
 import Unit from '../core-unit/Unit.js';
 
+// TODO: overhaul this
 const combatModifiers = {
   attack: {
     veteran: .5,
@@ -30,7 +31,8 @@ Object.defineProperty(Unit, 'combat', {
     getDefence: (unit) => {
       let {defence} = unit;
 
-      Object.keys(combatModifiers.defence).forEach((key) => defence += unit[key] ? (unit.defence * combatModifiers.defence[key]) : 0);
+      Object.keys(combatModifiers.defence)
+        .forEach((key) => defence += unit[key] ? (unit.defence * combatModifiers.defence[key]) : 0);
 
       return defence;
     },

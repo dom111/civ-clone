@@ -32,14 +32,14 @@ export class Swamp extends Terrain {
     {
       from: 0.2,
       to: 0.4,
-      coverage: 0.05,
+      coverage: 0.025,
       clustered: true,
       path: false,
     },
     {
       from: 0.6,
       to: 0.8,
-      coverage: 0.05,
+      coverage: 0.025,
       clustered: true,
       path: false,
     },

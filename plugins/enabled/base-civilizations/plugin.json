@@ -19,6 +19,18 @@
         },
         {
             "type": "script",
+            "file": "Roman.js"
+        },
+        {
+            "type": "script",
+            "file": "Russian.js"
+        },
+        {
+            "type": "script",
+            "file": "Spanish.js"
+        },
+        {
+            "type": "script",
             "file": "init.js"
         }
     ]

@@ -9,6 +9,7 @@ export class Settlers extends Worker {
   buildCity({
     name = this.player.civilization.cityNames.shift(),
   } = {}) {
+    engine.emit('unit:action', this, 'buildCity');
     new City({
       player: this.player,
       tile: this.tile,

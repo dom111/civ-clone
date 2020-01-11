@@ -6,11 +6,6 @@ export class Tile {
 
     Object.entries(details).forEach(([key, value]) => this[key] = value);
 
-    // keep this as its own instance
-    // tile.terrain = {
-    //   ...tile.terrain
-    // };
-
     tile.improvements = [];
     tile.city = false;
     tile.units = [];
@@ -51,6 +46,10 @@ export class Tile {
     ;
 
     return ['n', 'e', 's', 'w'].filter((position) => (adjacent[position].name === tile.name)).join('');
+  }
+
+  distanceFrom(tile) {
+    return Math.hypot(this.x - tile.x, this.y - tile.y);
   }
 
   get isOcean() {

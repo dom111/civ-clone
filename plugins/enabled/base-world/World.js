@@ -5,6 +5,7 @@ export class World {
   constructor() {
     this.terrain = [];
 
+    // TODO: use this to help generate consistent maps
     this.seed = Math.ceil(Math.random() * 1e7);
     // this.seed = 615489;
 
@@ -12,14 +13,35 @@ export class World {
       this.terrain.push(terrainDefinition);
     });
 
-    this.map = this.generate()
-      .map((row, y) => row.map((terrain, x) => new Tile({
-        x,
-        y,
-        terrain,
-        map: this,
-      })))
-    ;
+    // tiles that would be a 'great site for a city'
+    const greatTileCoverage = .005;
+
+    let regenerateCount = 0;
+
+    while (! this.map) {
+      this.map = this.generate()
+        .map((row, y) => row.map((terrain, x) => new Tile({
+          x,
+          y,
+          terrain,
+          map: this,
+        })))
+      ;
+
+      // TODO: _just_ (!) alter the map so that it does meet these criteria.
+      if (
+        (
+          this.getBy((tile) => tile.surroundingArea.score() >= 150).length /
+            (this.height * this.width)
+        ) < greatTileCoverage
+      ) {
+        if (++regenerateCount > 30) {
+          throw new TypeError('World generation failed repeatedly. Aborting.');
+        }
+
+        this.map = null;
+      }
+    }
   }
 
   get width() {
@@ -50,7 +72,30 @@ export class World {
       y += this.height;
     }
 
-    return (this.map[y] || [])[x] || false;
+    // this seems unnecessary with the above checks...
+    // return (this.map[y] || [])[x] || false;
+    return this.map[y][x];
+  }
+
+  // TODO: remove this when it's not needed for debugging
+  toString() {
+    const lookup = {
+      Arctic: '\u001b[48;5;254m',
+      Desert: '\u001b[48;5;229m',
+      Forest: '\u001b[48;5;22m',
+      Grassland: '\u001b[48;5;41m',
+      Hills: '\u001b[48;5;101m',
+      Jungle: '\u001b[48;5;72m',
+      Mountains: '\u001b[48;5;243m',
+      Ocean: '\u001b[48;5;18m',
+      Plains: '\u001b[48;5;144m',
+      River: '\u001b[48;5;27m',
+      Swamp: '\u001b[48;5;130m',
+      Tundra: '\u001b[48;5;223m',
+      Terrain: '\u001b[0m',
+    };
+
+    return this.map.map((row) => row.map((tile) => `${lookup[tile.terrain.constructor.name]} \u001b[0m`).join('')).join('\n');
   }
 
   getTerrainType(id) {
@@ -108,27 +153,34 @@ export class World {
 
     // Build land masses
     const generateLand = (height, width, map = Array(height * width).fill(0)) => {
-      const seen = [],
+      const seen = {},
         toProcess = [],
         seedTile = Math.floor(height * width * Math.random()),
         seedX = seedTile % width,
-        seedY = Math.floor(seedTile / width)
+        seedY = Math.floor(seedTile / width),
+        flagAsSeen = (id) => {
+          if (! (id in seen)) {
+            seen[id] = 0;
+          }
+
+          seen[id]++;
+        }
       ;
 
-      if (map[seedTile]) {
-        return generateLand(height, width, map);
-      }
+      // if (map[seedTile]) {
+      //   return generateLand(height, width, map);
+      // }
 
       map[seedTile] = 1;
 
-      seen.push(seedTile);
+      flagAsSeen(seedTile);
 
       toProcess.push(...getNeighbours(seedTile, height, width, true));
 
       while (toProcess.length) {
         const currentTile = toProcess.shift();
 
-        if (! seen.includes(currentTile)) {
+        if (! seen[currentTile] || seen[currentTile] < 3) {
           const x = currentTile % width,
             y = Math.floor(currentTile / width),
             distance = Math.hypot(seedX - x, seedY - y)
@@ -136,14 +188,15 @@ export class World {
 
           if (
             (Math.random() / distance) > chanceToBecomeLand ||
-            getNeighbours(currentTile, height, width).reduce((total, n) => total + map[n], 0) > (distance / 3)
+            getNeighbours(currentTile, height, width)
+              .reduce((total, n) => total + map[n], 0) > 5
           ) {
             map[currentTile] = 1;
 
-            toProcess.push(...getNeighbours(currentTile, height, width));
+            toProcess.push(...getNeighbours(currentTile, height, width, true));
           }
 
-          seen.push(currentTile);
+          flagAsSeen(currentTile);
         }
       }
 
@@ -164,11 +217,11 @@ export class World {
       ;
 
       oceanCells.forEach((index) => {
-        mapData[index] = new (this.terrain[0])();
+        mapData[index] = Terrain.fromName('Ocean');
       });
 
       landCells.forEach((index) => {
-        mapData[index] = new (this.terrain[1])();
+        mapData[index] = Terrain.fromName('Grassland');
       });
 
       this.terrain.forEach((TerrainType) => {
@@ -218,13 +271,13 @@ export class World {
 
     const mapData = populateTerrain(generateLand(mapHeight, mapWidth), mapHeight, mapWidth);
 
-    const r = [];
+    const rows = [];
 
     for (let i = 0; i < mapHeight; i++) {
-      r.push(mapData.splice(0, mapWidth));
+      rows.push(mapData.splice(0, mapWidth));
     }
 
-    return r;
+    return rows;
   }
 
   load() {

@@ -1,11 +1,5 @@
 import City from './City.js';
 
-engine.on('city:captured', (capturedCity, player) => {
-  capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
-  capturedCity.player = player;
-  player.cities.push(capturedCity);
-});
-
 engine.on('city:destroyed', (city, player) => {
   city.destroyed = {
     // turn: engine.turn, // TODO: import Time and use Time.turn
