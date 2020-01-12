@@ -57,6 +57,10 @@ export class Tileset {
     return this.#tiles.map(iterator);
   }
 
+  some(iterator) {
+    return this.#tiles.some(iterator);
+  }
+
   sum(field) {
     return this.map((tile) => tile[field]).reduce((total, tile) => total + tile, 0);
   }

@@ -96,22 +96,26 @@ engine.on('turn:start', (Time) => {
       }
 
       if (city.building) {
-        city.buildProgress += Math.max(city.production -
-          // TODO: this needs to be controlled via some kind of a PlayerEffect
-          Math.max(city.units.length - city.size, 0),
-        Math.round(Math.random()))
+        // console.log(`${city.name}: ${city.production} - [${Math.max(city.units.length - city.size, 0)}] (${city.size}) ${city.units.length}`);
+        const production = Math.max(city.production -
+          // TODO: convert to Rule
+          Math.max(city.units.length - city.size, 0), 0)
         ;
 
-        if (city.buildProgress >= city.building.cost) {
-          new (city.building)({
-            player,
-            city,
-            tile: city.tile,
-          });
+        if (production > 0) {
+          city.buildProgress += production;
 
-          engine.emit('city:built', city, city.building);
+          if (city.buildProgress >= city.building.cost) {
+            new (city.building)({
+              player,
+              city,
+              tile: city.tile,
+            });
 
-          city.building = false;
+            engine.emit('city:built', city, city.building);
+
+            city.building = false;
+          }
         }
       }
     });
@@ -119,20 +123,20 @@ engine.on('turn:start', (Time) => {
 
   if ((Time.turn % 50) === 0) {
     const mapData = worldMap.map.map((row) => row.map((tile) => (
-        {
-          terrain: tile.terrain.constructor.name,
-          units: tile.units.map((unit) => (
-            {
-              player: unit.player.civilization.people,
-              name: unit.constructor.name,
-            }
-          )),
-          city: tile.city && {
-            player: tile.city.player.civilization.people,
-            name: tile.city.name,
-          },
-        }
-      )))
+      {
+        terrain: tile.terrain.constructor.name,
+        units: tile.units.map((unit) => (
+          {
+            player: unit.player.civilization.people,
+            name: unit.constructor.name,
+          }
+        )),
+        city: tile.city && {
+          player: tile.city.player.civilization.people,
+          name: tile.city.name,
+        },
+      }
+    )))
     ;
 
     const lookup = {
@@ -222,7 +226,14 @@ engine.on('unit:moved', (unit, from) => {
 });
 
 engine.on('city:captured', (capturedCity, player) => {
-  capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
+  capturedCity.size--;
+
+  if (capturedCity.size > 0) {
+    capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
+  }
+  else {
+    engine.emit('city:destroyed', capturedCity, player);
+  }
 
   if (capturedCity.player.cities.length === 0) {
     capturedCity.player.units.forEach((unit) => unit.destroy());

@@ -1,3 +1,5 @@
+import Rule from '../core-rules/Rule.js';
+
 export default class City {
   static #availableBuildItems = [];
 
@@ -55,18 +57,8 @@ export default class City {
 
   autoAssignWorkers() {
     this.tilesWorked = [this.tile, ...this.tiles
-      .filter((tile) => tile.isVisible(this.player.id))
-      .sort((a, b) => {
-        const aScore = a.score(),
-          bScore = b.score()
-        ;
-
-        return (
-          aScore > bScore
-        ) ? -1 : (
-            aScore === bScore
-          ) ? 0 : 1;
-      })
+      .filter((tile) => tile.isVisible(this.player))
+      .sort((a, b) => b.score() - a.score())
       .slice(0, this.size),
     ];
   }
@@ -87,20 +79,15 @@ export default class City {
   // }
 
   resource(type) {
-    const total = this.tile[type] + this.tilesWorked.map(
-      (tile) => tile[type]
+    return this.tilesWorked.map(
+      (tile) => Rule.get(`tile:${type}`)
+        .filter((rule) => rule.validate(tile, this.player))
+        .map((rule) => rule.process(tile, this.player))
+        .sort()
+        .pop() || 0
     )
       .reduce((total, value) => total + value, 0)
     ;
-
-    // TODO: no hard-coded stuff!
-    // Maybe something like:
-    // city.player.government.resourceModifier(total);
-    // if (city.player.government === 'despotism') {
-    //     total = Math.ceil((total / 3) * 2);
-    // }
-
-    return total;
   }
 
   get trade() {
@@ -116,6 +103,7 @@ export default class City {
   }
 
   get surplusFood() {
+    // TODO: use Rules
     return this.food - (
       this.size * 2
     );

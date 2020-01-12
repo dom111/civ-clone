@@ -2,6 +2,10 @@
     "name": "core-unit",
     "title": "Core Unit",
     "version": "0.0.1",
+    "dependencies": [
+        "core-rules",
+        "core-world"
+    ],
     "components": [
         {
             "type": "script",

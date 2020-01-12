@@ -1,4 +1,4 @@
-import City from './City.js';
+import City from '../core-city/City.js';
 
 engine.on('city:destroyed', (city, player) => {
   city.destroyed = {

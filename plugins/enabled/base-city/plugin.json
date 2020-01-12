@@ -1,0 +1,14 @@
+{
+  "name": "base-city",
+  "title": "Base City",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-city"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

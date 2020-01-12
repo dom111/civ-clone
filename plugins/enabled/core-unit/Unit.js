@@ -1,3 +1,5 @@
+import Rule from '../core-rules/Rule.js';
+
 export class Unit {
   static #units = {};
 
@@ -74,18 +76,6 @@ export class Unit {
     engine.emit('player:visibility-changed', this.#player);
   }
 
-  canMoveTo(to) {
-    // TODO: use World#directions for compatibility of hex based `World`s
-    if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(to)) {
-      to = this.tile.neighbours[to];
-    }
-
-    // TODO: check if land/water and validate unit can move there
-    return this.tile.isNeighbourOf(to) &&
-      to.isLand
-    ;
-  }
-
   data(key, value = null) {
     if (value === null) {
       return this.#data[key];
@@ -154,43 +144,37 @@ export class Unit {
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
   validateMove(to) {
-    if (! to) {
-      return false;
-    }
+    return Rule.get('unit:movement')
+      .every((rule) => rule.validate(this, this.tile.get(to)))
+    ;
+  }
 
-    const {neighbours} = this.tile;
+  move(to) {
+    const from = this.tile;
 
-    if (! this.canMoveTo(to)) {
-      return false;
-    }
+    to = from.get(to);
 
-    if (this.movesLeft <= 0.1) {
-      return false;
-    }
-
-    if (! Object.keys(neighbours).map((position) => neighbours[position]).includes(to)) {
+    if (! this.validateMove(to)) {
       return false;
     }
 
     if (to.units.length && to.units[0].player !== this.player) {
       this.resolveCombat(to.units);
-
-      return true;
     }
-
-    if (to.city && to.city.player !== this.player) {
+    else if (to.city && to.city.player !== this.player) {
       if (to.units.length > 0) {
         this.resolveCombat(to.units);
-
-        return true;
       }
 
-      return engine.emit('city:captured', to.city, this.player);
+      engine.emit('city:captured', to.city, this.player);
     }
 
-    // TODO: adjacency rules
-
-    const movementCost = this.tile.movementCost(to);
+    const [movementCost] = Rule.get('unit:movementCost')
+      .filter((rule) => rule.validate(this, to))
+      .map((rule) => rule.process(this, to))
+      .sort((a, b) => a - b)
+    ;
+    // const movementCost = this.tile.movementCost(to);
 
     if (movementCost > this.movesLeft) {
       if ((Math.random() * 1.5) < (this.movesLeft / movementCost)) {
@@ -199,18 +183,6 @@ export class Unit {
         return false;
       }
     }
-
-    return movementCost;
-  }
-
-  move(to) {
-    const from = this.tile;
-
-    if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(to)) {
-      to = this.tile.neighbours[to];
-    }
-
-    const movementCost = this.validateMove(to);
 
     if (movementCost !== false) {
       this.tile.units = this.tile.units.filter((tileUnit) => tileUnit !== this);

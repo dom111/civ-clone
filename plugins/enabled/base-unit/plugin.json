@@ -3,6 +3,7 @@
     "title": "Base Unit",
     "version": "0.0.1",
     "dependencies": [
+        "base-terrain-improvements",
         "core-city",
         "core-unit"
     ],

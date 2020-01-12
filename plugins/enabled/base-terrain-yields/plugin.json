@@ -1,0 +1,18 @@
+{
+  "name": "base-terrain-yields",
+  "title": "Base Terrain Yields",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain",
+    "base-terrain-improvements",
+    "base-unit",
+    "core-rules",
+    "core-world"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ export class Irrigation extends Improvement {
   name = 'irrigation';
   title = 'Irrigation';
   cost = 1;
-  available = [
+  static available = [
     Desert,
     Grassland,
     Hills,

@@ -3,13 +3,28 @@
   "title": "Base Terrain Improvements",
   "version": "0.0.1",
   "dependencies": [
-    "base-terrain",
-    "base-unit"
+    "base-terrain"
   ],
   "components": [
     {
       "type": "script",
       "file": "Improvement.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements.js"
+    },
+    {
+      "type": "script",
+      "file": "Irrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Mine.js"
+    },
+    {
+      "type": "script",
+      "file": "Railroad.js"
     },
     {
       "type": "script",

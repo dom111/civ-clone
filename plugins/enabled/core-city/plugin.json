@@ -2,14 +2,13 @@
     "name": "core-city",
     "title": "Core City",
     "version": "0.0.1",
+    "dependencies": [
+        "core-rules"
+    ],
     "components": [
         {
             "type": "script",
             "file": "City.js"
-        },
-        {
-            "type": "script",
-            "file": "init.js"
         }
     ]
 }

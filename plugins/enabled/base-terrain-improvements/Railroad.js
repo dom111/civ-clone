@@ -1,9 +1,9 @@
 import {Arctic, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, River, Swamp, Tundra} from '../base-terrain/Terrains.js';
 import Improvement from './Improvement.js';
 
-export class Road extends Improvement {
-  name = 'road';
-  title = 'Road';
+export class Railroad extends Improvement {
+  name = 'railroad';
+  title = 'Railroad';
   cost = 1;
   static available = [
     Arctic,
@@ -20,4 +20,4 @@ export class Road extends Improvement {
   ];
 }
 
-Improvement.register(Road);
+Improvement.register(Railroad);

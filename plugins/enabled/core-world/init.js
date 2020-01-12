@@ -1,14 +1,13 @@
-// events
 import World from './World.js';
 
 engine.on('tile:improvement-built', (tile, improvement) => {
-  if (! tile.improvements.includes(improvement)) {
+  if (! tile.improvements.some((improvement) => improvement instanceof improvement.constructor)) {
     tile.improvements.push(improvement);
   }
 });
 
 engine.on('tile:improvement-pillaged', (tile, improvement) => {
-  if (tile.improvements.includes(improvement)) {
+  if (tile.improvements.some((improvement) => improvement instanceof improvement.constructor)) {
     tile.improvements = tile.improvements.filter((currentImprovement) => currentImprovement !== improvement);
   }
 });

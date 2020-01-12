@@ -17,6 +17,18 @@ export class Tile {
     tile.seed = tile.seed || (tile.x ^ tile.y);
   }
 
+  get(tile) {
+    if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(tile)) {
+      return this.neighbours[tile];
+    }
+
+    if (tile instanceof Tile) {
+      return tile;
+    }
+
+    throw new TypeError(`Tile#get: Expected tile to be a neighbour alias or instance of Tile, got '${typeof tile}'.`);
+  }
+
   get neighbours() {
     return {
       n: this.map.get(this.x, this.y - 1),
@@ -89,25 +101,19 @@ export class Tile {
   }
 
   resource(type) {
-    const tile = this;
-
-    if ((typeof tile.terrain[type] === 'function')) {
-      tile.terrain[type] = tile.terrain[type](tile.map, tile.x, tile.y);
-    }
-
-    return (this.terrain[type] + tile.improvements.map((improvement) => (tile.terrain.improvements[improvement] || {})[type] || 0).reduce((total, value) => total + value, 0)) || 0;
+    return this.terrain[type] || 0;
   }
 
   get trade() {
-    return this.resource('trade');
+    return this.resource('trade') || 0;
   }
 
   get food() {
-    return this.resource('food');
+    return this.resource('food') || 0;
   }
 
   get production() {
-    return this.resource('production');
+    return this.resource('production') || 0;
   }
 
   score({

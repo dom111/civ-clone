@@ -1,36 +1,37 @@
 import City from '../core-city/City.js';
+import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import Player from './Player.js';
 import {Settlers} from '../base-unit/Units.js';
-import Tileset from '../base-world/Tileset.js';
+import Tileset from '../core-world/Tileset.js';
 import Unit from '../core-unit/Unit.js';
 
 export class AIPlayer extends Player {
   #shouldIrrigate = (tile) => {
-    return [
-      'desert',
-      'grassland',
-      'plains',
-      'river',
-    ].includes(tile.terrain.name) &&
-    ! tile.improvements.includes('irrigation') &&
-    tile.surroundingArea.filter(
-      (tile) => tile.city && tile.city.player === this
-    ).length &&
-    [...Object.values(tile.adjacent), tile].filter((tile) => tile.terrain.name === 'river' ||
+    return Irrigation.availableOn(tile) &&
+    // TODO: doing this a lot already, need to make improvements a value object with a helper method
+    ! tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
+    tile.surroundingArea.some((tile) => tile.city && tile.city.player === this) &&
+    [...Object.values(tile.adjacent), tile].some((tile) => tile.terrain.name === 'river' ||
       tile.terrain.isCoast ||
       (tile.improvements.includes('irrigation') && ! tile.city)
-    ).length;
+    );
   };
 
   #shouldMine = (tile) => {
-    return [
-      'hills',
-      'mountains',
-    ].includes(tile.terrain.name) &&
-    ! tile.improvements.includes('mine') &&
-    tile.surroundingArea.filter(
+    return Mine.availableOn(tile) &&
+      ! tile.improvements.some((improvement) => improvement instanceof Mine) &&
+    tile.surroundingArea.some(
       (tile) => tile.city && tile.city.player === this
-    ).length;
+    );
+  };
+
+  #shouldRoad = (tile) => {
+    return Road.availableOn(tile) &&
+      ! tile.improvements.some((improvement) => improvement instanceof Road) &&
+      tile.surroundingArea.some(
+        (tile) => tile.city && tile.city.player === this
+      )
+    ;
   };
 
   // TODO: basic AI implementation, or at least methods to be called from another AI implementation
@@ -47,7 +48,7 @@ export class AIPlayer extends Player {
   }
 
   moveUnit(unit) {
-    while (unit.movesLeft > 0) {
+    while (unit.active && unit.movesLeft > 0) {
       const currentTile = unit.tile,
         scoreMove = (tile) => {
           if (unit instanceof Settlers) {
@@ -59,7 +60,7 @@ export class AIPlayer extends Player {
               return 4;
             }
 
-            if (! tile.improvements.includes('road')) {
+            if (this.#shouldRoad(tile)) {
               return 2;
             }
           }
@@ -73,8 +74,7 @@ export class AIPlayer extends Player {
           }
 
           const discoverableTiles = Object.values(tile.neighbours)
-            .filter((tile) => ! tile.isVisible(this))
-            .length
+            .some((tile) => ! tile.isVisible(this))
           ;
 
           if (discoverableTiles > 0) {
@@ -99,8 +99,8 @@ export class AIPlayer extends Player {
           return 0;
         },
         [target] = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
-          .map((direction) => currentTile.neighbours[direction])
-          .filter((tile) => unit.canMoveTo(tile) && scoreMove(tile) > -1)
+          .map((direction) => currentTile.get(direction))
+          .filter((tile) => unit.validateMove(tile) && scoreMove(tile) > -1)
           .sort((a, b) => (
             scoreMove(b) - scoreMove(a)
             // if there's no difference, sort randomly
@@ -111,8 +111,6 @@ export class AIPlayer extends Player {
         unit.move(target);
       }
       else {
-        console.log('noOrders');
-        console.log(unit);
         unit.noOrders();
       }
     }
@@ -142,13 +140,7 @@ export class AIPlayer extends Player {
               else if (this.#shouldMine(unit.tile)) {
                 unit.mine();
               }
-              else if (
-                // TODO: other improvements
-                unit.tile.surroundingArea.filter(
-                  (tile) => tile.city && tile.city.player === this
-                ).length &&
-                ! unit.tile.improvements.includes('road')
-              ) {
+              else if (this.#shouldRoad(unit.tile)) {
                 unit.road();
               }
               else {

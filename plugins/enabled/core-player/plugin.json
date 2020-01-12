@@ -3,10 +3,11 @@
     "title": "Core Player",
     "version": "0.0.1",
     "dependencies": [
+        "base-terrain-improvements",
         "base-unit",
-        "base-world",
         "core-city",
-        "core-unit"
+        "core-unit",
+        "core-world"
     ],
     "components": [
         {

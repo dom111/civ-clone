@@ -1,14 +1,10 @@
 {
-    "name": "base-player",
-    "title": "Base Player",
+    "name": "base-unit-movement",
+    "title": "Base Unit Movement",
     "version": "0.0.1",
     "dependencies": [
         "base-terrain-improvements",
-        "base-civilizations",
-        "core-civilization",
-        "core-player",
-        "core-turn-based-game",
-        "core-unit",
+        "core-rules",
         "core-world"
     ],
     "components": [

@@ -1,0 +1,27 @@
+{
+  "name": "core-rules",
+  "title": "Core Rules",
+  "version": "0.0.1",
+  "components": [
+    {
+      "type": "script",
+      "file": "Criteria.js"
+    },
+    {
+      "type": "script",
+      "file": "Criterion.js"
+    },
+    {
+      "type": "script",
+      "file": "Effect.js"
+    },
+    {
+      "type": "script",
+      "file": "OneCriteria.js"
+    },
+    {
+      "type": "script",
+      "file": "Rule.js"
+    }
+  ]
+}
