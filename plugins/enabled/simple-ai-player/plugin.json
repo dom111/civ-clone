@@ -1,0 +1,23 @@
+{
+  "name": "simple-ai-player",
+  "title": "Simple AI Player",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain-improvements",
+    "base-unit",
+    "core-city",
+    "core-player",
+    "core-unit",
+    "core-world"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "SimpleAIPlayer.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

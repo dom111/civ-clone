@@ -1,5 +1,4 @@
 .idea
 node_modules/*
-civ.settings.json
+settings.json
 yarn-error.log
-

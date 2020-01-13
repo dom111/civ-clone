@@ -17,6 +17,10 @@
         {
             "type": "script",
             "file": "AIPlayer.js"
+        },
+        {
+            "type": "script",
+            "file": "HumanPlayer.js"
         }
     ]
 }

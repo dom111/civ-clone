@@ -13,15 +13,6 @@ export class Plains extends Terrain {
   trade = 0;
   production = 1;
   movementCost = 1;
-  improvements = {
-    irrigation: {
-      food: 1,
-    },
-    road: {
-      trade: 1,
-    },
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
@@ -30,14 +21,14 @@ export class Plains extends Terrain {
       name: 'horse',
       title: 'Horse',
       production: 3,
-      chance: 16,
+      chance: .06,
     },
   ];
   static distribution = [
     {
-      from: 0.3,
-      to: 0.7,
-      coverage: 0.5,
+      from: .3,
+      to: .7,
+      coverage: .5,
       clustered: false,
       path: false,
     },

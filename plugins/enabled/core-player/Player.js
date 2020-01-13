@@ -16,8 +16,6 @@ export class Player {
     this.availableImprovements = [];
 
     engine.emit('player:added', this);
-
-    this.assignRates();
   }
 
   get actions() {
@@ -69,24 +67,24 @@ export class Player {
     return this.#visibleTiles;
   }
 
-  assignRates() {
-    let remaining = 1;
-
-    this.#availableRates.forEach((rate) => {
-      this.rates[rate] = Math.ceil((1 / this.#availableRates.length) * 100) / 100;
-      remaining -= this.rates[rate];
-    });
-
-    this.rates[this.#availableRates[0]] += remaining; // TODO, spread more evenly, also, maybe 5% increments?
-  }
-
-  getRate(rate) {
-    if (this.#availableRates.includes(rate)) {
-      return this.rates[rate];
-    }
-
-    throw `No rate '${rate}'!`;
-  }
+  // assignRates() {
+  //   let remaining = 1;
+  //
+  //   this.#availableRates.forEach((rate) => {
+  //     this.rates[rate] = Math.ceil((1 / this.#availableRates.length) * 100) / 100;
+  //     remaining -= this.rates[rate];
+  //   });
+  //
+  //   this.rates[this.#availableRates[0]] += remaining; // TODO, spread more evenly, also, maybe 5% increments?
+  // }
+  //
+  // getRate(rate) {
+  //   if (this.#availableRates.includes(rate)) {
+  //     return this.rates[rate];
+  //   }
+  //
+  //   throw `No rate '${rate}'!`;
+  // }
 
   takeTurn() {
     return promiseFactory((resolve, reject) => {

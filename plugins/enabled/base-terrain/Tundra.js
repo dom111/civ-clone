@@ -13,10 +13,6 @@ export class Tundra extends Terrain {
   trade = 0;
   production = 0;
   movementCost = 1;
-  improvements = {
-    road: {},
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
@@ -25,21 +21,21 @@ export class Tundra extends Terrain {
       name: 'seal',
       title: 'Seal',
       food: 2,
-      chance: 16,
+      chance: .06,
     },
   ];
   static distribution = [
     {
-      from: 0.02,
-      to: 0.15,
-      coverage: 0.3,
+      from: .02,
+      to: .15,
+      coverage: .3,
       clustered: true,
       path: false,
     },
     {
-      from: 0.85,
-      to: 0.98,
-      coverage: 0.3,
+      from: .85,
+      to: .98,
+      coverage: .3,
       clustered: true,
       path: false,
     },

@@ -3,7 +3,8 @@
   "title": "Base City",
   "version": "0.0.1",
   "dependencies": [
-    "core-city"
+    "core-city",
+    "core-rules"
   ],
   "components": [
     {

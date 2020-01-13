@@ -12,15 +12,6 @@ export class Grassland extends Terrain {
   food = 2;
   trade = 0;
   production = 0;
-  improvements = {
-    irrigation: {
-      food: 1,
-    },
-    road: {
-      trade: 1,
-    },
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
@@ -29,14 +20,14 @@ export class Grassland extends Terrain {
       name: 'grassland-shield',
       title: 'Grassland (Shield)',
       production: 1,
-      chance: .4,
+      chance: .33,
     },
     {
       name: 'grassland-cow',
       title: 'Grassland (Cow)',
       food: 3,
       production: 1,
-      chance: .05,
+      chance: .06,
     },
   ];
 }

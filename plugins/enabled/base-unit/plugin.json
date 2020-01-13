@@ -5,6 +5,7 @@
     "dependencies": [
         "base-terrain-improvements",
         "core-city",
+        "core-rules",
         "core-unit"
     ],
     "components": [
@@ -31,6 +32,10 @@
         {
             "type": "script",
             "file": "init.js"
+        },
+        {
+            "type": "script",
+            "file": "buildRules.js"
         }
     ]
 }

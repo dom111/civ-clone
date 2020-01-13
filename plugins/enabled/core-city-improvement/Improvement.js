@@ -1,37 +1,18 @@
-import City from '../core-city/City.js';
-
 export default class Improvement {
-  #built;
-  #city;
+  static #improvements = [];
 
   constructor({city}) {
     // this.#built = engine.turn; // TODO: import Time and use Time.turn
-    this.#city = city;
-
     city.improvements.push(this);
+
+    engine.emit('city-improvement:built', city, this);
   }
 
-  get city() {
-    return this.#city;
-  }
+  static register(constructor) {
+    if (! this.#improvements.includes(constructor)) {
+      this.#improvements.push(constructor);
 
-  static get(improvement) {
-    return engine.City.improvements[improvement];
-  }
-
-  // TODO: maybe this should be done as part of the 'advance-discovered' event instead...
-  static getAvailable(player) {
-    return Object.keys(engine.City.improvements).filter((improvement) => {
-      return (! engine.City.improvements[improvement].requires) || player.advances.includes(engine.City.improvements[improvement].requires);
-    }).map((improvement) => {
-      return engine.City.improvements[improvement];
-    });
+      engine.emit('city-improvement:registered', constructor);
+    }
   }
 }
-
-Object.defineProperty(City, 'Improvement', {
-  value: Improvement,
-});
-Object.defineProperty(City, 'improvements', {
-  value: [],
-});

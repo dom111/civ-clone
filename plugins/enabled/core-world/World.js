@@ -116,13 +116,13 @@ export class World {
       mapWidth = options.width || 160,
       landCoverage = options.landCoverage || .66,
       chanceToBecomeLand = options.chanceToBecomeLand || .05, // chance to become land
-      clusterChance = options.clusterChance || .66, // chance for adjacent tiles to cluster
-      pathChance = options.pathChance || .66, // chance for directly adjacent tiles to be part of the path
+      clusterChance = options.clusterChance || .15, // chance for adjacent tiles to cluster
+      pathChance = options.pathChance || .2, // chance for directly adjacent tiles to be part of the path
       coverageScale = options.coverageScale || .66 // this scales the coverage, this could (and should) be factored in to the coverage for each tile
     ;
 
     //
-    const getNeighbours = (index, height, width, directNeighbours = false) => {
+    const getNeighbours = (index, height, width, directNeighbours = true) => {
       // TODO: this needs to handle wrapping
       const total = height * width;
 
@@ -175,7 +175,7 @@ export class World {
 
       flagAsSeen(seedTile);
 
-      toProcess.push(...getNeighbours(seedTile, height, width, true));
+      toProcess.push(...getNeighbours(seedTile, height, width));
 
       while (toProcess.length) {
         const currentTile = toProcess.shift();
@@ -188,12 +188,12 @@ export class World {
 
           if (
             (Math.random() / distance) > chanceToBecomeLand ||
-            getNeighbours(currentTile, height, width)
+            getNeighbours(currentTile, height, width, false)
               .reduce((total, n) => total + map[n], 0) > 5
           ) {
             map[currentTile] = 1;
 
-            toProcess.push(...getNeighbours(currentTile, height, width, true));
+            toProcess.push(...getNeighbours(currentTile, height, width));
           }
 
           flagAsSeen(currentTile);
@@ -238,27 +238,35 @@ export class World {
               mapData[n] = new TerrainType();
               max--;
 
-              let neighbours = [];
-
-              if (distributionData.clustered || distributionData.path) {
-                neighbours = getNeighbours(n, height, width).filter((k) => rangeCells.includes(k));
+              if (! distributionData.clustered && ! distributionData.path) {
+                continue;
               }
+
+              const neighbours = getNeighbours(n, height, width, false)
+                .filter((k) => rangeCells.includes(k))
+              ;
 
               if (distributionData.clustered) {
                 neighbours.forEach((k) => {
                   // TODO: clusterChance
-                  if (Math.random() < clusterChance) {
+                  if (Math.random() >= clusterChance) {
                     mapData[k] = new TerrainType();
                     max--;
                   }
                 });
               }
-              else if (distributionData.path) {
-                while (neighbours.length && Math.random() < pathChance) {
+
+              if (distributionData.path) {
+                while (neighbours.length && Math.random() >= pathChance) {
                   const cell = neighbours[Math.floor(Math.random() * neighbours.length)];
 
                   mapData[cell] = new TerrainType();
-                  neighbours = getNeighbours(cell, height, width, true).filter((k) => rangeCells.includes(k));
+                  max--;
+
+                  neighbours.push(
+                    ...getNeighbours(cell, height, width, true)
+                      .filter((k) => rangeCells.includes(k))
+                  );
                 }
               }
             }

@@ -1,14 +1,18 @@
 import Terrain from './Terrain.js';
 
 export class Ocean extends Terrain {
+  constructor() {
+    super();
+
+    this.applySpecial();
+  }
+
   name = 'ocean';
   title = 'Ocean';
   food = 1;
   trade = 3;
   production = 0;
   movementCost = 1;
-  improvements = {};
-  size = 16;
   ocean = true;
   land = false;
   impassable = false;
@@ -17,16 +21,15 @@ export class Ocean extends Terrain {
       name: 'whale',
       title: 'Whale',
       food: 3,
-      trade: 4,
       production: 1,
-      chance: 16,
+      chance: .06,
     },
     {
       name: 'fish',
       title: 'Fish',
-      food: 3,
-      trade: 4,
-      chance: 20,
+      food: 2,
+      production: 1,
+      chance: .05,
     },
   ];
 }

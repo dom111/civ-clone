@@ -7,6 +7,7 @@
         "base-civilizations",
         "core-civilization",
         "core-player",
+        "core-rules",
         "core-turn-based-game",
         "core-unit",
         "core-world"

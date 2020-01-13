@@ -7,27 +7,38 @@ import saveJSON from './lib/saveJSON.js';
 
 export class Engine extends EventEmitter {
   #data = {};
-  #debug = global.debug || false;
+  #debug;
   #options = {};
   #paths = {};
   #pluginManager;
   #settings = {};
 
-  constructor() {
+  constructor({
+    base = './',
+    plugins = 'plugins',
+    enabled = 'enabled',
+    settingsFile = 'settings.json',
+    debug = !! global.debug,
+  } = {}) {
     super();
 
     this.#pluginManager = new Manager(this);
+    this.#debug = debug;
 
     // set up useful paths
-    this.path('base', './');
-    this.path('views', this.path('base'), 'views');
-    this.path('plugins', this.path('base'), 'plugins');
-    this.path('enabledPlugins', this.path('plugins'), 'enabled');
+    this.path('base', base);
+    this.path('plugins', this.path('base'), plugins);
+    this.path('enabledPlugins', this.path('plugins'), enabled);
+    // TODO: validate paths?
 
+    if (! settingsFile.match(/\.json$/)) {
+      settingsFile = `${settingsFile}.json`;
+    }
+
+    this.path('settingsFile', this.path('base'), settingsFile);
     // TODO: store in userHome/userData
-    this.path('settingsFile', this.path('base'), 'civ.settings.json');
     // this.path('userHome', process.env.HOME);
-    // this.path('settingsFile', this.path('userHome'), 'civ.settings.json');
+    // this.path('settingsFile', this.path('userHome'), settingsFile);
   }
 
   emit(event, ...args) {
@@ -64,6 +75,7 @@ export class Engine extends EventEmitter {
   path(key, ...parts) {
     if (parts.length) {
       this.#paths[key] = path.resolve(...parts);
+      this.emit('path:changed', key, this.#paths[key]);
     }
 
     return (key in this.#paths) ? this.#paths[key] : '';

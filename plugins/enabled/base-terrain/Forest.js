@@ -11,12 +11,8 @@ export class Forest extends Terrain {
   title = 'Forest';
   food = 1;
   trade = 0;
-  production = 3;
+  production = 2;
   movementCost = 2;
-  improvements = {
-    road: {},
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
@@ -25,35 +21,49 @@ export class Forest extends Terrain {
       name: 'horse',
       title: 'Horse',
       food: 3,
-      chance: 16,
+      production: 3,
+      chance: .06,
+    },
+    {
+      name: 'deer',
+      title: 'Deer',
+      food: 4,
+      chance: .06,
     },
   ];
   static distribution = [
     {
-      from: 0.05,
-      to: 0.2,
-      coverage: 0.15,
+      from: .05,
+      to: .2,
+      coverage: .15,
       clustered: false,
       path: false,
     },
     {
-      from: 0.2,
-      to: 0.4,
-      coverage: 0.2,
+      from: .2,
+      to: .4,
+      coverage: .2,
+      clustered: true,
+      path: true,
+    },
+    {
+      from: .4,
+      to: .6,
+      coverage: .08,
       clustered: true,
       path: false,
     },
     {
-      from: 0.6,
-      to: 0.8,
-      coverage: 0.2,
+      from: .6,
+      to: .8,
+      coverage: .2,
       clustered: true,
-      path: false,
+      path: true,
     },
     {
-      from: 0.8,
-      to: 0.95,
-      coverage: 0.15,
+      from: .8,
+      to: .95,
+      coverage: .15,
       clustered: false,
       path: false,
     },

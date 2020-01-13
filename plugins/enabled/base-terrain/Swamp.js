@@ -13,10 +13,6 @@ export class Swamp extends Terrain {
   trade = 0;
   production = 0;
   movementCost = 2;
-  improvements = {
-    road: {},
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
@@ -25,21 +21,21 @@ export class Swamp extends Terrain {
       name: 'oil',
       title: 'Oil',
       production: 3,
-      chance: 16,
+      chance: .06,
     },
   ];
   static distribution = [
     {
-      from: 0.2,
-      to: 0.4,
-      coverage: 0.025,
+      from: .2,
+      to: .4,
+      coverage: .025,
       clustered: true,
       path: false,
     },
     {
-      from: 0.6,
-      to: 0.8,
-      coverage: 0.025,
+      from: .6,
+      to: .8,
+      coverage: .025,
       clustered: true,
       path: false,
     },

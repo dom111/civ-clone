@@ -1,34 +1,36 @@
 import City from '../core-city/City.js';
+import Rule from '../core-rules/Rule.js';
 
 engine.on('city:destroyed', (city, player) => {
   city.destroyed = {
     // turn: engine.turn, // TODO: import Time and use Time.turn
     by: player,
   };
-
-  if (! city.player.cities.filter((city) => !! city.destroyed).some((value) => value === true)) {
-    // TODO: all cities destroyed
-  }
-
-  // TODO: remove from map
 });
 
 engine.on('city:grow', (city) => {
+  Rule.get('city:grow')
+    .forEach((rule) => {
+      if (rule.validate(city)) {
+        rule.process(city);
+      }
+    })
+  ;
+  city.size++;
+  city.foodStorage = 0;
   city.autoAssignWorkers();
-  // city.calculateRates();
 });
 
 engine.on('city:shrink', (city) => {
+  city.size--;
+  city.foodStorage = 0;
   city.autoAssignWorkers();
-  // city.calculateRates();
 });
 
-// engine.on('player:rate-change', (player) => player.cities.forEach((city) => city.calculateRates()));
-
 engine.on('unit:registered', (unit) => {
-  City.registerBuildItem(unit);
+  City.registerBuildUnit(unit);
 });
 
 engine.on('city-improvement:registered', (improvement) => {
-  City.registerBuildItem(improvement);
+  City.registerBuildImprovement(improvement);
 });

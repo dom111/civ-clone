@@ -1,7 +1,8 @@
 import Rule from '../core-rules/Rule.js';
 
 export default class City {
-  static #availableBuildItems = [];
+  static #availableBuildUnits = [];
+  static #availableBuildImprovements = [];
 
   // TODO: make these all private
   buildProgress = 0;
@@ -12,7 +13,6 @@ export default class City {
   improvements = [];
   name;
   player;
-  rates = {};
   size = 1;
   tile;
   tiles;
@@ -43,17 +43,7 @@ export default class City {
 
     // setup
     this.autoAssignWorkers();
-    // this.calculateRates();
   }
-
-  //
-  // get ratesArray() {
-  //   // TODO: check we have rates plugin available
-  //   return engine.availableTradeRates.map((rate) => ({
-  //     name: rate,
-  //     value: this.rates[rate],
-  //   }));
-  // }
 
   autoAssignWorkers() {
     this.tilesWorked = [this.tile, ...this.tiles
@@ -62,21 +52,6 @@ export default class City {
       .slice(0, this.size),
     ];
   }
-
-  // calculateRates() {
-  //   if (this.trade < 1) {
-  //     return;
-  //   }
-  //
-  //   const trade = Array(this.trade).fill(1);
-  //
-  //   // TODO: check we have rates plugin available
-  //   engine.availableTradeRates.forEach((rate) => {
-  //     this.rates[rate] = trade.splice(0, Math.ceil(this.player.getRate(rate) * this.trade))
-  //       .reduce((total, value) => total + value, 0)
-  //     ;
-  //   });
-  // }
 
   resource(type) {
     return this.tilesWorked.map(
@@ -109,9 +84,27 @@ export default class City {
     );
   }
 
+  get availableBuildUnits() {
+    const buildRules = Rule.get('city:build:unit');
+
+    return City.#availableBuildUnits
+      .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
+    ;
+  }
+
+  get availableBuildImprovements() {
+    const buildRules = Rule.get('city:build:improvement');
+
+    return City.#availableBuildImprovements
+      .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
+    ;
+  }
+
   get availableBuildItems() {
-    // TODO: process these for availability (advances/government/etc)
-    return City.#availableBuildItems;
+    return [
+      ...this.availableBuildUnits,
+      ...this.availableBuildImprovements,
+    ];
   }
 
   build(item) {
@@ -131,7 +124,15 @@ export default class City {
     });
   }
 
-  static registerBuildItem(item) {
-    City.#availableBuildItems.push(item);
+  static registerBuildUnit(constructor) {
+    if (! this.#availableBuildUnits.includes(constructor)) {
+      this.#availableBuildUnits.push(constructor);
+    }
+  }
+
+  static registerBuildImprovement(constructor) {
+    if (! this.#availableBuildImprovements.includes(constructor)) {
+      this.#availableBuildImprovements.push(constructor);
+    }
   }
 }

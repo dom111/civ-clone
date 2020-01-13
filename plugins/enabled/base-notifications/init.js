@@ -17,6 +17,7 @@ Object.entries({
   'city:created': (city) => `${city.player.civilization.people} city of ${city.name} (${city.tile.x},${city.tile.y}).`,
   // 'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size}).`,
   // 'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size}).`,
+  'city-improvement:built': (city, improvement) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
   // 'player:turn-start': (player) => `${player.constructor.name} ${player.id} ${player.leader.name}'s (${player.civilization.nation}) turn.`,
   'player:defeated': (defeatedPlayer, attacker) => `${defeatedPlayer.civilization.people} civilization destroyed by ${attacker.civilization.nation}.`,
   // 'tile:improvement-built': (tile, improvement) => `${improvement} built at ${tile.x}, ${tile.y} (${tile.terrain.constructor.name} - ${tile.terrain.name}).`,

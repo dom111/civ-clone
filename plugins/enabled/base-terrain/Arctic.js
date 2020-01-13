@@ -13,47 +13,57 @@ export class Arctic extends Terrain {
   trade = 0;
   production = 0;
   movementCost = 2;
-  improvements = {
-    road: {},
-  };
-  size = 16;
   ocean = false;
   land = true;
   impassable = false;
   special = [
     {
+      name: 'oil',
+      title: 'Oil',
+      production: 3,
+      chance: .06,
+    },
+    {
       name: 'seal',
       title: 'Seal',
       food: 2,
-      chance: 16,
+      production: 1,
+      chance: .06,
+    },
+    {
+      name: 'caribou',
+      title: 'Caribou',
+      food: 1,
+      production: 2,
+      chance: .06,
     },
   ];
   static distribution = [
     {
-      from: 0.0,
-      to: 0.02,
-      coverage: 0.8,
+      from: .0,
+      to: .02,
+      coverage: .8,
       clustered: false,
       path: false,
     },
     {
-      from: 0.02,
-      to: 0.1,
-      coverage: 0.3,
+      from: .02,
+      to: .1,
+      coverage: .3,
       clustered: true,
       path: false,
     },
     {
-      from: 0.90,
-      to: 0.98,
-      coverage: 0.3,
+      from: .90,
+      to: .98,
+      coverage: .3,
       clustered: true,
       path: false,
     },
     {
-      from: 0.98,
+      from: .98,
       to: 1,
-      coverage: 0.8,
+      coverage: .8,
       clustered: false,
       path: false,
     },

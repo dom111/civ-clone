@@ -1,5 +1,6 @@
 import AIPlayer from '../core-player/AIPlayer.js';
 import Civilization from '../core-civilization/Civilization.js';
+import Rule from '../core-rules/Rule.js';
 import Unit from '../core-unit/Unit.js';
 
 // TODO: rather than do this, maybe have a `Players` class that can be used instead, so that `engine` can be immutable
@@ -12,7 +13,8 @@ let currentPlayer,
 ;
 
 engine.on('world:built', (map) => {
-  const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150),
+  const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150)
+      .filter((tile) => tile.isLand),
     numberOfPlayers = engine.option('players', 6),
     usedStartSquares = []
   ;
@@ -27,7 +29,7 @@ engine.on('world:built', (map) => {
   let availableCivilizations = Civilization.civilizations;
 
   for (let i = 0; i < numberOfPlayers; i++) {
-    const player = new AIPlayer();
+    const player = AIPlayer.get();
 
     // TODO: use Civilization.available or something
     player.chooseCivilization(availableCivilizations);
@@ -83,20 +85,13 @@ engine.on('turn:start', (Time) => {
       city.foodStorage += city.surplusFood;
 
       if (city.foodStorage >= ((city.size * 10) + 10)) {
-        city.size++;
-        city.foodStorage = 0;
-
         engine.emit('city:grow', city);
       }
       else if (city.foodStorage < 1) {
-        city.size--;
-        city.foodStorage = ((city.size * 10) + 10);
-
         engine.emit('city:shrink', city);
       }
 
       if (city.building) {
-        // console.log(`${city.name}: ${city.production} - [${Math.max(city.units.length - city.size, 0)}] (${city.size}) ${city.units.length}`);
         const production = Math.max(city.production -
           // TODO: convert to Rule
           Math.max(city.units.length - city.size, 0), 0)
@@ -106,13 +101,11 @@ engine.on('turn:start', (Time) => {
           city.buildProgress += production;
 
           if (city.buildProgress >= city.building.cost) {
-            new (city.building)({
+            engine.emit('city:built', city, new (city.building)({
               player,
               city,
               tile: city.tile,
-            });
-
-            engine.emit('city:built', city, city.building);
+            }));
 
             city.building = false;
           }
@@ -279,4 +272,14 @@ engine.on('unit:activate-next', () => {
   else {
     engine.emit('player:turn-end');
   }
+});
+
+engine.on('city:built', (city, item) => {
+  Rule.get('city:built')
+    .forEach((rule) => {
+      if (rule.validate(city, item)) {
+        rule.process(city, item);
+      }
+    })
+  ;
 });
