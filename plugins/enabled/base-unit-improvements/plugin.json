@@ -1,0 +1,30 @@
+{
+  "name": "base-unit-improvements",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-rules",
+    "core-unit"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Improvement.js"
+    },
+    {
+      "type": "script",
+      "file": "Fortified.js"
+    },
+    {
+      "type": "script",
+      "file": "Veteran.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements.js"
+    },
+    {
+      "type": "script",
+      "file": "effects.js"
+    }
+  ]
+}

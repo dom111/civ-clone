@@ -5,6 +5,7 @@
     "dependencies": [
         "base-terrain-improvements",
         "base-civilizations",
+        "base-unit",
         "core-civilization",
         "core-player",
         "core-rules",

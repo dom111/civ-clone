@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "dependencies": [
         "base-terrain-improvements",
+        "base-unit-improvements",
         "core-city",
         "core-rules",
         "core-unit"
@@ -11,7 +12,15 @@
     "components": [
         {
             "type": "script",
+            "file": "FortifiableUnit.js"
+        },
+        {
+            "type": "script",
             "file": "Cavalry.js"
+        },
+        {
+            "type": "script",
+            "file": "Catapult.js"
         },
         {
             "type": "script",
@@ -31,11 +40,15 @@
         },
         {
             "type": "script",
-            "file": "init.js"
+            "file": "buildRules.js"
         },
         {
             "type": "script",
-            "file": "buildRules.js"
+            "file": "costs.js"
+        },
+        {
+            "type": "script",
+            "file": "init.js"
         }
     ]
 }

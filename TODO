@@ -8,29 +8,33 @@
 - [x] Get AI players to move units.
 - [x] Convert all raw data files to JS classes.
 - [x] Re-do world generation.
-- [ ] Abstract World class to allow implementation of hexes rather than squares
-- [ ] Remove reliance on augmenting Engine directly.
+- [X] Remove reliance on augmenting Engine directly.
+- [X] Work on city build list.
+- [X] Combat.
+- [X] When building World, ensure there are enough starting squares.
+- [X] Add user-definable rulesets.
+- [X] Non-human players.
+- [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Break all plugins into `core` (parent classes/interfaces/rules) and `base` (implementations).
-- [ ] Convert to TypeScript.
+- [ ] Convert to TypeScript?
 - [ ] Re-work the 'trade' mechanism to not be hard-coded.
 - [ ] Write tests.
-- [ ] Work on city build list.
 - [ ] Renderer interface.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.
 - [ ] Add map tiling - constraints (horizontal, vertical, both, neither).
 - [ ] City Improvements/Wonders.
 - [ ] City Happiness.
-- [ ] Non-human players.
 - [ ] Remote network players.
-- [ ] Combat.
 - [ ] More civilizations.
 - [ ] Governments.
 - [ ] Add/fix scaling/zoom.
 - [ ] Add 'isVisible' method for tiles in renderer: if (!tile.isVisible) { renderer.center = tile; }.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
-- [ ] When building World, ensure there are enough starting squares.
-- [ ] Add user-definable rulesets.
 - [ ] Add `PlayerMap` classes that only see what the Player has discovered.
+- [ ] Reorganise all existing plugins to extract self-contained entities (perhaps so they they are testable?)
+- [ ] Human players - this is likely dependent on a renderer, although perhaps make it playable within a TTY?
+- [ ] Control city improvement costs via `Rule`s.
+- [ ] Control unit base stats via `Rule`s.

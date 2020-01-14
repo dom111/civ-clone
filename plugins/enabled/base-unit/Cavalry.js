@@ -1,7 +1,6 @@
-import Unit from '../core-unit/Unit.js';
+import FortifiableUnit from './FortifiableUnit.js';
 
-export class Cavalry extends Unit {
-  static cost = 20;
+export class Cavalry extends FortifiableUnit {
   title = 'Cavalry';
   attack = 2;
   defence = 1;
@@ -11,5 +10,3 @@ export class Cavalry extends Unit {
 }
 
 export default Cavalry;
-
-Unit.register(Cavalry);

@@ -1,9 +1,6 @@
 # civ-clone
 
-Open source, plugin-driven, 4x games, written in JavaScript (node).
-
-Every component of the game is defined by 'plugins' so the core part of the game itself is just a mechanism for plugin
-management and dependency loading.
+Open source, plugin-driven, Civilization clone, written in JavaScript (`node`).
 
 ## Aims
 
@@ -15,14 +12,53 @@ The aims for this project are to:
   or multi-player game driven via either a rich GUI or even command-line.
 - allow third-party contributed plugins to augment the game.
 
-## Set-up
+## Current State
 
-Clone the repository, run:
+Currently the game is unplayable by a human player, but I'm working on making a simple decision-based AI that is helping
+me check the current state of the rules and mechanics.
+
+The world generation is pretty rudimentary, but should be very easy to replace with something else in the future.
+
+In `base-player/init.js` there's currently a crude ASCII map output that shows the state of play every 50 turns so you
+can observe progress.
+
+## Set up
 
 ```sh
-yarn install # or npm install
-yarn start # or npm start
+yarn install
 ```
+
+## Running
+
+```sh
+yarn start
+```
+
+## Core Concepts
+
+### Plugins
+
+The entirety of the logic is provided as plugins, some are `core` or `base` which are the primary components of the game
+itself and would need a suitable replacement to be removed, but should be possible to augment as required.
+
+Plugins are executed in a separate environment to help segregate external scripts from gaining access to your files
+without your say, but this system could do with a bit more work. Currently the `Engine` instance is shared with the
+plugins, but it might be better to just expose a dummy object that only provides the event system.
+
+The plugin resolution allows for simple dependencies but there are some issues that need to be ironed out (cyclic
+dependencies, failed initialisation, etc).
+
+### Rules
+
+I'm currently going through the process for replacing all hard-coded logic with a more flexible `Rule`-based system
+which, in theory, should allow for any and all concepts used within the game to be replaced or added to to allow a wide
+variety of modification and customisation. The aim is that plugin packs could provide an experience similar to any of
+the game versions in the Civilization series without too much work.
+
+## TODO
+
+Loads! See [`TODO.md`](./TODO.md) for the bigger ideas that are outstanding as well as looking for `// TODO` in the
+codebase.
 
 ## Contributing
 

@@ -6,26 +6,26 @@ import OneCriteria from '../core-rules/OneCriteria.js';
 import Rule from '../core-rules/Rule.js';
 import Tile from '../core-world/Tile.js';
 
-Rule.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
-Rule.register(new Rule('unit:movement:isNeighbouringTile', new Criterion(
+new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile));
+new Rule('unit:movement:isNeighbouringTile', new Criterion(
   (unit, to) => Object.values(unit.tile.neighbours)
     .includes(to)
 )
-));
-Rule.register(new Rule(
+);
+new Rule(
   'unit:movement:validateUnitType',
   new OneCriteria(
     (unit, to) => unit.land && to.isLand,
     (unit, to) => unit.sea && to.isOcean,
     (unit) => unit.air
-  )));
-Rule.register(new Rule(
+  ));
+new Rule(
   'unit:movement:hasEnoughMovesLeft',
   new Criterion((unit) => unit.movesLeft >= .1)
-));
+);
 
 // This is analogous to the original Civilization unit adjacency rules
-Rule.register(new Rule(
+new Rule(
   'unit:movement:unitAdjacencyRules',
   new Criterion((unit, to) => ! Object.values(unit.tile.neighbours)
     .filter(
@@ -35,17 +35,17 @@ Rule.register(new Rule(
     .flatMap((tile) => Object.values(tile.neighbours))
     .includes(to)
   )
-));
+);
 
 // movement cost
-Rule.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));
-Rule.register(new Rule(
+new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost));
+new Rule(
   'unit:movementCost:withRoad',
   new Criterion((unit) => unit.tile.improvements.some((improvement) => improvement instanceof Road)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Road)),
   new Effect(() => 1 / 3)
-));
-Rule.register(new Rule(
+);
+new Rule(
   'unit:movementCost:withRailroad',
   new Criterion((unit) => unit.tile.improvements.some((improvement) => improvement instanceof Railroad)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Railroad)),
@@ -53,4 +53,4 @@ Rule.register(new Rule(
   //  the moves and if a loop is detected auto-cancelling - this is pretty primitive.
   // new Criterion((unit) => ! (unit.player instanceof AIPlayer)),
   new Effect(() => 0)
-));
+);

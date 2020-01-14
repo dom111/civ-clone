@@ -30,12 +30,8 @@ export class Rule {
 
     this.#criteria = new Criteria(...criteria);
     this.#name = name;
-  }
 
-  process(...args) {
-    if (this.hasEffect) {
-      return this.#effect.apply(...args);
-    }
+    Rule.#rules.push(this);
   }
 
   get hasEffect() {
@@ -46,26 +42,31 @@ export class Rule {
     return this.#name;
   }
 
+  process(...args) {
+    if (this.hasEffect) {
+      return this.#effect.apply(...args);
+    }
+  }
+
+  unregister() {
+    Rule.#rules.splice(Rule.#rules.indexOf(this), 1);
+  }
+
   validate(...args) {
     if (this.#criteria instanceof Criteria) {
       return this.#criteria.validate(...args);
     }
   }
 
-  static register(rule) {
-    this.#rules.push(rule);
+  static get(ruleName) {
+    return this.#rules.filter((rule) => rule.name.startsWith(`${ruleName}:`));
   }
 
   static unregister(ruleName) {
-    const [matchingRule] = this.get(ruleName);
-
-    if (matchingRule) {
-      this.#rules = this.#rules.filter((rule) => rule !== matchingRule);
-    }
-  }
-
-  static get(ruleName) {
-    return this.#rules.filter((rule) => rule.name.startsWith(`${ruleName}:`));
+    [
+      ...this.filter((rule) => rule.name === ruleName),
+      ...this.get(ruleName),
+    ].forEach((rule) => rule.unregister());
   }
 }
 

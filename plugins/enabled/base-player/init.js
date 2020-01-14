@@ -1,7 +1,7 @@
 import AIPlayer from '../core-player/AIPlayer.js';
 import Civilization from '../core-civilization/Civilization.js';
 import Rule from '../core-rules/Rule.js';
-import Unit from '../core-unit/Unit.js';
+import {Settlers} from '../base-unit/Settlers.js';
 
 // TODO: rather than do this, maybe have a `Players` class that can be used instead, so that `engine` can be immutable
 const players = [],
@@ -37,8 +37,8 @@ engine.on('world:built', (map) => {
 
     const [startingSquare] = startingSquares
       .sort((a, b) =>
-        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(b))) -
-        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(a)))
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(a))) -
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(b)))
       )
       .splice(Math.floor(startingSquares.length * Math.random()), 1)
     ;
@@ -51,7 +51,7 @@ engine.on('world:built', (map) => {
 
     players.push(player);
 
-    Unit.fromName('Settlers', {
+    new Settlers({
       player,
       tile: startingSquare,
     });
@@ -101,7 +101,7 @@ engine.on('turn:start', (Time) => {
           city.buildProgress += production;
 
           if (city.buildProgress >= city.building.cost) {
-            engine.emit('city:built', city, new (city.building)({
+            engine.emit('city:building-complete', city, new (city.building)({
               player,
               city,
               tile: city.tile,
@@ -114,52 +114,56 @@ engine.on('turn:start', (Time) => {
     });
   });
 
-  if ((Time.turn % 50) === 0) {
-    const mapData = worldMap.map.map((row) => row.map((tile) => (
-      {
-        terrain: tile.terrain.constructor.name,
-        units: tile.units.map((unit) => (
-          {
-            player: unit.player.civilization.people,
-            name: unit.constructor.name,
-          }
-        )),
-        city: tile.city && {
-          player: tile.city.player.civilization.people,
-          name: tile.city.name,
-        },
-      }
-    )))
-    ;
+  const showMap = true;
 
-    const lookup = {
-      Babylonian: '\u001b[38;5;233;48;5;47m',
-      English: '\u001b[38;5;255;48;5;164m',
-      German: '\u001b[38;5;255;48;5;20m',
-      Roman: '\u001b[38;5;244;48;5;15m',
-      Russian: '\u001b[38;5;244;48;5;254m',
-      Spanish: '\u001b[38;5;233;48;5;173m',
-      Arctic: '\u001b[48;5;254m',
-      Desert: '\u001b[48;5;229m',
-      Forest: '\u001b[48;5;22m',
-      Grassland: '\u001b[48;5;41m',
-      Hills: '\u001b[48;5;101m',
-      Jungle: '\u001b[48;5;72m',
-      Mountains: '\u001b[48;5;243m',
-      Ocean: '\u001b[48;5;18m',
-      Plains: '\u001b[48;5;144m',
-      River: '\u001b[48;5;27m',
-      Swamp: '\u001b[48;5;130m',
-      Tundra: '\u001b[48;5;223m',
-      Terrain: '\u001b[0m',
-    };
+  if (showMap) {
+    if ((Time.turn % 50) === 0) {
+      const mapData = worldMap.map.map((row) => row.map((tile) => (
+        {
+          terrain: tile.terrain.constructor.name,
+          units: tile.units.map((unit) => (
+            {
+              player: unit.player.civilization.people,
+              name: unit.constructor.name,
+            }
+          )),
+          city: tile.city && {
+            player: tile.city.player.civilization.people,
+            name: tile.city.name,
+          },
+        }
+      )))
+      ;
 
-    console.log(mapData.map((row) => row.map((tile) => tile.city ?
-      `${lookup[tile.city.player]}#\u001b[0m` :
-      tile.units.length ?
-        `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
-        `${lookup[tile.terrain] || tile.terrain} \u001b[0m`
-    ).join('')).join('\n'));
+      const lookup = {
+        Babylonian: '\u001b[38;5;233;48;5;47m',
+        English: '\u001b[38;5;255;48;5;164m',
+        German: '\u001b[38;5;255;48;5;20m',
+        Roman: '\u001b[38;5;244;48;5;15m',
+        Russian: '\u001b[38;5;244;48;5;254m',
+        Spanish: '\u001b[38;5;233;48;5;173m',
+        Arctic: '\u001b[48;5;254m',
+        Desert: '\u001b[48;5;229m',
+        Forest: '\u001b[48;5;22m',
+        Grassland: '\u001b[48;5;41m',
+        Hills: '\u001b[48;5;101m',
+        Jungle: '\u001b[48;5;72m',
+        Mountains: '\u001b[48;5;243m',
+        Ocean: '\u001b[48;5;18m',
+        Plains: '\u001b[48;5;144m',
+        River: '\u001b[48;5;27m',
+        Swamp: '\u001b[48;5;130m',
+        Tundra: '\u001b[48;5;223m',
+        Terrain: '\u001b[0m',
+      };
+
+      console.log(mapData.map((row) => row.map((tile) => tile.city ?
+        `${lookup[tile.city.player]}#\u001b[0m` :
+        tile.units.length ?
+          `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
+          `${lookup[tile.terrain] || tile.terrain} \u001b[0m`
+      ).join('')).join('\n'));
+    }
   }
 
   engine.emit('player:turn-start', currentPlayer);
@@ -233,6 +237,10 @@ engine.on('city:captured', (capturedCity, player) => {
     engine.emit('player:defeated', capturedCity.player, player);
   }
 
+  if (! capturedCity.originalPlayer) {
+    capturedCity.originalPlayer = capturedCity.player;
+  }
+
   capturedCity.player = player;
   player.cities.push(capturedCity);
 });
@@ -274,8 +282,8 @@ engine.on('unit:activate-next', () => {
   }
 });
 
-engine.on('city:built', (city, item) => {
-  Rule.get('city:built')
+engine.on('city:building-complete', (city, item) => {
+  Rule.get('city:building-complete')
     .forEach((rule) => {
       if (rule.validate(city, item)) {
         rule.process(city, item);

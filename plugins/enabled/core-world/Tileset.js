@@ -49,12 +49,24 @@ export class Tileset {
     this.#tiles = tiles;
   }
 
+  every(iterator) {
+    return this.#tiles.every(iterator);
+  }
+
   filter(iterator) {
     return this.#tiles.filter(iterator);
   }
 
+  includes(tile) {
+    return this.#tiles.includes(tile);
+  }
+
   map(iterator) {
     return this.#tiles.map(iterator);
+  }
+
+  push(...tiles) {
+    this.#tiles.push(...tiles);
   }
 
   some(iterator) {

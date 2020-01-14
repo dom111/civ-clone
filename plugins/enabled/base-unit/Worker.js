@@ -2,11 +2,14 @@ import {Irrigation, Mine, Railroad, Road} from '../base-terrain-improvements/Imp
 import Unit from '../core-unit/Unit.js';
 
 export class Worker extends Unit {
-  static cost = 20;
   title = 'Worker';
   attack = 0;
   defence = 1;
   land = true;
+
+  fortify() {
+    return false;
+  }
 
   irrigate() {
     if (

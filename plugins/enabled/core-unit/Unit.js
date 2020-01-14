@@ -18,26 +18,20 @@ export class Unit {
   offsetY = 0;
 
   // TODO: This should be a valueObject collection with ValueObjects for each bonus
-  bonuses = [];
+  improvements = [];
 
   destroyed = false;
   active = true;
   busy = false;
   status = null;
 
-  static units = [];
-  static available = {};
-
-  static fromName(unit, ...args) {
-    if (! (unit in this.#units)) {
-      throw new TypeError(`Unknown Unit: '${unit}'.`);
-    }
-
-    return new (this.#units[unit])(...args);
-  }
-
   static register(constructor) {
     this.#units[constructor.name] = constructor;
+
+    Rule.get('unit:build-cost')
+      .filter((rule) => rule.validate(constructor))
+      .forEach((rule) => constructor.cost = rule.process(constructor.cost))
+    ;
 
     engine.emit('unit:registered', constructor);
   }
@@ -101,17 +95,6 @@ export class Unit {
     engine.emit('unit:action', this, 'disband');
     this.destroy();
     engine.emit('unit:disbanded', this);
-  }
-
-  fortify() {
-    this.delayedAction({
-      status: 'fortify',
-      action: () => {
-        // TODO
-        // this.bonuses.add(new Fortified());
-      },
-      turns: 1,
-    });
   }
 
   noOrders() {
@@ -204,37 +187,61 @@ export class Unit {
     }
   }
 
-  // TODO: make it so that a combat free version of the game can
-  resolveCombat(units) {
-    const unit = this;
+  finalAttack() {
+    let attack = this.attack * Math.random();
 
-    const [defender] = units.sort((a,b) => b.defence - a.defence),
-
-      // TODO: get current combat scheme and use that to resolve
-      result = Unit.combat.resolve(this, defender)
+    Rule.get('unit:combat:attack')
+      .forEach((rule) => {
+        if (rule.validate(this)) {
+          attack += (rule.process(this) || 0);
+        }
+      })
     ;
 
-    if (result) {
-      if (unit.tile.city || unit.tile.improvements.includes('fortress')) {
-        defender.destroy();
+    return attack;
+  }
+
+  finalDefence() {
+    let defence = this.defence * Math.random();
+
+    Rule.get('unit:combat:defence')
+      .forEach((rule) => {
+        if (rule.validate(this)) {
+          defence += (rule.process(this) || 0);
+        }
+      })
+    ;
+
+    return defence;
+  }
+
+  // TODO: make it so that a combat free version of the game can
+  resolveCombat(units) {
+    const [defender] = units.sort((a,b) => b.finalDefence() - a.finalDefence());
+
+    if (this.finalAttack() >= defender.finalDefence()) {
+      // TODO: fire a defeated event and process based on rules
+      if (this.tile.city || this.tile.improvements.includes('fortress')) {
+        defender.destroy(this.player);
       }
       else {
-        defender.tile.units.forEach((unit) => unit.destroy());
+        defender.tile.units.forEach((unit) => unit.destroy(this.player));
       }
-    }
-    else {
-      this.destroy();
+
+      return true;
     }
 
-    return result;
+    this.destroy(defender.player);
+
+    return false;
   }
 
   can(action) {
     return action in this.actions;
   }
 
-  destroy() {
-    engine.emit('unit:destroyed', this);
+  destroy(player = null) {
+    engine.emit('unit:destroyed', this, player);
   }
 
   get tile() {
