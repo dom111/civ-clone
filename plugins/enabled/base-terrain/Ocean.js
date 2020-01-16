@@ -14,7 +14,6 @@ export class Ocean extends Terrain {
   production = 0;
   movementCost = 1;
   ocean = true;
-  land = false;
   impassable = false;
   special = [
     {

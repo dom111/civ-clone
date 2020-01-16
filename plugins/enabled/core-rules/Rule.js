@@ -3,8 +3,6 @@ import Criterion from './Criterion.js';
 import Effect from './Effect.js';
 
 export class Rule {
-  static #rules = [];
-
   #criteria;
   #effect;
   #name;
@@ -30,8 +28,6 @@ export class Rule {
 
     this.#criteria = new Criteria(...criteria);
     this.#name = name;
-
-    Rule.#rules.push(this);
   }
 
   get hasEffect() {
@@ -48,25 +44,10 @@ export class Rule {
     }
   }
 
-  unregister() {
-    Rule.#rules.splice(Rule.#rules.indexOf(this), 1);
-  }
-
   validate(...args) {
     if (this.#criteria instanceof Criteria) {
       return this.#criteria.validate(...args);
     }
-  }
-
-  static get(ruleName) {
-    return this.#rules.filter((rule) => rule.name.startsWith(`${ruleName}:`));
-  }
-
-  static unregister(ruleName) {
-    [
-      ...this.filter((rule) => rule.name === ruleName),
-      ...this.get(ruleName),
-    ].forEach((rule) => rule.unregister());
   }
 }
 

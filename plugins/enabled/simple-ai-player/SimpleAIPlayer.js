@@ -252,6 +252,11 @@ export class SimpleAIPlayer extends AIPlayer {
               city.build(randomSelection);
             }
           }
+          else {
+            console.log(item);
+
+            break;
+          }
         }
 
         resolve();

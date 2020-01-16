@@ -31,6 +31,10 @@
          },
         {
             "type": "script",
+            "file": "costs.js"
+        },
+        {
+            "type": "script",
             "file": "effects.js"
         }
     ]

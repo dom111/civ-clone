@@ -1,15 +1,10 @@
-import {Irrigation, Mine, Railroad, Road} from '../base-terrain-improvements/Improvements.js';
-import Unit from '../core-unit/Unit.js';
+import {Irrigation, Mine, Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
+import LandUnit from '../LandUnit.js';
 
-export class Worker extends Unit {
+export class Worker extends LandUnit {
   title = 'Worker';
   attack = 0;
   defence = 1;
-  land = true;
-
-  fortify() {
-    return false;
-  }
 
   irrigate() {
     if (

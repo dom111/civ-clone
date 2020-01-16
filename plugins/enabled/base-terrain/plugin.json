@@ -9,6 +9,10 @@
         },
         {
             "type": "script",
+            "file": "Land.js"
+        },
+        {
+            "type": "script",
             "file": "Ocean.js"
         },
         {

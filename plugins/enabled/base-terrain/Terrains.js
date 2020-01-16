@@ -4,6 +4,7 @@ export {Forest} from './Forest.js';
 export {Grassland} from './Grassland.js';
 export {Hills} from './Hills.js';
 export {Jungle} from './Jungle.js';
+export {Land} from './Land.js';
 export {Mountains} from './Mountains.js';
 export {Ocean} from './Ocean.js';
 export {Plains} from './Plains.js';

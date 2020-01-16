@@ -1,8 +1,6 @@
-import Rule from '../core-rules/Rule.js';
+import Rules from '../core-rules/Rules.js';
 
 export class Unit {
-  static #units = {};
-
   #city;
   #data = {};
   #player;
@@ -24,17 +22,6 @@ export class Unit {
   active = true;
   busy = false;
   status = null;
-
-  static register(constructor) {
-    this.#units[constructor.name] = constructor;
-
-    Rule.get('unit:build-cost')
-      .filter((rule) => rule.validate(constructor))
-      .forEach((rule) => constructor.cost = rule.process(constructor.cost))
-    ;
-
-    engine.emit('unit:registered', constructor);
-  }
 
   constructor({player, city, tile}) {
     if (! tile) {
@@ -127,7 +114,7 @@ export class Unit {
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
   validateMove(to) {
-    return Rule.get('unit:movement')
+    return Rules.get('unit:movement')
       .every((rule) => rule.validate(this, this.tile.get(to)))
     ;
   }
@@ -152,7 +139,7 @@ export class Unit {
       engine.emit('city:captured', to.city, this.player);
     }
 
-    const [movementCost] = Rule.get('unit:movementCost')
+    const [movementCost] = Rules.get('unit:movementCost')
       .filter((rule) => rule.validate(this, to))
       .map((rule) => rule.process(this, to))
       .sort((a, b) => a - b)
@@ -190,7 +177,7 @@ export class Unit {
   finalAttack() {
     let attack = this.attack * Math.random();
 
-    Rule.get('unit:combat:attack')
+    Rules.get('unit:combat:attack')
       .forEach((rule) => {
         if (rule.validate(this)) {
           attack += (rule.process(this) || 0);
@@ -204,7 +191,7 @@ export class Unit {
   finalDefence() {
     let defence = this.defence * Math.random();
 
-    Rule.get('unit:combat:defence')
+    Rules.get('unit:combat:defence')
       .forEach((rule) => {
         if (rule.validate(this)) {
           defence += (rule.process(this) || 0);

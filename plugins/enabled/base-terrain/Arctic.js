@@ -1,6 +1,7 @@
+import Land from './Land.js';
 import Terrain from './Terrain.js';
 
-export class Arctic extends Terrain {
+export class Arctic extends Land {
   constructor() {
     super();
 

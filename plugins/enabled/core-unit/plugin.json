@@ -3,10 +3,15 @@
     "title": "Core Unit",
     "version": "0.0.1",
     "dependencies": [
+        "core-registry",
         "core-rules",
         "core-world"
     ],
     "components": [
+        {
+            "type": "script",
+            "file": "Registry.js"
+        },
         {
             "type": "script",
             "file": "Unit.js"

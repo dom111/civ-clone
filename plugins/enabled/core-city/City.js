@@ -1,10 +1,11 @@
-import Rule from '../core-rules/Rule.js';
+import Rules from '../core-rules/Rules.js';
 
 export default class City {
   static #availableBuildUnits = [];
   static #availableBuildImprovements = [];
 
   // TODO: make these all private
+  buildCost = 0;
   buildProgress = 0;
   building = false;
   capital = false;
@@ -26,12 +27,6 @@ export default class City {
     this.player = player;
     this.tile = tile;
     this.name = name;
-
-    // TODO: this should be more scientific
-    this.capital = player.cities.length === 0;
-
-    // TODO: do this in player events on city:created
-    player.cities.push(this);
 
     // main this tile, always worked
     tile.city = this;
@@ -55,7 +50,7 @@ export default class City {
 
   resource(type) {
     return this.tilesWorked.map(
-      (tile) => Rule.get(`tile:${type}`)
+      (tile) => Rules.get(`tile:${type}`)
         .filter((rule) => rule.validate(tile, this.player))
         .map((rule) => rule.process(tile, this.player))
         .sort()
@@ -85,7 +80,7 @@ export default class City {
   }
 
   get availableBuildUnits() {
-    const buildRules = Rule.get('city:build:unit');
+    const buildRules = Rules.get('city:build:unit');
 
     return City.#availableBuildUnits
       .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
@@ -93,7 +88,7 @@ export default class City {
   }
 
   get availableBuildImprovements() {
-    const buildRules = Rule.get('city:build:improvement');
+    const buildRules = Rules.get('city:build:improvement');
 
     return City.#availableBuildImprovements
       .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
@@ -109,6 +104,16 @@ export default class City {
 
   build(item) {
     this.building = item;
+
+    [this.buildCost] = Rules.get('city:build-cost')
+      .filter((rule) => rule.validate(item, this))
+      .map((rule) => rule.process(item, this))
+      .sort((a, b) => a - b)
+    ;
+
+    if (! this.buildCost) {
+      throw new TypeError(`${this.building}`);
+    }
 
     engine.emit('city:build', this, item);
   }

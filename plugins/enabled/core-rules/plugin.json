@@ -2,6 +2,9 @@
   "name": "core-rules",
   "title": "Core Rules",
   "version": "0.0.1",
+  "dependencies": [
+    "core-registry"
+  ],
   "components": [
     {
       "type": "script",
@@ -18,6 +21,14 @@
     {
       "type": "script",
       "file": "OneCriteria.js"
+    },
+    {
+      "type": "script",
+      "file": "Registry.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules.js"
     },
     {
       "type": "script",

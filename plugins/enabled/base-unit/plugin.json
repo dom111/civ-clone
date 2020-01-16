@@ -12,27 +12,39 @@
     "components": [
         {
             "type": "script",
+            "file": "LandUnit.js"
+        },
+        {
+            "type": "script",
             "file": "FortifiableUnit.js"
         },
         {
             "type": "script",
-            "file": "Cavalry.js"
+            "file": "NavalUnit.js"
         },
         {
             "type": "script",
-            "file": "Catapult.js"
+            "file": "Units/Catapult.js"
         },
         {
             "type": "script",
-            "file": "Militia.js"
+            "file": "Units/Cavalry.js"
         },
         {
             "type": "script",
-            "file": "Worker.js"
+            "file": "Units/Militia.js"
         },
         {
             "type": "script",
-            "file": "Settlers.js"
+            "file": "Units/Settlers.js"
+        },
+        {
+            "type": "script",
+            "file": "Units/Trireme.js"
+        },
+        {
+            "type": "script",
+            "file": "Units/Worker.js"
         },
         {
             "type": "script",

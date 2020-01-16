@@ -1,66 +1,37 @@
 import AIPlayer from '../core-player/AIPlayer.js';
 import Civilization from '../core-civilization/Civilization.js';
-import Rule from '../core-rules/Rule.js';
-import {Settlers} from '../base-unit/Settlers.js';
+import {Settlers} from '../base-unit/Units/Settlers.js';
 
-// TODO: rather than do this, maybe have a `Players` class that can be used instead, so that `engine` can be immutable
 const players = [],
   playersToAction = []
 ;
 
-let currentPlayer,
-  worldMap
-;
+let worldMap;
 
-engine.on('world:built', (map) => {
-  const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150)
-      .filter((tile) => tile.isLand),
-    numberOfPlayers = engine.option('players', 6),
-    usedStartSquares = []
-  ;
-
-  worldMap = map;
-
-  if (! startingSquares.length > numberOfPlayers) {
-    // TODO: ensure this at generation stage
-    throw new TypeError(`Invalid World, not enough valid starting squares ${startingSquares.length}.`);
+engine.on('player:turn-end', async () => {
+  if (playersToAction.length) {
+    engine.setData('currentPlayer', playersToAction.shift());
+    engine.emit('player:turn-start', engine.data('currentPlayer'));
   }
-
-  let availableCivilizations = Civilization.civilizations;
-
-  for (let i = 0; i < numberOfPlayers; i++) {
-    const player = AIPlayer.get();
-
-    // TODO: use Civilization.available or something
-    player.chooseCivilization(availableCivilizations);
-    availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
-
-    const [startingSquare] = startingSquares
-      .sort((a, b) =>
-        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(a))) -
-        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(b)))
-      )
-      .splice(Math.floor(startingSquares.length * Math.random()), 1)
-    ;
-
-    usedStartSquares.push(startingSquare);
-
-    if (! startingSquare) {
-      throw new TypeError(`startSquare is ${startingSquare}.`);
-    }
-
-    players.push(player);
-
-    new Settlers({
-      player,
-      tile: startingSquare,
-    });
+  else {
+    engine.emit('turn:end');
   }
+});
+
+engine.on('player:turn-start', async (player) => {
+  await player.takeTurn();
+
+  engine.emit('player:turn-end', player);
+});
+
+engine.on('player:visibility-changed', (player) => {
+  // clear the visibility
+  player.visibleTiles.splice(0, player.visibleTiles.length);
 });
 
 engine.on('turn:start', (Time) => {
   playersToAction.push(...players);
-  currentPlayer = playersToAction.shift();
+  engine.setData('currentPlayer', playersToAction.shift());
 
   players.forEach((player) => {
     player.units.forEach((unit) => {
@@ -97,10 +68,12 @@ engine.on('turn:start', (Time) => {
           Math.max(city.units.length - city.size, 0), 0)
         ;
 
+        // console.log(`${city.name} ${city.building} [${city.buildProgress} + ${production} / ${city.buildCost}]`);
+
         if (production > 0) {
           city.buildProgress += production;
 
-          if (city.buildProgress >= city.building.cost) {
+          if (city.buildProgress >= city.buildCost) {
             engine.emit('city:building-complete', city, new (city.building)({
               player,
               city,
@@ -166,128 +139,51 @@ engine.on('turn:start', (Time) => {
     }
   }
 
-  engine.emit('player:turn-start', currentPlayer);
+  engine.emit('player:turn-start', engine.data('currentPlayer'));
 });
 
-engine.on('player:turn-start', async (player) => {
-  await player.takeTurn();
-
-  engine.emit('player:turn-end', player);
-});
-
-engine.on('player:turn-end', async () => {
-  if (playersToAction.length) {
-    currentPlayer = playersToAction.shift();
-    engine.emit('player:turn-start', currentPlayer);
-  }
-  else {
-    engine.emit('turn:end');
-  }
-});
-
-engine.on('player:visibility-changed', (player) => {
-  // clear the visibility
-  player.visibleTiles.splice(0, player.visibleTiles.length);
-});
-
-engine.on('unit:created', (unit) => {
-  if (! unit.player.activeUnit) {
-    unit.player.activeUnit = unit;
-  }
-
-  unit.tile.units.push(unit);
-});
-
-engine.on('unit:activate', (unit) => {
-  unit.player.activeUnit = unit;
-  unit.active = true;
-});
-
-engine.on('city:shrink', (city) => {
-  if (city.production + city.size < city.units.length) {
-    city.units.splice(0, city.units.length - (city.production + city.size)).forEach((unit) => unit.disband());
-  }
-});
-
-engine.on('unit:moved', (unit, from) => {
-  unit.applyVisibility();
-
-  from.units = from.units.filter((tileUnit) => tileUnit !== unit);
-
-  if ((unit.movesLeft <= 0.1) && (currentPlayer.activeUnit === unit)) {
-    unit.player.activeUnit = false;
-    unit.active = false;
-
-    // engine.emit('unit:activate-next', unit.player);
-  }
-});
-
-engine.on('city:captured', (capturedCity, player) => {
-  capturedCity.size--;
-
-  if (capturedCity.size > 0) {
-    capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
-  }
-  else {
-    engine.emit('city:destroyed', capturedCity, player);
-  }
-
-  if (capturedCity.player.cities.length === 0) {
-    capturedCity.player.units.forEach((unit) => unit.destroy());
-    engine.emit('player:defeated', capturedCity.player, player);
-  }
-
-  if (! capturedCity.originalPlayer) {
-    capturedCity.originalPlayer = capturedCity.player;
-  }
-
-  capturedCity.player = player;
-  player.cities.push(capturedCity);
-});
-
-engine.on('unit:action', (unit) => {
-  if ((unit.movesLeft <= 0.1) && (currentPlayer.activeUnit === unit)) {
-    unit.player.activeUnit = false;
-    unit.active = false;
-
-    // engine.emit('unit:activate-next', unit.player);
-  }
-});
-
-engine.on('unit:destroyed', (unit) => {
-  unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
-  unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
-  unit.active = false;
-  unit.destroyed = true;
-
-  if (unit.city) {
-    unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
-  }
-  //
-  // if (currentPlayer === unit.player) {
-  //   if (unit.player.activeUnit === unit) {
-  //     unit.player.activeUnit = false;
-  //   }
-  //
-  //   engine.emit('unit:activate-next', unit.player);
-  // }
-});
-
-engine.on('unit:activate-next', () => {
-  if (currentPlayer.unitsToAction.length) {
-    engine.emit('unit:activate', currentPlayer.unitsToAction[0]);
-  }
-  else {
-    engine.emit('player:turn-end');
-  }
-});
-
-engine.on('city:building-complete', (city, item) => {
-  Rule.get('city:building-complete')
-    .forEach((rule) => {
-      if (rule.validate(city, item)) {
-        rule.process(city, item);
-      }
-    })
+engine.on('world:built', (map) => {
+  const startingSquares = map.getBy((tile) => tile.surroundingArea.score() >= 150)
+      .filter((tile) => tile.isLand),
+    numberOfPlayers = engine.option('players', 6),
+    usedStartSquares = []
   ;
+
+  worldMap = map;
+
+  if (! startingSquares.length > numberOfPlayers) {
+    // TODO: ensure this at generation stage
+    throw new TypeError(`Invalid World, not enough valid starting squares ${startingSquares.length}.`);
+  }
+
+  let availableCivilizations = Civilization.civilizations;
+
+  for (let i = 0; i < numberOfPlayers; i++) {
+    const player = AIPlayer.get();
+
+    player.chooseCivilization(availableCivilizations);
+    availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
+
+    const [startingSquare] = startingSquares
+      .sort((a, b) =>
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(a))) -
+        Math.min(...usedStartSquares.map((tile) => tile.distanceFrom(b)))
+      )
+      .splice(Math.floor(startingSquares.length * Math.random()), 1)
+    ;
+
+    usedStartSquares.push(startingSquare);
+
+    if (! startingSquare) {
+      throw new TypeError(`startSquare is ${startingSquare}.`);
+    }
+
+    players.push(player);
+
+    new Settlers({
+      player,
+      tile: startingSquare,
+    });
+  }
 });
+

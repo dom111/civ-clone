@@ -1,4 +1,4 @@
-import City from '../core-city/City.js';
+import City from '../../core-city/City.js';
 import Worker from './Worker.js';
 
 export class Settlers extends Worker {

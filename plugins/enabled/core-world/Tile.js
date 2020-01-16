@@ -71,9 +71,13 @@ export class Tile {
   get isCoast() {
     const tile = this;
 
-    return tile.isOcean &&
-      Object.keys(tile.neighbours).some((direction) => tile.neighbours[direction].isLand)
-    ;
+    return (
+      tile.isOcean &&
+      Object.values(tile.neighbours).some((tile) => tile.isLand)
+    ) || (
+      tile.isLand &&
+      Object.values(tile.neighbours).some((tile) => tile.isOcean)
+    );
   }
 
   get coast() {

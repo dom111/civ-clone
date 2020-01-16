@@ -16,7 +16,15 @@
     "components": [
         {
             "type": "script",
+            "file": "city.js"
+        },
+        {
+            "type": "script",
             "file": "init.js"
+        },
+        {
+            "type": "script",
+            "file": "unit.js"
         }
     ]
 }

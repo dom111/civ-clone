@@ -1,5 +1,5 @@
 import City from '../core-city/City.js';
-import Rule from '../core-rules/Rule.js';
+import Rules from '../core-rules/Rules.js';
 
 engine.on('city:destroyed', (city, player) => {
   city.destroyed = {
@@ -9,7 +9,7 @@ engine.on('city:destroyed', (city, player) => {
 });
 
 engine.on('city:grow', (city) => {
-  Rule.get('city:grow')
+  Rules.get('city:grow')
     .forEach((rule) => {
       if (rule.validate(city)) {
         rule.process(city);

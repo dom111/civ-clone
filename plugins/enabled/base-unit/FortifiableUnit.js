@@ -1,7 +1,7 @@
 import {Fortified} from '../base-unit-improvements/Fortified.js';
-import Unit from '../core-unit/Unit.js';
+import LandUnit from './LandUnit.js';
 
-export class FortifiableUnit extends Unit {
+export class FortifiableUnit extends LandUnit {
   fortify() {
     this.delayedAction({
       status: 'fortify',
