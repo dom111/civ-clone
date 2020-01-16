@@ -3,24 +3,24 @@
     "title": "Base Unit",
     "version": "0.0.1",
     "dependencies": [
-        "base-terrain-improvements",
-        "base-unit-improvements",
+        "base-terrain",
         "core-city",
         "core-rules",
-        "core-unit"
+        "core-unit",
+        "core-world"
     ],
     "components": [
         {
             "type": "script",
-            "file": "LandUnit.js"
+            "file": "Types/LandUnit.js"
         },
         {
             "type": "script",
-            "file": "FortifiableUnit.js"
+            "file": "Types/FortifiableUnit.js"
         },
         {
             "type": "script",
-            "file": "NavalUnit.js"
+            "file": "Types/NavalUnit.js"
         },
         {
             "type": "script",
@@ -48,19 +48,43 @@
         },
         {
             "type": "script",
+            "file": "Improvement.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Fortified.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Veteran.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements.js"
+        },
+        {
+            "type": "script",
+            "file": "rules/effects.js"
+        },
+        {
+            "type": "script",
             "file": "Units.js"
         },
         {
             "type": "script",
-            "file": "buildRules.js"
+            "file": "rules/build.js"
         },
         {
             "type": "script",
-            "file": "costs.js"
+            "file": "rules/costs.js"
         },
         {
             "type": "script",
-            "file": "init.js"
+            "file": "rules/movement.js"
+        },
+        {
+            "type": "script",
+            "file": "register.js"
         }
     ]
 }

@@ -1,6 +1,6 @@
-export {FortifiableUnit} from './FortifiableUnit.js';
-export {LandUnit} from './LandUnit.js';
-export {NavalUnit} from './NavalUnit.js';
+export {FortifiableUnit} from './Types/FortifiableUnit.js';
+export {LandUnit} from './Types/LandUnit.js';
+export {NavalUnit} from './Types/NavalUnit.js';
 
 export {Catapult} from './Units/Catapult.js';
 export {Cavalry} from './Units/Cavalry.js';

@@ -3,7 +3,7 @@
     "title": "Base Player",
     "version": "0.0.1",
     "dependencies": [
-        "base-terrain-improvements",
+        "base-terrain",
         "base-civilizations",
         "base-unit",
         "core-civilization",

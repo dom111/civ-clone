@@ -79,11 +79,14 @@ export default class City {
     );
   }
 
+  // TODO: look at merging the below into availableBuildItems?
   get availableBuildUnits() {
     const buildRules = Rules.get('city:build:unit');
 
     return City.#availableBuildUnits
-      .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
+      .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
+        .every((rule) => rule.process(this, buildItem).validate())
+      )
     ;
   }
 
@@ -91,7 +94,9 @@ export default class City {
     const buildRules = Rules.get('city:build:improvement');
 
     return City.#availableBuildImprovements
-      .filter((buildItem) => buildRules.every((rule) => rule.validate(this, buildItem)))
+      .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
+        .every((rule) => rule.process(this, buildItem).validate())
+      )
     ;
   }
 
@@ -117,17 +122,17 @@ export default class City {
 
     engine.emit('city:build', this, item);
   }
-
-  valueOf() {
-    return ['ratesArray', 'trade', 'food', 'production', 'surplusFood', 'availableBuildItems'].reduce((city, key) => (
-      {
-        ...city,
-        [key]: city[key],
-      }
-    ), {
-      ...this,
-    });
-  }
+  //
+  // valueOf() {
+  //   return ['ratesArray', 'trade', 'food', 'production', 'surplusFood', 'availableBuildItems'].reduce((city, key) => (
+  //     {
+  //       ...city,
+  //       [key]: city[key],
+  //     }
+  //   ), {
+  //     ...this,
+  //   });
+  // }
 
   static registerBuildUnit(constructor) {
     if (! this.#availableBuildUnits.includes(constructor)) {

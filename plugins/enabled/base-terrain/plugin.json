@@ -2,6 +2,9 @@
     "name": "base-terrain",
     "title": "Base Terrain",
     "version": "0.0.1",
+    "dependencies": [
+        "core-rules"
+    ],
     "components": [
         {
             "type": "script",
@@ -9,59 +12,95 @@
         },
         {
             "type": "script",
-            "file": "Land.js"
+            "file": "Types/Land.js"
         },
         {
             "type": "script",
-            "file": "Ocean.js"
+            "file": "Types/Ocean.js"
         },
         {
             "type": "script",
-            "file": "Grassland.js"
+            "file": "Terrain/Arctic.js"
         },
         {
             "type": "script",
-            "file": "Arctic.js"
+            "file": "Terrain/Desert.js"
         },
         {
             "type": "script",
-            "file": "Desert.js"
+            "file": "Terrain/Forest.js"
         },
         {
             "type": "script",
-            "file": "Forest.js"
+            "file": "Terrain/Grassland.js"
         },
         {
             "type": "script",
-            "file": "Hills.js"
+            "file": "Terrain/Hills.js"
         },
         {
             "type": "script",
-            "file": "Jungle.js"
+            "file": "Terrain/Jungle.js"
         },
         {
             "type": "script",
-            "file": "Mountains.js"
+            "file": "Terrain/Mountains.js"
         },
         {
             "type": "script",
-            "file": "Plains.js"
+            "file": "Terrain/Ocean.js"
         },
         {
             "type": "script",
-            "file": "River.js"
+            "file": "Terrain/Plains.js"
         },
         {
             "type": "script",
-            "file": "Swamp.js"
+            "file": "Terrain/River.js"
         },
         {
             "type": "script",
-            "file": "Tundra.js"
+            "file": "Terrain/Swamp.js"
+        },
+        {
+            "type": "script",
+            "file": "Terrain/Tundra.js"
         },
         {
             "type": "script",
             "file": "Terrains.js"
+        },
+        {
+            "type": "script",
+            "file": "Types.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvement.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Irrigation.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Mine.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Railroad.js"
+        },
+        {
+            "type": "script",
+            "file": "Improvements/Road.js"
+        },
+        {
+            "type": "script",
+            "file": "rules/yields.js"
         }
     ]
 }

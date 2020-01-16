@@ -3,7 +3,7 @@
     "title": "Base City Improvements",
     "version": "0.0.1",
     "dependencies": [
-        "base-unit-improvements",
+        "base-unit",
         "core-city",
         "core-city-improvement",
         "core-rules"
@@ -11,15 +11,15 @@
     "components": [
         {
             "type": "script",
-           "file": "Barracks.js"
+           "file": "Improvements/Barracks.js"
          },
         {
             "type": "script",
-           "file": "CityWalls.js"
+           "file": "Improvements/CityWalls.js"
          },
         {
             "type": "script",
-            "file": "Granary.js"
+            "file": "Improvements/Granary.js"
          },
         {
             "type": "script",
@@ -27,15 +27,15 @@
          },
         {
             "type": "script",
-            "file": "buildRules.js"
+            "file": "rules/build.js"
          },
         {
             "type": "script",
-            "file": "costs.js"
+            "file": "rules/costs.js"
         },
         {
             "type": "script",
-            "file": "effects.js"
+            "file": "rules/effects.js"
         }
     ]
 }

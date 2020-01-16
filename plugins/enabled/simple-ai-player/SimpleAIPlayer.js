@@ -1,8 +1,8 @@
-import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
+import {Irrigation, Mine, Road} from '../base-terrain/Improvements.js';
 import {Militia, Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
-import FortifiableUnit from '../base-unit/FortifiableUnit.js';
+import FortifiableUnit from '../base-unit/Types/FortifiableUnit.js';
 import Tileset from '../core-world/Tileset.js';
 import Unit from '../core-unit/Unit.js';
 
