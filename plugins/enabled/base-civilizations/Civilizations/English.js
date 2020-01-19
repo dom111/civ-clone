@@ -1,4 +1,4 @@
-import Civilization from '../core-civilization/Civilization.js';
+import Civilization from '../../core-civilization/Civilization.js';
 
 export class English extends Civilization {
   people = 'English';

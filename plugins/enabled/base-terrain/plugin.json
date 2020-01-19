@@ -1,106 +1,227 @@
 {
-    "name": "base-terrain",
-    "title": "Base Terrain",
-    "version": "0.0.1",
-    "dependencies": [
-        "core-rules"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Terrain.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/Land.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/Ocean.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Arctic.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Desert.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Forest.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Grassland.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Hills.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Jungle.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Mountains.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Ocean.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Plains.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/River.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Swamp.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrain/Tundra.js"
-        },
-        {
-            "type": "script",
-            "file": "Terrains.js"
-        },
-        {
-            "type": "script",
-            "file": "Types.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvement.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvements.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvements/Irrigation.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvements/Mine.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvements/Railroad.js"
-        },
-        {
-            "type": "script",
-            "file": "Improvements/Road.js"
-        },
-        {
-            "type": "script",
-            "file": "rules/yields.js"
-        }
-    ]
+  "name": "base-terrain",
+  "title": "Base Terrain",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-registry",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Terrain.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Arctic.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Arctic.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Distribution/groups.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Types.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvement.js"
+    },
+    {
+      "type": "script",
+      "file": "Registry.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Railroad.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Mine.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Irrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Road.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Pollution.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Land.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Food.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Production.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Yield.js"
+    }
+  ]
 }

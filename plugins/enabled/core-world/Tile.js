@@ -1,3 +1,6 @@
+import {Food, Production} from '../base-terrain/Yields.js';
+import {Land, Ocean} from '../base-terrain/Types.js';
+import Rules from '../core-rules/Rules.js';
 import Tileset from './Tileset.js';
 
 export class Tile {
@@ -65,7 +68,7 @@ export class Tile {
   }
 
   get isOcean() {
-    return this.terrain.ocean;
+    return this.terrain instanceof Ocean;
   }
 
   get isCoast() {
@@ -87,7 +90,7 @@ export class Tile {
   }
 
   get isLand() {
-    return this.terrain.land;
+    return this.terrain instanceof Land;
   }
 
   isNeighbourOf(tile) {
@@ -105,19 +108,25 @@ export class Tile {
   }
 
   resource(type) {
-    return this.terrain[type] || 0;
+    Rules.get('tile:yield')
+      .filter((rule) => rule.validate(type, this))
+      .forEach((rule) => rule.process(type, this))
+    ;
+
+    return type.value;
   }
 
+  // TODO
   get trade() {
-    return this.resource('trade') || 0;
+    return 0;
   }
 
   get food() {
-    return this.resource('food') || 0;
+    return this.resource(new Food());
   }
 
   get production() {
-    return this.resource('production') || 0;
+    return this.resource(new Production());
   }
 
   score({
@@ -125,6 +134,7 @@ export class Tile {
     production = 2,
     trade = 1,
   } = {}) {
+    // TODO: use resources that are registered
     return (this.food * food) +
       (this.production * production) +
       (this.trade * trade)

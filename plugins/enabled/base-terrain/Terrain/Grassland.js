@@ -1,21 +1,7 @@
 import {Land} from '../Types.js';
-import Terrain from '../Terrain.js';
 
 export class Grassland extends Land {
-  constructor() {
-    super();
-
-    this.applySpecial();
-  }
-
-  name = 'grassland';
-  title = 'Grassland';
-  food = 2;
-  trade = 0;
-  production = 0;
-  ocean = false;
-  land = true;
-  impassable = false;
+  movementCost = 1;
   special = [
     {
       name: 'grassland-shield',
@@ -34,5 +20,3 @@ export class Grassland extends Land {
 }
 
 export default Grassland;
-
-Terrain.register(Grassland);

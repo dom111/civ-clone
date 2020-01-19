@@ -1,21 +1,7 @@
-import {Ocean as OceanType} from '../Types/Ocean.js';
-import Terrain from '../Terrain.js';
+import {Ocean as BaseOcean} from '../Types/Ocean.js';
 
-export class Ocean extends OceanType {
-  constructor() {
-    super();
-
-    this.applySpecial();
-  }
-
-  name = 'ocean';
-  title = 'Ocean';
-  food = 1;
-  trade = 3;
-  production = 0;
+export class Ocean extends BaseOcean {
   movementCost = 1;
-  ocean = true;
-  impassable = false;
   special = [
     {
       name: 'whale',
@@ -35,5 +21,3 @@ export class Ocean extends OceanType {
 }
 
 export default Ocean;
-
-Terrain.register(Ocean);

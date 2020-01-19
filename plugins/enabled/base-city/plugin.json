@@ -3,8 +3,10 @@
   "title": "Base City",
   "version": "0.0.1",
   "dependencies": [
+    "base-terrain",
     "core-city",
-    "core-rules"
+    "core-rules",
+    "core-turn-based-game"
   ],
   "components": [
     {

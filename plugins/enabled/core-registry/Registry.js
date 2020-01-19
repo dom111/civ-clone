@@ -19,6 +19,10 @@ export class Registry {
     });
   }
 
+  get entries() {
+    return [...this.#registry];
+  }
+
   filter(iterator) {
     return this.#registry.filter(iterator);
   }

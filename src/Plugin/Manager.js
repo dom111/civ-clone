@@ -74,6 +74,7 @@ export class Manager {
                   return promiseFactory(async (resolve, reject) => {
                     try {
                       const fullPath = path.dirname(path.join(component.path, component.file)),
+                        filePath = path.relative(this.#engine.path('enabledPlugins'), path.join(component.path, component.file)),
                         calculatedPath = path.resolve(fullPath, specifier),
                         relativePath = path.relative(this.#engine.path('enabledPlugins'), calculatedPath),
                         [dependencyName, ...componentPaths] = relativePath.split(/\//),
@@ -82,23 +83,23 @@ export class Manager {
                       ;
 
                       if (! dependency) {
-                        return reject(new TypeError(`${pluginName}: Unable to find plugin '${dependencyName}'.`));
+                        return reject(new TypeError(`${filePath}: Unable to find plugin '${dependencyName}'.`));
                       }
 
                       const [module] = dependency.components.filter((component) => component.file === componentName);
 
                       if (! module) {
-                        return reject(new TypeError(`${pluginName}: Unable to find component '${componentName}' in '${dependencyName}'.`));
+                        return reject(new TypeError(`${filePath}: Unable to find component '${componentName}' in '${dependencyName}'.`));
                       }
 
                       if (! module.result) {
-                        return reject(new TypeError(`${pluginName}: Result of '${componentName}' in '${dependencyName}' is '${typeof module.result}'. Aborting.`));
+                        return reject(new TypeError(`${filePath}: Result of '${componentName}' in '${dependencyName}' is '${typeof module.result}'. Aborting.`));
                       }
 
                       const result = await module.result;
 
                       if (! (result instanceof vm.Module)) {
-                        return reject(new TypeError(`${pluginName}: '${componentName}' in '${dependencyName}' is '${typeof module}'. Aborting.`));
+                        return reject(new TypeError(`${filePath}: '${componentName}' in '${dependencyName}' is '${typeof module}'. Aborting.`));
                       }
 
                       debug && console.log(`resolved ${specifier}`);

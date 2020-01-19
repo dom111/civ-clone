@@ -112,21 +112,24 @@ engine.on('turn:start', (Time) => {
         Babylonian: '\u001b[38;5;233;48;5;47m',
         English: '\u001b[38;5;255;48;5;164m',
         German: '\u001b[38;5;255;48;5;20m',
+        Japanese: '\u001b[38;5;255;48;5;88m',
         Roman: '\u001b[38;5;244;48;5;15m',
         Russian: '\u001b[38;5;244;48;5;254m',
         Spanish: '\u001b[38;5;233;48;5;173m',
-        Arctic: '\u001b[48;5;254m',
-        Desert: '\u001b[48;5;229m',
-        Forest: '\u001b[48;5;22m',
-        Grassland: '\u001b[48;5;41m',
-        Hills: '\u001b[48;5;101m',
-        Jungle: '\u001b[48;5;72m',
-        Mountains: '\u001b[48;5;243m',
-        Ocean: '\u001b[48;5;18m',
-        Plains: '\u001b[48;5;144m',
-        River: '\u001b[48;5;27m',
-        Swamp: '\u001b[48;5;130m',
-        Tundra: '\u001b[48;5;223m',
+
+        Arctic: '\u001b[38;5;253;48;5;254mA',
+        Desert: '\u001b[38;5;228;48;5;229mD',
+        Forest: '\u001b[38;5;23;48;5;22mF',
+        Grassland: '\u001b[38;5;40;48;5;41mG',
+        Hills: '\u001b[38;5;100;48;5;101mH',
+        Jungle: '\u001b[38;5;71;48;5;72mJ',
+        Mountains: '\u001b[38;5;242;48;5;243mM',
+        Ocean: '\u001b[38;5;17;48;5;18mO',
+        Plains: '\u001b[38;5;142;48;5;144mP',
+        River: '\u001b[38;5;26;48;5;27mR',
+        Swamp: '\u001b[38;5;131;48;5;130mS',
+        Tundra: '\u001b[38;5;222;48;5;223mT',
+
         Terrain: '\u001b[0m',
       };
 
@@ -134,7 +137,7 @@ engine.on('turn:start', (Time) => {
         `${lookup[tile.city.player]}#\u001b[0m` :
         tile.units.length ?
           `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
-          `${lookup[tile.terrain] || tile.terrain} \u001b[0m`
+          `${lookup[tile.terrain] || tile.terrain}\u001b[0m`
       ).join('')).join('\n'));
     }
   }

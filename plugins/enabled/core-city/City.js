@@ -1,4 +1,5 @@
 import Rules from '../core-rules/Rules.js';
+import Tileset from '../core-world/Tileset.js';
 
 export default class City {
   static #availableBuildUnits = [];
@@ -32,8 +33,6 @@ export default class City {
     tile.city = this;
     this.tiles = this.tile.surroundingArea;
 
-    engine.emit('tile:improvement-built', tile, 'irrigation');
-    engine.emit('tile:improvement-built', tile, 'road');
     engine.emit('city:created', this, tile);
 
     // setup
@@ -41,27 +40,34 @@ export default class City {
   }
 
   autoAssignWorkers() {
-    this.tilesWorked = [this.tile, ...this.tiles
+    this.tilesWorked = Tileset.from(this.tile, ...this.tiles
       .filter((tile) => tile.isVisible(this.player))
       .sort((a, b) => b.score() - a.score())
-      .slice(0, this.size),
-    ];
+      .slice(0, this.size)
+    );
   }
 
+  assignUnassignedWorkers() {
+    this.tilesWorked.push(
+      ...this.tiles
+        .filter((tile) => this.tilesWorked.includes(tile))
+        .filter((tile) => tile.isVisible(this.player))
+        .sort((a, b) => b.score() - a.score())
+        .slice(0, (this.size + 1) - this.tilesWorked.length)
+    );
+  }
+
+  // TODO: just pass this through to the Tileset
   resource(type) {
     return this.tilesWorked.map(
-      (tile) => Rules.get(`tile:${type}`)
-        .filter((rule) => rule.validate(tile, this.player))
-        .map((rule) => rule.process(tile, this.player))
-        .sort()
-        .pop() || 0
+      (tile) => tile[type]
     )
       .reduce((total, value) => total + value, 0)
     ;
   }
 
   get trade() {
-    return this.resource('trade');
+    return 0;
   }
 
   get food() {

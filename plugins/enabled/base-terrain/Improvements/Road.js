@@ -2,8 +2,6 @@ import {Arctic, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, Riv
 import Improvement from '../Improvement.js';
 
 export class Road extends Improvement {
-  name = 'road';
-  title = 'Road';
   cost = 1;
   static available = [
     Arctic,
@@ -19,5 +17,7 @@ export class Road extends Improvement {
     Tundra,
   ];
 }
+
+export default Road;
 
 Improvement.register(Road);

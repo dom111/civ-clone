@@ -3,7 +3,8 @@
     "title": "Core World",
     "version": "0.0.1",
     "dependencies": [
-        "base-terrain"
+        "base-terrain",
+        "core-rules"
     ],
     "components": [
         {

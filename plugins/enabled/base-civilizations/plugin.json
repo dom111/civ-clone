@@ -7,31 +7,39 @@
     "components": [
         {
             "type": "script",
-            "file": "Babylonian.js"
+            "file": "Civilizations/Babylonian.js"
         },
         {
             "type": "script",
-            "file": "English.js"
+            "file": "Civilizations/English.js"
         },
         {
             "type": "script",
-            "file": "German.js"
+            "file": "Civilizations/German.js"
         },
         {
             "type": "script",
-            "file": "Roman.js"
+            "file": "Civilizations/Japanese.js"
         },
         {
             "type": "script",
-            "file": "Russian.js"
+            "file": "Civilizations/Roman.js"
         },
         {
             "type": "script",
-            "file": "Spanish.js"
+            "file": "Civilizations/Russian.js"
         },
         {
             "type": "script",
-            "file": "init.js"
+            "file": "Civilizations/Spanish.js"
+        },
+        {
+            "type": "script",
+            "file": "Civilizations.js"
+        },
+        {
+            "type": "script",
+            "file": "register.js"
         }
     ]
 }

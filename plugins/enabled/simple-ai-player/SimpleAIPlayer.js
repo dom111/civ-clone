@@ -72,6 +72,34 @@ export class SimpleAIPlayer extends AIPlayer {
         }
       }
     });
+
+    engine.on('city:grow', (city) => {
+      if (city.player === this) {
+        city.autoAssignWorkers();
+      }
+    });
+
+    engine.on('city:shrink', (city) => {
+      if (city.player === this) {
+        city.autoAssignWorkers();
+      }
+    });
+
+    // whenever we build an improvement near our cities, auto-assign the workers to make sure we're using the best tiles
+    engine.on('tile:improvement-built', (tile) => {
+      const ourNearbyCities = tile.surroundingArea
+        .cities()
+        .filter((city) => city.player === this)
+      ;
+
+      if (
+        ourNearbyCities.length &&
+        tile.units.length &&
+        tile.units[0].player === this
+      ) {
+        ourNearbyCities.forEach((city) => city.autoAssignWorkers());
+      }
+    });
   }
 
   moveUnit(unit) {

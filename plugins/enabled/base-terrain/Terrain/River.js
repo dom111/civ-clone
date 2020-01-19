@@ -1,22 +1,7 @@
 import {Land} from '../Types.js';
-import Terrain from '../Terrain.js';
 
 export class River extends Land {
-  constructor() {
-    super();
-
-    this.applySpecial();
-  }
-
-  name = 'river';
-  title = 'River';
-  food = 2;
-  trade = 1;
-  production = 0;
   movementCost = 1;
-  ocean = false;
-  land = true;
-  impassable = false;
   special = [
     {
       name: 'shield',
@@ -25,17 +10,6 @@ export class River extends Land {
       chance: .4,
     },
   ];
-  static distribution = [
-    {
-      from: .1,
-      to: .9,
-      coverage: .05,
-      clustered: false,
-      path: true,
-    },
-  ];
 }
 
 export default River;
-
-Terrain.register(River);

@@ -31,8 +31,9 @@ export class Time {
       increment: 1,
     },
   ];
+  static #startYear = -4000;
   static #turn = 0;
-  static #year = -4000;
+  static #year = this.#startYear;
 
   static increment() {
     if (this.#turn++) {
@@ -44,6 +45,21 @@ export class Time {
     engine.emit('time:year-updated', this.#year);
 
     return this;
+  }
+
+  static getYear(turn) {
+    return this.#ranges.reduce((year, range) => {
+      if (range.turn <= turn) {
+        year += range.turn * range.increment;
+        turn -= range.turn;
+      }
+      else if (turn > 0) {
+        year += turn * range.increment;
+        turn = 0;
+      }
+
+      return year;
+    }, this.#startYear);
   }
 
   static valueOf() {

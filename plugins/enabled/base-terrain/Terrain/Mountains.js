@@ -1,22 +1,7 @@
 import {Land} from '../Types.js';
-import Terrain from '../Terrain.js';
 
 export class Mountains extends Land {
-  constructor() {
-    super();
-
-    this.applySpecial();
-  }
-
-  name = 'mountains';
-  title = 'Mountains';
-  food = 0;
-  trade = 0;
-  production = 1;
   movementCost = 3;
-  ocean = false;
-  land = true;
-  impassable = false;
   special = [
     {
       name: 'gold',
@@ -31,17 +16,6 @@ export class Mountains extends Land {
       chance: .06,
     },
   ];
-  static distribution = [
-    {
-      from: .1,
-      to: .9,
-      coverage: .05,
-      clustered: false,
-      path: true,
-    },
-  ];
 }
 
 export default Mountains;
-
-Terrain.register(Mountains);

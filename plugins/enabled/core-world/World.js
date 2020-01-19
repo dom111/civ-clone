@@ -1,17 +1,13 @@
-import Terrain from '../base-terrain/Terrain.js';
+import {Land, Ocean} from '../base-terrain/Types.js';
+import Registry from '../base-terrain/Registry.js';
 import Tile from './Tile.js';
+import Rules from '../core-rules/Rules.js';
 
 export class World {
   constructor() {
-    this.terrain = [];
-
     // TODO: use this to help generate consistent maps
     this.seed = Math.ceil(Math.random() * 1e7);
     // this.seed = 615489;
-
-    Terrain.terrains.forEach((terrainDefinition) => {
-      this.terrain.push(terrainDefinition);
-    });
 
     // tiles that would be a 'great site for a city'
     const greatTileCoverage = .005;
@@ -98,14 +94,6 @@ export class World {
     return this.map.map((row) => row.map((tile) => `${lookup[tile.terrain.constructor.name]} \u001b[0m`).join('')).join('\n');
   }
 
-  getTerrainType(id) {
-    return this.terrainTypes[id];
-  }
-
-  get terrainTypes() {
-    return this.terrain;
-  }
-
   generate(options) {
     // const map = this;
 
@@ -116,17 +104,17 @@ export class World {
       mapWidth = options.width || 160,
       landCoverage = options.landCoverage || .66,
       chanceToBecomeLand = options.chanceToBecomeLand || .05, // chance to become land
-      clusterChance = options.clusterChance || .15, // chance for adjacent tiles to cluster
-      pathChance = options.pathChance || .2, // chance for directly adjacent tiles to be part of the path
-      coverageScale = options.coverageScale || .66 // this scales the coverage, this could (and should) be factored in to the coverage for each tile
+      defaultClusterChance = options.clusterChance || .33, // chance for adjacent tiles to cluster
+      defaultPathChance = options.pathChance || .33 // chance for directly adjacent tiles to be part of the path
+      // coverageScale = options.coverageScale || .66 // this scales the coverage, this could (and should) be factored in to the coverage for each tile
     ;
 
     //
     const getNeighbours = (index, height, width, directNeighbours = true) => {
       // TODO: this needs to handle wrapping
-      const total = height * width;
-
-      let n = index - width,
+      const total = height * width,
+        // TODO: validate these
+        n = index - width,
         ne = index - (width - 1),
         e = index + 1,
         se = index + (width + 1),
@@ -136,23 +124,25 @@ export class World {
         nw = index - (width + 1)
       ;
 
-      n += n < 0 ? total : 0;
-      e -= e % total === 0 ? width : 0;
-      s -= s > total ? total : 0;
-      w += w % total === 0 ? width : 0;
-
       return (
         directNeighbours ?
           [n, e, s, w] :
           [n, ne, e, se, s, sw, w, nw]
       )
-        .map((n) => n = n % (height * width))
-        // .filter((x) => x < (width * height) && x > -1)
+        .map((index) => index > total ?
+          index % total :
+          index < 0 ?
+            index + total :
+            index
+        )
       ;
     };
 
     // Build land masses
-    const generateLand = (height, width, map = Array(height * width).fill(0)) => {
+    const generateLand = (height, width, map = new Array(height * width)
+      .fill(0)
+      .map(() => new Ocean())
+    ) => {
       const seen = {},
         toProcess = [],
         seedTile = Math.floor(height * width * Math.random()),
@@ -171,7 +161,7 @@ export class World {
       //   return generateLand(height, width, map);
       // }
 
-      map[seedTile] = 1;
+      map[seedTile] = new Land();
 
       flagAsSeen(seedTile);
 
@@ -189,9 +179,9 @@ export class World {
           if (
             (Math.random() / distance) > chanceToBecomeLand ||
             getNeighbours(currentTile, height, width, false)
-              .reduce((total, n) => total + map[n], 0) > 5
+              .reduce((total, n) => total + (map[n] instanceof Land ? 1 : 0), 0) > 5
           ) {
-            map[currentTile] = 1;
+            map[currentTile] = new Land();
 
             toProcess.push(...getNeighbours(currentTile, height, width));
           }
@@ -200,79 +190,112 @@ export class World {
         }
       }
 
-      const [ocean, land] = [0, 1].map((land) => map.filter((flag) => flag === land).length);
+      const [ocean, land] = [Ocean, Land].map((type) => map.filter((tile) => tile instanceof type).length);
 
-      if (land / ocean < landCoverage) {
+      if ((land / ocean) < landCoverage) {
         return generateLand(height, width, map);
       }
 
       return map;
     };
 
-    //
-    // const populateTerrain = (m, h, w) => {
     const populateTerrain = (mapData, height, width) => {
-      const landCells = mapData.map((value, index) => index).filter((index) => mapData[index] === 1),
-        oceanCells = mapData.map((value, index) => index).filter((index) => mapData[index] === 0)
-      ;
+      const coords = (index) => [
+        index % width,
+        Math.floor(index / width),
+      ];
 
-      oceanCells.forEach((index) => {
-        mapData[index] = Terrain.fromName('Ocean');
-      });
+      Rules.get('terrain:distributionGroups')
+        .filter((rule) => rule.validate(Registry))
+        .map((rule) => rule.process(Registry))
+        .forEach((group) => group.forEach((TerrainType) => {
+          Rules.get('terrain:distribution')
+            .filter((rule) => rule.validate(TerrainType, mapData))
+            .map((rule) => rule.process(TerrainType, mapData))
+            .forEach((distribution) =>
+              distribution.forEach((distributionData) => {
+                const validIndices = Object.keys(mapData)
+                  .filter((i) => mapData[i] instanceof TerrainType.__proto__)
+                  .filter((i) =>
+                    distributionData.fill ||
+                    (
+                      i >= ((distributionData.from * height) * width) &&
+                      i <= ((distributionData.to * height) * width)
+                    )
+                  )
+                ;
 
-      landCells.forEach((index) => {
-        mapData[index] = Terrain.fromName('Grassland');
-      });
+                if (distributionData.fill) {
+                  validIndices.forEach((index) => mapData[index] = new TerrainType());
 
-      this.terrain.forEach((TerrainType) => {
-        if (TerrainType.distribution) {
-          TerrainType.distribution.forEach((distributionData) => {
-            const rangeCells = landCells.filter((n) => n >= ((distributionData.from * height) * width) && n <= ((distributionData.to * height) * width));
+                  return;
+                }
 
-            // TODO: fudgeFactor
-            let max = (rangeCells.length * distributionData.coverage) * coverageScale;
+                // TODO: fudgeFactor
+                let max = validIndices.length * distributionData.coverage;
 
-            while (max > 0) {
-              const n = rangeCells[Math.floor(Math.random() * rangeCells.length)];
+                while (max > 0) {
+                  const currentIndex = validIndices[Math.floor(Math.random() * validIndices.length)],
+                    [currentX, currentY] = coords(currentIndex)
+                  ;
 
-              mapData[n] = new TerrainType();
-              max--;
-
-              if (! distributionData.clustered && ! distributionData.path) {
-                continue;
-              }
-
-              const neighbours = getNeighbours(n, height, width, false)
-                .filter((k) => rangeCells.includes(k))
-              ;
-
-              if (distributionData.clustered) {
-                neighbours.forEach((k) => {
-                  // TODO: clusterChance
-                  if (Math.random() >= clusterChance) {
-                    mapData[k] = new TerrainType();
-                    max--;
-                  }
-                });
-              }
-
-              if (distributionData.path) {
-                while (neighbours.length && Math.random() >= pathChance) {
-                  const cell = neighbours[Math.floor(Math.random() * neighbours.length)];
-
-                  mapData[cell] = new TerrainType();
+                  mapData[currentIndex] = new TerrainType();
                   max--;
 
-                  neighbours.push(
-                    ...getNeighbours(cell, height, width, true)
-                      .filter((k) => rangeCells.includes(k))
-                  );
+                  if (! distributionData.cluster && ! distributionData.path) {
+                    continue;
+                  }
+
+                  if (distributionData.cluster) {
+                    const clusterChance = distributionData.clusterChance || defaultClusterChance,
+                      clusterNeighbours = getNeighbours(currentIndex, height, width)
+                        .filter((index) => ! (mapData[index] instanceof TerrainType))
+                    ;
+
+                    while (clusterNeighbours.length) {
+                      const index = clusterNeighbours.shift(),
+                        [x, y] = coords(index)
+                      ;
+
+                      if ((Math.random() / Math.hypot(currentX - x, currentY - y)) >= clusterChance) {
+                        mapData[index] = new TerrainType();
+                        max--;
+
+                        getNeighbours(index, height, width)
+                          .forEach((index) => {
+                            if (! (mapData[index] instanceof TerrainType) && (mapData[index] instanceof TerrainType.__proto__) && ! clusterNeighbours.includes(index)) {
+                              clusterNeighbours.push(index);
+                            }
+                          })
+                        ;
+                      }
+                    }
+                  }
+
+                  if (distributionData.path) {
+                    const pathChance = distributionData.pathChance || defaultPathChance;
+
+                    let index = currentIndex;
+
+                    while (Math.random() > pathChance) {
+                      const candidates = getNeighbours(index, height, width)
+                        .filter((index) => (mapData[index] instanceof TerrainType.__proto__) &&
+                          ! (mapData[index] instanceof TerrainType)
+                        )
+                      ;
+
+                      index = candidates[Math.floor(Math.random() * candidates.length)];
+
+                      mapData[index] = new TerrainType();
+                      max--;
+                    }
+                  }
                 }
               }
-            }
-          });
-        }
-      });
+              ))
+          ;
+        }))
+      ;
 
       return mapData;
     };
