@@ -1,6 +1,5 @@
-import City from '../core-city/City.js';
+import {Irrigation, Road} from '../base-terrain-improvements/Improvements.js';
 import Rules from '../core-rules/Rules.js';
-import {Irrigation, Road} from '../base-terrain/Improvements.js';
 import Time from '../core-turn-based-game/Time.js';
 
 engine.on('city:built', (city) => {
@@ -23,6 +22,7 @@ engine.on('city:grow', (city) => {
       }
     })
   ;
+
   city.size++;
   city.foodStorage = 0;
   city.assignUnassignedWorkers();
@@ -31,12 +31,4 @@ engine.on('city:grow', (city) => {
 engine.on('city:shrink', (city) => {
   city.size--;
   city.foodStorage = 0;
-});
-
-engine.on('unit:registered', (unit) => {
-  City.registerBuildUnit(unit);
-});
-
-engine.on('city-improvement:registered', (improvement) => {
-  City.registerBuildImprovement(improvement);
 });

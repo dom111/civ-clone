@@ -3,12 +3,16 @@
     "title": "Core City Improvement",
     "version": "0.0.1",
     "dependencies": [
-        "core-city"
+        "core-registry"
     ],
     "components": [
         {
             "type": "script",
             "file": "Improvement.js"
+        },
+        {
+            "type": "script",
+            "file": "Registry.js"
         }
     ]
 }

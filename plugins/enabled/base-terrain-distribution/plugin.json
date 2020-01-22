@@ -1,0 +1,87 @@
+{
+  "name": "base-terrain-distribution",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain",
+    "core-rules",
+    "core-terrain"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Arctic.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Arctic/Seal.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Desert/Oasis.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Forest/Horse.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Grassland/Shield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Grassland/Cow.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tundra/Caribou.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/groups.js"
+    }
+  ]
+}

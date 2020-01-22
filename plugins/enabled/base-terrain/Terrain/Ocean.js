@@ -1,6 +1,6 @@
-import {Ocean as BaseOcean} from '../Types/Ocean.js';
+import {Water} from '../../core-terrain/Types/Water.js';
 
-export class Ocean extends BaseOcean {
+export class Ocean extends Water {
   movementCost = 1;
   special = [
     {

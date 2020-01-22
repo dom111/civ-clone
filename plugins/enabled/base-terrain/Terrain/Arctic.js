@@ -1,4 +1,4 @@
-import {Land} from '../Types.js';
+import {Land} from '../../core-terrain/Types.js';
 
 export class Arctic extends Land {
   movementCost = 2;
@@ -7,13 +7,6 @@ export class Arctic extends Land {
       name: 'oil',
       title: 'Oil',
       production: 3,
-      chance: .06,
-    },
-    {
-      name: 'seal',
-      title: 'Seal',
-      food: 2,
-      production: 1,
       chance: .06,
     },
     {

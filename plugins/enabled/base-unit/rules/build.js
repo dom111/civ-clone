@@ -17,8 +17,8 @@ Rules.register(new Rule(
   'city:build:unit:settlers',
   new Criterion((city, buildItem) => buildItem === Settlers),
   new Effect((city) => new Criteria(
-    new Criterion(() => city.size >= 2),
-    new Criterion(() => city.surplusFood > 0)
+    new Criterion(() => city.size >= 2)
+    // new Criterion(() => city.surplusFood > 0)
   ))
 ));
 Rules.register(new Rule(
@@ -26,7 +26,7 @@ Rules.register(new Rule(
   new Criterion((city, buildItem) => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
   new Effect((city, buildItem) => new Criteria(
     new Criterion(() => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
-    new Criterion(() => city.tile.isCoast)
+    new Criterion(() => city.tile.isCoast())
   ))
 ));
 

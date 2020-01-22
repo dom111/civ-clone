@@ -16,6 +16,8 @@ export class Player {
     engine.on('tile:seen', (tile) => {
       if (! this.#seenTiles.includes(tile)) {
         this.#seenTiles.push(tile);
+
+        engine.emit('player:visibility-changed', this);
       }
     });
   }
@@ -47,27 +49,23 @@ export class Player {
     const visibleTiles = [];
 
     this.units.forEach((unit) => {
-      for (let x = -unit.visibility; x <= unit.visibility; x++) {
-        for (let y = -unit.visibility; y <= unit.visibility; y++) {
-          const tile = unit.tile.map.get(unit.tile.x + x, unit.tile.y + y);
-
+      unit.tile.getSurroundingArea(unit.visibility)
+        .forEach((tile) => {
           if (! visibleTiles.includes(tile)) {
             visibleTiles.push(tile);
           }
-        }
-      }
+        })
+      ;
     });
 
     this.cities.forEach((city) => {
-      for (let x = -2; x <= 2; x++) {
-        for (let y = -2; y <= 2; y++) {
-          const tile = city.tile.map.get(city.tile.x + x, city.tile.y + y);
-
+      city.tile.getSurroundingArea()
+        .forEach((tile) => {
           if (! visibleTiles.includes(tile)) {
             visibleTiles.push(tile);
           }
-        }
-      }
+        })
+      ;
     });
 
     return visibleTiles;

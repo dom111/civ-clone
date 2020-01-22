@@ -1,6 +1,6 @@
-import {Land, Ocean} from '../../base-terrain/Types.js';
+import {Land, Water} from '../../core-terrain/Types.js';
 import {LandUnit, NavalUnit} from '../Units.js';
-import {Railroad, Road} from '../../base-terrain/Improvements.js';
+import {Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
 // import AIPlayer from '../core-player/AIPlayer.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
@@ -11,8 +11,7 @@ import Tile from '../../core-world/Tile.js';
 
 Rules.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
 Rules.register(new Rule('unit:movement:isNeighbouringTile', new Criterion(
-  (unit, to) => Object.values(unit.tile.neighbours)
-    .includes(to)
+  (unit, to) => to.isNeighbourOf(unit.tile)
 )
 ));
 Rules.register(new Rule(
@@ -27,7 +26,7 @@ Rules.register(new Rule(
       )*/
     ),
     (unit, to) => unit instanceof NavalUnit && (
-      to.terrain instanceof Ocean || (to.city && to.city.player === unit.player)
+      to.terrain instanceof Water || (to.city && to.city.player === unit.player)
     ),
     (unit) => unit.air
   )));
@@ -39,12 +38,12 @@ Rules.register(new Rule(
 // This is analogous to the original Civilization unit adjacency rules
 Rules.register(new Rule(
   'unit:movement:unitAdjacencyRules',
-  new Criterion((unit, to) => ! Object.values(unit.tile.neighbours)
+  new Criterion((unit, to) => ! unit.tile.getNeighbours()
     .filter(
       (tile) => tile.units.length > 0 &&
         tile.units[0].player !== unit.player
     )
-    .flatMap((tile) => Object.values(tile.neighbours))
+    .flatMap((tile) => tile.getNeighbours())
     .includes(to)
   )
 ));

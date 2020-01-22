@@ -1,0 +1,13 @@
+{
+  "name": "ascii-renderer",
+  "dependencies": [
+    "core-turn-based-game",
+    "core-world"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

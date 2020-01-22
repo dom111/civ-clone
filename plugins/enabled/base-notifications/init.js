@@ -18,6 +18,11 @@ Object.entries({
   // 'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size}).`,
   // 'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size}).`,
   // 'city-improvement:built': (city, improvement) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
+  'engine:build': () => 'Building phase...',
+  'engine:initialise': () => 'Engine initialising...',
+  'engine:plugins-loaded': () => 'Plugins loaded...',
+  'engine:settings-loaded': () => 'Settings loaded...',
+  'engine:start': () => 'Engine starting...',
   // 'player:turn-start': (player) => `${player.constructor.name} ${player.id} ${player.leader.name}'s (${player.civilization.nation}) turn.`,
   'player:defeated': (defeatedPlayer, attacker) => `${defeatedPlayer.civilization.people} civilization destroyed by ${attacker.civilization.nation}.`,
   // 'tile:improvement-built': (tile, improvement) => `${improvement} built at ${tile.x}, ${tile.y} (${tile.terrain.constructor.name} - ${tile.terrain.name}).`,
@@ -25,7 +30,9 @@ Object.entries({
   // 'turn:start': (Time) => `Turn Start: ${Time.turn}.`,
   // 'unit:created': (unit) => `${unit.player.civilization.people} ${unit.constructor.name}.`,
   // 'unit:destroyed': (unit) => `${unit.player.civilization.people} ${unit.constructor.name}.`,
-  // 'unit:moved': (unit, from, to) => `${unit.player.civilization.people} ${unit.constructor.name} moved from ${from.x},${from.y} to ${to.x},${to.y} (${to.terrain.constructor.name}).`
+  // 'unit:moved': (unit, from, to) => `${unit.player.civilization.people} ${unit.constructor.name} moved from ${from.x},${from.y} to ${to.x},${to.y} (${to.terrain.constructor.name}).`,
+  'world:built': () => 'World generated...',
+  'world:start-tiles': () => 'Start tiles chosen...',
 }).forEach(([event, messageProvider]) => engine.on(event, (...args) => engine.emit('notification', new Notification({
   name: event,
   message: messageProvider(...args),

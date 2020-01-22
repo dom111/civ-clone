@@ -29,14 +29,6 @@ engine.on('unit:destroyed', (unit) => {
   if (unit.city) {
     unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
   }
-
-  // if (engine.data('currentPlayer') === unit.player) {
-  //   if (unit.player.activeUnit === unit) {
-  //     unit.player.activeUnit = false;
-  //   }
-  //
-  //   engine.emit('unit:activate-next', unit.player);
-  // }
 });
 
 engine.on('unit:activate-next', (player) => {
@@ -53,11 +45,8 @@ engine.on('unit:moved', (unit, from) => {
 
   from.units = from.units.filter((tileUnit) => tileUnit !== unit);
 
-  if ((unit.movesLeft <= 0.1) && (engine.data('currentPlayer').activeUnit === unit)) {
-    unit.player.activeUnit = false;
+  if (unit.movesLeft <= 0.1) {
     unit.active = false;
-
-    // engine.emit('unit:activate-next', unit.player);
   }
 });
 

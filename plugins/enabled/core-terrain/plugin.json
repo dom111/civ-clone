@@ -1,0 +1,30 @@
+{
+  "name": "core-terrain",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-rules",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Registry.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Land.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Water.js"
+    },
+    {
+      "type": "script",
+      "file": "Types.js"
+    }
+  ]
+}

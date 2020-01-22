@@ -4,8 +4,10 @@
     "version": "0.0.1",
     "dependencies": [
         "base-terrain",
+        "base-terrain-improvements",
         "core-city",
         "core-rules",
+        "core-terrain",
         "core-unit",
         "core-world"
     ],

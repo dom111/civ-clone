@@ -1,47 +1,59 @@
-import {Irrigation, Mine, Road} from '../base-terrain/Improvements.js';
+import {Food, Production} from '../base-yields/Yields.js';
+import {Hills, Mountains, Oasis, Plains, River} from '../base-terrain/Terrains.js';
+import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Militia, Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
 import FortifiableUnit from '../base-unit/Types/FortifiableUnit.js';
-import Tileset from '../core-world/Tileset.js';
 import Unit from '../core-unit/Unit.js';
 
 export class SimpleAIPlayer extends AIPlayer {
   #shouldIrrigate = (tile) => {
-    return Irrigation.availableOn(tile) &&
+    return [Oasis, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
       ! tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-      tile.surroundingArea.some((tile) => tile.city && tile.city.player === this) &&
-      [...Object.values(tile.adjacent), tile].some((tile) => tile.terrain.name === 'river' ||
-        tile.terrain.isCoast ||
-        (tile.improvements.includes('irrigation') && ! tile.city)
-      );
+      tile.getSurroundingArea().some((tile) => tile.city && tile.city.player === this) &&
+      [...tile.getAdjacent(), tile]
+        .some((tile) => tile.terrain instanceof River ||
+          tile.isCoast() ||
+          (
+            tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
+            ! tile.city
+          )
+        )
+    ;
   };
 
   #shouldMine = (tile) => {
-    return Mine.availableOn(tile) &&
+    return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       ! tile.improvements.some((improvement) => improvement instanceof Mine) &&
-      tile.surroundingArea.some(
+      tile.getSurroundingArea().some(
         (tile) => tile.city && tile.city.player === this
       );
   };
 
   #shouldRoad = (tile) => {
-    return Road.availableOn(tile) &&
+    return Road.availableOn(tile.terrain) &&
       ! tile.improvements.some((improvement) => improvement instanceof Road) &&
-      tile.surroundingArea.some(
+      tile.getSurroundingArea().some(
         (tile) => tile.city && tile.city.player === this
       )
     ;
   };
 
   #shouldBuildCity = (tile) => {
-    return tile.surroundingArea.score() >= 120 &&
-      ! Tileset.fromSurrounding(tile, 4)
+    return (tile.getSurroundingArea()
+      .score([
+        [Food, 4],
+        [Production, 2],
+      ]) >= 150) &&
+      ! tile.getSurroundingArea(4)
         .cities()
         .length
     ;
   };
+
+  #unitTargetData = new Map();
 
   #citiesToLiberate = [];
   #playersToAttack = [];
@@ -87,15 +99,16 @@ export class SimpleAIPlayer extends AIPlayer {
 
     // whenever we build an improvement near our cities, auto-assign the workers to make sure we're using the best tiles
     engine.on('tile:improvement-built', (tile) => {
-      const ourNearbyCities = tile.surroundingArea
+      const ourNearbyCities = tile.getSurroundingArea()
         .cities()
         .filter((city) => city.player === this)
       ;
 
       if (
-        ourNearbyCities.length &&
+        // if it was us that built the improvement
         tile.units.length &&
-        tile.units[0].player === this
+        tile.units[0].player === this &&
+        ourNearbyCities.length
       ) {
         ourNearbyCities.forEach((city) => city.autoAssignWorkers());
       }
@@ -112,12 +125,12 @@ export class SimpleAIPlayer extends AIPlayer {
               return 16;
             }
 
-            if (this.#shouldIrrigate(tile)) {
-              return 8;
-            }
-
             if (this.#shouldMine(tile)) {
               return 4;
+            }
+
+            if (this.#shouldIrrigate(tile)) {
+              return 8;
             }
 
             if (this.#shouldRoad(tile)) {
@@ -129,7 +142,7 @@ export class SimpleAIPlayer extends AIPlayer {
             return 16;
           }
 
-          const target = unit.data('target');
+          const target = this.#unitTargetData.get(unit);
 
           if (target) {
             if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
@@ -146,9 +159,8 @@ export class SimpleAIPlayer extends AIPlayer {
             return 8;
           }
 
-          const discoverableTiles = Object.values(tile.neighbours)
-            .filter((tile) => ! tile.isVisible(this))
-            .length
+          const discoverableTiles = tile.getNeighbours()
+            .some((tile) => ! tile.isVisible(this))
           ;
 
           if (discoverableTiles > 0) {
@@ -161,7 +173,7 @@ export class SimpleAIPlayer extends AIPlayer {
           ) {
             const target = this.#citiesToLiberate[Math.floor(this.#citiesToLiberate.length * Math.random())].tile;
 
-            unit.data('target', target);
+            this.#unitTargetData.set(unit, target);
 
             if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
               return 16;
@@ -177,7 +189,7 @@ export class SimpleAIPlayer extends AIPlayer {
           if (unit.attack > 0 && attackableCityTiles.length) {
             const target = attackableCityTiles[Math.floor(attackableCityTiles.length * Math.random())];
 
-            unit.data('target', target);
+            this.#unitTargetData.set(unit, target);
 
             if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
               return 2;
@@ -201,13 +213,12 @@ export class SimpleAIPlayer extends AIPlayer {
 
           return 0;
         },
-        [target] = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
-          .map((direction) => currentTile.get(direction))
+        [target] = currentTile.getNeighbours()
           .filter((tile) => unit.validateMove(tile) && scoreMove(tile) > -1)
-          .sort((a, b) => (
+          .sort((a, b) => ((
             scoreMove(b) - scoreMove(a)
             // if there's no difference, sort randomly
-          ) || Math.floor(Math.random() * 3) - 1)
+          ) || Math.floor(Math.random() * 3) - 1))
       ;
 
       if (target) {
@@ -222,7 +233,17 @@ export class SimpleAIPlayer extends AIPlayer {
   takeTurn() {
     return promiseFactory((resolve, reject) => {
       try {
+        let loopCheck = 0;
+
         while (this.actions.length) {
+          if (loopCheck++ > 1e4) {
+            // TODO: raise warning - notification?
+            // reject(new Error(`SimpleAIPlayer: Couldn't pick an action to do.`));
+            resolve();
+
+            break;
+          }
+
           const [item] = this.actions,
             {tile} = item
           ;
@@ -273,7 +294,7 @@ export class SimpleAIPlayer extends AIPlayer {
               city.build(Settlers);
             }
             else {
-              const available = city.availableBuildItems,
+              const available = city.availableBuildItems(),
                 randomSelection = available[Math.floor(available.length * Math.random())]
               ;
 
@@ -281,8 +302,6 @@ export class SimpleAIPlayer extends AIPlayer {
             }
           }
           else {
-            console.log(item);
-
             break;
           }
         }

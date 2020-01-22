@@ -1,3 +1,5 @@
+import YieldRegistry from '../core-yields/Registry.js';
+
 export class Tileset {
   #tiles;
 
@@ -9,20 +11,12 @@ export class Tileset {
     const tileX = tile.x,
       tileY = tile.y,
       seen = [],
-      gen = (max, pairs = [[0, 0]]) => {
-        for (let i = 0; i <= max * max; i++) {
-          const x = Math.floor(i / max),
-            y = i % max
-          ;
+      gen = (max) => {
+        const pairs = [];
 
-          pairs.push([tileX + x, tileY + y]);
-
-          if (x > 0) {
-            pairs.push([tileX - x, tileY + y]);
-          }
-
-          if (y > 0) {
-            pairs.push([tileX + x, tileY - y], [tileX - x, tileY - y]);
+        for (let x = tileX - max; x <= tileX + max; x++) {
+          for (let y = tileY - max; y <= tileY + max; y++) {
+            pairs.push([x, y]);
           }
         }
 
@@ -38,15 +32,15 @@ export class Tileset {
     );
   }
 
+  constructor(...tiles) {
+    this.#tiles = tiles;
+  }
+
   cities() {
     return this
       .filter((tile) => tile.city)
       .map((tile) => tile.city)
     ;
-  }
-
-  constructor(...tiles) {
-    this.#tiles = tiles;
   }
 
   every(iterator) {
@@ -57,8 +51,16 @@ export class Tileset {
     return this.#tiles.filter(iterator);
   }
 
+  forEach(iterator) {
+    return this.#tiles.forEach(iterator);
+  }
+
   includes(tile) {
     return this.#tiles.includes(tile);
+  }
+
+  get length() {
+    return this.#tiles.length;
   }
 
   map(iterator) {
@@ -69,38 +71,20 @@ export class Tileset {
     this.#tiles.push(...tiles);
   }
 
+  score(values) {
+    return this.map((tile) => tile.score(values))
+      .reduce((total, score) => total + score, 0)
+    ;
+  }
+
   some(iterator) {
     return this.#tiles.some(iterator);
   }
 
-  sum(field) {
-    return this.map((tile) => tile[field]).reduce((total, tile) => total + tile, 0);
-  }
+  yields(yields = YieldRegistry.entries().map((YieldType) => new YieldType())) {
+    yields.forEach((tileYield) => this.#tiles.forEach((tile) => tile.resource(tileYield)));
 
-  get food() {
-    return this.sum('food');
-  }
-
-  get production() {
-    return this.sum('production');
-  }
-
-  get trade() {
-    return this.sum('trade');
-  }
-
-  score({
-    food = 4,
-    production = 2,
-    trade = 1,
-  } = {}) {
-    return this.map((tile) => tile.score({
-      food,
-      production,
-      trade,
-    }))
-      .reduce((total, score) => total + score, 0)
-    ;
+    return yields;
   }
 }
 

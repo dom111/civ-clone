@@ -1,10 +1,9 @@
+import CityImprovementRegistry from '../core-city-improvement/Registry.js';
 import Rules from '../core-rules/Rules.js';
 import Tileset from '../core-world/Tileset.js';
+import UnitRegistry from '../core-unit/Registry.js';
 
 export default class City {
-  static #availableBuildUnits = [];
-  static #availableBuildImprovements = [];
-
   // TODO: make these all private
   buildCost = 0;
   buildProgress = 0;
@@ -18,6 +17,7 @@ export default class City {
   size = 1;
   tile;
   tiles;
+  tilesWorked = new Tileset();
   units = [];
 
   constructor({
@@ -31,12 +31,27 @@ export default class City {
 
     // main this tile, always worked
     tile.city = this;
-    this.tiles = this.tile.surroundingArea;
+    this.tiles = this.tile.getSurroundingArea();
 
     engine.emit('city:created', this, tile);
 
     // setup
-    this.autoAssignWorkers();
+    this.assignUnassignedWorkers();
+  }
+
+  assignUnassignedWorkers() {
+    this.tilesWorked.push(
+      ...this.tiles
+        .filter((tile) => ! this.tilesWorked.includes(tile))
+        .filter((tile) => tile.isVisible(this.player))
+        .sort((a, b) => b.score() - a.score())
+        // +1 here because we also work the main city tile
+        .slice(0, (this.size + 1) - this.tilesWorked.length)
+    );
+
+    if (this.tilesWorked.length !== (this.size + 1)) {
+      this.autoAssignWorkers();
+    }
   }
 
   autoAssignWorkers() {
@@ -47,69 +62,38 @@ export default class City {
     );
   }
 
-  assignUnassignedWorkers() {
-    this.tilesWorked.push(
-      ...this.tiles
-        .filter((tile) => this.tilesWorked.includes(tile))
-        .filter((tile) => tile.isVisible(this.player))
-        .sort((a, b) => b.score() - a.score())
-        .slice(0, (this.size + 1) - this.tilesWorked.length)
-    );
-  }
-
   // TODO: just pass this through to the Tileset
   resource(type) {
-    return this.tilesWorked.map(
-      (tile) => tile[type]
-    )
+    return this.tilesWorked.map((tile) => tile.resource(type))
       .reduce((total, value) => total + value, 0)
     ;
   }
 
-  get trade() {
-    return 0;
-  }
-
-  get food() {
-    return this.resource('food');
-  }
-
-  get production() {
-    return this.resource('production');
-  }
-
-  get surplusFood() {
-    // TODO: use Rules
-    return this.food - (
-      this.size * 2
-    );
-  }
-
   // TODO: look at merging the below into availableBuildItems?
-  get availableBuildUnits() {
+  availableBuildUnits() {
     const buildRules = Rules.get('city:build:unit');
 
-    return City.#availableBuildUnits
+    return UnitRegistry.entries()
       .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )
     ;
   }
 
-  get availableBuildImprovements() {
+  availableBuildImprovements() {
     const buildRules = Rules.get('city:build:improvement');
 
-    return City.#availableBuildImprovements
+    return CityImprovementRegistry.entries()
       .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )
     ;
   }
 
-  get availableBuildItems() {
+  availableBuildItems() {
     return [
-      ...this.availableBuildUnits,
-      ...this.availableBuildImprovements,
+      ...this.availableBuildUnits(),
+      ...this.availableBuildImprovements(),
     ];
   }
 
@@ -128,27 +112,10 @@ export default class City {
 
     engine.emit('city:build', this, item);
   }
-  //
-  // valueOf() {
-  //   return ['ratesArray', 'trade', 'food', 'production', 'surplusFood', 'availableBuildItems'].reduce((city, key) => (
-  //     {
-  //       ...city,
-  //       [key]: city[key],
-  //     }
-  //   ), {
-  //     ...this,
-  //   });
-  // }
 
-  static registerBuildUnit(constructor) {
-    if (! this.#availableBuildUnits.includes(constructor)) {
-      this.#availableBuildUnits.push(constructor);
-    }
-  }
-
-  static registerBuildImprovement(constructor) {
-    if (! this.#availableBuildImprovements.includes(constructor)) {
-      this.#availableBuildImprovements.push(constructor);
-    }
+  yields() {
+    return this.tilesWorked
+      .yields()
+    ;
   }
 }

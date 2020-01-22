@@ -1,0 +1,60 @@
+{
+  "name": "base-terrain-improvements",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain",
+    "base-yields",
+    "core-rules",
+    "core-terrain-improvements"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Improvements/Irrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Mine.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Pollution.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Railroad.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Road.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    }
+  ]
+}

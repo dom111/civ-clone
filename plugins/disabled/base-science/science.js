@@ -124,7 +124,7 @@ engine.availableTradeRates.push('science'); // add science as a trade-rate
 
 /** Load and execute all the `advance` plugins. */
 // TODO: delay this...
-engine.on('start', () => engine.loadPlugins('advance'));
+engine.on('engine:start', () => engine.loadPlugins('advance'));
 //
 //
 

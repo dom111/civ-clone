@@ -46,15 +46,9 @@ export class Unit {
   }
 
   applyVisibility() {
-    const unit = this;
-
-    for (let x = this.#tile.x - unit.visibility; x <= unit.tile.x + unit.visibility; x++) {
-      for (let y = this.#tile.y - unit.visibility; y <= unit.tile.y + unit.visibility; y++) {
-        engine.emit('tile:seen', this.#tile.map.get(x, y), this.#player);
-      }
-    }
-
-    engine.emit('player:visibility-changed', this.#player);
+    this.#tile.getSurroundingArea(this.visibility)
+      .forEach((tile) => engine.emit('tile:seen', tile, this.#player))
+    ;
   }
 
   data(key, value = null) {

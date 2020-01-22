@@ -1,7 +1,7 @@
-import {Land, Ocean} from '../base-terrain/Types.js';
-import Registry from '../base-terrain/Registry.js';
-import Tile from './Tile.js';
+import {Land, Water} from '../core-terrain/Types.js';
+import Registry from '../core-terrain/Registry.js';
 import Rules from '../core-rules/Rules.js';
+import Tile from './Tile.js';
 
 export class World {
   constructor() {
@@ -9,35 +9,14 @@ export class World {
     this.seed = Math.ceil(Math.random() * 1e7);
     // this.seed = 615489;
 
-    // tiles that would be a 'great site for a city'
-    const greatTileCoverage = .005;
-
-    let regenerateCount = 0;
-
-    while (! this.map) {
-      this.map = this.generate()
-        .map((row, y) => row.map((terrain, x) => new Tile({
-          x,
-          y,
-          terrain,
-          map: this,
-        })))
-      ;
-
-      // TODO: _just_ (!) alter the map so that it does meet these criteria.
-      if (
-        (
-          this.getBy((tile) => tile.surroundingArea.score() >= 150).length /
-            (this.height * this.width)
-        ) < greatTileCoverage
-      ) {
-        if (++regenerateCount > 30) {
-          throw new TypeError('World generation failed repeatedly. Aborting.');
-        }
-
-        this.map = null;
-      }
-    }
+    this.map = this.generate()
+      .map((row, y) => row.map((terrain, x) => new Tile({
+        x,
+        y,
+        terrain,
+        map: this,
+      })))
+    ;
   }
 
   get width() {
@@ -49,49 +28,28 @@ export class World {
   }
 
   getBy(filterFunction) {
-    return this.map.reduce((a, b) => a.concat(b), []).filter(filterFunction);
+    return this.map.flat().filter(filterFunction);
   }
 
   get(x, y) {
     // TODO: check map type
     if (x > (this.width - 1)) {
-      x -= this.width;
+      x = x % this.width;
     }
-    else if (x < 0) {
+
+    while (x < 0) {
       x += this.width;
     }
 
     if (y > (this.height - 1)) {
-      y -= this.height;
+      y = y % this.height;
     }
-    else if (y < 0) {
+
+    while (y < 0) {
       y += this.height;
     }
 
-    // this seems unnecessary with the above checks...
-    // return (this.map[y] || [])[x] || false;
     return this.map[y][x];
-  }
-
-  // TODO: remove this when it's not needed for debugging
-  toString() {
-    const lookup = {
-      Arctic: '\u001b[48;5;254m',
-      Desert: '\u001b[48;5;229m',
-      Forest: '\u001b[48;5;22m',
-      Grassland: '\u001b[48;5;41m',
-      Hills: '\u001b[48;5;101m',
-      Jungle: '\u001b[48;5;72m',
-      Mountains: '\u001b[48;5;243m',
-      Ocean: '\u001b[48;5;18m',
-      Plains: '\u001b[48;5;144m',
-      River: '\u001b[48;5;27m',
-      Swamp: '\u001b[48;5;130m',
-      Tundra: '\u001b[48;5;223m',
-      Terrain: '\u001b[0m',
-    };
-
-    return this.map.map((row) => row.map((tile) => `${lookup[tile.terrain.constructor.name]} \u001b[0m`).join('')).join('\n');
   }
 
   generate(options) {
@@ -141,7 +99,7 @@ export class World {
     // Build land masses
     const generateLand = (height, width, map = new Array(height * width)
       .fill(0)
-      .map(() => new Ocean())
+      .map(() => new Water())
     ) => {
       const seen = {},
         toProcess = [],
@@ -190,7 +148,7 @@ export class World {
         }
       }
 
-      const [ocean, land] = [Ocean, Land].map((type) => map.filter((tile) => tile instanceof type).length);
+      const [ocean, land] = [Water, Land].map((type) => map.filter((tile) => tile instanceof type).length);
 
       if ((land / ocean) < landCoverage) {
         return generateLand(height, width, map);
@@ -248,12 +206,12 @@ export class World {
 
                   if (distributionData.cluster) {
                     const clusterChance = distributionData.clusterChance || defaultClusterChance,
-                      clusterNeighbours = getNeighbours(currentIndex, height, width)
+                      clusteredNeighbours = getNeighbours(currentIndex, height, width)
                         .filter((index) => ! (mapData[index] instanceof TerrainType))
                     ;
 
-                    while (clusterNeighbours.length) {
-                      const index = clusterNeighbours.shift(),
+                    while (clusteredNeighbours.length) {
+                      const index = clusteredNeighbours.shift(),
                         [x, y] = coords(index)
                       ;
 
@@ -263,8 +221,8 @@ export class World {
 
                         getNeighbours(index, height, width)
                           .forEach((index) => {
-                            if (! (mapData[index] instanceof TerrainType) && (mapData[index] instanceof TerrainType.__proto__) && ! clusterNeighbours.includes(index)) {
-                              clusterNeighbours.push(index);
+                            if (! (mapData[index] instanceof TerrainType) && (mapData[index] instanceof TerrainType.__proto__) && ! clusteredNeighbours.includes(index)) {
+                              clusteredNeighbours.push(index);
                             }
                           })
                         ;

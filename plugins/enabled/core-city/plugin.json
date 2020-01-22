@@ -3,7 +3,9 @@
     "title": "Core City",
     "version": "0.0.1",
     "dependencies": [
+        "core-city-improvement",
         "core-rules",
+        "core-unit",
         "core-world"
     ],
     "components": [

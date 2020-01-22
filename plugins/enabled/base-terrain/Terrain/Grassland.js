@@ -1,14 +1,8 @@
-import {Land} from '../Types.js';
+import {Land} from '../../core-terrain/Types.js';
 
 export class Grassland extends Land {
   movementCost = 1;
   special = [
-    {
-      name: 'grassland-shield',
-      title: 'Grassland (Shield)',
-      production: 1,
-      chance: .33,
-    },
     {
       name: 'grassland-cow',
       title: 'Grassland (Cow)',

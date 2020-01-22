@@ -127,14 +127,16 @@ export class Engine extends EventEmitter {
       return;
     }
 
+    this.started = true;
+
+    this.emit('engine:initialise');
     await this.loadSettings();
+    this.emit('engine:settings-loaded');
     await this.loadPlugins();
+    this.emit('engine:plugins-loaded');
 
-    this.started = true;
-
-    this.emit('build');
-    this.emit('start');
-    this.started = true;
+    this.emit('engine:build');
+    this.emit('engine:start');
   }
 
   loadJSON(...parts) {

@@ -1,5 +1,6 @@
-import {Irrigation, Mine, Railroad, Road} from '../../base-terrain/Improvements.js';
+import {Irrigation, Mine, Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
 import LandUnit from '../Types/LandUnit.js';
+import {River} from '../../base-terrain/Terrain/River.js';
 
 export class Worker extends LandUnit {
   title = 'Worker';
@@ -8,20 +9,17 @@ export class Worker extends LandUnit {
 
   irrigate() {
     if (
+      Irrigation.availableOn(this.tile.terrain) &&
+      // TODO: doing this a lot already, need to make improvements a value object with a helper method
       ! this.tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-      Irrigation.availableOn(this.tile) &&
-      // TODO: Tile#hasAccessToWater?
-      (
-        Object.keys(this.tile.adjacent)
-          .map((direction) => this.tile.adjacent[direction])
-          .filter((tile) =>
-            tile.terrain.name === 'river' ||
-            (tile.improvements.includes('irrigation') && ! tile.city)
-            || tile.terrain.ocean
+      [...this.tile.getAdjacent(), this.tile]
+        .some((tile) => tile.terrain instanceof River ||
+          tile.isCoast() ||
+          (
+            tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
+            ! tile.city
           )
-          .length ||
-        this.tile.terrain.name === 'river'
-      )
+        )
     ) {
       this.delayedAction({
         status: 'irrigating',

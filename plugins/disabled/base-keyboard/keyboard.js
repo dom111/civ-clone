@@ -108,7 +108,7 @@ engine.on('unbind-key', (namespace, key) => {
   });
 });
 
-engine.on('start', (unit) => {
+engine.on('engine:start', (unit) => {
   Engine.Plugin.get('keybinds', 'unit').forEach((component) => {
     component.contents.forEach((assetPath) => {
       engine.loadJSON(assetPath)

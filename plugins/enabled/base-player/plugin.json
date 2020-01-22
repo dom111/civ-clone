@@ -6,6 +6,7 @@
         "base-terrain",
         "base-civilizations",
         "base-unit",
+        "base-yields",
         "core-civilization",
         "core-player",
         "core-rules",

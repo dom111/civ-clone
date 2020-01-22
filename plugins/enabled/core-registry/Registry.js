@@ -19,7 +19,7 @@ export class Registry {
     });
   }
 
-  get entries() {
+  entries() {
     return [...this.#registry];
   }
 

@@ -208,10 +208,10 @@ const BaseRenderer = class BaseRenderer {
             images: (() => {
               const images = [];
 
-              if (tile.isOcean) {
+              if (tile.isOcean()) {
                 images.push(renderer._getPreloadedImage('assets/terrain/ocean.gif'));
               }
-              else if (tile.isLand) {
+              else if (tile.isLand()) {
                 images.push(renderer._getPreloadedImage('assets/terrain/land.gif'));
               }
               else {
@@ -250,8 +250,8 @@ const BaseRenderer = class BaseRenderer {
 
           const images = [];
 
-          if (tile.isOcean) {
-            if (tile.isCoast) {
+          if (tile.isOcean()) {
+            if (tile.isCoast()) {
               const sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.gif'),
                 image = renderer._createPreloadCanvas(),
                 imageContext = image.getContext('2d'),
@@ -261,14 +261,15 @@ const BaseRenderer = class BaseRenderer {
                 // ocean tile. Starting with the tile to the left as the least significant bit and
                 // going clockwise
                 bitmask =
-                                (! tile.neighbours.w.isOcean ? 1 : 0) |
-                                (! tile.neighbours.nw.isOcean ? 2 : 0) |
-                                (! tile.neighbours.n.isOcean ? 4 : 0) |
-                                (! tile.neighbours.ne.isOcean ? 8 : 0) |
-                                (! tile.neighbours.e.isOcean ? 16 : 0) |
-                                (! tile.neighbours.se.isOcean ? 32 : 0) |
-                                (! tile.neighbours.s.isOcean ? 64 : 0) |
-                                (! tile.neighbours.sw.isOcean ? 128 : 0);
+                  (! tile.getNeighbour('n').isOcean() ? 4 : 0) |
+                  (! tile.getNeighbour('ne').isOcean() ? 8 : 0) |
+                  (! tile.getNeighbour('e').isOcean() ? 16 : 0) |
+                  (! tile.getNeighbour('se').isOcean() ? 32 : 0) |
+                  (! tile.getNeighbour('s').isOcean() ? 64 : 0) |
+                  (! tile.getNeighbour('sw').isOcean() ? 128 : 0) |
+                  (! tile.getNeighbour('w').isOcean() ? 1 : 0) |
+                  (! tile.getNeighbour('nw').isOcean() ? 2 : 0)
+              ;
 
               image.width = image.height = 16;
 
@@ -293,7 +294,7 @@ const BaseRenderer = class BaseRenderer {
               images.push(image);
 
               ['n', 'e', 's', 'w']
-                .filter((direction) => (tile.adjacent[direction].terrain.name === 'river'))
+                .filter((direction) => (tile.getAdjacent()[direction].terrain.name === 'river'))
                 .forEach((direction) => images.push(renderer._getPreloadedImage(`assets/terrain/river_mouth_${direction}.gif`)));
             }
 
@@ -304,7 +305,7 @@ const BaseRenderer = class BaseRenderer {
           else {
             if (tile.terrain.name === 'river') {
               const adjoining = ['n', 'e', 's', 'w']
-                .filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrain.name === tile.terrain.name)))
+                .filter((direction) => (tile.getAdjacent()[direction].isOcean() || (tile.getAdjacent()[direction].terrain.name === tile.terrain.name)))
                 .join('')
               ;
 
@@ -357,7 +358,7 @@ const BaseRenderer = class BaseRenderer {
 
                 otherImprovements.forEach((improvement) => {
                   if (improvement === 'road' && ! otherImprovements.includes('railroad')) {
-                    adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
+                    adjoining = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].filter((direction) => tile.getNeighbour(direction).improvements.includes('road'));
 
                     if (adjoining.length) {
                       adjoining.forEach((direction) => images.push(renderer._getPreloadedImage(`assets/improvements/${improvement}_${direction}.gif`)));
@@ -367,7 +368,7 @@ const BaseRenderer = class BaseRenderer {
                     }
                   }
                   else if (improvement === 'railroad') {
-                    adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
+                    adjoining = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].filter((direction) => tile.getNeighbour(direction).improvements.includes('railroad'));
 
                     if (adjoining.length) {
                       adjoining.forEach((direction) => images.push(renderer._getPreloadedImage(`assets/improvements/${improvement}_${direction}.gif`)));
@@ -398,7 +399,7 @@ const BaseRenderer = class BaseRenderer {
 
           if (tile.units.length) {
             if (! engine.currentPlayer || ! engine.currentPlayer.activeUnit || ! tile.units.includes(engine.currentPlayer.activeUnit)) {
-              let unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
+              let [unit] = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence === a.defence ? 0 : 1),
                 image = renderer._createPreloadCanvas(),
                 imageContext = image.getContext('2d'),
                 unitImage = renderer._getPreloadedImage(`assets/units/${unit.name}.gif`), // TODO: have each unit details as a component
@@ -526,7 +527,7 @@ const BaseRenderer = class BaseRenderer {
               const images = [];
 
               ['n', 'e', 's', 'w'].forEach((direction) => {
-                if (! tile.adjacent[direction].isVisible(player.id)) {
+                if (! tile.getAdjacent()[direction].isVisible(player.id)) {
                   images.push(renderer._getPreloadedImage(`assets/map/fog_${direction}.gif`));
                 }
               });
@@ -567,7 +568,7 @@ const BaseRenderer = class BaseRenderer {
               const images = [];
 
               ['n', 'e', 's', 'w'].forEach((direction) => {
-                if (! tile.adjacent[direction].isActivelyVisible(player.id)) {
+                if (! tile.getAdjacent()[direction].isActivelyVisible(player.id)) {
                   images.push(renderer._getPreloadedImage(`assets/map/fog_${direction}.gif`));
                 }
               });
@@ -967,7 +968,7 @@ BaseRenderer.Layer = class BaseLayer {
 
 global.renderer = new BaseRenderer();
 
-engine.on('start', () => global.renderer.init());
+engine.on('engine:start', () => global.renderer.init());
 
 engine.on('player-turn-start', (player) => {
   ['visibility', 'activeVisibility'].forEach((layer) => engine.emit('build-layer', layer));

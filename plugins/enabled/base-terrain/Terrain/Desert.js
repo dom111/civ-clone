@@ -1,14 +1,8 @@
-import {Land} from '../Types.js';
+import {Land} from '../../core-terrain/Types.js';
 
 export class Desert extends Land {
   movementCost = 1;
   special = [
-    {
-      name: 'oasis',
-      title: 'Oasis',
-      food: 2,
-      chance: .06,
-    },
     {
       name: 'oil',
       title: 'Oil',

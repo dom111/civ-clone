@@ -1,0 +1,18 @@
+{
+  "name": "core-terrain-improvements",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-rules",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Registry.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvement.js"
+    }
+  ]
+}

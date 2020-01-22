@@ -14,7 +14,7 @@ engine.on('city:captured', (capturedCity, player) => {
   capturedCity.size--;
 
   if (capturedCity.size > 0) {
-    capturedCity.player.cities = capturedCity.player.cities.filter((city) => (city !== capturedCity));
+    capturedCity.player.cities = capturedCity.player.cities.filter((city) => city !== capturedCity);
   }
   else {
     engine.emit('city:destroyed', capturedCity, player);
@@ -39,6 +39,7 @@ engine.on('city:created', (city) => {
 
 engine.on('city:shrink', (city) => {
   if (city.production + city.size < city.units.length) {
+    // TODO: rule
     city.units.splice(0, city.units.length - (city.production + city.size)).forEach((unit) => unit.disband());
   }
 });
