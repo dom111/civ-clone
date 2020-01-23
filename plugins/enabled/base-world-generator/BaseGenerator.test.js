@@ -1,4 +1,4 @@
-import Generator from './ContinentsGenerator.js';
+import Generator from './BaseGenerator.js';
 
 // __filename is undefined?
 import process from 'process';

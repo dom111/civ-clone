@@ -15,7 +15,7 @@ process.on('unhandledRejection', (error) => {
         .split(/=/, 2)
       ;
 
-      engine.setOption(key, value);
+      engine.setOption(key, arg.match(/=/) ? value : ! arg.match(/^--no-/));
     })
   ;
 

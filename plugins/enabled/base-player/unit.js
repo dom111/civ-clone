@@ -40,10 +40,11 @@ engine.on('unit:activate-next', (player) => {
   }
 });
 
-engine.on('unit:moved', (unit, from) => {
+engine.on('unit:moved', (unit, from, to) => {
   unit.applyVisibility();
 
   from.units = from.units.filter((tileUnit) => tileUnit !== unit);
+  to.units.push(unit);
 
   if (unit.movesLeft <= 0.1) {
     unit.active = false;

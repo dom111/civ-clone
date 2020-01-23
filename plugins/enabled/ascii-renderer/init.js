@@ -57,9 +57,7 @@ engine.on('turn:start', () => {
           player: tile.city.player.civilization.people,
           name: tile.city.name,
         },
-        // visible: true, // always show everything
-        // visible: observingPlayers.length ? tile.isVisible(observingPlayers[0]) : true, // only show what player 1 sees
-        visible: observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
+        visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
       }
     ))
       .map(
@@ -79,6 +77,10 @@ engine.on('turn:start', () => {
       )
       .join('')}${Math.abs(Time.year)} ${Time.year < 0 ? 'BC' : 'AD'} (${Time.turn}) [${observingPlayers.map((player) => `${player.civilization.nation}: ${player.cities.length} cit${player.cities.length === 1 ? 'y' : 'ies'} - ${player.units.length} unit${player.units.length === 1 ? '' : 's'}`).join(' / ')}]`
     );
+
+    if (engine.option('earlyExit')) {
+      throw new Error('earlyExit');
+    }
   }
 });
 

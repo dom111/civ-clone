@@ -1,7 +1,8 @@
-import NavalUnit from '../Types/NavalUnit.js';
+import NavalTransport from '../Types/NavalTransport.js';
 
-export class Trireme extends NavalUnit {
+export class Trireme extends NavalTransport {
   attack = 2;
+  capacity = 3;
   defence = 2;
   movement = 3;
   visibility = 1;

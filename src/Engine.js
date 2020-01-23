@@ -7,7 +7,6 @@ import saveJSON from './lib/saveJSON.js';
 
 export class Engine extends EventEmitter {
   #data = {};
-  #debug;
   #options = {};
   #paths = {};
   #pluginManager;
@@ -17,7 +16,7 @@ export class Engine extends EventEmitter {
     base = './',
     plugins = 'plugins',
     enabled = 'enabled',
-    settingsFile = 'settings.json'
+    settingsFile = 'settings.json',
   } = {}) {
     super();
 

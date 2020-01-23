@@ -14,15 +14,19 @@
     "components": [
         {
             "type": "script",
+            "file": "Types/NavalUnit.js"
+        },
+        {
+            "type": "script",
+            "file": "Types/NavalTransport.js"
+        },
+        {
+            "type": "script",
             "file": "Types/LandUnit.js"
         },
         {
             "type": "script",
             "file": "Types/FortifiableUnit.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/NavalUnit.js"
         },
         {
             "type": "script",

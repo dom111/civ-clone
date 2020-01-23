@@ -1,10 +1,9 @@
 import {Food, Production} from '../base-yields/Yields.js';
 import {Hills, Mountains, Oasis, Plains, River} from '../base-terrain/Terrains.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
-import {Militia, Settlers, Worker} from '../base-unit/Units.js';
+import {FortifiableUnit, Militia, NavalTransport, Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
-import FortifiableUnit from '../base-unit/Types/FortifiableUnit.js';
 import Unit from '../core-unit/Unit.js';
 
 export class SimpleAIPlayer extends AIPlayer {
@@ -235,7 +234,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
           const lastMoves = this.#lastUnitMoves.get(unit) || [];
 
-          if (lastMoves.includes(tile)) {
+          if (lastMoves.slice(-50).includes(tile)) {
             return score / 4;
           }
 
@@ -284,6 +283,14 @@ export class SimpleAIPlayer extends AIPlayer {
 
           if (item instanceof Unit) {
             const unit = item;
+
+            if (
+              unit instanceof NavalTransport &&
+              unit.hasCargo() &&
+              tile.getNeighbours().some((tile) => tile.isCoast())
+            ) {
+              unit.unload();
+            }
 
             if (unit instanceof Worker) {
               if (unit instanceof Settlers && this.#shouldBuildCity(tile)) {

@@ -20,7 +20,7 @@ engine.on('world:built', (map) => {
     usedStartSquares = []
   ;
 
-  let startingSquares = map.getBy((tile) => tile.terrain instanceof Land)
+  let startingSquares = engine.option('skipSort') ? map.getBy((tile) => tile.terrain instanceof Land) : map.getBy((tile) => tile.terrain instanceof Land)
     .sort((a, b) =>
       b.getSurroundingArea().score([[Food, 4], [Production, 2]]) -
         a.getSurroundingArea().score([[Food, 4], [Production, 2]])
@@ -60,12 +60,18 @@ engine.on('world:built', (map) => {
   }
 });
 
+engine.on('engine:start', () => {
+  console.log(`Game started. ${Rules.entries().length} rules in play.`);
+});
+
 engine.on('turn:start', () => {
   playersToAction.push(...players);
   currentPlayer = playersToAction.shift();
 
   players.forEach((player) => {
-    player.units.forEach((unit) => {
+    player.units
+      .sort((a, b) => a.waiting - b.waiting)
+      .forEach((unit) => {
       if (unit.busy > 0) {
         unit.busy--;
 

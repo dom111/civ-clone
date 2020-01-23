@@ -1,5 +1,5 @@
 import {Land, Water} from '../../core-terrain/Types.js';
-import {LandUnit, NavalUnit} from '../Units.js';
+import {LandUnit, NavalTransport, NavalUnit} from '../Units.js';
 import {Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
 // import AIPlayer from '../core-player/AIPlayer.js';
 import Criterion from '../../core-rules/Criterion.js';
@@ -18,18 +18,18 @@ Rules.register(new Rule(
   'unit:movement:validateUnitType',
   new OneCriteria(
     (unit, to) => unit instanceof LandUnit && (
-      // TODO: naval transport
-      to.terrain instanceof Land/* ||
+      to.terrain instanceof Land ||
       (
-        to.terrain instanceof Ocean &&
-        to.terrain.units.some((navalUnit) => unit.player === navalUnit.player && navalUnit.hasCapacity())
-      )*/
+        to.terrain instanceof Water &&
+        to.units.some((navalUnit) => unit.player === navalUnit.player && navalUnit instanceof NavalTransport && navalUnit.hasCapacity())
+      )
     ),
     (unit, to) => unit instanceof NavalUnit && (
       to.terrain instanceof Water || (to.city && to.city.player === unit.player)
     ),
     (unit) => unit.air
-  )));
+  )
+));
 Rules.register(new Rule(
   'unit:movement:hasEnoughMovesLeft',
   new Criterion((unit) => unit.movesLeft >= .1)
