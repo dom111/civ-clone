@@ -72,22 +72,22 @@ engine.on('turn:start', () => {
     player.units
       .sort((a, b) => a.waiting - b.waiting)
       .forEach((unit) => {
-      if (unit.busy > 0) {
-        unit.busy--;
+        if (unit.busy > 0) {
+          unit.busy--;
 
-        if (unit.busy === 0) {
-          if (unit.actionOnComplete) {
-            unit.actionOnComplete();
+          if (unit.busy === 0) {
+            if (unit.actionOnComplete) {
+              unit.actionOnComplete();
+            }
           }
         }
-      }
 
-      if (! unit.busy) {
-        unit.busy = false;
-        unit.active = true;
-        unit.movesLeft = unit.movement;
-      }
-    });
+        if (! unit.busy) {
+          unit.busy = false;
+          unit.active = true;
+          unit.movesLeft = unit.movement;
+        }
+      });
 
     player.cities.forEach((city) => {
       city.yields()

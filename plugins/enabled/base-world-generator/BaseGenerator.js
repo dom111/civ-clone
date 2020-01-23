@@ -42,7 +42,7 @@ export class IslandsGenerator extends BaseGenerator {
       toProcess = [],
       seedTile = Math.floor((this.height * this.width) * Math.random()),
       flagAsSeen = (id) => {
-        if (!(id in seen)) {
+        if (! (id in seen)) {
           seen[id] = 0;
         }
 
@@ -59,7 +59,7 @@ export class IslandsGenerator extends BaseGenerator {
     while (toProcess.length) {
       const currentTile = toProcess.shift();
 
-      if (!seen[currentTile] || seen[currentTile] < this.#maxIterations) {
+      if (! seen[currentTile] || seen[currentTile] < this.#maxIterations) {
         const distance = this.distanceFrom(seedTile, currentTile);
 
         if (
@@ -79,7 +79,7 @@ export class IslandsGenerator extends BaseGenerator {
     const [water, land] = [Water, Land]
       .map((type) => this.#map
         .filter((tile) => tile instanceof type)
-        .length,
+        .length
       )
     ;
 
@@ -128,22 +128,22 @@ export class IslandsGenerator extends BaseGenerator {
           .map((rule) => rule.process(TerrainType, this.#map))
           .forEach((distribution) => distribution.forEach(
             ({
-               cluster,
-               clusterChance = this.#clusterChance,
-               coverage,
-               fill = false,
-               from = 0,
-               path,
-               pathChance = this.#pathChance,
-               to = 1,
-             }) => {
+              cluster,
+              clusterChance = this.#clusterChance,
+              coverage,
+              fill = false,
+              from = 0,
+              path,
+              pathChance = this.#pathChance,
+              to = 1,
+            }) => {
               const validIndices = Object.keys(this.#map)
                 .filter((i) => this.#map[i] instanceof TerrainType.__proto__)
                 .filter((i) =>
                   (
                     i >= ((from * this.height) * this.width) &&
                     i <= ((to * this.height) * this.width)
-                  ),
+                  )
                 )
               ;
 
@@ -163,7 +163,7 @@ export class IslandsGenerator extends BaseGenerator {
 
                 if (cluster) {
                   const clusteredNeighbours = this.getNeighbours(currentIndex)
-                    .filter((index) => !(this.#map[index] instanceof TerrainType))
+                    .filter((index) => ! (this.#map[index] instanceof TerrainType))
                   ;
 
                   while (clusteredNeighbours.length) {
@@ -174,9 +174,9 @@ export class IslandsGenerator extends BaseGenerator {
                       max--;
 
                       this.getNeighbours(index)
-                        .filter((index) => !(this.#map[index] instanceof TerrainType) &&
+                        .filter((index) => ! (this.#map[index] instanceof TerrainType) &&
                           (this.#map[index] instanceof TerrainType.__proto__) &&
-                          !clusteredNeighbours.includes(index),
+                          ! clusteredNeighbours.includes(index)
                         )
                         .forEach((index) => clusteredNeighbours.push(index))
                       ;
@@ -190,7 +190,7 @@ export class IslandsGenerator extends BaseGenerator {
                   while (Math.random() > pathChance) {
                     const candidates = this.getNeighbours(index)
                       .filter((index) => (this.#map[index] instanceof TerrainType.__proto__) &&
-                        !(this.#map[index] instanceof TerrainType),
+                        ! (this.#map[index] instanceof TerrainType)
                       )
                     ;
 
@@ -201,7 +201,7 @@ export class IslandsGenerator extends BaseGenerator {
                   }
                 }
               }
-            },
+            }
           ))
         ;
       }))
