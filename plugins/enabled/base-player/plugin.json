@@ -10,6 +10,7 @@
         "core-civilization",
         "core-player",
         "core-rules",
+        "core-terrain",
         "core-turn-based-game",
         "core-unit",
         "core-world"

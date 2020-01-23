@@ -1,15 +1,17 @@
 import Time from '../core-turn-based-game/Time.js';
 
+const observingPlayers = [];
+
 let map;
 
 engine.on('world:built', (world) => map = world);
 
 engine.on('turn:start', () => {
   const showMap = true,
-    everyXTurns = 10
+    everyXTurns = 1
   ;
 
-  if (showMap && ((Time.turn % everyXTurns) === 1)) {
+  if (showMap && (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1))) {
     const lookup = {
       Babylonian: '\u001b[38;5;233;48;5;47m',
       English: '\u001b[38;5;88;48;5;255m',
@@ -42,7 +44,7 @@ engine.on('turn:start', () => {
     lookup.Cow = lookup.Shield = lookup.Grassland;
     lookup.Caribou = lookup.Tundra;
 
-    console.log(map.map.map((row) => row.map((tile) => (
+    console.log(`${map.getBy(() => true).map((tile) => (
       {
         terrain: tile.terrain.constructor.name,
         units: tile.units.map((unit) => (
@@ -55,18 +57,33 @@ engine.on('turn:start', () => {
           player: tile.city.player.civilization.people,
           name: tile.city.name,
         },
+        // visible: true, // always show everything
+        // visible: observingPlayers.length ? tile.isVisible(observingPlayers[0]) : true, // only show what player 1 sees
+        visible: observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
       }
-    )))
+    ))
       .map(
-        (row) => row.map((tile) => tile.city ?
-          `${lookup[tile.city.player]}#\u001b[0m` :
-          tile.units.length ?
-            `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
-            `${lookup[tile.terrain] || tile.terrain}${tile.terrain.substr(0, 1)}\u001b[0m`
+        (tile, i) => (
+          tile.visible ?
+            tile.city ?
+              `${lookup[tile.city.player]}#\u001b[0m` :
+              tile.units.length ?
+                `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
+                `${lookup[tile.terrain] || tile.terrain}${tile.terrain.substr(0, 1)}\u001b[0m` :
+            ' '
+        ) + (
+          (i % map.width) === (map.width - 1) ?
+            '\n' :
+            ''
         )
-          .join('')
       )
-      .join('\n'))
-    ;
+      .join('')}${Math.abs(Time.year)} ${Time.year < 0 ? 'BC' : 'AD'} (${Time.turn}) [${observingPlayers.map((player) => `${player.civilization.nation}: ${player.cities.length} cit${player.cities.length === 1 ? 'y' : 'ies'} - ${player.units.length} unit${player.units.length === 1 ? '' : 's'}`).join(' / ')}]`
+    );
+  }
+});
+
+engine.on('player:turn-start', (player) => {
+  if (! observingPlayers.includes(player)) {
+    observingPlayers.push(player);
   }
 });

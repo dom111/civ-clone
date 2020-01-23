@@ -24,10 +24,8 @@ export class Manager {
 
   // TODO: this is big, break it down into re-usable chunks
   get(pluginName) {
-    const debug = global.debug || false;
-
     if (! (pluginName in this.#plugins)) {
-      debug && console.log(`loading ${pluginName}`);
+      this.#engine.option('debug') && console.log(`loading ${pluginName}`);
 
       this.#plugins[pluginName] = promiseFactory(async (resolve, reject) => {
         try {
@@ -40,7 +38,7 @@ export class Manager {
 
           await fs.access(pluginJSONPath);
 
-          debug && console.log(`loading ${pluginName}'s dependencies`);
+          this.#engine.option('debug') && console.log(`loading ${pluginName}'s dependencies`);
 
           const pluginData = await loadJSON(pluginJSONPath),
             plugin = new Plugin({
@@ -63,13 +61,13 @@ export class Manager {
 
           const dependencies = await Promise.all(plugin.dependencies.map((dependency) => this.get(dependency)));
 
-          debug && console.log(`loading ${pluginName}'s components`);
+          this.#engine.option('debug') && console.log(`loading ${pluginName}'s components`);
 
           await Promise.all(
             plugin.components.map((component) => promiseFactory(async (resolve, reject) => {
               try {
                 await component.run(this.#context, (specifier) => {
-                  debug && console.log(`resolving ${specifier}`);
+                  this.#engine.option('debug') && console.log(`resolving ${specifier}`);
 
                   return promiseFactory(async (resolve, reject) => {
                     try {
@@ -102,35 +100,35 @@ export class Manager {
                         return reject(new TypeError(`${filePath}: '${componentName}' in '${dependencyName}' is '${typeof module}'. Aborting.`));
                       }
 
-                      debug && console.log(`resolved ${specifier}`);
+                      this.#engine.option('debug') && console.log(`resolved ${specifier}`);
 
                       resolve(result);
                     }
                     catch (e) {
-                      debug && console.log(`rejected ${specifier}`);
+                      this.#engine.option('debug') && console.log(`rejected ${specifier}`);
 
                       reject(e);
                     }
                   });
                 });
-                debug && console.log(`resolved ${plugin.name}/${component.file}`);
+                this.#engine.option('debug') && console.log(`resolved ${plugin.name}/${component.file}`);
 
                 resolve(component.result);
               }
               catch (e) {
-                debug && console.log(`rejected ${plugin.name}/${component.file}`);
+                this.#engine.option('debug') && console.log(`rejected ${plugin.name}/${component.file}`);
 
                 reject(e);
               }
             }))
           );
 
-          debug && console.log(`loading ${pluginName} complete`);
+          this.#engine.option('debug') && console.log(`loading ${pluginName} complete`);
 
           resolve(plugin);
         }
         catch (e) {
-          debug && console.log(`rejected ${pluginName}`);
+          this.#engine.option('debug') && console.log(`rejected ${pluginName}`);
           reject(e);
         }
       });
@@ -140,22 +138,20 @@ export class Manager {
   }
 
   load() {
-    const debug = global.debug || false;
-
     return promiseFactory(async (resolve, reject) => {
       try {
         const enabledPlugins = await fs.readdir(this.#engine.path('enabledPlugins')),
           pluginPromises = Promise.all(enabledPlugins.map((pluginName) => this.get(pluginName))),
-          timeoutId = debug && setTimeout(() => {
+          timeoutId = this.#engine.option('debug') && setTimeout(() => {
             console.log(enabledPlugins.map((pluginName) => [pluginName, this.get(pluginName)]));
           }, 500),
           loadedPlugins = await pluginPromises
         ;
 
         // This will show which plugins aren't loading.
-        debug && clearTimeout(timeoutId);
+        this.#engine.option('debug') && clearTimeout(timeoutId);
 
-        debug && console.log(loadedPlugins.map((plugin) => [plugin.name, plugin]));
+        this.#engine.option('debug') && console.log(loadedPlugins.map((plugin) => [plugin.name, plugin]));
 
         resolve(loadedPlugins);
       }

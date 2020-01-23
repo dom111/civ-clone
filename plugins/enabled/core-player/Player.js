@@ -13,13 +13,6 @@ export class Player {
     this.units = [];
 
     engine.emit('player:added', this);
-    engine.on('tile:seen', (tile) => {
-      if (! this.#seenTiles.includes(tile)) {
-        this.#seenTiles.push(tile);
-
-        engine.emit('player:visibility-changed', this);
-      }
-    });
   }
 
   get actions() {

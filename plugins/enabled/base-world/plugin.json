@@ -1,0 +1,13 @@
+{
+  "name": "base-world",
+  "dependencies": [
+    "core-world",
+    "core-world-generator"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

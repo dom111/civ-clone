@@ -11,7 +11,7 @@ import Tile from '../../core-world/Tile.js';
 
 Rules.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
 Rules.register(new Rule('unit:movement:isNeighbouringTile', new Criterion(
-  (unit, to) => to.isNeighbourOf(unit.tile)
+  (unit, to, from) => to.isNeighbourOf(from || unit.tile)
 )
 ));
 Rules.register(new Rule(
@@ -38,7 +38,7 @@ Rules.register(new Rule(
 // This is analogous to the original Civilization unit adjacency rules
 Rules.register(new Rule(
   'unit:movement:unitAdjacencyRules',
-  new Criterion((unit, to) => ! unit.tile.getNeighbours()
+  new Criterion((unit, to, from) => ! (from || unit.tile).getNeighbours()
     .filter(
       (tile) => tile.units.length > 0 &&
         tile.units[0].player !== unit.player
@@ -52,13 +52,13 @@ Rules.register(new Rule(
 Rules.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));
 Rules.register(new Rule(
   'unit:movementCost:withRoad',
-  new Criterion((unit) => unit.tile.improvements.some((improvement) => improvement instanceof Road)),
+  new Criterion((unit, to, from) => (from || unit.tile).improvements.some((improvement) => improvement instanceof Road)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Road)),
   new Effect(() => 1 / 3)
 ));
 Rules.register(new Rule(
   'unit:movementCost:withRailroad',
-  new Criterion((unit) => unit.tile.improvements.some((improvement) => improvement instanceof Railroad)),
+  new Criterion((unit, to, from) => (from || unit.tile).improvements.some((improvement) => improvement instanceof Railroad)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Railroad)),
   // TODO: need to also protect against goto etc, like classic Civ does, although I'd rather that was done by evaluating
   //  the moves and if a loop is detected auto-cancelling - this is pretty primitive.

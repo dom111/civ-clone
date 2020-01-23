@@ -17,13 +17,11 @@ export class Engine extends EventEmitter {
     base = './',
     plugins = 'plugins',
     enabled = 'enabled',
-    settingsFile = 'settings.json',
-    debug = !! global.debug,
+    settingsFile = 'settings.json'
   } = {}) {
     super();
 
     this.#pluginManager = new Manager(this);
-    this.#debug = debug;
 
     // set up useful paths
     this.path('base', base);
@@ -42,7 +40,7 @@ export class Engine extends EventEmitter {
   }
 
   emit(event, ...args) {
-    this.#debug && console.log(`${event}: ${args}`);
+    this.option('debug') && console.log(`${event}: ${args}`);
 
     super.emit(event, ...args);
   }

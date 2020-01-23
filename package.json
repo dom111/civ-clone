@@ -11,7 +11,9 @@
         "jsonlint": "find ./ -name \\*.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -t -n1 jsonlint -q",
         "lint": "npm run jsonlint && npm run eslint",
         "start": "node --experimental-vm-modules ./boot.js",
-        "start:debug": "node --inspect --experimental-vm-modules ./boot.js"
+        "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
+        "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
+        "test": "find -type f -name '*.test.js' -and -not -wholename '*node_modules*' | xargs -n1 node"
     },
     "author": "dom111 <dom111@users.noreply.github.com>",
     "repository": {
@@ -29,7 +31,7 @@
     ],
     "husky": {
         "hooks": {
-            "pre-commit": "npm run eslint:fix"
+            "pre-commit": "npm run eslint:fix && npm run test"
         }
     },
     "dependencies": {},

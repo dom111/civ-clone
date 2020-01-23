@@ -86,16 +86,25 @@ export class Tile {
     ;
   }
 
-  // this is used to help with rendering contiguous terrain types
-  get adjacentTerrain() {
-    return ['n', 'e', 's', 'w']
-      .filter((position) => this.getNeighbour(position).terrain instanceof this.terrain.constructor)
-      .join('')
-    ;
-  }
-
   distanceFrom(tile) {
-    return Math.hypot(this.x - tile.x, this.y - tile.y);
+    const [shortestDistance] = [
+      [-1, 1],
+      [-1, 0],
+      [-1, -1],
+      [0, 1],
+      [0, 0],
+      [0, -1],
+      [1, 1],
+      [1, 0],
+      [1, -1],
+    ]
+      .map(([x, y]) => [x * this.map.width, y * this.map.height])
+      .map(([x, y]) => [(this.x - tile.x) + x, (this.y - tile.y) + y])
+      .map((coords) => Math.hypot(...coords))
+      .sort((a, b) => a - b)
+    ;
+
+    return shortestDistance;
   }
 
   isOcean() {
@@ -155,7 +164,9 @@ export class Tile {
 
       return tileYield.value * weight;
     })
-      .reduce((total, value) => total + value, 0)
+      .reduce((total, value) => total + value, 0) *
+      // Ensure we have some of each scored yield
+      (values.every(([YieldType, value]) => (value < 1) || yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0)
     ;
   }
 

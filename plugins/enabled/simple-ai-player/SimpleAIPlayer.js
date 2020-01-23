@@ -42,11 +42,12 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldBuildCity = (tile) => {
-    return (tile.getSurroundingArea()
-      .score([
-        [Food, 4],
-        [Production, 2],
-      ]) >= 150) &&
+    return (tile.isLand() &&
+      tile.getSurroundingArea()
+        .score([
+          [Food, 4],
+          [Production, 2],
+        ]) >= 150) &&
       ! tile.getSurroundingArea(4)
         .cities()
         .length
@@ -54,9 +55,11 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #unitTargetData = new Map();
+  #lastUnitMoves = new Map();
 
   #citiesToLiberate = [];
   #playersToAttack = [];
+  #goodSitesForCities = [];
 
   constructor() {
     super();
@@ -119,87 +122,106 @@ export class SimpleAIPlayer extends AIPlayer {
     while (unit.active && unit.movesLeft > 0) {
       const currentTile = unit.tile,
         scoreMove = (tile) => {
+          if (! unit.validateMove(tile)) {
+            return -1;
+          }
+
+          let score = 0;
+
           // TODO: consider appending all the positives to the score instead of returning immediately
           if (unit instanceof Worker) {
             if (unit instanceof Settlers && this.#shouldBuildCity(tile)) {
-              return 16;
+              score += 16;
             }
 
             if (this.#shouldMine(tile)) {
-              return 4;
+              score += 4;
             }
 
             if (this.#shouldIrrigate(tile)) {
-              return 8;
+              score += 8;
             }
 
             if (this.#shouldRoad(tile)) {
-              return 2;
+              score += 2;
+            }
+
+            this.#goodSitesForCities = this.#goodSitesForCities.filter((tile) => this.#shouldBuildCity(tile));
+
+            if (this.#goodSitesForCities.length) {
+              this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
             }
           }
 
           if (tile.city && tile.city.player !== this && ! tile.units.length) {
-            return 16;
+            score += 16;
           }
 
           const target = this.#unitTargetData.get(unit);
 
           if (target) {
             if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-              return 14;
+              score += 14;
             }
           }
 
-          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.finalAttack() > tile.units[0].finalDefence()) {
-            return 12;
+          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.attack > tile.units[0].defence) {
+            score += 12;
           }
 
           // add some jeopardy
-          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.finalAttack() > (tile.units[0].finalDefence() - .5)) {
-            return 8;
+          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.attack > (tile.units[0].defence - .5)) {
+            score += 8;
           }
 
           const discoverableTiles = tile.getNeighbours()
-            .some((tile) => ! tile.isVisible(this))
+            .filter((neighbouringTile) => unit.validateMove(neighbouringTile, tile) && ! neighbouringTile.isVisible(this))
+            .length
           ;
 
-          if (discoverableTiles > 0) {
-            return discoverableTiles * 3;
+          if (discoverableTiles) {
+            score += discoverableTiles * 3;
           }
 
-          if (
-            unit.attack > 0 &&
-            this.#citiesToLiberate.length > 0
-          ) {
-            const target = this.#citiesToLiberate[Math.floor(this.#citiesToLiberate.length * Math.random())].tile;
+          if (unit.defence > 0 && unit instanceof FortifiableUnit) {
+            const undefendedCities = this.cities
+              .filter((city) => ! city.tile.units.length)
+            ;
 
-            this.#unitTargetData.set(unit, target);
-
-            if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-              return 16;
+            if (undefendedCities.length > 0) {
+              this.#unitTargetData.set(unit, undefendedCities[Math.floor(undefendedCities.length * Math.random())].tile);
             }
           }
 
-          const attackableCityTiles = this.seenTiles
-            .cities()
-            .filter((city) => this.#playersToAttack.includes(city.player))
-            .map(({tile}) => tile)
-          ;
+          if (unit.attack > 0) {
+            if (this.#citiesToLiberate.length > 0) {
+              const target = this.#citiesToLiberate[Math.floor(this.#citiesToLiberate.length * Math.random())].tile;
 
-          if (unit.attack > 0 && attackableCityTiles.length) {
-            const target = attackableCityTiles[Math.floor(attackableCityTiles.length * Math.random())];
+              this.#unitTargetData.set(unit, target);
 
-            this.#unitTargetData.set(unit, target);
+              if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
+                score += 16;
+              }
+            }
 
-            if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-              return 2;
+            const attackableCityTiles = this.seenTiles
+              .cities()
+              .filter((city) => this.#playersToAttack.includes(city.player))
+              .map(({tile}) => tile)
+            ;
+
+            if (attackableCityTiles.length) {
+              const target = attackableCityTiles[Math.floor(attackableCityTiles.length * Math.random())];
+
+              this.#unitTargetData.set(unit, target);
+
+              if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
+                score += 2;
+              }
             }
           }
 
-          if (
-            (tile.city && tile.city.player !== this) ||
-            (tile.units.length && tile.units[0].player !== this)
-          ) {
+          if (tile.units.length && tile.units[0].player !== this) {
             if (unit.attack <= 0) {
               return -1;
             }
@@ -208,13 +230,19 @@ export class SimpleAIPlayer extends AIPlayer {
               [defender] = enemies.sort((a, b) => b.defence - a.defence)
             ;
 
-            return unit.attack - defender.defense;
+            return unit.attack - defender.defence;
           }
 
-          return 0;
+          const lastMoves = this.#lastUnitMoves.get(unit) || [];
+
+          if (lastMoves.includes(tile)) {
+            return score / 4;
+          }
+
+          return score * 4;
         },
         [target] = currentTile.getNeighbours()
-          .filter((tile) => unit.validateMove(tile) && scoreMove(tile) > -1)
+          .filter((tile) => scoreMove(tile) > -1)
           .sort((a, b) => ((
             scoreMove(b) - scoreMove(a)
             // if there's no difference, sort randomly
@@ -222,6 +250,12 @@ export class SimpleAIPlayer extends AIPlayer {
       ;
 
       if (target) {
+        const lastMoves = this.#lastUnitMoves.get(unit) || [];
+
+        lastMoves.push(target);
+
+        this.#lastUnitMoves.set(unit, lastMoves);
+
         unit.move(target);
       }
       else {
@@ -302,6 +336,8 @@ export class SimpleAIPlayer extends AIPlayer {
             }
           }
           else {
+            console.log(`Can't process: '${item}'`);
+
             break;
           }
         }

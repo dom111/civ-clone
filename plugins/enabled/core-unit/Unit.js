@@ -107,9 +107,9 @@ export class Unit {
   }
 
   // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
-  validateMove(to) {
+  validateMove(to, from) {
     return Rules.get('unit:movement')
-      .every((rule) => rule.validate(this, this.tile.get(to)))
+      .every((rule) => rule.validate(this, this.tile.get(to), from))
     ;
   }
 

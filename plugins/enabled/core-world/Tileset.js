@@ -8,14 +8,12 @@ export class Tileset {
   }
 
   static fromSurrounding(tile, radius = 2) {
-    const tileX = tile.x,
-      tileY = tile.y,
-      seen = [],
-      gen = (max) => {
+    const seen = [],
+      gen = (radius) => {
         const pairs = [];
 
-        for (let x = tileX - max; x <= tileX + max; x++) {
-          for (let y = tileY - max; y <= tileY + max; y++) {
+        for (let x = tile.x - radius; x <= tile.x + radius; x++) {
+          for (let y = tile.y - radius; y <= tile.y + radius; y++) {
             pairs.push([x, y]);
           }
         }

@@ -19,10 +19,6 @@
         {
             "type": "script",
             "file": "World.js"
-        },
-        {
-            "type": "script",
-            "file": "init.js"
         }
     ]
 }

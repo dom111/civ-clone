@@ -1,0 +1,16 @@
+{
+  "name": "core-world-generator",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Generator.js"
+    },
+    {
+      "type": "script",
+      "file": "Registry.js"
+    }
+  ]
+}
