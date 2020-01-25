@@ -46,6 +46,12 @@ export class Unit {
     engine.emit('unit:created', this);
   }
 
+  activate() {
+    this.active = true;
+    this.busy = false;
+    this.status = null;
+  }
+
   applyVisibility() {
     this.#tile.getSurroundingArea(this.visibility)
       .forEach((tile) => engine.emit('tile:seen', tile, this.#player))
@@ -188,7 +194,7 @@ export class Unit {
     return this.#player;
   }
 
-  // TODO: make it so that a combat free version of the game can
+  // TODO: make it so that a combat free version of the game can exist
   resolveCombat(units) {
     const [defender] = units.sort((a,b) => b.finalDefence() - a.finalDefence());
 
@@ -211,7 +217,8 @@ export class Unit {
 
   sleep() {
     engine.emit('unit:action', this, 'sleep');
-    this.busy = true;
+    this.active = false;
+    this.busy = Infinity;
     this.action = 'sleep';
   }
 
@@ -223,8 +230,7 @@ export class Unit {
     this.#tile = tile;
   }
 
-  // TODO: break this down, so moves can be validated and allow for extension (capturing settlers, barbarian 'leaders' etc)
-  validateMove(to, from) {
+  validateMove(to, from = this.tile) {
     return Rules.get('unit:movement')
       .every((rule) => rule.validate(this, this.tile.get(to), from))
     ;

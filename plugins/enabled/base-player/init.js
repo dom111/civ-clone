@@ -57,6 +57,11 @@ engine.on('world:built', (map) => {
       player,
       tile: startingSquare,
     });
+
+    // ensure surrounding tiles are visible
+    startingSquare.getSurroundingArea()
+      .forEach((tile) => engine.emit('tile:seen', tile, player))
+    ;
   }
 });
 
@@ -82,10 +87,11 @@ engine.on('turn:start', () => {
           }
         }
 
+        unit.movesLeft = unit.movement;
+
         if (! unit.busy) {
           unit.busy = false;
           unit.active = true;
-          unit.movesLeft = unit.movement;
         }
       });
 
@@ -143,6 +149,10 @@ engine.on('turn:start', () => {
   });
 
   engine.emit('player:turn-start', currentPlayer);
+});
+
+engine.on('player:defeated', (player) => {
+  players.splice(players.indexOf(player), 1);
 });
 
 engine.on('player:turn-end', async () => {

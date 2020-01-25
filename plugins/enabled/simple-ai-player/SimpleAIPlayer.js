@@ -1,45 +1,13 @@
 import {Food, Production} from '../base-yields/Yields.js';
+import {FortifiableUnit, LandUnit, Militia, NavalTransport, NavalUnit, Settlers, Worker} from '../base-unit/Units.js';
 import {Hills, Mountains, Oasis, Plains, River} from '../base-terrain/Terrains.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
-import {FortifiableUnit, Militia, NavalTransport, Settlers, Worker} from '../base-unit/Units.js';
+import {Land, Water} from '../core-terrain/Types.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
 import Unit from '../core-unit/Unit.js';
 
 export class SimpleAIPlayer extends AIPlayer {
-  #shouldIrrigate = (tile) => {
-    return [Oasis, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
-      // TODO: doing this a lot already, need to make improvements a value object with a helper method
-      ! tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-      tile.getSurroundingArea().some((tile) => tile.city && tile.city.player === this) &&
-      [...tile.getAdjacent(), tile]
-        .some((tile) => tile.terrain instanceof River ||
-          tile.isCoast() ||
-          (
-            tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-            ! tile.city
-          )
-        )
-    ;
-  };
-
-  #shouldMine = (tile) => {
-    return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
-      ! tile.improvements.some((improvement) => improvement instanceof Mine) &&
-      tile.getSurroundingArea().some(
-        (tile) => tile.city && tile.city.player === this
-      );
-  };
-
-  #shouldRoad = (tile) => {
-    return Road.availableOn(tile.terrain) &&
-      ! tile.improvements.some((improvement) => improvement instanceof Road) &&
-      tile.getSurroundingArea().some(
-        (tile) => tile.city && tile.city.player === this
-      )
-    ;
-  };
-
   #shouldBuildCity = (tile) => {
     return (tile.isLand() &&
       tile.getSurroundingArea()
@@ -53,39 +21,55 @@ export class SimpleAIPlayer extends AIPlayer {
     ;
   };
 
-  #unitTargetData = new Map();
-  #lastUnitMoves = new Map();
+  #shouldIrrigate = (tile) => {
+    return [Oasis, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+      // TODO: doing this a lot already, need to make improvements a value object with a helper method
+      ! tile.improvements
+        .some((improvement) => improvement instanceof Irrigation) &&
+      tile.getSurroundingArea()
+        .some((tile) => tile.city && tile.city.player === this) &&
+      [...tile.getAdjacent(), tile]
+        .some((tile) => tile.terrain instanceof River ||
+          tile.isCoast() ||
+          (
+            tile.improvements
+              .some((improvement) => improvement instanceof Irrigation) &&
+            ! tile.city
+          )
+        )
+    ;
+  };
 
-  #citiesToLiberate = [];
-  #playersToAttack = [];
+  #shouldMine = (tile) => {
+    return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+      ! tile.improvements
+        .some((improvement) => improvement instanceof Mine) &&
+      tile.getSurroundingArea()
+        .some((tile) => tile.city && tile.city.player === this)
+    ;
+  };
+
+  #shouldRoad = (tile) => {
+    return Road.availableOn(tile.terrain) &&
+      ! tile.improvements
+        .some((improvement) => improvement instanceof Road) &&
+      tile.getSurroundingArea()
+        .some((tile) => tile.city && tile.city.player === this)
+    ;
+  };
+
+  #lastUnitMoves = new Map();
+  #unitTargetData = new Map();
+
+  #enemyCitiesToAttack = [];
+  #enemyUnitsToAttack = [];
   #goodSitesForCities = [];
+  #landTilesToExplore = [];
+  #seaTilesToExplore = [];
+  #undefendedCities = [];
 
   constructor() {
     super();
-
-    engine.on('city:captured', (city, player) => {
-      if (city.originalPlayer === this) {
-        if (! this.#citiesToLiberate.includes(city)) {
-          this.#citiesToLiberate.push(city);
-        }
-
-        if (! this.#playersToAttack.includes(player)) {
-          this.#playersToAttack.push(player);
-        }
-      }
-
-      if (this.#citiesToLiberate.includes(city) && player === this) {
-        this.#citiesToLiberate.splice(this.#citiesToLiberate.indexOf(city), 1);
-      }
-    });
-
-    engine.on('unit:destroyed', (unit, player) => {
-      if (unit.player === this) {
-        if (! this.#playersToAttack.includes(player)) {
-          this.#playersToAttack.push(player);
-        }
-      }
-    });
 
     engine.on('city:grow', (city) => {
       if (city.player === this) {
@@ -144,80 +128,67 @@ export class SimpleAIPlayer extends AIPlayer {
             if (this.#shouldRoad(tile)) {
               score += 2;
             }
+          }
 
-            this.#goodSitesForCities = this.#goodSitesForCities.filter((tile) => this.#shouldBuildCity(tile));
+          if (
+            unit instanceof NavalTransport &&
+            unit.hasCapacity() &&
+            tile.units.length &&
+            tile.units[0].player === this
+          ) {
+            score += 10;
+          }
 
-            if (this.#goodSitesForCities.length) {
-              this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
-            }
+          if (
+            unit instanceof NavalTransport &&
+            unit.hasCargo() &&
+            tile.isCoast() &&
+            tile.terrain instanceof Water
+          ) {
+            score += 10;
+          }
+
+          if (
+            tile.units.length &&
+            tile.units[0].player === this &&
+            tile.units.some((unit) => unit instanceof NavalTransport && unit.hasCapacity())
+          ) {
+            score += 10;
           }
 
           if (tile.city && tile.city.player !== this && ! tile.units.length) {
             score += 16;
           }
 
-          const target = this.#unitTargetData.get(unit);
-
-          if (target) {
-            if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-              score += 14;
-            }
-          }
-
-          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.attack > tile.units[0].defence) {
+          if (
+            currentTile.city &&
+            tile.units.length &&
+            tile.units[0].player !== this &&
+            unit.attack > tile.units[0].defence
+          ) {
             score += 12;
           }
 
           // add some jeopardy
-          if (currentTile.city && tile.units.length && tile.units[0].player !== this && unit.attack > (tile.units[0].defence - .5)) {
+          if (
+            currentTile.city &&
+            tile.units.length &&
+            tile.units[0].player !== this &&
+            unit.attack > (tile.units[0].defence - .5)
+          ) {
             score += 8;
           }
 
           const discoverableTiles = tile.getNeighbours()
-            .filter((neighbouringTile) => unit.validateMove(neighbouringTile, tile) && ! neighbouringTile.isVisible(this))
+            .filter(
+              (neighbouringTile) => unit.validateMove(neighbouringTile, tile) &&
+                ! neighbouringTile.isVisible(this)
+            )
             .length
           ;
 
           if (discoverableTiles) {
             score += discoverableTiles * 3;
-          }
-
-          if (unit.defence > 0 && unit instanceof FortifiableUnit) {
-            const undefendedCities = this.cities
-              .filter((city) => ! city.tile.units.length)
-            ;
-
-            if (undefendedCities.length > 0) {
-              this.#unitTargetData.set(unit, undefendedCities[Math.floor(undefendedCities.length * Math.random())].tile);
-            }
-          }
-
-          if (unit.attack > 0) {
-            if (this.#citiesToLiberate.length > 0) {
-              const target = this.#citiesToLiberate[Math.floor(this.#citiesToLiberate.length * Math.random())].tile;
-
-              this.#unitTargetData.set(unit, target);
-
-              if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-                score += 16;
-              }
-            }
-
-            const attackableCityTiles = this.seenTiles
-              .cities()
-              .filter((city) => this.#playersToAttack.includes(city.player))
-              .map(({tile}) => tile)
-            ;
-
-            if (attackableCityTiles.length) {
-              const target = attackableCityTiles[Math.floor(attackableCityTiles.length * Math.random())];
-
-              this.#unitTargetData.set(unit, target);
-
-              if (tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-                score += 2;
-              }
-            }
           }
 
           if (tile.units.length && tile.units[0].player !== this) {
@@ -232,13 +203,19 @@ export class SimpleAIPlayer extends AIPlayer {
             return unit.attack - defender.defence;
           }
 
-          const lastMoves = this.#lastUnitMoves.get(unit) || [];
+          const target = this.#unitTargetData.get(unit);
 
-          if (lastMoves.slice(-50).includes(tile)) {
-            return score / 4;
+          if (target && tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
+            score += 14;
           }
 
-          return score * 4;
+          const lastMoves = this.#lastUnitMoves.get(unit) || [];
+
+          if (! lastMoves.slice(-50).includes(tile)) {
+            return score * 4;
+          }
+
+          return score;
         },
         [target] = currentTile.getNeighbours()
           .filter((tile) => scoreMove(tile) > -1)
@@ -249,7 +226,13 @@ export class SimpleAIPlayer extends AIPlayer {
       ;
 
       if (target) {
-        const lastMoves = this.#lastUnitMoves.get(unit) || [];
+        const lastMoves = this.#lastUnitMoves.get(unit) || [],
+          currentTarget = this.#unitTargetData.get(unit)
+        ;
+
+        if (currentTarget === target) {
+          this.#unitTargetData.delete(unit);
+        }
 
         lastMoves.push(target);
 
@@ -263,13 +246,53 @@ export class SimpleAIPlayer extends AIPlayer {
     }
   }
 
+  preProcessTurn() {
+    this.#enemyCitiesToAttack.splice(0);
+    this.#enemyUnitsToAttack.splice(0);
+    this.#goodSitesForCities.splice(0);
+    this.#landTilesToExplore.splice(0);
+    this.#seaTilesToExplore.splice(0);
+    this.#undefendedCities.splice(0);
+
+    this.seenTiles
+      .filter((tile) => ! [...this.#unitTargetData.values()].includes(tile))
+      .forEach((tile) => {
+        if (tile.terrain instanceof Land && tile.getNeighbours().some((tile) => ! tile.isVisible(this))) {
+          this.#landTilesToExplore.push(tile);
+        }
+        else if (tile.terrain instanceof Water && tile.getNeighbours().some((tile) => ! tile.isVisible(this))) {
+          this.#seaTilesToExplore.push(tile);
+        }
+        // TODO: if diplomacy exists, check diplomatic status with player
+        else if (tile.units.length && tile.units[0].player !== this) {
+          this.#enemyUnitsToAttack.push(tile);
+        }
+        else if (tile.city && tile.city.player !== this) {
+          this.#enemyCitiesToAttack.push(tile);
+        }
+        else if (this.#shouldBuildCity(tile)) {
+          this.#goodSitesForCities.push(tile);
+        }
+      })
+    ;
+
+    this.cities
+      .forEach((city) => {
+        if (! city.tile.units.length) {
+          this.#undefendedCities.push(city.tile);
+        }
+      });
+  }
+
   takeTurn() {
     return promiseFactory((resolve, reject) => {
       try {
         let loopCheck = 0;
 
+        this.preProcessTurn();
+
         while (this.actions.length) {
-          if (loopCheck++ > 1e4) {
+          if (loopCheck++ > 1e3) {
             // TODO: raise warning - notification?
             // reject(new Error(`SimpleAIPlayer: Couldn't pick an action to do.`));
             resolve();
@@ -282,12 +305,21 @@ export class SimpleAIPlayer extends AIPlayer {
           ;
 
           if (item instanceof Unit) {
-            const unit = item;
+            const unit = item,
+              target = this.#unitTargetData.get(unit)
+            ;
 
             if (
               unit instanceof NavalTransport &&
               unit.hasCargo() &&
-              tile.getNeighbours().some((tile) => tile.isCoast())
+              tile.getNeighbours()
+                .some((tile) => tile.terrain instanceof Land && tile.isCoast()) &&
+              unit.cargo
+                .some((unit) => ! this.#lastUnitMoves
+                  .get(unit)
+                  .slice(-50)
+                  .includes(tile)
+                )
             ) {
               unit.unload();
             }
@@ -306,6 +338,10 @@ export class SimpleAIPlayer extends AIPlayer {
                 unit.road();
               }
               else {
+                if (this.#goodSitesForCities.length) {
+                  this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
+                }
+
                 this.moveUnit(unit);
               }
             }
@@ -319,6 +355,62 @@ export class SimpleAIPlayer extends AIPlayer {
                 unit.fortify();
               }
               else {
+                if (! target) {
+                  // TODO: all the repetition - sort this.
+                  if (unit instanceof LandUnit && unit.defence > 0 && unit instanceof FortifiableUnit && this.#undefendedCities.length > 0) {
+                    const [targetTile] = this.#undefendedCities
+                      .sort((a, b) => a.distanceFrom(unit.tile) - b.distanceFrom(unit.tile))
+                    ;
+
+                    this.#undefendedCities.splice(this.#undefendedCities.indexOf(targetTile), 1);
+
+                    this.#unitTargetData.set(unit, targetTile);
+                  }
+
+                  else if (unit.attack > 0 && this.#enemyUnitsToAttack.length > 0) {
+                    const [targetTile] = this.#enemyUnitsToAttack
+                      .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
+                        (unit instanceof NavalUnit && tile.terrain instanceof Water)
+                      )
+                      .sort((a, b) => a.distanceFrom(unit.tile) - b.distanceFrom(unit.tile))
+                    ;
+
+                    this.#enemyUnitsToAttack.splice(this.#enemyUnitsToAttack.indexOf(targetTile), 1);
+
+                    this.#unitTargetData.set(unit, targetTile);
+                  }
+
+                  else if (unit instanceof LandUnit && unit.attack > 0 && this.#enemyCitiesToAttack.length > 0) {
+                    const [targetTile] = this.#enemyCitiesToAttack
+                      .sort((a, b) => a.distanceFrom(unit.tile) - b.distanceFrom(unit.tile))
+                    ;
+
+                    this.#enemyCitiesToAttack.splice(this.#enemyCitiesToAttack.indexOf(targetTile), 1);
+
+                    this.#unitTargetData.set(unit, targetTile);
+                  }
+
+                  else if (unit instanceof LandUnit && this.#landTilesToExplore.length > 0) {
+                    const [targetTile] = this.#landTilesToExplore
+                      .sort((a, b) => a.distanceFrom(unit.tile) - b.distanceFrom(unit.tile))
+                    ;
+
+                    this.#landTilesToExplore.splice(this.#landTilesToExplore.indexOf(targetTile), 1);
+
+                    this.#unitTargetData.set(unit, targetTile);
+                  }
+
+                  else if (unit instanceof NavalUnit && this.#seaTilesToExplore.length > 0) {
+                    const [targetTile] = this.#seaTilesToExplore
+                      .sort((a, b) => a.distanceFrom(unit.tile) - b.distanceFrom(unit.tile))
+                    ;
+
+                    this.#seaTilesToExplore.splice(this.#seaTilesToExplore.indexOf(targetTile), 1);
+
+                    this.#unitTargetData.set(unit, targetTile);
+                  }
+                }
+
                 this.moveUnit(unit);
               }
             }
@@ -331,7 +423,7 @@ export class SimpleAIPlayer extends AIPlayer {
               city.build(Militia);
             }
             // Always Build Cities
-            else if (! city.units.filter((unit) => unit instanceof Settlers)) {
+            else if (! city.units.some((unit) => unit instanceof Settlers)) {
               city.build(Settlers);
             }
             else {

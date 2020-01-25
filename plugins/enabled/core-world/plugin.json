@@ -10,6 +10,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Path.js"
+        },
+        {
+            "type": "script",
             "file": "Tileset.js"
         },
         {

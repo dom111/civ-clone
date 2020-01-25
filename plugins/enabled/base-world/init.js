@@ -5,11 +5,11 @@ engine.on('engine:build', () => {
   const availableGenerators = WorldGeneratorRegistry.entries(),
     Generator = availableGenerators[Math.floor(availableGenerators.length * Math.random())],
     generatorOptions = {
-      landCoverage: .3 + (Math.random() * .4),
-      landMassReductionScale: Math.random() * 5,
-      // chanceToBecomeLand: Math.random() / 15,
+      landCoverage: parseFloat(engine.option('landCoverage', .3 + (Math.random() * .4)), 10),
+      landMassReductionScale: parseFloat(engine.option('landMassReductionScale', Math.random() * 5), 10),
+      // chanceToBecomeLand: parseInt(engine.option('chanceToBecomeLand', Math.random() / 15), 10),
       // smoothness
-      maxIterations: 5,
+      maxIterations: parseInt(engine.option('maxIterations', 5), 10),
     },
     generator = new Generator({
       ...generatorOptions,

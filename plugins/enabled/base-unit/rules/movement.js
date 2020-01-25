@@ -10,10 +10,15 @@ import Rules from '../../core-rules/Rules.js';
 import Tile from '../../core-world/Tile.js';
 
 Rules.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
-Rules.register(new Rule('unit:movement:isNeighbouringTile', new Criterion(
-  (unit, to, from) => to.isNeighbourOf(from || unit.tile)
-)
-));
+Rules.register(new Rule('unit:movement:isNeighbouringTile', new OneCriteria(
+  new Criterion(
+    (unit, to, from) => to.isNeighbourOf(from || unit.tile)
+  ),
+  // This rule doesn't need to be met if we're being transported.
+  new Criterion(
+    (unit, to) => to.units.includes(unit.transport)
+  )
+)));
 Rules.register(new Rule(
   'unit:movement:validateUnitType',
   new OneCriteria(
@@ -21,7 +26,16 @@ Rules.register(new Rule(
       to.terrain instanceof Land ||
       (
         to.terrain instanceof Water &&
-        to.units.some((navalUnit) => unit.player === navalUnit.player && navalUnit instanceof NavalTransport && navalUnit.hasCapacity())
+        (
+          to.units.some((navalUnit) => (
+            unit.player === navalUnit.player &&
+            navalUnit instanceof NavalTransport &&
+            (
+              navalUnit.hasCapacity() ||
+              navalUnit === unit.transport
+            )
+          ))
+        )
       )
     ),
     (unit, to) => unit instanceof NavalUnit && (
@@ -32,7 +46,14 @@ Rules.register(new Rule(
 ));
 Rules.register(new Rule(
   'unit:movement:hasEnoughMovesLeft',
-  new Criterion((unit) => unit.movesLeft >= .1)
+  new OneCriteria(
+    new Criterion((unit) => unit.movesLeft >= .1),
+
+    // This rule doesn't need to be met if we're being transported.
+    new Criterion(
+      (unit, to) => to.units.includes(unit.transport)
+    )
+  )
 ));
 
 // This is analogous to the original Civilization unit adjacency rules
@@ -63,5 +84,11 @@ Rules.register(new Rule(
   // TODO: need to also protect against goto etc, like classic Civ does, although I'd rather that was done by evaluating
   //  the moves and if a loop is detected auto-cancelling - this is pretty primitive.
   // new Criterion((unit) => ! (unit.player instanceof AIPlayer)),
+  new Effect(() => 0)
+));
+Rules.register(new Rule(
+  'unit:movementCost:beingTransported',
+  new Criterion((unit) => unit instanceof LandUnit),
+  new Criterion((unit) => unit.transport instanceof NavalTransport),
   new Effect(() => 0)
 ));

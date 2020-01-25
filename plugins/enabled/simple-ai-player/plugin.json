@@ -9,6 +9,7 @@
     "base-yields",
     "core-city",
     "core-player",
+    "core-terrain",
     "core-unit",
     "core-world"
   ],

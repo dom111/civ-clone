@@ -8,7 +8,7 @@ engine.on('world:built', (world) => map = world);
 
 engine.on('turn:start', () => {
   const showMap = true,
-    everyXTurns = 1
+    everyXTurns = parseInt(engine.option('renderTurns', 1), 10)
   ;
 
   if (showMap && (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1))) {

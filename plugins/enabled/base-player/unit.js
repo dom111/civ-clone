@@ -8,11 +8,11 @@ engine.on('unit:created', (unit) => {
 
 engine.on('unit:activate', (unit) => {
   unit.player.activeUnit = unit;
-  unit.active = true;
+  unit.activate();
 });
 
 engine.on('unit:action', (unit) => {
-  if ((unit.movesLeft <= 0.1)) {
+  if ((unit.movesLeft <= .1)) {
     unit.player.activeUnit = false;
     unit.active = false;
 
@@ -23,12 +23,13 @@ engine.on('unit:action', (unit) => {
 engine.on('unit:destroyed', (unit) => {
   unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
   unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
-  unit.active = false;
-  unit.destroyed = true;
 
   if (unit.city) {
     unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
   }
+
+  unit.active = false;
+  unit.destroyed = true;
 });
 
 engine.on('unit:activate-next', (player) => {

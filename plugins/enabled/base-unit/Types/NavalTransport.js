@@ -18,13 +18,10 @@ export class NavalTransport extends NavalUnit {
   }
 
   move(to) {
-    const from = this.tile;
-
     super.move(to);
 
     this.cargo.forEach((unit) => {
-      unit.tile = to;
-      engine.emit('unit:moved', unit, from, to);
+      unit.move(to);
     });
   }
 
@@ -34,6 +31,7 @@ export class NavalTransport extends NavalUnit {
     }
 
     unit.sleep();
+    unit.transport = this;
 
     this.cargo.push(unit);
 
@@ -44,8 +42,10 @@ export class NavalTransport extends NavalUnit {
     this.wait();
 
     this.cargo.forEach((unit) => {
-      unit.active = true;
-      unit.busy = false;
+      this.cargo.splice(this.cargo.indexOf(unit), 1);
+
+      unit.activate();
+      unit.transport = null;
     });
   }
 }

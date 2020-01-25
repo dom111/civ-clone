@@ -4,7 +4,7 @@ export class AIPlayer extends Player {
   static #implementations = [];
 
   chooseCivilization(choices) {
-    const Random = choices[parseInt(choices.length * Math.random(), 10)];
+    const Random = choices[Math.floor(choices.length * Math.random())];
 
     this.civilization = new Random();
 
