@@ -11,10 +11,10 @@ Rules.register(new Rule(
   new Effect((tileYield, city) => tileYield.subtract(city.size * 2))
 ));
 Rules.register(new Rule(
-  'city:cost:food:activeSettlers',
+  '#city:cost:food:activeSettlers',
   new Criterion((tileYield) => tileYield instanceof Food),
-  new Criterion((tileYield, city) => city.units.some((unit) => unit instanceof Settlers)),
+  new Criterion((tileYield, city) => city.units.some((unit) => unit instanceof Settlers && ! unit.destroyed)),
   new Effect((tileYield, city) => tileYield.subtract(
-    city.units.reduce((total, unit) => total + (unit instanceof Settlers) ? 1 : 0, 0)
+    city.units.reduce((total, unit) => total + (unit instanceof Settlers && ! unit.destroyed) ? 1 : 0, 0)
   ))
 ));

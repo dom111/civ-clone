@@ -98,10 +98,15 @@ engine.on('turn:start', () => {
     player.cities.forEach((city) => {
       city.yields()
         .forEach((cityYield) => {
+          // console.log(`${city.player.civilization.people} city of ${city.name} (${city.size}) has ${cityYield.value} ${cityYield.constructor.name}`);
+
           Rules.get('city:cost')
             .filter((rule) => rule.validate(cityYield, city))
             .forEach((rule) => rule.process(cityYield, city))
           ;
+
+          // console.log(`${city.player.civilization.people} city of ${city.name} has ${cityYield.value} ${cityYield.constructor.name}`);
+          // console.log(city.tilesWorked.map((tile) => `${tile.terrain.constructor.name} [${tile.yields().map((tileYield) => `${tileYield.value} ${tileYield.constructor.name}`)}]`));
 
           if (cityYield instanceof Food) {
             city.foodStorage += cityYield.value;

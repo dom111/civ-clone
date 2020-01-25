@@ -13,9 +13,13 @@ engine.on('turn:start', () => {
 
   if (showMap && (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1))) {
     const lookup = {
+      American: '\u001b[38;5;17;48;5;231m',
       Babylonian: '\u001b[38;5;233;48;5;47m',
       English: '\u001b[38;5;88;48;5;255m',
+      French: '\u001b[38;5;255;48;5;27m',
       German: '\u001b[38;5;255;48;5;20m',
+      Greek: '\u001b[38;5;27;48;5;255m',
+      Indian: '\u001b[38;5;255;48;5;28m',
       Japanese: '\u001b[38;5;255;48;5;88m',
       Roman: '\u001b[38;5;255;48;5;53m',
       Russian: '\u001b[38;5;0;48;5;214m',
@@ -75,7 +79,7 @@ engine.on('turn:start', () => {
             ''
         )
       )
-      .join('')}${Math.abs(Time.year)} ${Time.year < 0 ? 'BC' : 'AD'} (${Time.turn}) [${observingPlayers.map((player) => `${player.civilization.nation}: ${player.cities.length} cit${player.cities.length === 1 ? 'y' : 'ies'} - ${player.units.length} unit${player.units.length === 1 ? '' : 's'}`).join(' / ')}]`
+      .join('')}${Math.abs(Time.year)} ${Time.year < 0 ? 'BC' : 'AD'} (${Time.turn}) [${observingPlayers.map((player) => `${player.civilization.nation}: C:${player.cities.length} [${player.cities.reduce((total, city) => total + city.size, 0)}] U:${player.units.length}`).join(' / ')}]`
     );
 
     if (engine.option('earlyExit')) {

@@ -13,10 +13,11 @@ engine.on('city:building-complete', (city, item) => {
 engine.on('city:captured', (capturedCity, player) => {
   capturedCity.size--;
 
-  if (capturedCity.size > 0) {
-    capturedCity.player.cities = capturedCity.player.cities.filter((city) => city !== capturedCity);
+  if (capturedCity.player.cities.includes(capturedCity)) {
+    capturedCity.player.cities.splice(capturedCity.player.cities.indexOf(capturedCity), 1);
   }
-  else {
+
+  if (capturedCity.size <= 0) {
     engine.emit('city:destroyed', capturedCity, player);
   }
 

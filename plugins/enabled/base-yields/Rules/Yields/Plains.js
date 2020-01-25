@@ -15,5 +15,5 @@ Rules.register(new Rule(
   'tile:yield:production:plains',
   new Criterion((tileYield) => tileYield instanceof Production),
   new Criterion((tileYield, tile) => tile.terrain instanceof Plains),
-  new Effect((tileYield) => tileYield.add(2))
+  new Effect((tileYield) => tileYield.add(1))
 ));

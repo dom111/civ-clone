@@ -1,5 +1,5 @@
 import {Food, Production} from '../base-yields/Yields.js';
-import {FortifiableUnit, LandUnit, Militia, NavalTransport, NavalUnit, Settlers, Worker} from '../base-unit/Units.js';
+import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit, Settlers, Worker} from '../base-unit/Units.js';
 import {Hills, Mountains, Oasis, Plains, River} from '../base-terrain/Terrains.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
@@ -67,39 +67,6 @@ export class SimpleAIPlayer extends AIPlayer {
   #landTilesToExplore = [];
   #seaTilesToExplore = [];
   #undefendedCities = [];
-
-  constructor() {
-    super();
-
-    engine.on('city:grow', (city) => {
-      if (city.player === this) {
-        city.autoAssignWorkers();
-      }
-    });
-
-    engine.on('city:shrink', (city) => {
-      if (city.player === this) {
-        city.autoAssignWorkers();
-      }
-    });
-
-    // whenever we build an improvement near our cities, auto-assign the workers to make sure we're using the best tiles
-    engine.on('tile:improvement-built', (tile) => {
-      const ourNearbyCities = tile.getSurroundingArea()
-        .cities()
-        .filter((city) => city.player === this)
-      ;
-
-      if (
-        // if it was us that built the improvement
-        tile.units.length &&
-        tile.units[0].player === this &&
-        ourNearbyCities.length
-      ) {
-        ourNearbyCities.forEach((city) => city.autoAssignWorkers());
-      }
-    });
-  }
 
   moveUnit(unit) {
     while (unit.active && unit.movesLeft > 0) {
@@ -278,6 +245,8 @@ export class SimpleAIPlayer extends AIPlayer {
 
     this.cities
       .forEach((city) => {
+        city.autoAssignWorkers();
+
         if (! city.tile.units.length) {
           this.#undefendedCities.push(city.tile);
         }
@@ -416,21 +385,36 @@ export class SimpleAIPlayer extends AIPlayer {
             }
           }
           else if (item instanceof City) {
-            const city = item;
+            const city = item,
+              available = city.availableBuildItems()
+            ;
 
             if (! tile.units.length) {
-              // TODO: a more thorough check on this
-              city.build(Militia);
-            }
-            // Always Build Cities
-            else if (! city.units.some((unit) => unit instanceof Settlers)) {
-              city.build(Settlers);
-            }
-            else {
-              const available = city.availableBuildItems(),
-                randomSelection = available[Math.floor(available.length * Math.random())]
+              const [defensiveUnit] = available.filter((entity) => Object.prototype.isPrototypeOf.call(FortifiableUnit, entity) &&
+                entity.prototype.defence > 0)
+                .sort((a, b) => b.prototype.defence - a.prototype.defence)
               ;
 
+              if (defensiveUnit) {
+                city.build(defensiveUnit);
+
+                continue;
+              }
+            }
+
+            // Always Build Cities
+            if (! city.units.some((unit) => unit instanceof Settlers) && available.includes(Settlers)) {
+              city.build(Settlers);
+
+              continue;
+            }
+
+            const availableExceptSettlers = available.filter((entity) => entity !== Settlers),
+              randomSelection = availableExceptSettlers[Math.floor(available.length * Math.random())]
+            ;
+
+            // TODO: this won't be feasible...
+            if (randomSelection) {
               city.build(randomSelection);
             }
           }

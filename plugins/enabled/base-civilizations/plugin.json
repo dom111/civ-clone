@@ -7,6 +7,10 @@
     "components": [
         {
             "type": "script",
+            "file": "Civilizations/American.js"
+        },
+        {
+            "type": "script",
             "file": "Civilizations/Babylonian.js"
         },
         {
@@ -15,7 +19,19 @@
         },
         {
             "type": "script",
+            "file": "Civilizations/French.js"
+        },
+        {
+            "type": "script",
             "file": "Civilizations/German.js"
+        },
+        {
+            "type": "script",
+            "file": "Civilizations/Greek.js"
+        },
+        {
+            "type": "script",
+            "file": "Civilizations/Indian.js"
         },
         {
             "type": "script",
