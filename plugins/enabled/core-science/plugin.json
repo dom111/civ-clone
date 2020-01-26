@@ -1,0 +1,17 @@
+{
+  "name": "core-science",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Registry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advance.js"
+    }
+  ]
+}

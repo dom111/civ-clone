@@ -137,10 +137,6 @@ export class Tile {
     return player.seenTiles.includes(this);
   }
 
-  isActivelyVisible(player) {
-    return player.visibleTiles.includes(this);
-  }
-
   resource(type) {
     Rules.get('tile:yield')
       .filter((rule) => rule.validate(type, this))
@@ -160,9 +156,11 @@ export class Tile {
     const yields = this.yields();
 
     return yields.map((tileYield) => {
-      const [[, weight]] = values.filter(([YieldType]) => tileYield instanceof YieldType);
+      const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),
+        [, weight] = value || []
+      ;
 
-      return tileYield.value * weight;
+      return tileYield.value * (weight || 0);
     })
       .reduce((total, value) => total + value, 0) *
       // Ensure we have some of each scored yield

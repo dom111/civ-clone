@@ -16,7 +16,7 @@ engine.on('unit:action', (unit) => {
     unit.player.activeUnit = false;
     unit.active = false;
 
-    engine.emit('unit:activate-next', unit.player);
+    // engine.emit('unit:activate-next', unit.player);
   }
 });
 
@@ -32,14 +32,14 @@ engine.on('unit:destroyed', (unit) => {
   unit.destroyed = true;
 });
 
-engine.on('unit:activate-next', (player) => {
-  if (player.unitsToAction.length) {
-    engine.emit('unit:activate', player.unitsToAction[0]);
-  }
-  else {
-    engine.emit('player:turn-end');
-  }
-});
+// engine.on('unit:activate-next', (player) => {
+//   if (player.unitsToAction.length) {
+//     engine.emit('unit:activate', player.unitsToAction[0]);
+//   }
+//   else {
+//     engine.emit('player:turn-end');
+//   }
+// });
 
 engine.on('unit:moved', (unit, from, to) => {
   unit.applyVisibility();

@@ -1,0 +1,26 @@
+{
+  "name": "base-player-science",
+  "description": "A bridge for players to allow and control researching advances.",
+  "dependencies": [
+    "base-player",
+    "base-science",
+    "core-player",
+    "core-registry",
+    "core-rules",
+    "core-science"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "PlayerResearch.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerResearchRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

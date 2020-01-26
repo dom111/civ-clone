@@ -34,6 +34,8 @@ Object.entries({
   'engine:start': () => '',
   // 'player:turn-start': (player) => `${player.constructor.name} ${player.id} ${player.leader.name}'s (${player.civilization.nation}) turn.`,
   // 'player:defeated': (defeatedPlayer, attacker) => `${defeatedPlayer.civilization.people} civilization destroyed by ${attacker.civilization.nation}.`,
+  // 'player:research': (player, Advance) => `${player.civilization.people} have started researching ${Advance.name}.`,
+  // 'player:research-complete': (player, Advance) => `${player.civilization.people} have learned the secrets of ${Advance.constructor.name}.`,
   // 'tile:improvement-built': (tile, improvement) => `${improvement} built at ${tile.x}, ${tile.y} (${tile.terrain.constructor.name} - ${tile.terrain.name}).`,
   // 'time:year-updated': (year) => `${year < 0 ? `${-year} BC` : `${year} AD`}`,
   // 'turn:start': (Time) => `Turn Start: ${Time.turn}.`,

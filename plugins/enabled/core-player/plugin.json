@@ -6,6 +6,8 @@
         "base-terrain",
         "base-unit",
         "core-city",
+        "core-registry",
+        "core-rules",
         "core-unit",
         "core-world"
     ],
@@ -21,6 +23,14 @@
         {
             "type": "script",
             "file": "HumanPlayer.js"
+        },
+        {
+            "type": "script",
+            "file": "PlayerActionRegistry.js"
+        },
+        {
+            "type": "script",
+            "file": "registerActions.js"
         }
     ]
 }

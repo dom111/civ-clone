@@ -3,7 +3,9 @@ import AIPlayer from '../core-player/AIPlayer.js';
 import Civilization from '../core-civilization/Civilization.js';
 import {Land} from '../core-terrain/Types.js';
 import Rules from '../core-rules/Rules.js';
+import Science from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
+import Trade from '../base-yield-trade/Yields/Trade.js';
 
 const players = [],
   playersToAction = []
@@ -148,6 +150,12 @@ engine.on('turn:start', () => {
               }
             }
           }
+
+          // TODO: abstract this.
+          if (cityYield instanceof Trade) {
+            // TODO: check rates
+            engine.emit('player:yield', player, new Science(cityYield.value));
+          }
         })
       ;
     });
@@ -174,11 +182,6 @@ engine.on('player:turn-start', async (player) => {
   await player.takeTurn();
 
   engine.emit('player:turn-end', player);
-});
-
-engine.on('player:visibility-changed', (player) => {
-  // clear the visibility
-  player.visibleTiles.splice(0, player.visibleTiles.length);
 });
 
 engine.on('tile:improvement-built', (tile, improvement) => {

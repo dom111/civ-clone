@@ -1,10 +1,12 @@
+import {Desert, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit, Settlers, Worker} from '../base-unit/Units.js';
-import {Hills, Mountains, Oasis, Plains, River} from '../base-terrain/Terrains.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
+import PlayerResearch from '../base-player-science/PlayerResearch.js';
+import {Trade} from '../base-yield-trade/Yields/Trade.js';
 import Unit from '../core-unit/Unit.js';
 
 export class SimpleAIPlayer extends AIPlayer {
@@ -14,6 +16,7 @@ export class SimpleAIPlayer extends AIPlayer {
         .score([
           [Food, 4],
           [Production, 2],
+          [Trade, 1],
         ]) >= 150) &&
       ! tile.getSurroundingArea(4)
         .cities()
@@ -22,7 +25,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldIrrigate = (tile) => {
-    return [Oasis, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+    return [Desert, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
       ! tile.improvements
         .some((improvement) => improvement instanceof Irrigation) &&
@@ -260,7 +263,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
         this.preProcessTurn();
 
-        while (this.actions.length) {
+        while (this.hasActions()) {
           if (loopCheck++ > 1e3) {
             // TODO: raise warning - notification?
             // reject(new Error(`SimpleAIPlayer: Couldn't pick an action to do.`));
@@ -269,7 +272,7 @@ export class SimpleAIPlayer extends AIPlayer {
             break;
           }
 
-          const [item] = this.actions,
+          const item = this.getAction(),
             {tile} = item
           ;
 
@@ -418,8 +421,15 @@ export class SimpleAIPlayer extends AIPlayer {
               city.build(randomSelection);
             }
           }
+          else if (item instanceof PlayerResearch) {
+            const available = item.getAvailableResearch();
+
+            if (available.length) {
+              item.setResearch(available[Math.floor(available.length * Math.random())]);
+            }
+          }
           else {
-            console.log(`Can't process: '${item}'`);
+            console.log(`Can't process: '${item.constructor.name}'`);
 
             break;
           }

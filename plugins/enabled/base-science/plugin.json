@@ -1,0 +1,63 @@
+{
+  "name": "base-science",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-rules",
+    "core-science",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Advances/Alphabet.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/BronzeWorking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/HorsebackRiding.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/IronWorking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/MapMaking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Masonry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Mathematics.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Writing.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/research.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/costs.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Science.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    }
+  ]
+}

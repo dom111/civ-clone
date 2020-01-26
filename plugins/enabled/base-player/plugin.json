@@ -3,9 +3,11 @@
     "title": "Base Player",
     "version": "0.0.1",
     "dependencies": [
-        "base-terrain",
         "base-civilizations",
+        "base-science",
+        "base-terrain",
         "base-unit",
+        "base-yield-trade",
         "base-yields",
         "core-civilization",
         "core-player",

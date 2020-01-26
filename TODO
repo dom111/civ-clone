@@ -19,6 +19,12 @@
 - [X] City Improvements/Wonders.
 - [X] Control city improvement costs via `Rule`s.
 - [X] Control unit base stats via `Rule`s.
+- [X] Fix AI bug with NavalTransports.
+- [X] More civilizations.
+- [X] Reorganise all existing plugins to extract self-contained entities (perhaps so they they are testable?)
+- [X] Fix AI bug where they always trend north-east. Maybe this is just masked - but seems less problematic.
+- [X] Add science.
+- [X] Add 'trade' tile yield.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Break all plugins into `core` (parent classes/interfaces/rules) and `base` (implementations).
@@ -29,23 +35,19 @@
 - [ ] i18n/l10n.
 - [ ] City Happiness.
 - [ ] Remote network players.
-- [ ] More civilizations.
+- [ ] Even more civilizations.
 - [ ] Governments.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
 - [ ] Add `PlayerMap` classes that only see what the Player has discovered.
-- [ ] Reorganise all existing plugins to extract self-contained entities (perhaps so they they are testable?)
 - [ ] Human players - this is likely dependent on a renderer, although perhaps make it playable within a TTY?
 - [ ] Write more tests.
 - [ ] Feature parity with Civilization.
-- [ ] Fix AI bug where they always trend north-east.
 - [ ] Add pathing mechanisms (A*?)
-- [ ] Fix AI bug with NavalTransports.
 - [ ] Add more units.
 - [ ] Add more city improvements.
 - [ ] Add wonders.
 - [ ] Add wealth.
 - [ ] Add build-queue.
-- [ ] Add science.
 - [ ] Add Barbarians.
 - [ ] Change terrain specials to be augments instead of specific terrain types - this would allow rivers as they are in Civ 2+

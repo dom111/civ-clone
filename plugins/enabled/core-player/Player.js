@@ -1,3 +1,4 @@
+import PlayerActionRegistry from './PlayerActionRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 
 export class Player {
@@ -15,11 +16,16 @@ export class Player {
     engine.emit('player:added', this);
   }
 
-  get actions() {
-    return [
-      ...this.citiesToAction,
-      ...this.unitsToAction,
-    ];
+  getAction() {
+    const [action] = this.getActions();
+
+    return action;
+  }
+
+  getActions() {
+    return PlayerActionRegistry.entries()
+      .flatMap((actionsProvider) => actionsProvider.apply(this))
+    ;
   }
 
   get unitsToAction() {
@@ -30,38 +36,14 @@ export class Player {
     return this.cities.filter((city) => ! city.building);
   }
 
-  get actionsLeft() {
-    return this.unitsToAction.length + this.citiesToAction.length;
+  hasActions() {
+    const actions = this.getActions();
+
+    return actions.length;
   }
 
   get seenTiles() {
     return this.#seenTiles;
-  }
-
-  get visibleTiles() {
-    const visibleTiles = [];
-
-    this.units.forEach((unit) => {
-      unit.tile.getSurroundingArea(unit.visibility)
-        .forEach((tile) => {
-          if (! visibleTiles.includes(tile)) {
-            visibleTiles.push(tile);
-          }
-        })
-      ;
-    });
-
-    this.cities.forEach((city) => {
-      city.tile.getSurroundingArea()
-        .forEach((tile) => {
-          if (! visibleTiles.includes(tile)) {
-            visibleTiles.push(tile);
-          }
-        })
-      ;
-    });
-
-    return visibleTiles;
   }
 
   takeTurn() {

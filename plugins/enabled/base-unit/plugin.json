@@ -46,6 +46,14 @@
         },
         {
             "type": "script",
+            "file": "Units/Spearman.js"
+        },
+        {
+            "type": "script",
+            "file": "Units/Swordman.js"
+        },
+        {
+            "type": "script",
             "file": "Units/Trireme.js"
         },
         {
