@@ -1,11 +1,12 @@
 // import {Barracks} from '../base-city-improvements/Improvements.js';
-import {NavalUnit, Settlers} from '../Units.js';
 import Criteria from '../../core-rules/Criteria.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
+import {NavalUnit} from '../Types.js';
 // import OneCriteria from '../../core-rules/OneCriteria.js';
 import Rule from '../../core-rules/Rule.js';
 import Rules from '../../core-rules/Rules.js';
+import {Settlers} from '../Units.js';
 
 // Rules.register(new Rule(
 //   'city:build:unit:any',

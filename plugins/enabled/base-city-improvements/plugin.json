@@ -3,7 +3,7 @@
     "title": "Base City Improvements",
     "version": "0.0.1",
     "dependencies": [
-        "base-unit",
+        "base-unit-improvements",
         "core-city",
         "core-city-improvement",
         "core-rules"

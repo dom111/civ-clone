@@ -1,8 +1,9 @@
 import {Desert, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-yields/Yields.js';
-import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit, Settlers, Worker} from '../base-unit/Units.js';
+import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
+import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';

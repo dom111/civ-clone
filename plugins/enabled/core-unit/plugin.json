@@ -10,7 +10,7 @@
     "components": [
         {
             "type": "script",
-            "file": "Registry.js"
+            "file": "UnitRegistry.js"
         },
         {
             "type": "script",

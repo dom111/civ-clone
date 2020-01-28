@@ -1,4 +1,4 @@
-import AdvanceRegistry from '../core-science/Registry.js';
+import AdvanceRegistry from '../core-science/AdvanceRegistry.js';
 import Rules from '../core-rules/Rules.js';
 
 export class PlayerResearch {

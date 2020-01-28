@@ -10,7 +10,7 @@
   "components": [
     {
       "type": "script",
-      "file": "Terrain/Forest.js"
+      "file": "Terrain/Arctic.js"
     },
     {
       "type": "script",
@@ -18,7 +18,11 @@
     },
     {
       "type": "script",
-      "file": "Terrain/Ocean.js"
+      "file": "Terrain/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrain/Grassland.js"
     },
     {
       "type": "script",
@@ -30,15 +34,11 @@
     },
     {
       "type": "script",
-      "file": "Terrain/Grassland.js"
+      "file": "Terrain/Mountains.js"
     },
     {
       "type": "script",
-      "file": "Terrain/Tundra.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/River.js"
+      "file": "Terrain/Ocean.js"
     },
     {
       "type": "script",
@@ -46,7 +46,7 @@
     },
     {
       "type": "script",
-      "file": "Terrain/Arctic.js"
+      "file": "Terrain/River.js"
     },
     {
       "type": "script",
@@ -54,39 +54,15 @@
     },
     {
       "type": "script",
-      "file": "Terrain/Mountains.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Arctic/Seal.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Desert/Oasis.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Forest/Horse.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Grassland/Shield.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Grassland/Cow.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Tundra/Caribou.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrains.js"
+      "file": "Terrain/Tundra.js"
     },
     {
       "type": "script",
       "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains.js"
     }
   ]
 }

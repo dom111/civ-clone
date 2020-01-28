@@ -1,4 +1,4 @@
-import NavalTransport from '../Types/NavalTransport.js';
+import {NavalTransport} from '../Types.js';
 
 export class Trireme extends NavalTransport {
   attack = 2;

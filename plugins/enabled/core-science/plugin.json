@@ -7,11 +7,11 @@
   "components": [
     {
       "type": "script",
-      "file": "Registry.js"
+      "file": "Advance.js"
     },
     {
       "type": "script",
-      "file": "Advance.js"
+      "file": "AdvanceRegistry.js"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import {Fortified} from '../Improvements.js';
+import {Fortified} from '../../base-unit-improvements/Improvements.js';
 import LandUnit from './LandUnit.js';
 
 export class FortifiableUnit extends LandUnit {

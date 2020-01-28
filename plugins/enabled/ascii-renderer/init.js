@@ -26,14 +26,14 @@ engine.on('turn:start', () => {
       Spanish: '\u001b[38;5;208;48;5;167m',
 
       Arctic: '\u001b[38;5;250;48;5;254m',
-      Desert: '\u001b[38;5;230;48;5;227m',
+      Desert: '\u001b[38;5;248;48;5;227m',
       Forest: '\u001b[38;5;29;48;5;22m',
       Grassland: '\u001b[38;5;144;48;5;41m',
       Hills: '\u001b[38;5;143;48;5;101m',
       Jungle: '\u001b[38;5;70;48;5;72m',
       Mountains: '\u001b[38;5;249;48;5;243m',
       Ocean: '\u001b[38;5;57;48;5;18m',
-      Plains: '\u001b[38;5;179;48;5;144m',
+      Plains: '\u001b[38;5;250;48;5;144m',
       River: '\u001b[38;5;24;48;5;27m',
       Swamp: '\u001b[38;5;202;48;5;130m',
       Tundra: '\u001b[38;5;174;48;5;223m',
@@ -51,6 +51,7 @@ engine.on('turn:start', () => {
     console.log(`${map.getBy(() => true).map((tile) => (
       {
         terrain: tile.terrain.constructor.name,
+        terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
         units: tile.units.map((unit) => (
           {
             player: unit.player.civilization.people,
@@ -71,7 +72,7 @@ engine.on('turn:start', () => {
               `${lookup[tile.city.player]}#\u001b[0m` :
               tile.units.length ?
                 `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
-                `${lookup[tile.terrain] || tile.terrain}${tile.terrain.substr(0, 1)}\u001b[0m` :
+                `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
             ' '
         ) + (
           (i % map.width) === (map.width - 1) ?

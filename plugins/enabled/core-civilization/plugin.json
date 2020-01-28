@@ -1,10 +1,17 @@
 {
     "name": "core-civilization",
     "version": "0.0.1",
+    "dependencies": [
+        "core-registry"
+    ],
     "components": [
         {
             "type": "script",
             "file": "Civilization.js"
+        },
+        {
+            "type": "script",
+            "file": "CivilizationRegistry.js"
         }
     ]
 }

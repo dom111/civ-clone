@@ -1,5 +1,5 @@
 import {Irrigation, Mine, Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
-import LandUnit from '../Types/LandUnit.js';
+import {LandUnit} from '../Types.js';
 import {River} from '../../base-terrain/Terrain/River.js';
 
 export class Worker extends LandUnit {

@@ -8,11 +8,11 @@
   "components": [
     {
       "type": "script",
-      "file": "Registry.js"
+      "file": "Terrain.js"
     },
     {
       "type": "script",
-      "file": "Terrain.js"
+      "file": "TerrainRegistry.js"
     },
     {
       "type": "script",

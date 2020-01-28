@@ -9,7 +9,6 @@ Rules.register(new Rule(
   'terrain:distribution:hills',
   new Criterion((Terrain) => Terrain === Hills),
 
-  // target any tile that's just `Land`.
   new Criterion((Terrain, mapData) => mapData.some((tile) => tile instanceof Land)),
   new Effect(() => [
     {

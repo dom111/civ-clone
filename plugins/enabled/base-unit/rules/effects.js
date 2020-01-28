@@ -1,4 +1,4 @@
-import {Fortified, Veteran} from '../Improvements.js';
+import {Fortified, Veteran} from '../../base-unit-improvements/Improvements.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
 import Rule from '../../core-rules/Rule.js';

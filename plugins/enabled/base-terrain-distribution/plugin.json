@@ -57,30 +57,6 @@
     },
     {
       "type": "script",
-      "file": "Rules/Arctic/Seal.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Desert/Oasis.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Forest/Horse.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Grassland/Shield.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Grassland/Cow.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Tundra/Caribou.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/groups.js"
     }
   ]

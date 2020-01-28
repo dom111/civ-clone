@@ -7,11 +7,11 @@
   "components": [
     {
       "type": "script",
-      "file": "Registry.js"
+      "file": "Yield.js"
     },
     {
       "type": "script",
-      "file": "Yield.js"
+      "file": "YieldRegistry.js"
     }
   ]
 }

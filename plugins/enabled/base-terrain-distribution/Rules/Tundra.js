@@ -9,7 +9,6 @@ Rules.register(new Rule(
   'terrain:distribution:river',
   new Criterion((Terrain) => Terrain === Tundra),
 
-  // target any tile that's just `Land`.
   new Criterion((Terrain, mapData) => mapData.some((tile) => tile instanceof Land)),
   new Effect(() => [
     {

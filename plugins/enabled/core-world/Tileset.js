@@ -1,4 +1,4 @@
-import YieldRegistry from '../core-yields/Registry.js';
+import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class Tileset {
   #tiles;

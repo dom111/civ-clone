@@ -9,7 +9,6 @@ Rules.register(new Rule(
   'terrain:distribution:ocean',
   new Criterion((Terrain) => Terrain === Ocean),
 
-  // target any tile that's just `BaseOcean`.
   new Criterion((Terrain, mapData) => mapData.some((tile) => tile.constructor === Water)),
   new Effect(() => [
     {

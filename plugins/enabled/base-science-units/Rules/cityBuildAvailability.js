@@ -19,7 +19,7 @@ import Rule from '../../core-rules/Rule.js';
 import Rules from '../../core-rules/Rules.js';
 
 Rules.register(new Rule(
-  'city:build:unit:spearman:bronzeworking',
+  'city:build:unit:catapult:mathematics',
   new Criterion((city, buildItem) => buildItem === Catapult),
   new Effect((city) => new Criterion(() => PlayerResearchRegistry.entries()
     .filter((playerResearch) => playerResearch.player === city.player)
@@ -27,7 +27,7 @@ Rules.register(new Rule(
   ))
 ));
 Rules.register(new Rule(
-  'city:build:unit:spearman:bronzeworking',
+  'city:build:unit:cavalry:horsebackriding',
   new Criterion((city, buildItem) => buildItem === Cavalry),
   new Effect((city) => new Criterion(() => PlayerResearchRegistry.entries()
     .filter((playerResearch) => playerResearch.player === city.player)
@@ -43,7 +43,7 @@ Rules.register(new Rule(
   ))
 ));
 Rules.register(new Rule(
-  'city:build:unit:swordman:bronzeworking',
+  'city:build:unit:swordman:ironworking',
   new Criterion((city, buildItem) => buildItem === Swordman),
   new Effect((city) => new Criterion(() => PlayerResearchRegistry.entries()
     .filter((playerResearch) => playerResearch.player === city.player)
@@ -51,7 +51,7 @@ Rules.register(new Rule(
   ))
 ));
 Rules.register(new Rule(
-  'city:build:unit:swordman:bronzeworking',
+  'city:build:unit:trireme:mapmaking',
   new Criterion((city, buildItem) => buildItem === Trireme),
   new Effect((city) => new Criterion(() => PlayerResearchRegistry.entries()
     .filter((playerResearch) => playerResearch.player === city.player)

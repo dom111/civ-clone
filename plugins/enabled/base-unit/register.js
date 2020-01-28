@@ -1,8 +1,6 @@
-import {Catapult, Cavalry, Militia, Settlers, Trireme} from './Units.js';
-import Registry from '../core-unit/Registry.js';
+import {Catapult, Cavalry, Militia, Settlers, Spearman, Swordman, Trireme} from './Units.js';
+import UnitRegistry from '../core-unit/UnitRegistry.js';
 
-Registry.register(Catapult);
-Registry.register(Cavalry);
-Registry.register(Militia);
-Registry.register(Settlers);
-Registry.register(Trireme);
+[Catapult, Cavalry, Militia, Settlers, Spearman, Swordman, Trireme]
+  .forEach((Unit) => UnitRegistry.register(Unit))
+;

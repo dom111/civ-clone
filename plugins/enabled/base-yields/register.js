@@ -1,5 +1,6 @@
 import {Food, Production} from './Yields.js';
-import Registry from '../core-yields/Registry.js';
+import YieldRegistry from '../core-yields/YieldRegistry.js';
 
-Registry.register(Food);
-Registry.register(Production);
+[Food, Production]
+  .forEach((Yield) => YieldRegistry.register(Yield))
+;

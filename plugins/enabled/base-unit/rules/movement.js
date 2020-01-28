@@ -1,5 +1,5 @@
 import {Land, Water} from '../../core-terrain/Types.js';
-import {LandUnit, NavalTransport, NavalUnit} from '../Units.js';
+import {LandUnit, NavalTransport, NavalUnit} from '../Types.js';
 import {Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
 // import AIPlayer from '../core-player/AIPlayer.js';
 import Criterion from '../../core-rules/Criterion.js';

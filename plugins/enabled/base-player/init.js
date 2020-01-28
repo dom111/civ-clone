@@ -1,11 +1,11 @@
 import {Food, Production} from '../base-yields/Yields.js';
 import AIPlayer from '../core-player/AIPlayer.js';
-import Civilization from '../core-civilization/Civilization.js';
+import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 import {Land} from '../core-terrain/Types.js';
 import Rules from '../core-rules/Rules.js';
-import Science from '../base-science/Yields/Science.js';
+import {Science} from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
-import Trade from '../base-yield-trade/Yields/Trade.js';
+import {Trade} from '../base-yield-trade/Yields/Trade.js';
 
 const players = [],
   playersToAction = []
@@ -32,7 +32,7 @@ engine.on('world:built', (map) => {
 
   engine.emit('world:start-tiles', startingSquares);
 
-  let availableCivilizations = Civilization.civilizations;
+  let availableCivilizations = CivilizationRegistry.entries();
 
   for (let i = 0; i < numberOfPlayers; i++) {
     const player = AIPlayer.get();

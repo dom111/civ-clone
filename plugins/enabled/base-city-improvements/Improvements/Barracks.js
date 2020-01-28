@@ -1,11 +1,5 @@
 import Improvement from '../../core-city-improvement/Improvement.js';
 
-export class Barracks extends Improvement {
-  name = 'barracks';
-  title = 'Barracks';
-  static cost = 40;
-}
+export class Barracks extends Improvement {}
 
 export default Barracks;
-
-Improvement.register(Barracks);

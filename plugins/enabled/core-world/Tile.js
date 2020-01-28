@@ -2,7 +2,7 @@ import {Land, Water} from '../core-terrain/Types.js';
 import Rules from '../core-rules/Rules.js';
 import Tileset from './Tileset.js';
 import {Yield} from '../core-yields/Yield.js';
-import YieldRegistry from '../core-yields/Registry.js';
+import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class Tile {
   constructor({x, y, terrain, map}) {

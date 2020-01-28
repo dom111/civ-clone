@@ -1,0 +1,105 @@
+{
+  "name": "base-terrain-features",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain",
+    "base-yields",
+    "base-yield-trade",
+    "core-rules",
+    "core-terrain-features"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Coal.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Fish.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Game.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Gems.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Gold.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Horse.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Oasis.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Oil.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Seal.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Shield.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Coal.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Fish.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Game.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Gems.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Gold.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Horse.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Oasis.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Oil.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Seal.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Yields/Shield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/applyFeatures.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    }
+  ]
+}

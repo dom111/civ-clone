@@ -1,5 +1,5 @@
 import World from '../core-world/World.js';
-import WorldGeneratorRegistry from '../core-world-generator/Registry.js';
+import WorldGeneratorRegistry from '../core-world-generator/WorldGeneratorRegistry.js';
 
 engine.on('engine:build', () => {
   const availableGenerators = WorldGeneratorRegistry.entries(),

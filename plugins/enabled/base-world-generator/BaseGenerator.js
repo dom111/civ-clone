@@ -1,7 +1,8 @@
 import {Land, Water} from '../core-terrain/Types.js';
 import {Generator as BaseGenerator} from '../core-world-generator/Generator.js';
-import Registry from '../core-terrain/Registry.js';
 import Rules from '../core-rules/Rules.js';
+import TerrainFeatureRegistry from '../core-terrain-features/TerrainFeatureRegistry.js';
+import TerrainRegistry from '../core-terrain/TerrainRegistry.js';
 
 export class IslandsGenerator extends BaseGenerator {
   #chanceToBecomeLand;
@@ -120,8 +121,8 @@ export class IslandsGenerator extends BaseGenerator {
 
   populateTerrain() {
     Rules.get('terrain:distributionGroups')
-      .filter((rule) => rule.validate(Registry))
-      .map((rule) => rule.process(Registry))
+      .filter((rule) => rule.validate())
+      .map((rule) => rule.process())
       .forEach((group) => group.forEach((TerrainType) => {
         Rules.get('terrain:distribution')
           .filter((rule) => rule.validate(TerrainType, this.#map))
@@ -205,6 +206,28 @@ export class IslandsGenerator extends BaseGenerator {
           ))
         ;
       }))
+    ;
+
+    TerrainFeatureRegistry.entries()
+      .forEach((TerrainFeature) => {
+        TerrainRegistry.entries()
+          .forEach((Terrain) => {
+            this.#map
+              .filter((terrain) => terrain instanceof Terrain)
+              .forEach((terrain) => {
+                Rules.get('terrain:feature')
+                  .filter((rule) => rule.validate(TerrainFeature, Terrain))
+                  .forEach((rule) => {
+                    if (rule.process()) {
+                      terrain.features.push(new TerrainFeature());
+                    }
+                  })
+                ;
+              })
+            ;
+          })
+        ;
+      })
     ;
   }
 }

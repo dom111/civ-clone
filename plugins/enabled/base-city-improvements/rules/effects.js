@@ -3,7 +3,7 @@ import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
 import Rule from '../../core-rules/Rule.js';
 import Rules from '../../core-rules/Rules.js';
-import {Veteran} from '../../base-unit/Improvements.js';
+import {Veteran} from '../../base-unit-improvements/Improvements.js';
 
 Rules.register(new Rule(
   'unit:created:veteran',

@@ -1,4 +1,4 @@
-import FortifiableUnit from '../Types/FortifiableUnit.js';
+import {FortifiableUnit} from '../Types.js';
 
 export class Catapult extends FortifiableUnit {
   title = 'Catapult';

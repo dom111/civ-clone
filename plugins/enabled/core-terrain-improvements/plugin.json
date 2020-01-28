@@ -8,11 +8,11 @@
   "components": [
     {
       "type": "script",
-      "file": "Registry.js"
+      "file": "Improvement.js"
     },
     {
       "type": "script",
-      "file": "Improvement.js"
+      "file": "TerrainImprovementRegistry.js"
     }
   ]
 }

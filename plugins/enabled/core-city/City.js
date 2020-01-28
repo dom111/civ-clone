@@ -1,7 +1,7 @@
 import CityImprovementRegistry from '../core-city-improvement/Registry.js';
 import Rules from '../core-rules/Rules.js';
 import Tileset from '../core-world/Tileset.js';
-import UnitRegistry from '../core-unit/Registry.js';
+import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 export default class City {
   // TODO: make these all private

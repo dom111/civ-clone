@@ -1,4 +1,4 @@
-import Registry from '../core-yields/Registry.js';
 import {Trade} from './Yields/Trade.js';
+import YieldRegistry from '../core-yields/YieldRegistry.js';
 
-Registry.register(Trade);
+YieldRegistry.register(Trade);

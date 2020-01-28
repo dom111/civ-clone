@@ -1,8 +1,12 @@
 import {Irrigation, Mine, Pollution, Railroad, Road} from './Improvements.js';
-import Registry from '../core-terrain-improvements/Registry.js';
+import TerrainImprovementRegistry from '../core-terrain-improvements/TerrainImprovementRegistry.js';
 
-Registry.register(Irrigation);
-Registry.register(Mine);
-Registry.register(Pollution);
-Registry.register(Railroad);
-Registry.register(Road);
+[
+  Irrigation,
+  Mine,
+  Pollution,
+  Railroad,
+  Road,
+]
+  .forEach((TerrainImprovement) => TerrainImprovementRegistry.register(TerrainImprovement))
+;

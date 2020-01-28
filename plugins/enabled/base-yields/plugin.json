@@ -53,30 +53,6 @@
     },
     {
       "type": "script",
-      "file": "Rules/Yields/Arctic/Seal.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Desert/Oasis.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Forest/Horse.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Grassland/Shield.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Grassland/Cow.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Tundra/Caribou.js"
-    },
-    {
-      "type": "script",
       "file": "Yields/Food.js"
     },
     {
