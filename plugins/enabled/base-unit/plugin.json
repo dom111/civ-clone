@@ -63,10 +63,6 @@
         },
         {
             "type": "script",
-            "file": "rules/effects.js"
-        },
-        {
-            "type": "script",
             "file": "Types.js"
         },
         {
@@ -75,15 +71,19 @@
         },
         {
             "type": "script",
-            "file": "rules/build.js"
+            "file": "Rules/build.js"
         },
         {
             "type": "script",
-            "file": "rules/costs.js"
+            "file": "Rules/costs.js"
         },
         {
             "type": "script",
-            "file": "rules/movement.js"
+            "file": "Rules/effects.js"
+        },
+        {
+            "type": "script",
+            "file": "Rules/movement.js"
         },
         {
             "type": "script",

@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "dependencies": [
     "base-terrain",
-    "base-yields",
-    "base-yield-trade",
+    "base-terrain-yields",
+    "base-terrain-yield-trade",
     "core-rules",
     "core-terrain-features"
   ],

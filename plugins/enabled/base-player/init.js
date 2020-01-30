@@ -1,11 +1,11 @@
-import {Food, Production} from '../base-yields/Yields.js';
+import {Food, Production} from '../base-terrain-yields/Yields.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 import {Land} from '../core-terrain/Types.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import {Science} from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
-import {Trade} from '../base-yield-trade/Yields/Trade.js';
+import {Trade} from '../base-terrain-yield-trade/Yields/Trade.js';
 
 const players = [],
   playersToAction = []
@@ -105,18 +105,18 @@ engine.on('turn:start', () => {
     player.cities.forEach((city) => {
       city.yields(player)
         .forEach((cityYield) => {
-          // console.log(`${city.player.civilization.people} city of ${city.name} (${city.size}) has ${cityYield.value} ${cityYield.constructor.name}`);
+          // console.log(`${city.player.civilization.people} city of ${city.name} (${city.size}) has ${cityYield.value()} ${cityYield.constructor.name}`);
 
           RulesRegistry.get('city:cost')
             .filter((rule) => rule.validate(cityYield, city))
             .forEach((rule) => rule.process(cityYield, city))
           ;
 
-          // console.log(`${city.player.civilization.people} city of ${city.name} has ${cityYield.value} ${cityYield.constructor.name}`);
-          // console.log(city.tilesWorked.map((tile) => `${tile.terrain.constructor.name} [${tile.yields().map((tileYield) => `${tileYield.value} ${tileYield.constructor.name}`)}]`));
+          // console.log(`${city.player.civilization.people} city of ${city.name} has ${cityYield.value()} ${cityYield.constructor.name}`);
+          // console.log(city.tilesWorked.map((tile) => `${tile.terrain.constructor.name} [${tile.yields().map((tileYield) => `${tileYield.value()} ${tileYield.constructor.name}`)}]`));
 
           if (cityYield instanceof Food) {
-            city.foodStorage += cityYield.value;
+            city.foodStorage += cityYield.value();
 
             if (
               city.foodStorage >= ((city.size * 10) + 10)
@@ -137,7 +137,7 @@ engine.on('turn:start', () => {
 
           if (cityYield instanceof Production) {
             if (city.building) {
-              const production = cityYield.value;
+              const production = cityYield.value();
 
               if (production > 0) {
                 city.buildProgress += production;
@@ -159,7 +159,7 @@ engine.on('turn:start', () => {
           // TODO: abstract this.
           if (cityYield instanceof Trade) {
             // TODO: check rates
-            engine.emit('player:yield', player, new Science(cityYield.value));
+            engine.emit('player:yield', player, new Science(cityYield.value()));
           }
         })
       ;

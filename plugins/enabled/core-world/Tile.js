@@ -158,7 +158,7 @@ export class Tile {
     ;
   }
 
-  score(player, values = [[Yield, 3]]) {
+  score({player, values = [[Yield, 3]]}) {
     const yields = this.yields(player);
 
     return yields.map((tileYield) => {
@@ -166,7 +166,7 @@ export class Tile {
         [, weight] = value || []
       ;
 
-      return tileYield.value * (weight || 0);
+      return tileYield.value() * (weight || 0);
     })
       .reduce((total, value) => total + value, 0) *
       // Ensure we have some of each scored yield

@@ -1,5 +1,5 @@
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
-import {Food, Production} from '../base-yields/Yields.js';
+import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
@@ -11,7 +11,7 @@ import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
-import {Trade} from '../base-yield-trade/Yields/Trade.js';
+import {Trade} from '../base-terrain-yield-trade/Yields/Trade.js';
 import Unit from '../core-unit/Unit.js';
 
 export class SimpleAIPlayer extends AIPlayer {
@@ -25,7 +25,7 @@ export class SimpleAIPlayer extends AIPlayer {
             [Production, 2],
             [Trade, 1],
           ],
-        }) >= 150) &&
+        }) >= 180) &&
       ! tile.getSurroundingArea(4)
         .cities()
         .length

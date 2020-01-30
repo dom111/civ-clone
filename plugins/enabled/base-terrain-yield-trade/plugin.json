@@ -1,0 +1,29 @@
+{
+  "name": "base-terrain-yield-trade",
+  "description": "To add 'trade' yields to the tiles as per the original Civilization.",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-terrain",
+    "base-terrain-improvements",
+    "core-rules",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Trade.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/yields.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    }
+  ]
+}

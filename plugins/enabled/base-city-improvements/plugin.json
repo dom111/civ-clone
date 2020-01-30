@@ -1,41 +1,61 @@
 {
-    "name": "base-city-improvements",
-    "title": "Base City Improvements",
-    "version": "0.0.1",
-    "dependencies": [
-        "base-unit-improvements",
-        "core-city",
-        "core-city-improvement",
-        "core-rules"
-    ],
-    "components": [
-        {
-            "type": "script",
-           "file": "Improvements/Barracks.js"
-         },
-        {
-            "type": "script",
-           "file": "Improvements/CityWalls.js"
-         },
-        {
-            "type": "script",
-            "file": "Improvements/Granary.js"
-         },
-        {
-            "type": "script",
-            "file": "Improvements.js"
-         },
-        {
-            "type": "script",
-            "file": "rules/build.js"
-         },
-        {
-            "type": "script",
-            "file": "rules/costs.js"
-        },
-        {
-            "type": "script",
-            "file": "rules/effects.js"
-        }
-    ]
+  "name": "base-city-improvements",
+  "title": "Base City Improvements",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-unit-improvements",
+    "core-city",
+    "core-city-improvement",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Improvements/Barracks.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/CityWalls.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Courthouse.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Granary.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Library.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Palace.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Temple.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/costs.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/effects.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/effects.js"
+    }
+  ]
 }

@@ -3,7 +3,7 @@ import Effect from '../../../core-rules/Effect.js';
 import {Gold} from '../../TerrainFeatures.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
-import {Trade} from '../../../base-yield-trade/Yields/Trade.js';
+import {Trade} from '../../../base-terrain-yield-trade/Yields/Trade.js';
 
 RulesRegistry.register(new Rule(
   'tile:yield:trade:gold',

@@ -31,7 +31,6 @@
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
-- [ ] Re-work the 'trade' mechanism to not be hard-coded.
 - [ ] Renderer interface.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.

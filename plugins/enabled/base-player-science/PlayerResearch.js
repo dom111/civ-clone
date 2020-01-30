@@ -13,7 +13,7 @@ export class PlayerResearch {
   }
 
   addProgress(researchYield) {
-    this.#researchProgress += researchYield.value;
+    this.#researchProgress += researchYield.value();
 
     if (this.#researchProgress > this.#researchCost) {
       const completedResearch = new (this.#currentResearch)();

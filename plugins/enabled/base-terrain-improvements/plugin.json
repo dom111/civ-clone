@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": [
     "base-terrain",
-    "base-yields",
+    "base-terrain-yields",
     "core-rules",
     "core-terrain-improvements"
   ],

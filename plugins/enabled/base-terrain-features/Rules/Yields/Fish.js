@@ -1,7 +1,7 @@
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {Fish} from '../../TerrainFeatures.js';
-import {Food} from '../../../base-yields/Yields.js';
+import {Food} from '../../../base-terrain-yields/Yields.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 

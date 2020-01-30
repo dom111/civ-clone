@@ -5,14 +5,18 @@ import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchR
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-RulesRegistry.register(new Rule(
-  'player:government:monarchy',
-  new Criterion((Government) => Government === MonarchyGovernment),
-  new Criterion((Government, player) => {
-    const playerResearch = PlayerResearchRegistry
-      .filter((playerResearch) => playerResearch.player === player)
-    ;
+[
+  [MonarchyGovernment, MonarchyAdvance],
+]
+  .forEach(([Government, Advance]) => {
+    RulesRegistry.register(new Rule(
+      `player:government:${Government.name.toLowerCase()}`,
+      new Criterion((GovernmentType) => GovernmentType === Government),
+      new Criterion((Government, player) => {
+        const playerResearch = PlayerResearchRegistry.getBy('player', player);
 
-    return playerResearch.hasCompleted(MonarchyAdvance);
+        return playerResearch.hasCompleted(Advance);
+      })
+    ));
   })
-));
+;

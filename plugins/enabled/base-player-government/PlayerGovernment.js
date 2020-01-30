@@ -14,8 +14,8 @@ export class PlayerGovernment {
     return this.#government.constructor;
   }
 
-  is(Government) {
-    return this.#government instanceof Government;
+  is(...governments) {
+    return governments.some((Government) => this.#government instanceof Government);
   }
 
   get player() {

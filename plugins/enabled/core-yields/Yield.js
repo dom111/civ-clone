@@ -1,4 +1,7 @@
+import YieldModifiers from './YieldModifiers.js';
+
 export class Yield {
+  #modifiers = new YieldModifiers();
   #value = 0;
 
   constructor(value = 0) {
@@ -9,16 +12,20 @@ export class Yield {
     this.#value += n;
   }
 
+  addModifier(...modifiers) {
+    this.#modifiers.add(...modifiers);
+  }
+
   subtract(n) {
     this.#value -= n;
   }
 
-  get value() {
-    return this.#value;
+  value() {
+    return this.#modifiers.apply(this.#value);
   }
 
   valueOf() {
-    return this.value;
+    return this.value();
   }
 }
 

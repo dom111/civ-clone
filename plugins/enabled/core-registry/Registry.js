@@ -27,6 +27,10 @@ export class Registry {
     return this.#registry.filter(iterator);
   }
 
+  getBy(key, value) {
+    return this.filter((entity) => entity[key] === value);
+  }
+
   register(entity) {
     if (! this.accepts(entity)) {
       throw new TypeError(`Invalid entity attempted to be registered in ${this.#namespace} registry. (${entity})`);

@@ -7,6 +7,14 @@
   "components": [
     {
       "type": "script",
+      "file": "YieldModifier.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifiers.js"
+    },
+    {
+      "type": "script",
       "file": "Yield.js"
     },
     {

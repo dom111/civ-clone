@@ -1,6 +1,6 @@
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import {Food} from '../../../base-yields/Yields.js';
+import {Food} from '../../../base-terrain-yields/Yields.js';
 import {Grassland} from '../../../base-terrain/Terrains.js';
 import {Irrigation} from '../../../base-terrain-improvements/Improvements.js';
 import {Monarchy} from '../../../base-governments/Governments.js';
@@ -14,9 +14,7 @@ RulesRegistry.register(new Rule(
   new Criterion((tileYield, tile) => tile.terrain instanceof Grassland),
   new Criterion((tileYield, tile) => tile.improvements.some((improvement) => improvement instanceof Irrigation)),
   new Criterion((tileYield, tile, player) => {
-    const [playerGovernment] = PlayerGovernmentRegistry
-      .filter((playerGovernment) => playerGovernment.player === player)
-    ;
+    const [playerGovernment] = PlayerGovernmentRegistry.getBy('player', player);
 
     if (playerGovernment) {
       return playerGovernment.is(Monarchy);

@@ -6,7 +6,7 @@
     "base-terrain",
     "base-terrain-features",
     "base-terrain-improvements",
-    "base-yields",
+    "base-terrain-yields",
     "core-rules",
     "core-registry"
   ],

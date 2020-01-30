@@ -10,8 +10,8 @@
     "base-terrain",
     "base-terrain-improvements",
     "base-unit",
-    "base-yield-trade",
-    "base-yields",
+    "base-terrain-yield-trade",
+    "base-terrain-yields",
     "core-city",
     "core-player",
     "core-terrain",
@@ -25,7 +25,7 @@
     },
     {
       "type": "script",
-      "file": "init.js"
+      "file": "register.js"
     }
   ]
 }
