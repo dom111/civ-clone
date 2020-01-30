@@ -3,9 +3,9 @@ import Effect from '../../core-rules/Effect.js';
 import {Land} from '../../core-terrain/Types.js';
 import {Mountains} from '../../base-terrain/Terrains.js';
 import Rule from '../../core-rules/Rule.js';
-import Rules from '../../core-rules/Rules.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'terrain:distribution:mountains',
   new Criterion((Terrain) => Terrain === Mountains),
 

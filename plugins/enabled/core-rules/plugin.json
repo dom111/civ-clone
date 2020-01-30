@@ -1,6 +1,6 @@
 {
   "name": "core-rules",
-  "title": "Core Rules",
+  "title": "Core RulesRegistry",
   "version": "0.0.1",
   "dependencies": [
     "core-registry"
@@ -28,7 +28,7 @@
     },
     {
       "type": "script",
-      "file": "Rules.js"
+      "file": "RulesRegistry.js"
     },
     {
       "type": "script",

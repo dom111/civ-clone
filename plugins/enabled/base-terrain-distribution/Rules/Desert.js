@@ -3,9 +3,9 @@ import {Desert} from '../../base-terrain/Terrains.js';
 import Effect from '../../core-rules/Effect.js';
 import {Land} from '../../core-terrain/Types.js';
 import Rule from '../../core-rules/Rule.js';
-import Rules from '../../core-rules/Rules.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'terrain:distribution:desert',
   new Criterion((Terrain) => Terrain === Desert),
 

@@ -2,10 +2,10 @@ import {Desert, Grassland, Hills, Plains} from '../../base-terrain/Terrains.js';
 import Improvement from '../../core-terrain-improvements/Improvement.js';
 
 export class Irrigation extends Improvement {
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   cost = 1;
 
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   static available = [
     Desert,
     Grassland,
@@ -15,5 +15,3 @@ export class Irrigation extends Improvement {
 }
 
 export default Irrigation;
-
-Improvement.register(Irrigation);

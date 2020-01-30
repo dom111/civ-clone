@@ -1,0 +1,10 @@
+{
+  "name": "core-government",
+  "version": "0.0.1",
+  "components": [
+    {
+      "type": "script",
+      "file": "Government.js"
+    }
+  ]
+}

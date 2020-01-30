@@ -1,5 +1,5 @@
 import CityImprovementRegistry from '../core-city-improvement/Registry.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
 
@@ -44,7 +44,11 @@ export default class City {
       ...this.tiles
         .filter((tile) => ! this.tilesWorked.includes(tile))
         .filter((tile) => tile.isVisible(this.player))
-        .sort((a, b) => b.score() - a.score())
+        .sort((a, b) => b.score({
+          player: this.player,
+        }) - a.score({
+          player: this.player,
+        }))
         // +1 here because we also work the main city tile
         .slice(0, (this.size + 1) - this.tilesWorked.length)
     );
@@ -57,34 +61,38 @@ export default class City {
   autoAssignWorkers() {
     this.tilesWorked = Tileset.from(this.tile, ...this.tiles
       .filter((tile) => tile.isVisible(this.player))
-      .sort((a, b) => b.score() - a.score())
+      .sort((a, b) => b.score({
+        player: this.player,
+      }) - a.score({
+        player: this.player,
+      }))
       .slice(0, this.size)
     );
   }
 
   // TODO: just pass this through to the Tileset
   resource(type) {
-    return this.tilesWorked.map((tile) => tile.resource(type))
+    return this.tilesWorked.map((tile) => tile.resource(this.player, type))
       .reduce((total, value) => total + value, 0)
     ;
   }
 
   // TODO: look at merging the below into availableBuildItems?
   availableBuildUnits() {
-    const buildRules = Rules.get('city:build:unit');
+    const buildRulesRegistry = RulesRegistry.get('city:build:unit');
 
-    return UnitRegistry.entries()
-      .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
+    return UnitRegistry
+      .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )
     ;
   }
 
   availableBuildImprovements() {
-    const buildRules = Rules.get('city:build:improvement');
+    const buildRulesRegistry = RulesRegistry.get('city:build:improvement');
 
-    return CityImprovementRegistry.entries()
-      .filter((buildItem) => buildRules.filter((rule) => rule.validate(this, buildItem))
+    return CityImprovementRegistry
+      .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )
     ;
@@ -100,7 +108,7 @@ export default class City {
   build(item) {
     this.building = item;
 
-    [this.buildCost] = Rules.get('city:build-cost')
+    [this.buildCost] = RulesRegistry.get('city:build-cost')
       .filter((rule) => rule.validate(item, this))
       .map((rule) => rule.process(item, this))
       .sort((a, b) => a - b)
@@ -115,7 +123,7 @@ export default class City {
 
   yields() {
     return this.tilesWorked
-      .yields()
+      .yields(this.player)
     ;
   }
 }

@@ -26,6 +26,10 @@
         },
         {
             "type": "script",
+            "file": "PlayerActionProvider.js"
+        },
+        {
+            "type": "script",
             "file": "PlayerActionRegistry.js"
         },
         {

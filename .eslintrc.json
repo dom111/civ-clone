@@ -27,7 +27,7 @@
     }],
     "curly": ["error", "all"],
     "eqeqeq": "error",
-    "import/extensions": ["warn", "always"],
+    "import/extensions": ["warn", "ignorePackages"],
     "import/first": ["warn", "always"],
     "indent": ["warn", 2],
     "linebreak-style": ["error", "unix"],

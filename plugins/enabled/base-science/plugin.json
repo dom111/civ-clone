@@ -17,6 +17,14 @@
     },
     {
       "type": "script",
+      "file": "Advances/CeremonialBurial.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/CodeOfLaws.js"
+    },
+    {
+      "type": "script",
       "file": "Advances/HorsebackRiding.js"
     },
     {
@@ -34,6 +42,14 @@
     {
       "type": "script",
       "file": "Advances/Mathematics.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Monarchy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Mysticism.js"
     },
     {
       "type": "script",

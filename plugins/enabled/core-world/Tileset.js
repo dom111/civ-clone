@@ -69,8 +69,8 @@ export class Tileset {
     this.#tiles.push(...tiles);
   }
 
-  score(values) {
-    return this.map((tile) => tile.score(values))
+  score({player = null, values}) {
+    return this.map((tile) => tile.score({player, values}))
       .reduce((total, score) => total + score, 0)
     ;
   }
@@ -79,8 +79,8 @@ export class Tileset {
     return this.#tiles.some(iterator);
   }
 
-  yields(yields = YieldRegistry.entries().map((YieldType) => new YieldType())) {
-    yields.forEach((tileYield) => this.#tiles.forEach((tile) => tile.resource(tileYield)));
+  yields(player, yields = YieldRegistry.entries().map((YieldType) => new YieldType())) {
+    yields.forEach((tileYield) => this.#tiles.forEach((tile) => tile.resource(tileYield, player)));
 
     return yields;
   }

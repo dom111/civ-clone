@@ -1,6 +1,6 @@
 import {Land, Water} from '../core-terrain/Types.js';
 import {Generator as BaseGenerator} from '../core-world-generator/Generator.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import TerrainFeatureRegistry from '../core-terrain-features/TerrainFeatureRegistry.js';
 import TerrainRegistry from '../core-terrain/TerrainRegistry.js';
 
@@ -78,8 +78,8 @@ export class IslandsGenerator extends BaseGenerator {
     }
 
     const [water, land] = [Water, Land]
-      .map((type) => this.#map
-        .filter((tile) => tile instanceof type)
+      .map((Type) => this.#map
+        .filter((tile) => tile instanceof Type)
         .length
       )
     ;
@@ -120,11 +120,11 @@ export class IslandsGenerator extends BaseGenerator {
   }
 
   populateTerrain() {
-    Rules.get('terrain:distributionGroups')
+    RulesRegistry.get('terrain:distributionGroups')
       .filter((rule) => rule.validate())
       .map((rule) => rule.process())
       .forEach((group) => group.forEach((TerrainType) => {
-        Rules.get('terrain:distribution')
+        RulesRegistry.get('terrain:distribution')
           .filter((rule) => rule.validate(TerrainType, this.#map))
           .map((rule) => rule.process(TerrainType, this.#map))
           .forEach((distribution) => distribution.forEach(
@@ -215,7 +215,7 @@ export class IslandsGenerator extends BaseGenerator {
             this.#map
               .filter((terrain) => terrain instanceof Terrain)
               .forEach((terrain) => {
-                Rules.get('terrain:feature')
+                RulesRegistry.get('terrain:feature')
                   .filter((rule) => rule.validate(TerrainFeature, Terrain))
                   .forEach((rule) => {
                     if (rule.process()) {

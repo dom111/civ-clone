@@ -1,7 +1,7 @@
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 engine.on('city:building-complete', (city, item) => {
-  Rules.get('city:building-complete')
+  RulesRegistry.get('city:building-complete')
     .forEach((rule) => {
       if (rule.validate(city, item)) {
         rule.process(city, item);

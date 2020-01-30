@@ -1,0 +1,38 @@
+{
+  "name": "base-governments",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-player-science",
+    "base-science",
+    "base-terrain-features",
+    "base-yields",
+    "core-government",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Governments/Anarchy.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments/Despotism.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments/Monarchy.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments/Republic.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Governments/availability.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments.js"
+    }
+  ]
+}

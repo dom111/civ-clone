@@ -25,9 +25,11 @@
 - [X] Fix AI bug where they always trend north-east. Maybe this is just masked - but seems less problematic.
 - [X] Add science.
 - [X] Add 'trade' tile yield.
+- [X] Break all plugins into `core` (parent classes/interfaces/rules) and `base` (implementations).
+- [X] Change terrain specials to be augments instead of specific terrain types - this would allow rivers as they are in Civ 2+
+- [X] Governments.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
-- [ ] Break all plugins into `core` (parent classes/interfaces/rules) and `base` (implementations).
 - [ ] Convert to TypeScript?
 - [ ] Re-work the 'trade' mechanism to not be hard-coded.
 - [ ] Renderer interface.
@@ -36,7 +38,6 @@
 - [ ] City Happiness.
 - [ ] Remote network players.
 - [ ] Even more civilizations.
-- [ ] Governments.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
 - [ ] Add `PlayerMap` classes that only see what the Player has discovered.
@@ -50,4 +51,12 @@
 - [ ] Add wealth.
 - [ ] Add build-queue.
 - [ ] Add Barbarians.
-- [ ] Change terrain specials to be augments instead of specific terrain types - this would allow rivers as they are in Civ 2+
+- [ ] Replace all unit stats (and maybe costs etc) with `Yield`s
+- [ ] Add `Modifier`s to `Yield`s with either a priority field, or a `Queue` of some sort.
+- [ ] Look at the benefit of creating a single entity registry with helper methods like `.is(...)`.
+- [ ] Replace all the `.improvements`, `.features` with some kind of registry value object. Alternatively, consider using the `Registry` pattern, return all entities to be self-contained and augment separately (e.g. `base-city-improvements` could provide a registry of improvements associated to a city)
+- [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
+- [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
+- [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
+- [ ] Add goody huts
+- [ ] Convert terrain improvements `availableOn` into `Rule`s.

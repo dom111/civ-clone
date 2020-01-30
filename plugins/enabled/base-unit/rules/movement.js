@@ -6,11 +6,11 @@ import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
 import OneCriteria from '../../core-rules/OneCriteria.js';
 import Rule from '../../core-rules/Rule.js';
-import Rules from '../../core-rules/Rules.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 import Tile from '../../core-world/Tile.js';
 
-Rules.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
-Rules.register(new Rule('unit:movement:isNeighbouringTile', new OneCriteria(
+RulesRegistry.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
+RulesRegistry.register(new Rule('unit:movement:isNeighbouringTile', new OneCriteria(
   new Criterion(
     (unit, to, from) => to.isNeighbourOf(from || unit.tile)
   ),
@@ -19,7 +19,7 @@ Rules.register(new Rule('unit:movement:isNeighbouringTile', new OneCriteria(
     (unit, to) => to.units.includes(unit.transport)
   )
 )));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'unit:movement:validateUnitType',
   new OneCriteria(
     (unit, to) => unit instanceof LandUnit && (
@@ -44,7 +44,7 @@ Rules.register(new Rule(
     (unit) => unit.air
   )
 ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'unit:movement:hasEnoughMovesLeft',
   new OneCriteria(
     new Criterion((unit) => unit.movesLeft >= .1),
@@ -57,8 +57,8 @@ Rules.register(new Rule(
 ));
 
 // This is analogous to the original Civilization unit adjacency rules
-Rules.register(new Rule(
-  'unit:movement:unitAdjacencyRules',
+RulesRegistry.register(new Rule(
+  'unit:movement:unitAdjacencyRulesRegistry',
   new Criterion((unit, to, from) => ! (from || unit.tile).getNeighbours()
     .filter(
       (tile) => tile.units.length > 0 &&
@@ -70,14 +70,14 @@ Rules.register(new Rule(
 ));
 
 // movement cost
-Rules.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));
+RulesRegistry.register(new Rule(
   'unit:movementCost:withRoad',
   new Criterion((unit, to, from) => (from || unit.tile).improvements.some((improvement) => improvement instanceof Road)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Road)),
   new Effect(() => 1 / 3)
 ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'unit:movementCost:withRailroad',
   new Criterion((unit, to, from) => (from || unit.tile).improvements.some((improvement) => improvement instanceof Railroad)),
   new Criterion((unit, to) => to.improvements.some((improvement) => improvement instanceof Railroad)),
@@ -86,7 +86,7 @@ Rules.register(new Rule(
   // new Criterion((unit) => ! (unit.player instanceof AIPlayer)),
   new Effect(() => 0)
 ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'unit:movementCost:beingTransported',
   new Criterion((unit) => unit instanceof LandUnit),
   new Criterion((unit) => unit.transport instanceof NavalTransport),

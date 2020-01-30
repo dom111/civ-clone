@@ -2,7 +2,7 @@ import {Food, Production} from '../base-yields/Yields.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 import {Land} from '../core-terrain/Types.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import {Science} from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
 import {Trade} from '../base-yield-trade/Yields/Trade.js';
@@ -17,17 +17,22 @@ engine.on('world:built', (map) => {
   engine.emit('world:generate-start-tiles');
 
   const numberOfPlayers = engine.option('players', 5),
-    // TODO: this is expensive in CPU time - optimise
-    // TODO: also getBy(() => true) is a hack...
     usedStartSquares = []
   ;
 
-  let startingSquares = engine.option('skipSort') ? map.getBy((tile) => tile.terrain instanceof Land) : map.getBy((tile) => tile.terrain instanceof Land)
-    .sort((a, b) =>
-      b.getSurroundingArea().score([[Food, 4], [Production, 2]]) -
-        a.getSurroundingArea().score([[Food, 4], [Production, 2]])
-    )
-    .slice(0, numberOfPlayers * 20)
+  // TODO: this is expensive in CPU time - optimise?
+  let startingSquares = engine.option('skipSort') ?
+    map.getBy((tile) => tile.terrain instanceof Land) :
+    map.getBy((tile) => tile.terrain instanceof Land)
+      .sort((a, b) =>
+        b.getSurroundingArea().score({
+          values: [[Food, 4], [Production, 2]],
+        }) -
+        a.getSurroundingArea().score({
+          values: [[Food, 4], [Production, 2]],
+        })
+      )
+      .slice(0, numberOfPlayers * 20)
   ;
 
   engine.emit('world:start-tiles', startingSquares);
@@ -38,7 +43,7 @@ engine.on('world:built', (map) => {
     const player = AIPlayer.get();
 
     player.chooseCivilization(availableCivilizations);
-    availableCivilizations = availableCivilizations.filter((civilization) => ! (player.civilization instanceof civilization));
+    availableCivilizations = availableCivilizations.filter((Civilization) => ! (player.civilization instanceof Civilization));
 
     startingSquares = startingSquares
       .filter((tile) => ! usedStartSquares.includes(tile))
@@ -68,7 +73,7 @@ engine.on('world:built', (map) => {
 });
 
 engine.on('engine:start', () => {
-  console.log(`Game started. ${Rules.entries().length} rules in play.`);
+  console.log(`Game started. ${RulesRegistry.entries().length} rules in play.`);
 });
 
 engine.on('turn:start', () => {
@@ -98,11 +103,11 @@ engine.on('turn:start', () => {
       });
 
     player.cities.forEach((city) => {
-      city.yields()
+      city.yields(player)
         .forEach((cityYield) => {
           // console.log(`${city.player.civilization.people} city of ${city.name} (${city.size}) has ${cityYield.value} ${cityYield.constructor.name}`);
 
-          Rules.get('city:cost')
+          RulesRegistry.get('city:cost')
             .filter((rule) => rule.validate(cityYield, city))
             .forEach((rule) => rule.process(cityYield, city))
           ;
@@ -115,7 +120,7 @@ engine.on('turn:start', () => {
 
             if (
               city.foodStorage >= ((city.size * 10) + 10)
-              // Rules.get('city:grow')
+              // RulesRegistry.get('city:grow')
               //   .some((rule) => rule.validate(city))
             ) {
               engine.emit('city:grow', city);
@@ -123,7 +128,7 @@ engine.on('turn:start', () => {
 
             if (
               city.foodStorage < 0
-              // Rules.get('city:shrink')
+              // RulesRegistry.get('city:shrink')
               //   .some((rule) => rule.validate(city))
             ) {
               engine.emit('city:shrink', city);

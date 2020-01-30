@@ -1,5 +1,5 @@
 import {Land, Water} from '../core-terrain/Types.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from './Tileset.js';
 import {Yield} from '../core-yields/Yield.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
@@ -12,6 +12,7 @@ export class Tile {
     this.map = map;
 
     this.improvements = [];
+    this.features = [];
     this.city = false;
     this.units = [];
     this.seenBy = [];
@@ -98,9 +99,10 @@ export class Tile {
       [1, 0],
       [1, -1],
     ]
-      .map(([x, y]) => [x * this.map.width, y * this.map.height])
-      .map(([x, y]) => [(this.x - tile.x) + x, (this.y - tile.y) + y])
-      .map((coords) => Math.hypot(...coords))
+      // .map(([x, y]) => [x * this.map.width, y * this.map.height])
+      // .map(([x, y]) => [(this.x - tile.x) + x, (this.y - tile.y) + y])
+      // .map((coords) => Math.hypot(...coords))
+      .map(([x, y]) => Math.hypot(...[(this.x - tile.x) + (x * this.map.width), (this.y - tile.y) + (y * this.map.height)]))
       .sort((a, b) => a - b)
     ;
 
@@ -137,23 +139,27 @@ export class Tile {
     return player.seenTiles.includes(this);
   }
 
-  resource(type) {
-    Rules.get('tile:yield')
-      .filter((rule) => rule.validate(type, this))
-      .forEach((rule) => rule.process(type, this))
+  resource(type, player) {
+    RulesRegistry.get('tile:yield')
+      .filter((rule) => rule.validate(type, this, player))
+      .forEach((rule) => rule.process(type, this, player))
     ;
 
     return type;
   }
 
-  yields(yields = YieldRegistry.entries().map((YieldType) => new YieldType())) {
+  yields(
+    player,
+    yields = YieldRegistry.entries()
+      .map((YieldType) => new YieldType())
+  ) {
     return yields
-      .map((tileYield) => this.resource(tileYield))
+      .map((tileYield) => this.resource(tileYield, player))
     ;
   }
 
-  score(values = [[Yield, 3]]) {
-    const yields = this.yields();
+  score(player, values = [[Yield, 3]]) {
+    const yields = this.yields(player);
 
     return yields.map((tileYield) => {
       const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),

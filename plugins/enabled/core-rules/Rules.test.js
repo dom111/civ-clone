@@ -3,7 +3,7 @@ import Criterion from './Criterion.js';
 import Effect from './Effect.js';
 import OneCriteria from './OneCriteria.js';
 import Rule from './Rule.js';
-import Rules from './Rules.js';
+import RulesRegistry from './RulesRegistry.js';
 import process from 'process';
 
 // Needed by the registry - perhaps this needs to be injected?
@@ -43,7 +43,7 @@ const emptyRule = new Rule(
   squareRule,
   evenAndSquareRule,
   evenOrSquareRule,
-].forEach((rule) => Rules.register(rule));
+].forEach((rule) => RulesRegistry.register(rule));
 
 const tests = [
   [emptyRule.validate(), true, 'Check empty rule validates successfully'],
@@ -51,7 +51,7 @@ const tests = [
   [emptyCriteria.validate(), true, 'Check empty Criteria validates successfully'],
   [emptyCriterion.validate(), true, 'Check empty Criterion validates successfully'],
   [emptyOneCriteria.validate(), true, 'Check empty OneCriteria validates successfully'],
-  [Rules.get('empty').length, 1],
+  [RulesRegistry.get('empty').length, 1],
   [even.validate(2), true],
   [even.validate(1), false],
   [square.validate(4), true],
@@ -61,7 +61,7 @@ const tests = [
   [evenOrSquare.validate(6), true],
   [evenOrSquare.validate(25), true],
   [evenOrSquare.validate(13), false],
-  [Rules.get('number').length, 4],
+  [RulesRegistry.get('number').length, 4],
   [ruleWithJustEffect.validate(), true],
   [ruleWithJustEffect.process(), 42],
   [ruleThatSquares.process(5), 25],

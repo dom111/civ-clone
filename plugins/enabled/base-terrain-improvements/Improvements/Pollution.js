@@ -2,10 +2,10 @@ import {Arctic, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, Riv
 import Improvement from '../../core-terrain-improvements/Improvement.js';
 
 export class Pollution extends Improvement {
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   cost = 0;
 
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   static available = [
     Arctic,
     Desert,
@@ -22,5 +22,3 @@ export class Pollution extends Improvement {
 }
 
 export default Pollution;
-
-Improvement.register(Pollution);

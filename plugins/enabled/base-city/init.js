@@ -1,5 +1,5 @@
 import {Irrigation, Road} from '../base-terrain-improvements/Improvements.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Time from '../core-turn-based-game/Time.js';
 
 engine.on('city:created', (city) => {
@@ -19,7 +19,7 @@ engine.on('city:destroyed', (city, player) => {
 });
 
 engine.on('city:grow', (city) => {
-  Rules.get('city:grow')
+  RulesRegistry.get('city:grow')
     .forEach((rule) => {
       if (rule.validate(city)) {
         rule.process(city);

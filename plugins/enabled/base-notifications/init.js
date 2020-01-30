@@ -1,23 +1,24 @@
 import Notification from './Notification.js';
 import Notifications from './Notifications.js';
 
-
-
-const renderTurns = parseInt(engine.option('renderTurns', 0), 10),
-  eventsToAnnounce = engine.option('eventsToAnnounce', (renderTurns > 0) ?
-    '' :
-    [
-      'city:captured',
-      'city:created',
-      'city:destroyed',
-      'city:building-complete',
-      'city:improvement:built',
-      'player:defeated',
-      'player:research-complete',
-      'time:year-updated',
-      'unit:destroyed',
-    ]
-      .join(',')
+const renderTurns = parseInt(engine.option('renderTurns', 1), 10),
+  eventsToAnnounce = engine.option(
+    'eventsToAnnounce',
+    (renderTurns > 0) ?
+      '' :
+      [
+        'city:captured',
+        'city:created',
+        'city:destroyed',
+        'city:building-complete',
+        'city:improvement:built',
+        'player:defeated',
+        'player:government:changed',
+        'player:research-complete',
+        'time:year-updated',
+        'unit:destroyed',
+      ]
+        .join(',')
   )
     .split(/,/)
 ;
@@ -32,7 +33,9 @@ const renderTurns = parseInt(engine.option('renderTurns', 0), 10),
   // 'world:built',
   // 'world:generate-start-tiles',
   // 'world:start-tiles',
-].forEach((event) => engine.on(event, () => Notifications.check()));
+]
+  .forEach((event) => engine.on(event, () => Notifications.check()))
+;
 
 engine.on('notification', (data) => {
   Notifications.add(data);
@@ -55,8 +58,9 @@ Object.entries({
   // 'engine:start': () => '',
   'player:turn-start': (player) => `${player.constructor.name} ${player.id} ${player.leader.name}'s (${player.civilization.nation}) turn.`,
   'player:defeated': (defeatedPlayer, attacker) => `${defeatedPlayer.civilization.people} civilization destroyed by ${attacker.civilization.nation}.`,
+  'player:government:changed': (player, government) => `${player.civilization.nation} has formed a ${government.constructor.name}.`,
   'player:research': (player, Advance) => `${player.civilization.nation} have started researching ${Advance.name}.`,
-  'player:research-complete': (player, Advance) => `${player.civilization.nation} have discovered the secrets of ${Advance.constructor.name}.`,
+  'player:research-complete': (player, advance) => `${player.civilization.nation} have discovered the secrets of ${advance.constructor.name}.`,
   'tile:improvement-built': (tile, improvement) => `${improvement} built at ${tile.x}, ${tile.y} (${tile.terrain.constructor.name} - ${tile.terrain.name}).`,
   'time:year-updated': (year) => `${year < 0 ? `${-year} BC` : `${year} AD`}`,
   'turn:start': (Time) => `Turn Start: ${Time.turn}.`,

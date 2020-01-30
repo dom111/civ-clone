@@ -8,17 +8,56 @@ import vm from 'vm';
 export class Manager {
   #context;
   #engine;
+  #engineModule;
   #plugins = {};
+  #promiseFactoryModule;
 
   constructor(engine) {
     this.#engine = engine;
-    this.#context = vm.createContext({
+
+    const context = {
       console: ['log', 'warn', 'error'].reduce((obj, key) => ({
         ...obj,
         [key]: (...args) => console[key](...args),
       }), {}),
-      promiseFactory,
-      engine,
+    };
+
+    Object.defineProperty(context, 'engine', {
+      writable: false,
+      enumerable: true,
+      configurable: false,
+      value: [
+        'emit',
+        'on',
+        'option',
+        'setOption',
+      ]
+        .reduce((object, key) => {
+          Object.defineProperty(object, key, {
+            writable: false,
+            enumerable: true,
+            configurable: false,
+            value: (...args) => engine[key](...args),
+          });
+
+          return object;
+        }, {})
+      ,
+    });
+
+    Object.defineProperty(context, 'promiseFactory', {
+      writable: false,
+      enumerable: true,
+      configurable: false,
+      value: promiseFactory,
+    });
+
+    this.#context = vm.createContext(context);
+    this.#engineModule = new vm.SourceTextModule('export default engine;', {
+      context: this.#context,
+    });
+    this.#promiseFactoryModule = new vm.SourceTextModule('export default promiseFactory;', {
+      context: this.#context,
     });
   }
 
@@ -70,6 +109,14 @@ export class Manager {
                   this.#engine.option('debug') && console.log(`resolving ${specifier}`);
 
                   return promiseFactory(async (resolve, reject) => {
+                    if (specifier === 'engine') {
+                      return resolve(this.#engineModule);
+                    }
+
+                    if (specifier === 'promiseFactory') {
+                      return resolve(this.#promiseFactoryModule);
+                    }
+
                     try {
                       const fullPath = path.dirname(path.join(component.path, component.file)),
                         filePath = path.relative(this.#engine.path('enabledPlugins'), path.join(component.path, component.file)),

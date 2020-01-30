@@ -8,7 +8,7 @@ export class Improvement {
   }
 
   static availableOn(terrain) {
-    // TODO: use Rules so things like rivers necessitate Bridge Building
+    // TODO: use RulesRegistry so things like rivers necessitate Bridge Building
     return this.available.some((constructor) => terrain instanceof constructor);
   }
 }

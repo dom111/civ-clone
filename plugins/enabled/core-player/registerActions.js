@@ -1,4 +1,4 @@
-import Effect from '../core-rules/Effect.js';
+import PlayerActionProvider from './PlayerActionProvider.js';
 import PlayerActionRegistry from './PlayerActionRegistry.js';
 
 // base actions
@@ -6,5 +6,5 @@ import PlayerActionRegistry from './PlayerActionRegistry.js';
   (player) => player.units.filter((unit) => unit.active && unit.movesLeft),
   (player) => player.cities.filter((city) => ! city.building),
 ]
-  .forEach((effect) => PlayerActionRegistry.register(new Effect(effect)))
+  .forEach((provider) => PlayerActionRegistry.register(new PlayerActionProvider(provider)))
 ;

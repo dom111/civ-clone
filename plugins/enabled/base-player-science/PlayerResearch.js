@@ -1,5 +1,5 @@
 import AdvanceRegistry from '../core-science/AdvanceRegistry.js';
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class PlayerResearch {
   #completedResearch = [];
@@ -28,8 +28,8 @@ export class PlayerResearch {
   }
 
   getAvailableResearch() {
-    return AdvanceRegistry.entries()
-      .filter((Advance) => Rules.get('research:advance')
+    return AdvanceRegistry
+      .filter((Advance) => RulesRegistry.get('research:advance')
         .filter((rule) => rule.validate(Advance, this.#completedResearch))
         .every((rule) => rule.process(Advance, this.#completedResearch) === true)
       )
@@ -52,7 +52,7 @@ export class PlayerResearch {
   }
 
   setResearch(Advance) {
-    [this.#researchCost] = Rules.get('advance:cost')
+    [this.#researchCost] = RulesRegistry.get('advance:cost')
       .filter((rule) => rule.validate(Advance))
       .map((rule) => rule.process())
     ;

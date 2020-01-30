@@ -1,4 +1,4 @@
-import {Desert, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
+import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
@@ -6,7 +6,11 @@ import {Land, Water} from '../core-terrain/Types.js';
 import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
+import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
+import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
+import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';
+import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
 import {Trade} from '../base-yield-trade/Yields/Trade.js';
 import Unit from '../core-unit/Unit.js';
 
@@ -14,11 +18,14 @@ export class SimpleAIPlayer extends AIPlayer {
   #shouldBuildCity = (tile) => {
     return (tile.isLand() &&
       tile.getSurroundingArea()
-        .score([
-          [Food, 4],
-          [Production, 2],
-          [Trade, 1],
-        ]) >= 150) &&
+        .score({
+          player: this,
+          values: [
+            [Food, 4],
+            [Production, 2],
+            [Trade, 1],
+          ],
+        }) >= 150) &&
       ! tile.getSurroundingArea(4)
         .cities()
         .length
@@ -26,7 +33,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldIrrigate = (tile) => {
-    return [Desert, Plains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+    return [Desert, Plains, Grassland, River].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
       ! tile.improvements
         .some((improvement) => improvement instanceof Irrigation) &&
@@ -254,7 +261,8 @@ export class SimpleAIPlayer extends AIPlayer {
         if (! city.tile.units.length) {
           this.#undefendedCities.push(city.tile);
         }
-      });
+      })
+    ;
   }
 
   takeTurn() {
@@ -263,6 +271,14 @@ export class SimpleAIPlayer extends AIPlayer {
         let loopCheck = 0;
 
         this.preProcessTurn();
+
+        const [playerGovernment] = PlayerGovernmentRegistry.filter((playerGovernment) => playerGovernment.player === this),
+          [playerResearch] = PlayerResearchRegistry.filter((playerScience) => playerScience.player === this)
+        ;
+
+        if (playerResearch.hasCompleted(MonarchyAdvance) && ! playerGovernment.is(MonarchyGovernment)) {
+          playerGovernment.set(new MonarchyGovernment());
+        }
 
         while (this.hasActions()) {
           if (loopCheck++ > 1e3) {

@@ -1,6 +1,6 @@
-import Effect from '../core-rules/Effect.js';
+import PlayerActionProvider from './PlayerActionProvider.js';
 import Registry from '../core-registry/Registry.js';
 
-export const PlayerActionRegistry = new Registry('player-action', Effect);
+export const PlayerActionRegistry = new Registry('player-action', PlayerActionProvider);
 
 export default PlayerActionRegistry;

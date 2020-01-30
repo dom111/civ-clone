@@ -3,7 +3,10 @@
   "title": "Simple AI Player",
   "version": "0.0.1",
   "dependencies": [
+    "base-governments",
+    "base-player-government",
     "base-player-science",
+    "base-science",
     "base-terrain",
     "base-terrain-improvements",
     "base-unit",

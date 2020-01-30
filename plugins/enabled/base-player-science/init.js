@@ -1,4 +1,4 @@
-import Effect from '../core-rules/Effect.js';
+import PlayerActionProvider from '../core-player/PlayerActionProvider.js';
 import PlayerActionRegistry from '../core-player/PlayerActionRegistry.js';
 import PlayerResearch from './PlayerResearch.js';
 import PlayerResearchRegistry from './PlayerResearchRegistry.js';
@@ -8,7 +8,7 @@ engine.on('player:added', (player) => PlayerResearchRegistry.register(new Player
 
 engine.on('player:yield', (player, playerYield) => {
   if (playerYield instanceof Science) {
-    const [research] = PlayerResearchRegistry.entries()
+    const [research] = PlayerResearchRegistry
       .filter((playerResearch) => playerResearch.player === player)
     ;
 
@@ -16,8 +16,8 @@ engine.on('player:yield', (player, playerYield) => {
   }
 });
 
-PlayerActionRegistry.register(new Effect((player) => {
-  const [research] = PlayerResearchRegistry.entries()
+PlayerActionRegistry.register(new PlayerActionProvider((player) => {
+  const [research] = PlayerResearchRegistry
     .filter((playerResearch) => playerResearch.player === player)
   ;
 

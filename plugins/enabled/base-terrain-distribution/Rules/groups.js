@@ -14,9 +14,9 @@ import {
 } from '../../base-terrain/Terrains.js';
 import Effect from '../../core-rules/Effect.js';
 import Rule from '../../core-rules/Rule.js';
-import Rules from '../../core-rules/Rules.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'terrain:distributionGroups:root',
   // first pass (root terrain types)
   new Effect(() => [
@@ -24,7 +24,7 @@ Rules.register(new Rule(
     Grassland,
   ])
 ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'terrain:distributionGroups:base',
   // first pass (terrain types)
   new Effect(() => [

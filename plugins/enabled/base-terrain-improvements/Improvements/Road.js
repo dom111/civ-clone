@@ -13,10 +13,10 @@ import {
 import Improvement from '../../core-terrain-improvements/Improvement.js';
 
 export class Road extends Improvement {
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   cost = 1;
 
-  // TODO: control via Rules
+  // TODO: control via RulesRegistry
   static available = [
     Arctic,
     Desert,
@@ -32,5 +32,3 @@ export class Road extends Improvement {
 }
 
 export default Road;
-
-Improvement.register(Road);

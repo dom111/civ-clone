@@ -5,16 +5,16 @@ import Effect from '../../core-rules/Effect.js';
 import {NavalUnit} from '../Types.js';
 // import OneCriteria from '../../core-rules/OneCriteria.js';
 import Rule from '../../core-rules/Rule.js';
-import Rules from '../../core-rules/Rules.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 import {Settlers} from '../Units.js';
 
-// Rules.register(new Rule(
+// RulesRegistry.register(new Rule(
 //   'city:build:unit:any',
 //   new Effect((city) => new Criterion(
 //     () => (city.production - city.units.length) > 0
 //   ))
 // ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'city:build:unit:settlers',
   new Criterion((city, buildItem) => buildItem === Settlers),
   new Effect((city) => new Criteria(
@@ -22,7 +22,7 @@ Rules.register(new Rule(
     // new Criterion(() => city.surplusFood > 0)
   ))
 ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'city:build:unit:trireme',
   new Criterion((city, buildItem) => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
   new Effect((city, buildItem) => new Criteria(
@@ -33,12 +33,12 @@ Rules.register(new Rule(
 
 // on built
 // For example:
-// Rules.register(new Rule(
+// RulesRegistry.register(new Rule(
 //   'unit:built:veteran',
 //   new Criterion((unit, city) => city.hasImprovement(Barracks)),
 //   new Effect((unit) => unit.improvements.push(new Veteran()))
 // ));
-Rules.register(new Rule(
+RulesRegistry.register(new Rule(
   'city:building-complete:unit:settlers',
   new Criterion((city, unit) => unit instanceof Settlers),
   new Effect((city) => city && engine.emit('city:shrink', city))

@@ -24,7 +24,7 @@ export class Player {
 
   getActions() {
     return PlayerActionRegistry.entries()
-      .flatMap((actionsProvider) => actionsProvider.apply(this))
+      .flatMap((actionsProvider) => actionsProvider.provide(this))
     ;
   }
 

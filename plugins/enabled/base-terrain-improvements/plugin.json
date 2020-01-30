@@ -1,4 +1,4 @@
-{
+  {
   "name": "base-terrain-improvements",
   "version": "0.0.1",
   "dependencies": [
@@ -35,10 +35,6 @@
     {
       "type": "script",
       "file": "Rules/Yields/Desert.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Grassland.js"
     },
     {
       "type": "script",

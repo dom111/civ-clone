@@ -1,4 +1,4 @@
-import Rules from '../core-rules/Rules.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class Unit {
   #city;
@@ -92,7 +92,7 @@ export class Unit {
   finalAttack() {
     let attack = this.attack * Math.random();
 
-    Rules.get('unit:combat:attack')
+    RulesRegistry.get('unit:combat:attack')
       .forEach((rule) => {
         if (rule.validate(this)) {
           attack += (rule.process(this) || 0);
@@ -106,7 +106,7 @@ export class Unit {
   finalDefence() {
     let defence = this.defence * Math.random();
 
-    Rules.get('unit:combat:defence')
+    RulesRegistry.get('unit:combat:defence')
       .forEach((rule) => {
         if (rule.validate(this)) {
           defence += (rule.process(this) || 0);
@@ -138,7 +138,7 @@ export class Unit {
       }
     }
 
-    const [movementCost] = Rules.get('unit:movementCost')
+    const [movementCost] = RulesRegistry.get('unit:movementCost')
       .filter((rule) => rule.validate(this, to))
       .map((rule) => rule.process(this, to))
       .sort((a, b) => a - b)
@@ -231,7 +231,7 @@ export class Unit {
   }
 
   validateMove(to, from = this.tile) {
-    return Rules.get('unit:movement')
+    return RulesRegistry.get('unit:movement')
       .every((rule) => rule.validate(this, this.tile.get(to), from))
     ;
   }
