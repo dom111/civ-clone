@@ -28,6 +28,6 @@ var Civilopedia = engine.Civilopedia = {
   }
 };
 
-engine.on('engine:start', () => {
+engine.on('game:start', () => {
   Civilopedia.load();
 });

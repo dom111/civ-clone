@@ -1,3 +1,4 @@
+import TileUnitRegistry from '../base-tile-units/TileUnitRegistry.js';
 import Time from '../core-turn-based-game/Time.js';
 
 const observingPlayers = [];
@@ -48,23 +49,26 @@ engine.on('turn:start', () => {
     lookup.Cow = lookup.Shield = lookup.Grassland;
     lookup.Caribou = lookup.Tundra;
 
-    console.log(`${map.getBy(() => true).map((tile) => (
-      {
-        terrain: tile.terrain.constructor.name,
-        terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
-        units: tile.units.map((unit) => (
-          {
-            player: unit.player.civilization.people,
-            name: unit.constructor.name,
-          }
-        )),
-        city: tile.city && {
-          player: tile.city.player.civilization.people,
-          name: tile.city.name,
-        },
-        visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
-      }
-    ))
+    console.log(`${map.getBy(() => true)
+      .map((tile) => {
+        const tileUnits = TileUnitRegistry.getBy('tile', tile);
+
+        return {
+          terrain: tile.terrain.constructor.name,
+          terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
+          units: tileUnits.map((unit) => (
+            {
+              player: unit.player.civilization.people,
+              name: unit.constructor.name,
+            }
+          )),
+          city: tile.city && {
+            player: tile.city.player.civilization.people,
+            name: tile.city.name,
+          },
+          visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
+        };
+      })
       .map(
         (tile, i) => (
           tile.visible ?

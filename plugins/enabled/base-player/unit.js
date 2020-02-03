@@ -1,9 +1,13 @@
+import TileUnitRegistry from '../base-tile-units/TileUnitRegistry.js';
+
 engine.on('unit:created', (unit) => {
   if (! unit.player.activeUnit) {
     unit.player.activeUnit = unit;
   }
 
-  unit.tile.units.push(unit);
+  TileUnitRegistry.register(unit);
+
+  unit.applyVisibility();
 });
 
 engine.on('unit:activate', (unit) => {
@@ -22,7 +26,7 @@ engine.on('unit:action', (unit) => {
 
 engine.on('unit:destroyed', (unit) => {
   unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
-  unit.tile.units = unit.tile.units.filter((tileUnit) => tileUnit !== unit);
+  TileUnitRegistry.unregister(unit);
 
   if (unit.city) {
     unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
@@ -32,20 +36,8 @@ engine.on('unit:destroyed', (unit) => {
   unit.destroyed = true;
 });
 
-// engine.on('unit:activate-next', (player) => {
-//   if (player.unitsToAction.length) {
-//     engine.emit('unit:activate', player.unitsToAction[0]);
-//   }
-//   else {
-//     engine.emit('player:turn-end');
-//   }
-// });
-
-engine.on('unit:moved', (unit, from, to) => {
+engine.on('unit:moved', (unit) => {
   unit.applyVisibility();
-
-  from.units = from.units.filter((tileUnit) => tileUnit !== unit);
-  to.units.push(unit);
 
   if (unit.movesLeft <= 0.1) {
     unit.active = false;

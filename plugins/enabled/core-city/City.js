@@ -29,7 +29,6 @@ export default class City {
     this.tile = tile;
     this.name = name;
 
-    // main this tile, always worked
     tile.city = this;
     this.tiles = this.tile.getSurroundingArea();
 

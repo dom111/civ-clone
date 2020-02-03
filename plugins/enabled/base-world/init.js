@@ -1,7 +1,7 @@
 import World from '../core-world/World.js';
 import WorldGeneratorRegistry from '../core-world-generator/WorldGeneratorRegistry.js';
 
-engine.on('engine:build', () => {
+engine.on('engine:start', () => {
   const availableGenerators = WorldGeneratorRegistry.entries(),
     Generator = availableGenerators[Math.floor(availableGenerators.length * Math.random())],
     generatorOptions = {

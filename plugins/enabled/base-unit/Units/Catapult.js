@@ -1,11 +1,5 @@
 import {FortifiableUnit} from '../Types.js';
 
-export class Catapult extends FortifiableUnit {
-  title = 'Catapult';
-  attack = 6;
-  defence = 1;
-  movement = 1;
-  visibility = 1;
-}
+export class Catapult extends FortifiableUnit {}
 
 export default Catapult;

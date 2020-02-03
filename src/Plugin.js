@@ -12,7 +12,7 @@ export class Plugin {
   }
 
   get components() {
-    if (this.#components.length !== this.data.components.length) {
+    if (this.#components.length !== (this.data.components || []).length) {
       this.#components = this.data.components.map((component) => Component.fromType({data: component, plugin: this}));
     }
 

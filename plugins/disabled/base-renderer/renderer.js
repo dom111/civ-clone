@@ -968,7 +968,7 @@ BaseRenderer.Layer = class BaseLayer {
 
 global.renderer = new BaseRenderer();
 
-engine.on('engine:start', () => global.renderer.init());
+engine.on('game:start', () => global.renderer.init());
 
 engine.on('player-turn-start', (player) => {
   ['visibility', 'activeVisibility'].forEach((layer) => engine.emit('build-layer', layer));

@@ -1,73 +1,9 @@
-import {Land, Water} from '../../core-terrain/Types.js';
-import {LandUnit, NavalTransport, NavalUnit} from '../Types.js';
+import {LandUnit, NavalTransport} from '../Types.js';
 import {Railroad, Road} from '../../base-terrain-improvements/Improvements.js';
-// import AIPlayer from '../core-player/AIPlayer.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
-import OneCriteria from '../../core-rules/OneCriteria.js';
 import Rule from '../../core-rules/Rule.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
-import Tile from '../../core-world/Tile.js';
-
-RulesRegistry.register(new Rule('unit:movement:validToTile', new Criterion((unit, to) => to instanceof Tile)));
-RulesRegistry.register(new Rule('unit:movement:isNeighbouringTile', new OneCriteria(
-  new Criterion(
-    (unit, to, from) => to.isNeighbourOf(from || unit.tile)
-  ),
-  // This rule doesn't need to be met if we're being transported.
-  new Criterion(
-    (unit, to) => to.units.includes(unit.transport)
-  )
-)));
-RulesRegistry.register(new Rule(
-  'unit:movement:validateUnitType',
-  new OneCriteria(
-    (unit, to) => unit instanceof LandUnit && (
-      to.terrain instanceof Land ||
-      (
-        to.terrain instanceof Water &&
-        (
-          to.units.some((navalUnit) => (
-            unit.player === navalUnit.player &&
-            navalUnit instanceof NavalTransport &&
-            (
-              navalUnit.hasCapacity() ||
-              navalUnit === unit.transport
-            )
-          ))
-        )
-      )
-    ),
-    (unit, to) => unit instanceof NavalUnit && (
-      to.terrain instanceof Water || (to.city && to.city.player === unit.player)
-    ),
-    (unit) => unit.air
-  )
-));
-RulesRegistry.register(new Rule(
-  'unit:movement:hasEnoughMovesLeft',
-  new OneCriteria(
-    new Criterion((unit) => unit.movesLeft >= .1),
-
-    // This rule doesn't need to be met if we're being transported.
-    new Criterion(
-      (unit, to) => to.units.includes(unit.transport)
-    )
-  )
-));
-
-// This is analogous to the original Civilization unit adjacency rules
-RulesRegistry.register(new Rule(
-  'unit:movement:unitAdjacencyRulesRegistry',
-  new Criterion((unit, to, from) => ! (from || unit.tile).getNeighbours()
-    .filter(
-      (tile) => tile.units.length > 0 &&
-        tile.units[0].player !== unit.player
-    )
-    .flatMap((tile) => tile.getNeighbours())
-    .includes(to)
-  )
-));
 
 // movement cost
 RulesRegistry.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));

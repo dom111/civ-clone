@@ -17,11 +17,12 @@ export class NavalTransport extends NavalUnit {
     return this.cargo.length > 0;
   }
 
-  move(to) {
-    super.move(to);
+  action(action) {
+    super.action(action);
 
+    // TODO: need to make unload an action and deal with this differently, perhaps have a `Transport` action?
     this.cargo.forEach((unit) => {
-      unit.move(to);
+      unit.action(action);
     });
   }
 

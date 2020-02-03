@@ -39,8 +39,6 @@ export class Registry {
     if (! this.#registry.includes(entity)) {
       this.#registry.push(entity);
     }
-
-    engine.emit(`${this.#namespace}:registered`, entity);
   }
 
   unregister(entity) {
@@ -48,8 +46,6 @@ export class Registry {
 
     if (index > -1) {
       this.#registry.splice(index, 1);
-
-      engine.emit(`${this.#namespace}:unregistered`, entity);
     }
   }
 }

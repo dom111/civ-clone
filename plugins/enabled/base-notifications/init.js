@@ -25,7 +25,6 @@ const renderTurns = parseInt(engine.option('renderTurns', 1), 10),
 
 [
   'turn:start',
-  // 'engine:build',
   // 'engine:initialise',
   // 'engine:plugins-loaded',
   // 'engine:settings-loaded',
@@ -51,7 +50,6 @@ Object.entries({
   'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size}).`,
   'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size}).`,
   'city-improvement:built': (city, improvement) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
-  // 'engine:build': () => '',
   // 'engine:initialise': () => '',
   // 'engine:plugins-loaded': () => '',
   // 'engine:settings-loaded': () => '',

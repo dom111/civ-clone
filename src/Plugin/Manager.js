@@ -9,6 +9,7 @@ export class Manager {
   #context;
   #engine;
   #engineModule;
+  #pluginManifests = {};
   #plugins = {};
   #promiseFactoryModule;
 
@@ -69,27 +70,28 @@ export class Manager {
       this.#plugins[pluginName] = promiseFactory(async (resolve, reject) => {
         try {
           const pluginPath = path.join(
-              this.#engine.path('enabledPlugins'),
-              pluginName
-            ),
-            pluginJSONPath = path.join(pluginPath, 'plugin.json')
+            this.#engine.path('plugins'),
+            pluginName
+          )
           ;
-
-          await fs.access(pluginJSONPath);
 
           this.#engine.option('debug') && console.log(`loading ${pluginName}'s dependencies`);
 
-          const pluginData = await loadJSON(pluginJSONPath),
+          const pluginData = await this.loadManifest(pluginName),
             plugin = new Plugin({
               ...pluginData,
               path: pluginPath,
             }),
-            cyclicDependencies = (plugin.dependencies || []).filter((dependency) => (dependency.dependencies || []).includes(pluginName))
+            cyclicDependencies = (await Promise.all(
+              (plugin.dependencies || [])
+                .map(async (pluginName) => await this.loadManifest(pluginName))
+            ))
+              .filter((dependency) => (dependency.dependencies || []).includes(pluginName))
           ;
 
           if (cyclicDependencies.length > 0) {
             return reject(
-              new TypeError(
+              new ReferenceError(
                 `Cyclic dependencies exist: ${
                   cyclicDependencies.map((dependency) => `${pluginName} => ${dependency.name} => ${pluginName}`)
                     .join(', ')
@@ -119,9 +121,9 @@ export class Manager {
 
                     try {
                       const fullPath = path.dirname(path.join(component.path, component.file)),
-                        filePath = path.relative(this.#engine.path('enabledPlugins'), path.join(component.path, component.file)),
+                        filePath = path.relative(this.#engine.path('plugins'), path.join(component.path, component.file)),
                         calculatedPath = path.resolve(fullPath, specifier),
-                        relativePath = path.relative(this.#engine.path('enabledPlugins'), calculatedPath),
+                        relativePath = path.relative(this.#engine.path('plugins'), calculatedPath),
                         [dependencyName, ...componentPaths] = relativePath.split(/\//),
                         componentName = path.join(...componentPaths),
                         [dependency] = [...dependencies, plugin].filter((dependency) => dependency.name === dependencyName)
@@ -187,10 +189,10 @@ export class Manager {
   load() {
     return promiseFactory(async (resolve, reject) => {
       try {
-        const enabledPlugins = await fs.readdir(this.#engine.path('enabledPlugins')),
-          pluginPromises = Promise.all(enabledPlugins.map((pluginName) => this.get(pluginName))),
+        const plugins = await fs.readdir(this.#engine.path('plugins')),
+          pluginPromises = Promise.all(plugins.map((pluginName) => this.get(pluginName))),
           timeoutId = this.#engine.option('debug') && setTimeout(() => {
-            console.log(enabledPlugins.map((pluginName) => [pluginName, this.get(pluginName)]));
+            console.log(plugins.map((pluginName) => [pluginName, this.get(pluginName)]));
           }, 500),
           loadedPlugins = await pluginPromises
         ;
@@ -207,6 +209,18 @@ export class Manager {
         reject(e);
       }
     });
+  }
+
+  async loadManifest(pluginName) {
+    const pluginJSONPath = path.join(this.#engine.path('plugins'), pluginName, this.#engine.option('manifestName'));
+
+    await fs.access(pluginJSONPath);
+
+    if (! (pluginName in this.#pluginManifests)) {
+      this.#pluginManifests[pluginName] = await loadJSON(pluginJSONPath);
+    }
+
+    return this.#pluginManifests[pluginName];
   }
 }
 

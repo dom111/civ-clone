@@ -70,9 +70,11 @@ engine.on('world:built', (map) => {
       .forEach((tile) => engine.emit('tile:seen', tile, player))
     ;
   }
+
+  engine.emit('game:start');
 });
 
-engine.on('engine:start', () => {
+engine.on('game:start', () => {
   console.log(`Game started. ${RulesRegistry.entries().length} rules in play.`);
 });
 
@@ -88,13 +90,14 @@ engine.on('turn:start', () => {
           unit.busy--;
 
           if (unit.busy === 0) {
+            // TODO: This feels crude - should maybe just have a promise to resolve.
             if (unit.actionOnComplete) {
               unit.actionOnComplete();
             }
           }
         }
 
-        unit.movesLeft = unit.movement;
+        unit.movesLeft = unit.movement.value();
 
         if (! unit.busy) {
           unit.busy = false;
@@ -105,15 +108,10 @@ engine.on('turn:start', () => {
     player.cities.forEach((city) => {
       city.yields(player)
         .forEach((cityYield) => {
-          // console.log(`${city.player.civilization.people} city of ${city.name} (${city.size}) has ${cityYield.value()} ${cityYield.constructor.name}`);
-
           RulesRegistry.get('city:cost')
             .filter((rule) => rule.validate(cityYield, city))
             .forEach((rule) => rule.process(cityYield, city))
           ;
-
-          // console.log(`${city.player.civilization.people} city of ${city.name} has ${cityYield.value()} ${cityYield.constructor.name}`);
-          // console.log(city.tilesWorked.map((tile) => `${tile.terrain.constructor.name} [${tile.yields().map((tileYield) => `${tileYield.value()} ${tileYield.constructor.name}`)}]`));
 
           if (cityYield instanceof Food) {
             city.foodStorage += cityYield.value();

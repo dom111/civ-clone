@@ -1,0 +1,17 @@
+{
+  "name": "core-unit-actions",
+  "version": "0.0.1",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Action.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitActionRegistry.js"
+    }
+  ]
+}

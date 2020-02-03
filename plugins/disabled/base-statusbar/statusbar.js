@@ -2,7 +2,7 @@
 
 export class Statusbar {
   constructor() {
-    engine.on('engine:start', () => this.init());
+    engine.on('game:start', () => this.init());
   }
 
   init() {

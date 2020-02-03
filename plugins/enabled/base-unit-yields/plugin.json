@@ -1,0 +1,19 @@
+{
+  "name": "base-unit-yields",
+  "version": "0.0.1",
+  "dependencies": [
+    "base-unit",
+    "core-rules",
+    "core-unit-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/yields.js"
+    },
+    {
+      "type": "script",
+      "file": "events.js"
+    }
+  ]
+}
