@@ -13,9 +13,6 @@ export class Tile {
 
     this.improvements = [];
     this.features = [];
-    this.city = false;
-    this.units = [];
-    this.seenBy = [];
 
     // when generating use this:
     // this.seed = Math.ceil(Math.random() * 1e7);

@@ -5,6 +5,7 @@ import PlayerGovernmentRegistry from '../../base-player-government/PlayerGovernm
 import {Production} from '../../base-terrain-yields/Yields.js';
 import Rule from '../../core-rules/Rule.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 RulesRegistry.register(new Rule(
   'city:cost:production:base',
@@ -20,7 +21,9 @@ RulesRegistry.register(new Rule(
   }),
   // For units like Caravan/Diplomat, they could extend a FreeUnit class or something and these could be filtered out
   new Effect((tileYield, city) => {
-    const supportedUnits = city.units.length;
+    const supportedUnits = UnitRegistry.getBy('city', city)
+      .length
+    ;
 
     if (supportedUnits > city.size) {
       tileYield.subtract(supportedUnits - city.size);

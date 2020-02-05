@@ -10,11 +10,15 @@
     "components": [
         {
             "type": "script",
-            "file": "UnitRegistry.js"
+            "file": "Unit.js"
         },
         {
             "type": "script",
-            "file": "Unit.js"
+            "file": "AvailableUnitRegistry.js"
+        },
+        {
+            "type": "script",
+            "file": "UnitRegistry.js"
         }
     ]
 }

@@ -25,12 +25,6 @@ export class Unit {
     this.#city   = city;
     this.#tile   = tile;
 
-    player.units.push(this);
-
-    if (city) {
-      city.units.push(this);
-    }
-
     engine.emit('unit:created', this);
   }
 

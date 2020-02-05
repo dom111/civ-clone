@@ -11,7 +11,8 @@
     "base-terrain-yields",
     "core-city",
     "core-rules",
-    "core-turn-based-game"
+    "core-turn-based-game",
+    "core-unit"
   ],
   "components": [
     {

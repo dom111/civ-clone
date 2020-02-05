@@ -6,6 +6,7 @@ import PlayerGovernmentRegistry from '../../base-player-government/PlayerGovernm
 import Rule from '../../core-rules/Rule.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
 import {Settlers} from '../../base-unit/Units.js';
+import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 RulesRegistry.register(new Rule(
   'city:cost:food:base',
@@ -21,7 +22,9 @@ RulesRegistry.register(new Rule(
     RulesRegistry.register(new Rule(
       `city:cost:food:activeSettlers:${governments.map((Government) => Government.name).join('-').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Food),
-      new Criterion((tileYield, city) => city.units.some((unit) => unit instanceof Settlers && ! unit.destroyed)),
+      new Criterion((tileYield, city) => UnitRegistry.getBy('city', city)
+        .some((unit) => unit instanceof Settlers && ! unit.destroyed)
+      ),
       new Criterion((tileYield, city) => {
         const [playerGovernment] = PlayerGovernmentRegistry.getBy('player', city.player);
 
@@ -32,7 +35,7 @@ RulesRegistry.register(new Rule(
         return false;
       }),
       new Effect((tileYield, city) => tileYield.subtract(
-        city.units
+        UnitRegistry.getBy('city', city)
           .filter((unit) => (unit instanceof Settlers) && ! unit.destroyed)
           .length *
         multiplier

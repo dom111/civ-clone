@@ -5,6 +5,7 @@ import PlayerGovernmentRegistry from '../../PlayerGovernmentRegistry.js';
 import {Production} from '../../../base-terrain-yields/Yields/Production.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 RulesRegistry.register(new Rule(
   'city:cost:production:monarchy',
@@ -15,7 +16,9 @@ RulesRegistry.register(new Rule(
     return playerGovernment.is(Monarchy);
   }),
   new Effect((tileYield, city) => {
-    const supportedUnits = city.units.length;
+    const supportedUnits = UnitRegistry.getBy('city', city)
+      .length
+    ;
 
     tileYield.subtract(supportedUnits);
   })

@@ -1,10 +1,8 @@
 export class Registry {
   #acceptedTypes = [];
-  #namespace;
-  #registry = [];
+  #entries = [];
 
-  constructor(namespace, ...acceptedTypes) {
-    this.#namespace = namespace;
+  constructor(...acceptedTypes) {
     this.#acceptedTypes.push(...acceptedTypes);
   }
 
@@ -20,11 +18,11 @@ export class Registry {
   }
 
   entries() {
-    return [...this.#registry];
+    return [...this.#entries];
   }
 
   filter(iterator) {
-    return this.#registry.filter(iterator);
+    return this.#entries.filter(iterator);
   }
 
   getBy(key, value) {
@@ -33,19 +31,19 @@ export class Registry {
 
   register(entity) {
     if (! this.accepts(entity)) {
-      throw new TypeError(`Invalid entity attempted to be registered in ${this.#namespace} registry. (${entity})`);
+      throw new TypeError(`Invalid entity attempted to be registered: ${entity}`);
     }
 
-    if (! this.#registry.includes(entity)) {
-      this.#registry.push(entity);
+    if (! this.#entries.includes(entity)) {
+      this.#entries.push(entity);
     }
   }
 
   unregister(entity) {
-    const index = this.#registry.indexOf(entity);
+    const index = this.#entries.indexOf(entity);
 
     if (index > -1) {
-      this.#registry.splice(index, 1);
+      this.#entries.splice(index, 1);
     }
   }
 }

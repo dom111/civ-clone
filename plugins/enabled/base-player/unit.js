@@ -1,11 +1,11 @@
-import TileUnitRegistry from '../base-tile-units/TileUnitRegistry.js';
+import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 engine.on('unit:created', (unit) => {
   if (! unit.player.activeUnit) {
     unit.player.activeUnit = unit;
   }
 
-  TileUnitRegistry.register(unit);
+  UnitRegistry.register(unit);
 
   unit.applyVisibility();
 });
@@ -25,12 +25,9 @@ engine.on('unit:action', (unit) => {
 });
 
 engine.on('unit:destroyed', (unit) => {
-  unit.player.units = unit.player.units.filter((playerUnit) => playerUnit !== unit);
-  TileUnitRegistry.unregister(unit);
+  // TODO: debatable if this should happen, or if it should stay and be represented with the destroyed flag
+  UnitRegistry.unregister(unit);
 
-  if (unit.city) {
-    unit.city.units = unit.city.units.filter((cityUnit) => cityUnit !== unit);
-  }
 
   unit.active = false;
   unit.destroyed = true;

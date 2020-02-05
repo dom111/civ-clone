@@ -10,8 +10,6 @@ export class Player {
 
   constructor() {
     this.id = Player.id++;
-    this.cities = [];
-    this.units = [];
 
     engine.emit('player:added', this);
   }
@@ -26,14 +24,6 @@ export class Player {
     return PlayerActionRegistry.entries()
       .flatMap((actionsProvider) => actionsProvider.provide(this))
     ;
-  }
-
-  get unitsToAction() {
-    return this.units.filter((unit) => unit.active && unit.movesLeft);
-  }
-
-  get citiesToAction() {
-    return this.cities.filter((city) => ! city.building);
   }
 
   hasActions() {

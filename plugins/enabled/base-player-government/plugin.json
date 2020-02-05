@@ -8,7 +8,8 @@
     "base-terrain-improvements",
     "base-terrain-yields",
     "core-rules",
-    "core-registry"
+    "core-registry",
+    "core-unit"
   ],
   "components": [
     {

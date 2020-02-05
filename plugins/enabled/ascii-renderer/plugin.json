@@ -1,8 +1,9 @@
 {
   "name": "ascii-renderer",
   "dependencies": [
-    "base-tile-units",
+    "core-city",
     "core-turn-based-game",
+    "core-unit",
     "core-world"
   ],
   "components": [

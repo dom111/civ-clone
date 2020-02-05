@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "dependencies": [
         "core-city-improvement",
+        "core-registry",
         "core-rules",
         "core-unit",
         "core-world"
@@ -12,6 +13,10 @@
         {
             "type": "script",
             "file": "City.js"
+        },
+        {
+            "type": "script",
+            "file": "CityRegistry.js"
         }
     ]
 }

@@ -1,11 +1,13 @@
 import {Food, Production} from '../base-terrain-yields/Yields.js';
 import AIPlayer from '../core-player/AIPlayer.js';
+import CityRegistry from '../core-city/CityRegistry.js';
 import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 import {Land} from '../core-terrain/Types.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import {Science} from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
 import {Trade} from '../base-terrain-yield-trade/Yields/Trade.js';
+import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 const players = [],
   playersToAction = []
@@ -83,7 +85,7 @@ engine.on('turn:start', () => {
   currentPlayer = playersToAction.shift();
 
   players.forEach((player) => {
-    player.units
+    UnitRegistry.getBy('player', player)
       .sort((a, b) => a.waiting - b.waiting)
       .forEach((unit) => {
         if (unit.busy > 0) {
@@ -105,63 +107,74 @@ engine.on('turn:start', () => {
         }
       });
 
-    player.cities.forEach((city) => {
-      city.yields(player)
-        .forEach((cityYield) => {
-          RulesRegistry.get('city:cost')
-            .filter((rule) => rule.validate(cityYield, city))
-            .forEach((rule) => rule.process(cityYield, city))
-          ;
+    CityRegistry.getBy('player', player)
+      .forEach((city) => {
+        city.yields(player)
+          .forEach((cityYield) => {
+            RulesRegistry.get('city:cost')
+              .filter((rule) => rule.validate(cityYield, city))
+              .forEach((rule) => rule.process(cityYield, city))
+            ;
 
-          if (cityYield instanceof Food) {
-            city.foodStorage += cityYield.value();
+            if (cityYield instanceof Food) {
+              city.foodStorage += cityYield.value();
 
-            if (
-              city.foodStorage >= ((city.size * 10) + 10)
-              // RulesRegistry.get('city:grow')
-              //   .some((rule) => rule.validate(city))
-            ) {
-              engine.emit('city:grow', city);
+              if (
+                city.foodStorage >= ((city.size * 10) + 10)
+                // RulesRegistry.get('city:grow')
+                //   .some((rule) => rule.validate(city))
+              ) {
+                engine.emit('city:grow', city);
+              }
+
+              if (
+                city.foodStorage < 0
+                // RulesRegistry.get('city:shrink')
+                //   .some((rule) => rule.validate(city))
+              ) {
+                engine.emit('city:shrink', city);
+              }
             }
 
-            if (
-              city.foodStorage < 0
-              // RulesRegistry.get('city:shrink')
-              //   .some((rule) => rule.validate(city))
-            ) {
-              engine.emit('city:shrink', city);
-            }
-          }
+            if (cityYield instanceof Production) {
+              if (city.building) {
+                const production = cityYield.value();
 
-          if (cityYield instanceof Production) {
-            if (city.building) {
-              const production = cityYield.value();
+                if (production > 0) {
+                  city.buildProgress += production;
 
-              if (production > 0) {
-                city.buildProgress += production;
+                  if (city.buildProgress >= city.buildCost) {
+                    engine.emit('city:building-complete', city, new (city.building)({
+                      player,
+                      city,
+                      tile: city.tile,
+                    }));
 
-                if (city.buildProgress >= city.buildCost) {
-                  engine.emit('city:building-complete', city, new (city.building)({
-                    player,
-                    city,
-                    tile: city.tile,
-                  }));
+                    city.building = false;
+                    city.buildProgress = 0;
+                  }
+                }
 
-                  city.building = false;
-                  city.buildProgress = 0;
+                if (production < 0) {
+                  UnitRegistry.getBy('city', city)
+                    // TODO: this should probably be rule based
+                    .sort((a, b) => b.tile.distanceFrom(city.tile) - a.tile.distanceFrom(city.tile))
+                    .slice(production)
+                    .forEach((unit) => unit.destroy())
+                  ;
                 }
               }
             }
-          }
 
-          // TODO: abstract this.
-          if (cityYield instanceof Trade) {
-            // TODO: check rates
-            engine.emit('player:yield', player, new Science(cityYield.value()));
-          }
-        })
-      ;
-    });
+            // TODO: abstract this.
+            if (cityYield instanceof Trade) {
+              // TODO: check rates
+              engine.emit('player:yield', player, new Science(cityYield.value()));
+            }
+          })
+        ;
+      })
+    ;
   });
 
   engine.emit('player:turn-start', currentPlayer);

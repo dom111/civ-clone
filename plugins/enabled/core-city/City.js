@@ -1,9 +1,9 @@
+import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
 import CityImprovementRegistry from '../core-city-improvement/Registry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
-import UnitRegistry from '../core-unit/UnitRegistry.js';
 
-export default class City {
+export class City {
   // TODO: make these all private
   buildCost = 0;
   buildProgress = 0;
@@ -18,7 +18,6 @@ export default class City {
   tile;
   tiles;
   tilesWorked = new Tileset();
-  units = [];
 
   constructor({
     player,
@@ -29,7 +28,6 @@ export default class City {
     this.tile = tile;
     this.name = name;
 
-    tile.city = this;
     this.tiles = this.tile.getSurroundingArea();
 
     engine.emit('city:created', this, tile);
@@ -80,7 +78,7 @@ export default class City {
   availableBuildUnits() {
     const buildRulesRegistry = RulesRegistry.get('city:build:unit');
 
-    return UnitRegistry
+    return AvailableUnitRegistry
       .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )
@@ -126,3 +124,5 @@ export default class City {
     ;
   }
 }
+
+export default City;

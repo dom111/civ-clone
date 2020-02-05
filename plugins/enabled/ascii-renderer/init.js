@@ -1,5 +1,6 @@
-import TileUnitRegistry from '../base-tile-units/TileUnitRegistry.js';
+import CityRegistry from '../core-city/CityRegistry.js';
 import Time from '../core-turn-based-game/Time.js';
+import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 const observingPlayers = [];
 
@@ -49,42 +50,66 @@ engine.on('turn:start', () => {
     lookup.Cow = lookup.Shield = lookup.Grassland;
     lookup.Caribou = lookup.Tundra;
 
-    console.log(`${map.getBy(() => true)
-      .map((tile) => {
-        const tileUnits = TileUnitRegistry.getBy('tile', tile);
+    console.log(`${
+      map.getBy(() => true)
+        .map((tile) => {
+          const tileUnits = UnitRegistry.getBy('tile', tile),
+            [city] = CityRegistry.getBy('tile', tile)
+          ;
 
-        return {
-          terrain: tile.terrain.constructor.name,
-          terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
-          units: tileUnits.map((unit) => (
-            {
-              player: unit.player.civilization.people,
-              name: unit.constructor.name,
-            }
-          )),
-          city: tile.city && {
-            player: tile.city.player.civilization.people,
-            name: tile.city.name,
-          },
-          visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
-        };
-      })
-      .map(
-        (tile, i) => (
-          tile.visible ?
-            tile.city ?
-              `${lookup[tile.city.player]}#\u001b[0m` :
-              tile.units.length ?
-                `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
-                `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
-            ' '
-        ) + (
-          (i % map.width) === (map.width - 1) ?
-            '\n' :
-            ''
+          return {
+            terrain: tile.terrain.constructor.name,
+            terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
+            units: tileUnits.map((unit) => (
+              {
+                player: unit.player.civilization.people,
+                name: unit.constructor.name,
+              }
+            )),
+            city: city && {
+              player: city.player.civilization.people,
+              name: city.name,
+            },
+            visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
+          };
+        })
+        .map(
+          (tile, i) => (
+            tile.visible ?
+              tile.city ?
+                `${lookup[tile.city.player]}#\u001b[0m` :
+                tile.units.length ?
+                  `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
+                  `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
+              ' '
+          ) + (
+            (i % map.width) === (map.width - 1) ?
+              '\n' :
+              ''
+          )
         )
-      )
-      .join('')}${Math.abs(Time.year)} ${Time.year < 0 ? 'BC' : 'AD'} (${Time.turn}) [${observingPlayers.map((player) => `${player.civilization.nation}: C:${player.cities.length} [${player.cities.reduce((total, city) => total + city.size, 0)}] U:${player.units.length}`).join(' / ')}]`
+        .join('')}${
+      Math.abs(Time.year)
+    } ${
+      Time.year < 0 ? 'BC' : 'AD'
+    } (${
+      Time.turn
+    }) [${
+      observingPlayers.map((player) => `${
+        player.civilization
+          .nation
+      }: C:${
+        CityRegistry.getBy('player', player)
+          .length
+      } [${
+        CityRegistry.getBy('player', player)
+          .reduce((total, city) => total + city.size, 0)
+      }] U:${
+        UnitRegistry.getBy('player', player)
+          .length
+      }`)
+        .join(' / ')
+    }]`
     );
 
     if (engine.option('earlyExit')) {

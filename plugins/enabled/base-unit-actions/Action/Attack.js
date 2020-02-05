@@ -1,10 +1,11 @@
 import Action from '../../core-unit-actions/Action.js';
-import TileUnitRegistry from '../../base-tile-units/TileUnitRegistry.js';
+import CityRegistry from '../../core-city/CityRegistry.js';
+import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 export class Attack extends Action {
   perform() {
-    const [tile] = TileUnitRegistry.getBy('tile',  this.unit.tile),
-      tileUnits = TileUnitRegistry.getBy('tile', this.to)
+    const [tile] = UnitRegistry.getBy('tile',  this.unit.tile),
+      tileUnits = UnitRegistry.getBy('tile', this.to)
         .sort((a,b) => b.finalDefence() - a.finalDefence()),
       [defender] = tileUnits
     ;
@@ -12,7 +13,8 @@ export class Attack extends Action {
     if ((this.unit.finalAttack() * Math.random()) >= (defender.finalDefence() * Math.random())) {
       // TODO: fire a defeated event and process based on rules
       if (
-        tile.city ||
+        CityRegistry.getBy('tile', tile)
+          .length ||
         // TODO: unit tile improvement registry
         tile.improvements.includes('fortress')
       ) {

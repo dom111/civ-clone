@@ -3,6 +3,7 @@ import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../../base-u
 import {Irrigation, Mine, Road} from '../../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../../core-terrain/Types.js';
 import {Settlers, Worker} from '../../base-unit/Units.js';
+import CityRegistry from '../../core-city/CityRegistry.js';
 import Criteria from '../../core-rules/Criteria.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
@@ -10,14 +11,14 @@ import OneCriteria from '../../core-rules/OneCriteria.js';
 import {River} from '../../base-terrain/Terrains.js';
 import Rule from '../../core-rules/Rule.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
-import TileUnitRegistry from '../../base-tile-units/TileUnitRegistry.js';
+import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 const isNeighbouringTile = new OneCriteria(
     new Criterion(
       (unit, to, from = unit.tile) => to.isNeighbourOf(from)
     ),
     // This rule doesn't need to be met if we're being transported.
-    new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+    new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
       .includes(unit.transport)
     )
   ),
@@ -39,9 +40,8 @@ RulesRegistry.register(new Rule(
       new Criterion((unit) => unit instanceof NavalUnit),
       new OneCriteria(
         new Criterion((unit, to) => to.terrain instanceof Water),
-        new Criteria(
-          new Criterion((unit, to) => to.city),
-          new Criterion((unit, to) => to.city.player === unit.player)
+        new Criterion((unit, to) => CityRegistry.getBy('tile', to)
+          .some((city) => city.player === unit.player)
         )
       )
     )
@@ -51,14 +51,14 @@ RulesRegistry.register(new Rule(
   new OneCriteria(
     new Criterion((unit) => ! (unit instanceof LandUnit)),
     new Criterion((unit, to, from = unit.tile) => ! from.getNeighbours()
-      .filter((tile) => TileUnitRegistry.getBy('tile', tile)
+      .filter((tile) => UnitRegistry.getBy('tile', tile)
         .some((tileUnit) => tileUnit.player !== unit.player)
       )
       .flatMap((tile) => tile.getNeighbours())
       .includes(to)
     )
   ),
-  new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+  new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
     .every((tileUnit) => tileUnit.player === unit.player)
   ),
   new Effect((unit, to, from = unit.tile) => new Move(unit, to, from))
@@ -78,14 +78,14 @@ RulesRegistry.register(new Rule(
       new OneCriteria(
         new Criterion((unit, to) => to.terrain instanceof Water),
         new Criteria(
-          new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+          new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
             .some((tileUnit) => tileUnit.player !== unit.player)
           )
         )
       )
     )
   ),
-  new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+  new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
     // this will return false if there are no other units on the tile
     .some((tileUnit) => tileUnit.player !== unit.player)
   ),
@@ -97,10 +97,10 @@ RulesRegistry.register(new Rule(
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof LandUnit),
   new Criterion((unit, to) => to.terrain instanceof Water),
-  new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+  new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
     .every((tileUnit) => tileUnit.player === unit.player)
   ),
-  new Criterion((unit, to) => TileUnitRegistry.getBy('tile', to)
+  new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
     .filter((tileUnit) => tileUnit instanceof NavalTransport)
     .some((tileUnit) => tileUnit.hasCapacity())
   ),
@@ -118,7 +118,8 @@ RulesRegistry.register(new Rule(
       tile.isCoast() ||
       (
         tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-        ! tile.city
+        ! CityRegistry.getBy('tile', tile)
+          .length
       )
     )
   ),
@@ -146,9 +147,11 @@ RulesRegistry.register(new Rule(
   'unit:action:captureCity',
   isNeighbouringTile,
   hasEnoughMovesLeft,
-  new Criterion((unit, to) => to.city.player === unit.player),
+  new Criterion((unit, to) => CityRegistry.getBy('tile', to)
+    .some((city) => city.player === unit.player)
+  ),
   new Criterion((unit) => unit instanceof LandUnit),
-  new Criterion((unit, to) => ! TileUnitRegistry.getBy('tile', to)
+  new Criterion((unit, to) => ! UnitRegistry.getBy('tile', to)
     .length
   ),
   new Effect((unit, to, from = unit.tile) => new CaptureCity(unit, to, from))
@@ -165,7 +168,9 @@ RulesRegistry.register(new Rule(
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof Settlers),
   new Criterion((unit) => unit.tile.isLand()),
-  new Criterion((unit) => ! unit.tile.city),
+  new Criterion((unit) => ! CityRegistry.getBy('tile', unit.tile)
+    .length
+  ),
   new Effect((unit, to, from = unit.tile) => new FoundCity(unit, to, from))
 ));
 RulesRegistry.register(new Rule(
