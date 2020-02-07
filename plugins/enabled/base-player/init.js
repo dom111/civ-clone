@@ -107,7 +107,7 @@ engine.on('turn:start', () => {
           }
         }
 
-        unit.movesLeft = unit.movement.value();
+        unit.movesLeft = unit.movement;
 
         if (! unit.busy) {
           unit.busy = false;

@@ -10,8 +10,6 @@ export class Attack extends Action {
       [defender] = tileUnits
     ;
 
-    console.log(`${this.unit.player.civilization.people} ${this.unit.constructor.name} attacking ${defender.player.civilization.people} ${defender.constructor.name}`);
-
     if ((this.unit.finalAttack() * Math.random()) >= (defender.finalDefence() * Math.random())) {
       // TODO: fire a defeated event and process based on rules
       if (

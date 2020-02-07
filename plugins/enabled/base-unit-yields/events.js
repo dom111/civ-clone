@@ -11,8 +11,8 @@ engine.on('unit:created', (unit) => {
     ;
 
     // caching these here for easy access.
-    unit[Yield.name.toLowerCase()] = unitYield;
+    unit[Yield.name.toLowerCase()] = unitYield.value();
   });
 
-  unit.movesLeft = unit.movement.value();
+  unit.movesLeft = unit.movement;
 });

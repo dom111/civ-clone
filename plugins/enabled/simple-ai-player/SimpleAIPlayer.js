@@ -4,6 +4,7 @@ import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
+import {Move, NoOrders} from '../base-unit-actions/Actions.js';
 import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
@@ -11,7 +12,6 @@ import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/Improvements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
-import {NoOrders} from '../base-unit-actions/Actions.js';
 import {Palace} from '../base-city-improvements/Improvements.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';
@@ -120,7 +120,10 @@ export class SimpleAIPlayer extends AIPlayer {
             }), {})
           ;
 
-          if (actions.length === 1 && noOrders) {
+          if (
+            ! actions.some((action) => action instanceof Move) ||
+            (actions.length === 1 && noOrders)
+          ) {
             return -1;
           }
 
@@ -233,6 +236,14 @@ export class SimpleAIPlayer extends AIPlayer {
       ;
 
       if (! target) {
+        // TODO: could do something a bit more intelligent here
+        // const actions = RulesRegistry.get('unit:action')
+        //   .filter((rule) => rule.validate(unit, unit.tile, unit.tile))
+        //   .map((rule) => rule.process(unit, unit.tile, unit.tile))
+        // ;
+        //
+        // console.log(actions);
+
         unit.action(new NoOrders(unit));
 
         return;
@@ -247,6 +258,12 @@ export class SimpleAIPlayer extends AIPlayer {
         currentTarget = this.#unitTargetData
           .get(unit)
       ;
+
+      if (! action) {
+        unit.action(new NoOrders(unit));
+
+        return;
+      }
 
       if (currentTarget === target) {
         this.#unitTargetData.delete(unit);
@@ -493,16 +510,17 @@ export class SimpleAIPlayer extends AIPlayer {
               ! UnitRegistry.getBy('tile', tile)
                 .length
             ) {
-              const [defensiveUnit] = available.filter((entity) => Object.prototype.isPrototypeOf.call(FortifiableUnit, entity) &&
-                entity.prototype.defence > 0)
-                .sort((a, b) => b.prototype.defence - a.prototype.defence)
-              ;
-
-              if (defensiveUnit) {
-                city.build(defensiveUnit);
-
-                continue;
-              }
+              // TODO
+              // const [defensiveUnit] = available.filter((entity) => Object.prototype.isPrototypeOf.call(FortifiableUnit, entity) &&
+              //   entity.prototype.defence > 0)
+              //   .sort((a, b) => b.prototype.defence - a.prototype.defence)
+              // ;
+              //
+              // if (defensiveUnit) {
+              //   city.build(defensiveUnit);
+              //
+              //   continue;
+              // }
             }
 
             // Always Build Cities
