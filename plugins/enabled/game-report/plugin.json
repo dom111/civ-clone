@@ -1,0 +1,17 @@
+{
+  "name": "game-report",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-player",
+    "base-player-science",
+    "core-city",
+    "core-turn-based-game",
+    "core-unit"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

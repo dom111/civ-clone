@@ -1,4 +1,15 @@
-import {Attack, BoardTransport, BuildIrrigation, BuildMine, BuildRoad, CaptureCity, Fortify, FoundCity, Move, NoOrders} from '../Actions.js';
+import {
+  Attack,
+  BoardTransport,
+  BuildIrrigation,
+  BuildMine,
+  BuildRoad,
+  CaptureCity,
+  Fortify,
+  FoundCity,
+  Move,
+  NoOrders,
+} from '../Actions.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../../core-terrain/Types.js';
@@ -34,7 +45,13 @@ RulesRegistry.register(new Rule(
   new OneCriteria(
     new Criteria(
       new Criterion((unit) => unit instanceof LandUnit),
-      new Criterion((unit, to) => to.terrain instanceof Land)
+      new Criterion((unit, to) => to.terrain instanceof Land),
+      new Criterion((unit, to) => CityRegistry.getBy('tile', to)
+        .every((city) => city.player === unit.player)
+      ),
+      new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
+        .every((tileUnit) => tileUnit.player === unit.player)
+      )
     ),
     new Criteria(
       new Criterion((unit) => unit instanceof NavalUnit),
@@ -50,12 +67,16 @@ RulesRegistry.register(new Rule(
   // This is analogous to the original Civilization unit adjacency rules
   new OneCriteria(
     new Criterion((unit) => ! (unit instanceof LandUnit)),
-    new Criterion((unit, to, from = unit.tile) => ! from.getNeighbours()
-      .filter((tile) => UnitRegistry.getBy('tile', tile)
-        .some((tileUnit) => tileUnit.player !== unit.player)
-      )
-      .flatMap((tile) => tile.getNeighbours())
-      .includes(to)
+    new Criterion((unit, to, from = unit.tile) => ! (
+      from.getNeighbours()
+        .some((tile) => UnitRegistry.getBy('tile', tile)
+          .some((tileUnit) => tileUnit.player !== unit.player)
+        ) &&
+        to.getNeighbours()
+          .some((tile) => UnitRegistry.getBy('tile', tile)
+            .some((tileUnit) => tileUnit.player !== unit.player)
+          )
+    )
     )
   ),
   new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
@@ -91,6 +112,7 @@ RulesRegistry.register(new Rule(
   ),
   new Effect((unit, to, from = unit.tile) => new Attack(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:boardTransport',
   isNeighbouringTile,
@@ -106,11 +128,13 @@ RulesRegistry.register(new Rule(
   ),
   new Effect((unit, to, from = unit.tile) => new BoardTransport(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:buildIrrigation',
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof Worker),
   new Criterion((unit) => Irrigation.availableOn(unit.tile.terrain)),
+  new Criterion((unit, to) => unit.tile === to),
   // TODO: doing this a lot already, need to make improvements a value object with a helper method
   new Criterion((unit) => ! unit.tile.improvements.some((improvement) => improvement instanceof Irrigation)),
   new Criterion((unit) => [...unit.tile.getAdjacent(), unit.tile]
@@ -125,30 +149,35 @@ RulesRegistry.register(new Rule(
   ),
   new Effect((unit, to, from = unit.tile) => new BuildIrrigation(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:buildMine',
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof Worker),
   new Criterion((unit, to, from) => Mine.availableOn(from.terrain)),
+  new Criterion((unit, to) => unit.tile === to),
   // TODO: doing this a lot already, need to make improvements a value object with a helper method
   new Criterion((unit, to, from) => ! from.improvements.some((improvement) => improvement instanceof Mine)),
   new Effect((unit, to, from = unit.tile) => new BuildMine(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:buildRoad',
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof Worker),
   new Criterion((unit, to, from) => Mine.availableOn(from.terrain)),
+  new Criterion((unit, to) => unit.tile === to),
   // TODO: doing this a lot already, need to make improvements a value object with a helper method
   new Criterion((unit, to, from) => ! from.improvements.some((improvement) => improvement instanceof Road)),
   new Effect((unit, to, from = unit.tile) => new BuildRoad(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:captureCity',
   isNeighbouringTile,
   hasEnoughMovesLeft,
   new Criterion((unit, to) => CityRegistry.getBy('tile', to)
-    .some((city) => city.player === unit.player)
+    .some((city) => city.player !== unit.player)
   ),
   new Criterion((unit) => unit instanceof LandUnit),
   new Criterion((unit, to) => ! UnitRegistry.getBy('tile', to)
@@ -156,13 +185,16 @@ RulesRegistry.register(new Rule(
   ),
   new Effect((unit, to, from = unit.tile) => new CaptureCity(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:fortify',
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof FortifiableUnit),
   new Criterion((unit) => unit.tile.isLand()),
+  new Criterion((unit, to) => unit.tile === to),
   new Effect((unit, to, from = unit.tile) => new Fortify(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:foundCity',
   hasEnoughMovesLeft,
@@ -171,9 +203,12 @@ RulesRegistry.register(new Rule(
   new Criterion((unit) => ! CityRegistry.getBy('tile', unit.tile)
     .length
   ),
+  new Criterion((unit, to) => unit.tile === to),
   new Effect((unit, to, from = unit.tile) => new FoundCity(unit, to, from))
 ));
+
 RulesRegistry.register(new Rule(
   'unit:action:noOrders',
+  new Criterion((unit, to) => unit.tile === to),
   new Effect((unit, to, from = unit.tile) => new NoOrders(unit, to, from))
 ));

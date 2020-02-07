@@ -1,28 +1,28 @@
 {
-    "name": "core-world",
-    "title": "Core World",
-    "version": "0.0.1",
-    "dependencies": [
-        "core-rules",
-        "core-terrain",
-        "core-yields"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Path.js"
-        },
-        {
-            "type": "script",
-            "file": "Tileset.js"
-        },
-        {
-            "type": "script",
-            "file": "Tile.js"
-        },
-        {
-            "type": "script",
-            "file": "World.js"
-        }
-    ]
+  "name": "core-world",
+  "title": "Core World",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "core-terrain",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Path.js"
+    },
+    {
+      "type": "script",
+      "file": "Tileset.js"
+    },
+    {
+      "type": "script",
+      "file": "Tile.js"
+    },
+    {
+      "type": "script",
+      "file": "World.js"
+    }
+  ]
 }

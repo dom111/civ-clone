@@ -1,7 +1,7 @@
 {
   "name": "base-terrain-yield-trade",
   "description": "To add 'trade' yields to the tiles as per the original Civilization.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-terrain",
     "base-terrain-improvements",

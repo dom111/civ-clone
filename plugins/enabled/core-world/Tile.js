@@ -96,9 +96,6 @@ export class Tile {
       [1, 0],
       [1, -1],
     ]
-      // .map(([x, y]) => [x * this.map.width, y * this.map.height])
-      // .map(([x, y]) => [(this.x - tile.x) + x, (this.y - tile.y) + y])
-      // .map((coords) => Math.hypot(...coords))
       .map(([x, y]) => Math.hypot(...[(this.x - tile.x) + (x * this.map.width), (this.y - tile.y) + (y * this.map.height)]))
       .sort((a, b) => a - b)
     ;

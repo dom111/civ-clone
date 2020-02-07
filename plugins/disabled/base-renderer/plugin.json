@@ -1,7 +1,7 @@
 {
     "name": "base-renderer",
     "title": "Base Renderer",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "components": [
         {
             "type": "script",

@@ -8,7 +8,6 @@ export class City {
   buildCost = 0;
   buildProgress = 0;
   building = false;
-  capital = false;
   destroyed = false;
   foodStorage = 0;
   improvements = [];

@@ -1,0 +1,45 @@
+{
+  "name": "base-currency",
+  "title": "Base Currency",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city",
+    "core-registry",
+    "core-rules",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Gold.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTreasuryRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTreasury.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    }
+  ]
+}

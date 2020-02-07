@@ -3,10 +3,9 @@ import AIPlayer from '../core-player/AIPlayer.js';
 import CityRegistry from '../core-city/CityRegistry.js';
 import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 import {Land} from '../core-terrain/Types.js';
+import PlayerRegistry from './PlayerRegistry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
-import {Science} from '../base-science/Yields/Science.js';
 import {Settlers} from '../base-unit/Units.js';
-import {Trade} from '../base-terrain-yield-trade/Yields/Trade.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 const players = [],
@@ -14,6 +13,20 @@ const players = [],
 ;
 
 let currentPlayer;
+
+const cache = new Map(),
+  tileScore = (tile) => {
+    if (! cache.has(tile)) {
+      cache.set(tile, tile.getSurroundingArea()
+        .score({
+          values: [[Food, 4], [Production, 2]],
+        })
+      );
+    }
+
+    return cache.get(tile);
+  }
+;
 
 engine.on('world:built', (map) => {
   engine.emit('world:generate-start-tiles');
@@ -26,14 +39,7 @@ engine.on('world:built', (map) => {
   let startingSquares = engine.option('skipSort') ?
     map.getBy((tile) => tile.terrain instanceof Land) :
     map.getBy((tile) => tile.terrain instanceof Land)
-      .sort((a, b) =>
-        b.getSurroundingArea().score({
-          values: [[Food, 4], [Production, 2]],
-        }) -
-        a.getSurroundingArea().score({
-          values: [[Food, 4], [Production, 2]],
-        })
-      )
+      .sort((a, b) => tileScore(b) - tileScore(a))
       .slice(0, numberOfPlayers * 20)
   ;
 
@@ -61,6 +67,8 @@ engine.on('world:built', (map) => {
     usedStartSquares.push(startingSquare);
 
     players.push(player);
+
+    PlayerRegistry.register(player);
 
     new Settlers({
       player,
@@ -116,61 +124,7 @@ engine.on('turn:start', () => {
               .forEach((rule) => rule.process(cityYield, city))
             ;
 
-            if (cityYield instanceof Food) {
-              city.foodStorage += cityYield.value();
-
-              if (
-                city.foodStorage >= ((city.size * 10) + 10)
-                // RulesRegistry.get('city:grow')
-                //   .some((rule) => rule.validate(city))
-              ) {
-                engine.emit('city:grow', city);
-              }
-
-              if (
-                city.foodStorage < 0
-                // RulesRegistry.get('city:shrink')
-                //   .some((rule) => rule.validate(city))
-              ) {
-                engine.emit('city:shrink', city);
-              }
-            }
-
-            if (cityYield instanceof Production) {
-              if (city.building) {
-                const production = cityYield.value();
-
-                if (production > 0) {
-                  city.buildProgress += production;
-
-                  if (city.buildProgress >= city.buildCost) {
-                    engine.emit('city:building-complete', city, new (city.building)({
-                      player,
-                      city,
-                      tile: city.tile,
-                    }));
-
-                    city.building = false;
-                    city.buildProgress = 0;
-                  }
-                }
-
-                if (production < 0) {
-                  UnitRegistry.getBy('city', city)
-                    // TODO: this should probably be rule based
-                    .sort((a, b) => b.tile.distanceFrom(city.tile) - a.tile.distanceFrom(city.tile))
-                    .slice(production)
-                    .forEach((unit) => unit.destroy())
-                  ;
-                }
-              }
-            }
-
-            // TODO: abstract this.
-            if (cityYield instanceof Trade) {
-              // TODO: check rates
-              engine.emit('player:yield', player, new Science(cityYield.value()));
-            }
+            engine.emit('city:yield', cityYield, city);
           })
         ;
       })
@@ -184,7 +138,7 @@ engine.on('player:defeated', (player) => {
   players.splice(players.indexOf(player), 1);
 });
 
-engine.on('player:turn-end', async () => {
+engine.on('player:turn-end', () => {
   if (playersToAction.length) {
     currentPlayer = playersToAction.shift();
     engine.emit('player:turn-start', currentPlayer);

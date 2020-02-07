@@ -1,30 +1,42 @@
 import Generator from '../BaseGenerator.js';
-import test from '../../core-test/test.js';
+import assert from 'assert';
 
-test('BaseGenerator.test.js', () => {
+describe('BaseGenerator', () => {
   const height = 10,
-    width = 10
+    width = 10,
+    generator = new Generator({
+      height,
+      width,
+    })
   ;
-
-  const generator = new Generator({
-    height,
-    width,
-  });
 
   generator.generate();
 
-  return [
-    [generator.height, height],
-    [generator.width, width],
-    [generator.coordsToIndex(0, 2), 20],
-    [generator.getNeighbours(
+  it('should return the expected dimensions', () => {
+    assert.strictEqual(generator.height, height);
+    assert.strictEqual(generator.width, width);
+  });
+
+  it('should correctly convert coordinates to an index', () => {
+    assert.strictEqual(generator.coordsToIndex(0, 2), 20);
+    assert.strictEqual(generator.getNeighbours(
       generator.coordsToIndex(0, 2)
     ).includes(
       generator.coordsToIndex(10, 1)
-    ), true],
-    [generator.distanceFrom(
+    ), true)
+    ;
+  });
+
+  it('should calculate distance correctly', () => {
+    assert.strictEqual(generator.distanceFrom(
       generator.coordsToIndex(0, 0),
       generator.coordsToIndex(9, 9)
-    ) < 1.5, true],
-  ];
+    ) < 1.5, true)
+    ;
+    assert.strictEqual(generator.distanceFrom(
+      generator.coordsToIndex(0, 0),
+      generator.coordsToIndex(0, 9)
+    ), 1)
+    ;
+  });
 });

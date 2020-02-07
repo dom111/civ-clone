@@ -1,19 +1,20 @@
 {
     "productName": "civ-clone",
     "name": "civ-clone",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "homepage": "https://github.com/dom111/civ-one",
     "description": "civ-clone base library and plugin infrastructure.",
     "type": "module",
     "scripts": {
         "eslint": "eslint src plugins",
         "eslint:fix": "npm run eslint -- --fix",
-        "jsonlint": "find ./ -name \\*.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -t -n1 jsonlint -q",
-        "lint": "npm run jsonlint && npm run eslint",
+        "jsonlint:plugins": "find ./ -name plugin.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -n1 ajv -s src/Plugin/Schema.json -d",
+        "lint": "npm run jsonlint:plugins && npm run eslint",
         "start": "node --experimental-vm-modules ./boot.js",
         "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
         "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
-        "test": "find -type f -name '*.test.js' -and -not -wholename '*node_modules*' | xargs -n1 node"
+        "test": "mocha --delay run-tests.cjs",
+        "validate": "./checkPlugins.sh"
     },
     "author": "dom111 <dom111@users.noreply.github.com>",
     "repository": {
@@ -36,10 +37,11 @@
     },
     "dependencies": {},
     "devDependencies": {
+        "ajv-cli": "^3.0.0",
         "babel-eslint": "^10.0.3",
         "eslint": "^6.8.0",
         "eslint-plugin-import": "^2.19.1",
         "husky": "^3.1.0",
-        "jsonlint": "^1.6.3"
+        "mocha": "^7.0.1"
     }
 }

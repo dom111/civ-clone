@@ -20,4 +20,6 @@ process.on('unhandledRejection', (error) => {
   ;
 
   await engine.start();
+
+  engine.on('game:exit', () => process.exit());
 })();

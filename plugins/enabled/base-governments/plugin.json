@@ -1,23 +1,13 @@
 {
   "name": "base-governments",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-player-science",
     "base-science",
-    "base-terrain-features",
-    "base-terrain-yields",
     "core-government",
     "core-rules"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Governments/Anarchy.js"
-    },
-    {
-      "type": "script",
-      "file": "Governments/Despotism.js"
-    },
     {
       "type": "script",
       "file": "Governments/Monarchy.js"
@@ -25,6 +15,14 @@
     {
       "type": "script",
       "file": "Governments/Republic.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments/Anarchy.js"
+    },
+    {
+      "type": "script",
+      "file": "Governments/Despotism.js"
     },
     {
       "type": "script",

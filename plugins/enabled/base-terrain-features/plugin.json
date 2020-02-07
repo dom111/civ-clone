@@ -1,12 +1,12 @@
 {
   "name": "base-terrain-features",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
-    "base-terrain",
     "base-terrain-yields",
     "base-terrain-yield-trade",
     "core-rules",
-    "core-terrain-features"
+    "core-terrain-features",
+    "base-terrain"
   ],
   "components": [
     {
@@ -55,47 +55,11 @@
     },
     {
       "type": "script",
-      "file": "Rules/Yields/Coal.js"
+      "file": "Rules/Tile/yield.js"
     },
     {
       "type": "script",
-      "file": "Rules/Yields/Fish.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Game.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Gems.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Gold.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Horse.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Oasis.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Oil.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Seal.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Shield.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/applyFeatures.js"
+      "file": "Rules/Terrain/feature.js"
     },
     {
       "type": "script",

@@ -1,24 +1,23 @@
 {
-    "name": "core-unit",
-    "title": "Core Unit",
-    "version": "0.0.1",
-    "dependencies": [
-        "core-registry",
-        "core-rules",
-        "core-world"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Unit.js"
-        },
-        {
-            "type": "script",
-            "file": "AvailableUnitRegistry.js"
-        },
-        {
-            "type": "script",
-            "file": "UnitRegistry.js"
-        }
-    ]
+  "name": "core-unit",
+  "title": "Core Unit",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Unit.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableUnitRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitRegistry.js"
+    }
+  ]
 }

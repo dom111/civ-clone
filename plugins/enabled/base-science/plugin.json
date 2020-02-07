@@ -1,6 +1,6 @@
 {
   "name": "base-science",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "core-rules",
     "core-science",
@@ -9,35 +9,19 @@
   "components": [
     {
       "type": "script",
+      "file": "Yields/Science.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
       "file": "Advances/Alphabet.js"
     },
     {
       "type": "script",
-      "file": "Advances/BronzeWorking.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/CeremonialBurial.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/CodeOfLaws.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/HorsebackRiding.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/IronWorking.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/MapMaking.js"
-    },
-    {
-      "type": "script",
-      "file": "Advances/Masonry.js"
+      "file": "Advances/Navigation.js"
     },
     {
       "type": "script",
@@ -45,11 +29,51 @@
     },
     {
       "type": "script",
-      "file": "Advances/Monarchy.js"
+      "file": "Advances/BronzeWorking.js"
     },
     {
       "type": "script",
-      "file": "Advances/Mysticism.js"
+      "file": "Advances/CodeOfLaws.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Feudalism.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Astronomy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/TheWheel.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Currency.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/HorsebackRiding.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Chivalry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Masonry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/IronWorking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Pottery.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Monarchy.js"
     },
     {
       "type": "script",
@@ -57,11 +81,15 @@
     },
     {
       "type": "script",
-      "file": "Advances.js"
+      "file": "Advances/Mysticism.js"
     },
     {
       "type": "script",
-      "file": "Rules/research.js"
+      "file": "Advances/CeremonialBurial.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/MapMaking.js"
     },
     {
       "type": "script",
@@ -69,11 +97,15 @@
     },
     {
       "type": "script",
-      "file": "Yields/Science.js"
+      "file": "Rules/research.js"
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances.js"
     }
   ]
 }

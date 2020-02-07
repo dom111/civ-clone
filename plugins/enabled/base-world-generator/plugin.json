@@ -1,11 +1,12 @@
 {
   "name": "base-world-generator",
   "dependencies": [
-    "core-registry",
     "core-rules",
     "core-terrain",
     "core-terrain-features",
-    "core-world-generator"
+    "core-world-generator",
+    "base-terrain",
+    "base-terrain-features"
   ],
   "components": [
     {
@@ -15,6 +16,14 @@
     {
       "type": "script",
       "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "StaticWorldGenerator.js"
+    },
+    {
+      "type": "script",
+      "file": "FillGenerator.js"
     }
   ]
 }

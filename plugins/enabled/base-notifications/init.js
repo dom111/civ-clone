@@ -7,16 +7,21 @@ const renderTurns = parseInt(engine.option('renderTurns', 1), 10),
     (renderTurns > 0) ?
       '' :
       [
+        'city:building',
+        'city:building-complete',
         'city:captured',
         'city:created',
         'city:destroyed',
-        'city:building-complete',
-        'city:improvement:built',
+        // 'city:grow',
+        // 'city:shrink',
+        // 'city:yield',
         'player:defeated',
         'player:government:changed',
+        'player:research',
         'player:research-complete',
+        // 'player:yield',
         'time:year-updated',
-        'unit:destroyed',
+        // 'unit:destroyed',
       ]
         .join(',')
   )
@@ -47,8 +52,9 @@ Object.entries({
   'city:captured': (city, player) => `${city.player.civilization.people} city of ${city.name} (${city.size}) captured by ${player.civilization.nation}.`,
   'city:created': (city) => `${city.player.civilization.people} city of ${city.name} (${city.tile.x},${city.tile.y}).`,
   'city:destroyed': (city) => `${city.player.civilization.people} city of ${city.name} (${city.tile.x},${city.tile.y}).`,
-  'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size}).`,
-  'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size}).`,
+  'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size + 1}).`,
+  'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size - 1}).`,
+  'city:yield': (cityYield, city) => `${city.player.civilization.people} city of ${city.name} provides ${cityYield.value()} ${cityYield.constructor.name}.`,
   'city-improvement:built': (city, improvement) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
   // 'engine:initialise': () => '',
   // 'engine:plugins-loaded': () => '',
@@ -59,6 +65,7 @@ Object.entries({
   'player:government:changed': (player, government) => `${player.civilization.nation} has formed a ${government.constructor.name}.`,
   'player:research': (player, Advance) => `${player.civilization.nation} have started researching ${Advance.name}.`,
   'player:research-complete': (player, advance) => `${player.civilization.nation} have discovered the secrets of ${advance.constructor.name}.`,
+  'player:yield': (playerYield, player) => `${player.civilization.nation} acquires ${playerYield.value()} ${playerYield.constructor.name}.`,
   'tile:improvement-built': (tile, improvement) => `${improvement} built at ${tile.x}, ${tile.y} (${tile.terrain.constructor.name} - ${tile.terrain.name}).`,
   'time:year-updated': (year) => `${year < 0 ? `${-year} BC` : `${year} AD`}`,
   'turn:start': (Time) => `Turn Start: ${Time.turn}.`,
@@ -70,8 +77,10 @@ Object.entries({
   // 'world:start-tiles': () => '',
 })
   .filter(([event]) => eventsToAnnounce.includes(event))
-  .forEach(([event, messageProvider]) =>
-    engine.on(event, (...args) => engine.emit('notification', new Notification({
-      name: event,
+  .forEach(([name, messageProvider]) =>
+    engine.on(name, (...args) => engine.emit('notification', new Notification({
+      name,
       message: messageProvider(...args),
-    }))));
+    })))
+  )
+;

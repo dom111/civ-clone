@@ -1,7 +1,7 @@
 {
   "name": "simple-ai-player",
   "title": "Simple AI Player",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-governments",
     "base-player-government",
@@ -19,7 +19,8 @@
     "core-rules",
     "core-terrain",
     "core-unit",
-    "core-world"
+    "base-city-improvements",
+    "core-unit-yields"
   ],
   "components": [
     {

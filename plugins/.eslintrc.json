@@ -1,6 +1,18 @@
 {
-  "globals": {
-    "engine": false,
-    "promiseFactory": false
-  }
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "globals": {
+        "engine": false,
+        "promiseFactory": false
+      }
+    },
+    {
+      "files": ["*.test.js"],
+      "globals": {
+        "describe": false,
+        "it": false
+      }
+    }
+  ]
 }

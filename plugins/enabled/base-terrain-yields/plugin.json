@@ -1,6 +1,6 @@
 {
   "name": "base-terrain-yields",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-terrain",
     "core-rules",
@@ -9,47 +9,7 @@
   "components": [
     {
       "type": "script",
-      "file": "Rules/Yields/Desert.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Forest.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Grassland.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Hills.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Jungle.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Mountains.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Ocean.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Plains.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/River.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Swamp.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Tundra.js"
+      "file": "Rules/Tile/yield.js"
     },
     {
       "type": "script",

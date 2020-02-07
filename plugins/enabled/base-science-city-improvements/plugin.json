@@ -1,0 +1,16 @@
+{
+  "name": "base-science-city-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city-improvements",
+    "base-player-science",
+    "base-science",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    }
+  ]
+}

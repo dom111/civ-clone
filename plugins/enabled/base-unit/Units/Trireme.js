@@ -1,7 +1,7 @@
 import {NavalTransport} from '../Types.js';
 
 export class Trireme extends NavalTransport {
-  capacity = 3;
+  capacity = 2;
 }
 
 export default Trireme;

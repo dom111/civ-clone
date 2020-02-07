@@ -5,10 +5,13 @@ import UnitRegistry from '../core-unit/UnitRegistry.js';
 const observingPlayers = [];
 
 let map;
-
 engine.on('world:built', (world) => map = world);
 
 engine.on('turn:start', () => {
+  if (! map) {
+    return;
+  }
+
   const showMap = true,
     everyXTurns = parseInt(engine.option('renderTurns', 1), 10)
   ;
@@ -55,7 +58,7 @@ engine.on('turn:start', () => {
         .map((tile) => {
           const tileUnits = UnitRegistry.getBy('tile', tile),
             [city] = CityRegistry.getBy('tile', tile)
-          ;
+            ;
 
           return {
             terrain: tile.terrain.constructor.name,

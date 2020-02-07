@@ -1,9 +1,9 @@
+import {Attack, Defence} from '../core-unit-yields/Yields.js';
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
-import {Move, NoOrders} from '../base-unit-actions/Actions.js';
 import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import City from '../core-city/City.js';
@@ -11,6 +11,8 @@ import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/Improvements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
+import {NoOrders} from '../base-unit-actions/Actions.js';
+import {Palace} from '../base-city-improvements/Improvements.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
@@ -220,11 +222,6 @@ export class SimpleAIPlayer extends AIPlayer {
           return score;
         },
         [target] = currentTile.getNeighbours()
-          .filter((tile) => RulesRegistry.get('unit:action')
-            .filter((rule) => rule.validate(unit, tile, unit.tile))
-            .map((rule) => rule.process(unit, tile, unit.tile))
-            .some((action) => action instanceof Move)
-          )
           .filter((tile) => scoreMove(tile) > -1)
           .sort((a, b) => (
             (
@@ -241,7 +238,11 @@ export class SimpleAIPlayer extends AIPlayer {
         return;
       }
 
-      const lastMoves = this.#lastUnitMoves
+      const [action] = RulesRegistry.get('unit:action')
+          .filter((rule) => rule.validate(unit, target, unit.tile))
+          .map((rule) => rule.process(unit, target, unit.tile))
+        ,
+        lastMoves = this.#lastUnitMoves
           .get(unit) || [],
         currentTarget = this.#unitTargetData
           .get(unit)
@@ -255,7 +256,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
       this.#lastUnitMoves.set(unit, lastMoves);
 
-      unit.action(new Move(unit, target, unit.tile));
+      unit.action(action);
     }
   }
 
@@ -351,7 +352,8 @@ export class SimpleAIPlayer extends AIPlayer {
               target = this.#unitTargetData.get(unit),
               actions = RulesRegistry.get('unit:action')
                 .filter((rule) => rule.validate(unit, unit.tile, unit.tile))
-                .map((rule) => rule.process(unit, unit.tile, unit.tile)),
+                .map((rule) => rule.process(unit, unit.tile, unit.tile))
+              ,
               {
                 buildIrrigation,
                 buildMine,
@@ -372,7 +374,7 @@ export class SimpleAIPlayer extends AIPlayer {
               unit.hasCargo() &&
               tile.getNeighbours()
                 .some((tile) => tile.terrain instanceof Land && tile.isCoast()) &&
-              unit.hasCargo()
+              unit.cargo
                 .some((unit) => ! this.#lastUnitMoves
                   .get(unit)
                   .slice(-50)
@@ -504,17 +506,74 @@ export class SimpleAIPlayer extends AIPlayer {
             }
 
             // Always Build Cities
-            if (! UnitRegistry.getBy('city', city)
-              .some((unit) => unit instanceof Settlers) && available.includes(Settlers)
+            if (available.includes(Settlers) &&
+              ! UnitRegistry.getBy('city', city)
+                .some((unit) => unit instanceof Settlers) &&
+              UnitRegistry.getBy('player', this)
+                .filter((unit) => unit instanceof Settlers)
+                .length < 3
             ) {
               city.build(Settlers);
 
               continue;
             }
 
-            const availableExceptSettlers = available.filter((entity) => entity !== Settlers),
-              randomSelection = availableExceptSettlers[Math.floor(available.length * Math.random())]
+            const restrictions = [Palace, Settlers],
+              availableFiltered = available.filter((entity) => ! restrictions.includes(entity)),
+              availableUnits = available.filter((entity) => Object.prototype.isPrototypeOf.call(FortifiableUnit, entity)),
+              randomSelection = availableFiltered[Math.floor(available.length * Math.random())]
             ;
+
+            if (
+              this.#enemyCitiesToAttack.length > 0 ||
+              this.#enemyUnitsToAttack.length > 4
+            ) {
+              const [offensiveUnit] = availableUnits.sort((a, b) => {
+                const aAttack = new Attack(),
+                  bAttack = new Attack()
+                ;
+
+                RulesRegistry.get('unit:yield')
+                  .filter((rule) => rule.validate(a, aAttack))
+                  .forEach((rule) => rule.process(a, aAttack))
+                ;
+
+                RulesRegistry.get('unit:yield')
+                  .filter((rule) => rule.validate(b, bAttack))
+                  .forEach((rule) => rule.process(b, bAttack))
+                ;
+
+                return bAttack - aAttack;
+              });
+
+              city.build(offensiveUnit);
+
+              continue;
+            }
+
+            if (this.#undefendedCities.length) {
+              const [defensiveUnit] = availableUnits.sort((a, b) => {
+                const aDefence = new Defence(),
+                  bDefence = new Defence()
+                ;
+
+                RulesRegistry.get('unit:yield')
+                  .filter((rule) => rule.validate(a, aDefence))
+                  .forEach((rule) => rule.process(a, aDefence))
+                ;
+
+                RulesRegistry.get('unit:yield')
+                  .filter((rule) => rule.validate(b, bDefence))
+                  .forEach((rule) => rule.process(b, bDefence))
+                ;
+
+                return bDefence - aDefence;
+              });
+
+              city.build(defensiveUnit);
+
+              continue;
+            }
 
             // TODO: this won't be feasible...
             if (randomSelection) {
@@ -522,7 +581,7 @@ export class SimpleAIPlayer extends AIPlayer {
             }
           }
           else if (item instanceof PlayerResearch) {
-            const available = item.getAvailableResearch();
+            const available = item.availableResearch();
 
             if (available.length) {
               item.setResearch(available[Math.floor(available.length * Math.random())]);

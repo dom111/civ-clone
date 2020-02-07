@@ -1,9 +1,7 @@
 {
   "name": "base-unit-improvements",
-  "version": "0.0.1",
-  "dependencies": [
-    "core-unit"
-  ],
+  "version": "0.1.0",
+  "dependencies": [],
   "components": [
     {
       "type": "script",

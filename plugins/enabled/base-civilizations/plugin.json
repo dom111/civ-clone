@@ -1,61 +1,61 @@
 {
-    "name": "base-civilizations",
-    "version": "0.0.1",
-    "dependencies": [
-        "core-civilization"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Civilizations/American.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Babylonian.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/English.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/French.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/German.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Greek.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Indian.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Japanese.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Roman.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Russian.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations/Spanish.js"
-        },
-        {
-            "type": "script",
-            "file": "Civilizations.js"
-        },
-        {
-            "type": "script",
-            "file": "register.js"
-        }
-    ]
+  "name": "base-civilizations",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/American.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Greek.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Roman.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/German.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/English.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Russian.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Japanese.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Indian.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Babylonian.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Spanish.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/French.js"
+    }
+  ]
 }

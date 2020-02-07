@@ -4,9 +4,9 @@ import Effect from '../Effect.js';
 import OneCriteria from '../OneCriteria.js';
 import Rule from '../Rule.js';
 import RulesRegistry from '../RulesRegistry.js';
-import test from '../../core-test/test.js';
+import assert from 'assert';
 
-test('Rules.test.js', () => {
+describe('Rules', () => {
   const emptyRule = new Rule(
       'empty:rule'
     ),
@@ -35,27 +35,37 @@ test('Rules.test.js', () => {
     squareRule,
     evenAndSquareRule,
     evenOrSquareRule,
-  ].forEach((rule) => RulesRegistry.register(rule));
+  ]
+    .forEach((rule) => RulesRegistry.register(rule))
+  ;
 
-  return [
-    [emptyRule.validate(), true, 'Check empty rule validates successfully'],
-    [typeof emptyRule.process(), 'undefined', 'Check empty rule processes successfully'],
-    [emptyCriteria.validate(), true, 'Check empty Criteria validates successfully'],
-    [emptyCriterion.validate(), true, 'Check empty Criterion validates successfully'],
-    [emptyOneCriteria.validate(), true, 'Check empty OneCriteria validates successfully'],
-    [RulesRegistry.get('empty').length, 1],
-    [even.validate(2), true],
-    [even.validate(1), false],
-    [square.validate(4), true],
-    [square.validate(3), false],
-    [evenAndSquare.validate(4), true],
-    [evenAndSquare.validate(9), false],
-    [evenOrSquare.validate(6), true],
-    [evenOrSquare.validate(25), true],
-    [evenOrSquare.validate(13), false],
-    [RulesRegistry.get('number').length, 4],
-    [ruleWithJustEffect.validate(), true],
-    [ruleWithJustEffect.process(), 42],
-    [ruleThatSquares.process(5), 25],
-  ];
+  describe('RulesRegistry', () => {
+    it('should return the expected number of rules', () => {
+      assert.strictEqual(RulesRegistry.get('empty').length, 1);
+      assert.strictEqual(RulesRegistry.get('number').length, 4);
+    });
+  });
+
+  it('should successfully validate empty rules and criteria', () => {
+    assert.strictEqual(emptyRule.validate(), true);
+    assert.strictEqual(typeof emptyRule.process(), 'undefined');
+    assert.strictEqual(emptyCriteria.validate(), true);
+    assert.strictEqual(emptyCriterion.validate(), true);
+    assert.strictEqual(emptyOneCriteria.validate(), true);
+  });
+
+  it('should successfully validate all combinations', () => {
+    assert.strictEqual(even.validate(2), true);
+    assert.strictEqual(even.validate(1), false);
+    assert.strictEqual(square.validate(4), true);
+    assert.strictEqual(square.validate(3), false);
+    assert.strictEqual(evenAndSquare.validate(4), true);
+    assert.strictEqual(evenAndSquare.validate(9), false);
+    assert.strictEqual(evenOrSquare.validate(6), true);
+    assert.strictEqual(evenOrSquare.validate(25), true);
+    assert.strictEqual(evenOrSquare.validate(13), false);
+    assert.strictEqual(ruleWithJustEffect.validate(), true);
+    assert.strictEqual(ruleWithJustEffect.process(), 42);
+    assert.strictEqual(ruleThatSquares.process(5), 25);
+  });
 });

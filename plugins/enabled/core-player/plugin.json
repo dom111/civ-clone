@@ -1,40 +1,37 @@
 {
-    "name": "core-player",
-    "title": "Core Player",
-    "version": "0.0.1",
-    "dependencies": [
-        "base-terrain",
-        "base-unit",
-        "core-city",
-        "core-registry",
-        "core-rules",
-        "core-unit",
-        "core-world"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Player.js"
-        },
-        {
-            "type": "script",
-            "file": "AIPlayer.js"
-        },
-        {
-            "type": "script",
-            "file": "HumanPlayer.js"
-        },
-        {
-            "type": "script",
-            "file": "PlayerActionProvider.js"
-        },
-        {
-            "type": "script",
-            "file": "PlayerActionRegistry.js"
-        },
-        {
-            "type": "script",
-            "file": "registerActions.js"
-        }
-    ]
+  "name": "core-player",
+  "title": "Core Player",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city",
+    "core-registry",
+    "core-unit",
+    "core-world"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Player.js"
+    },
+    {
+      "type": "script",
+      "file": "AIPlayer.js"
+    },
+    {
+      "type": "script",
+      "file": "HumanPlayer.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActionProvider.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActionRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "registerActions.js"
+    }
+  ]
 }

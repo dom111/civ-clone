@@ -1,7 +1,7 @@
 {
     "name": "core-city",
     "title": "Core City",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "dependencies": [
         "core-city-improvement",
         "core-registry",

@@ -1,93 +1,106 @@
 {
-    "name": "base-unit",
-    "title": "Base Unit",
-    "version": "0.0.1",
-    "dependencies": [
-        "base-terrain",
-        "base-terrain-improvements",
-        "base-unit-improvements",
-        "core-city",
-        "core-rules",
-        "core-terrain",
-        "core-unit",
-        "core-world"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Types/NavalUnit.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/NavalTransport.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/LandUnit.js"
-        },
-        {
-            "type": "script",
-            "file": "Types/FortifiableUnit.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Catapult.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Cavalry.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Militia.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Settlers.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Spearman.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Swordman.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Trireme.js"
-        },
-        {
-            "type": "script",
-            "file": "Units/Worker.js"
-        },
-        {
-            "type": "script",
-            "file": "Types.js"
-        },
-        {
-            "type": "script",
-            "file": "Units.js"
-        },
-        {
-            "type": "script",
-            "file": "Rules/build.js"
-        },
-        {
-            "type": "script",
-            "file": "Rules/costs.js"
-        },
-        {
-            "type": "script",
-            "file": "Rules/effects.js"
-        },
-        {
-            "type": "script",
-            "file": "Rules/movement.js"
-        },
-        {
-            "type": "script",
-            "file": "register.js"
-        }
-    ]
+  "name": "base-unit",
+  "title": "Base Unit",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city-improvements",
+    "base-terrain-improvements",
+    "core-rules",
+    "core-unit",
+    "base-unit-improvements"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Types/NavalUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/NavalTransport.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/LandUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/FortifiableUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Catapult.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Cavalry.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Chariot.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Knights.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Militia.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Settlers.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Spearman.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Swordman.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Trireme.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Worker.js"
+    },
+    {
+      "type": "script",
+      "file": "Types.js"
+    },
+    {
+      "type": "script",
+      "file": "Units.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/combat.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/movementCost.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Sail.js"
+    }
+  ]
 }

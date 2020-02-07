@@ -1,7 +1,7 @@
 {
   "name": "base-city-improvements",
   "title": "Base City Improvements",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-unit-improvements",
     "core-city",
@@ -11,35 +11,19 @@
   "components": [
     {
       "type": "script",
-      "file": "Improvements/Barracks.js"
+      "file": "register.js"
     },
     {
       "type": "script",
-      "file": "Improvements/CityWalls.js"
+      "file": "Rules/Unit/created.js"
     },
     {
       "type": "script",
-      "file": "Improvements/Courthouse.js"
+      "file": "Rules/City/build-cost.js"
     },
     {
       "type": "script",
-      "file": "Improvements/Granary.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Library.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Palace.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Temple.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements.js"
+      "file": "Rules/City/grow.js"
     },
     {
       "type": "script",
@@ -47,15 +31,43 @@
     },
     {
       "type": "script",
-      "file": "Rules/City/costs.js"
+      "file": "Improvements.js"
     },
     {
       "type": "script",
-      "file": "Rules/City/effects.js"
+      "file": "Improvements/Temple.js"
     },
     {
       "type": "script",
-      "file": "Rules/Unit/effects.js"
+      "file": "Improvements/Library.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Granary.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Barracks.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Marketplace.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Courthouse.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/CityWalls.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Palace.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/created.js"
     }
   ]
 }

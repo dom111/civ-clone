@@ -1,0 +1,60 @@
+{
+  "$id": "https://github.com/dom111/civ-clone/plugin.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "definitions": {
+    "pluginName": {
+      "type": "string",
+      "description": "The name of the plugin. This MUST match the directory that contains the plugin.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    }
+  },
+
+  "title": "Plugin",
+  "properties": {
+    "name": {
+      "$ref": "#/definitions/pluginName"
+    },
+    "description": {
+      "description": "An optional description of the plugin",
+      "type": "string"
+    },
+    "version": {
+      "description": "A version definition in MAJOR.MINOR.PATCH.",
+      "type": "string",
+      "pattern": "^[0-9]+.[0-9]+.[0-9]+(-[A-Za-z0-9]+)*$"
+    },
+    "components": {
+      "description": "A list of the plugin's components.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of component.",
+            "enum": [
+              "script"
+            ]
+          },
+          "file": {
+            "description": "The relative path to the component.",
+            "type": "string",
+            "pattern": "([A-Za-z0-9]+/)*[A-Za-z0-9]+(.[A-Za-z0-9]+)"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "description": "The other plugins that this plugin is dependent on.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/pluginName"
+      }
+    },
+    "required": {
+      "name": true,
+      "version": true
+    }
+  },
+  "type": "object"
+}

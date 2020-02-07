@@ -12,10 +12,10 @@ export class PlayerResearch {
     this.#player = player;
   }
 
-  addProgress(researchYield) {
-    this.#researchProgress += researchYield.value();
+  add(researchYield) {
+    this.#researchProgress += researchYield;
 
-    if (this.#researchProgress > this.#researchCost) {
+    if (this.isResearching() && (this.#researchProgress > this.#researchCost)) {
       const completedResearch = new (this.#currentResearch)();
 
       engine.emit('player:research-complete', this.#player, completedResearch);
@@ -27,7 +27,11 @@ export class PlayerResearch {
     }
   }
 
-  getAvailableResearch() {
+  completedResearch() {
+    return this.#completedResearch.slice(0);
+  }
+
+  availableResearch() {
     return AdvanceRegistry
       .filter((Advance) => RulesRegistry.get('research:advance')
         .filter((rule) => rule.validate(Advance, this.#completedResearch))

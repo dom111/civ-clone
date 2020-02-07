@@ -1,7 +1,7 @@
 {
   "name": "core-turn-based-game",
   "title": "Core Turn Based Game",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "components": [
     {
       "type": "script",

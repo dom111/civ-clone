@@ -1,36 +1,46 @@
 {
-    "name": "base-player",
-    "title": "Base Player",
-    "version": "0.0.1",
-    "dependencies": [
-        "base-civilizations",
-        "base-science",
-        "base-terrain",
-        "base-unit",
-        "base-terrain-yield-trade",
-        "base-terrain-yields",
-        "core-city",
-        "core-civilization",
-        "core-player",
-        "core-registry",
-        "core-rules",
-        "core-terrain",
-        "core-turn-based-game",
-        "core-unit",
-        "core-world"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "city.js"
-        },
-        {
-            "type": "script",
-            "file": "init.js"
-        },
-        {
-            "type": "script",
-            "file": "unit.js"
-        }
-    ]
+  "name": "base-player",
+  "title": "Base Player",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain-yields",
+    "base-unit",
+    "core-city",
+    "core-civilization",
+    "core-player",
+    "core-registry",
+    "core-rules",
+    "core-terrain",
+    "core-unit"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "unit.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/captured.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerRegistry.js"
+    }
+  ]
 }

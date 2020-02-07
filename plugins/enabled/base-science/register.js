@@ -10,6 +10,7 @@ import {
   Mathematics,
   Monarchy,
   Mysticism,
+  Pottery,
   Writing,
 } from './Advances.js';
 import AdvanceRegistry from '../core-science/AdvanceRegistry.js';
@@ -26,6 +27,7 @@ import AdvanceRegistry from '../core-science/AdvanceRegistry.js';
   Mathematics,
   Monarchy,
   Mysticism,
+  Pottery,
   Writing,
 ]
   .forEach((Advance) => AdvanceRegistry.register(Advance))

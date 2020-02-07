@@ -1,10 +1,8 @@
 {
   "name": "base-terrain",
   "title": "Base Terrain",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
-    "core-registry",
-    "core-rules",
     "core-terrain"
   ],
   "components": [

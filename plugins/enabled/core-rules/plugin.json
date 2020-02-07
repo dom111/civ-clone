@@ -1,7 +1,7 @@
 {
   "name": "core-rules",
   "title": "Core RulesRegistry",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "core-registry"
   ],

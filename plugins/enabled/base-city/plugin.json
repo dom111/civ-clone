@@ -1,14 +1,13 @@
 {
   "name": "base-city",
   "title": "Base City",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
-    "base-player-government",
     "base-governments",
-    "base-terrain",
+    "base-player-government",
     "base-terrain-improvements",
-    "base-unit",
     "base-terrain-yields",
+    "base-unit",
     "core-city",
     "core-rules",
     "core-turn-based-game",
@@ -17,15 +16,23 @@
   "components": [
     {
       "type": "script",
-      "file": "Rules/Food.js"
+      "file": "Events/City/grow.js"
     },
     {
       "type": "script",
-      "file": "Rules/Production.js"
+      "file": "Events/City/created.js"
     },
     {
       "type": "script",
-      "file": "init.js"
+      "file": "Events/City/shrink.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/City/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
     }
   ]
 }

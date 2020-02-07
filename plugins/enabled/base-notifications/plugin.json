@@ -1,19 +1,19 @@
 {
-    "name": "base-notifications",
-    "title": "Base Notifications",
-    "version": "0.0.1",
-    "components": [
-        {
-            "type": "script",
-            "file": "Notification.js"
-        },
-        {
-            "type": "script",
-            "file": "Notifications.js"
-        },
-        {
-            "type": "script",
-            "file": "init.js"
-        }
-    ]
+  "name": "base-notifications",
+  "title": "Base Notifications",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "Notifications.js"
+    },
+    {
+      "type": "script",
+      "file": "Notification.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
 }

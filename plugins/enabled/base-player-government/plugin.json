@@ -1,60 +1,33 @@
 {
   "name": "base-player-government",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-governments",
     "base-terrain",
     "base-terrain-features",
     "base-terrain-improvements",
     "base-terrain-yields",
-    "core-rules",
+    "core-player",
     "core-registry",
+    "core-rules",
     "core-unit"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "PlayerGovernment.js"
-    },
     {
       "type": "script",
       "file": "PlayerGovernmentRegistry.js"
     },
     {
       "type": "script",
+      "file": "PlayerGovernment.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/yield.js"
+    },
+    {
+      "type": "script",
       "file": "Rules/City/unitSupportCosts.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Coal.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Fish.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Game.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Grassland.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Horse.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Oasis.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/Oil.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Yields/River.js"
     },
     {
       "type": "script",

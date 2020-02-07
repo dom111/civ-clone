@@ -1,6 +1,6 @@
   {
   "name": "base-terrain-improvements",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-terrain",
     "base-terrain-yields",

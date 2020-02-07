@@ -1,5 +1,4 @@
 import {Despotism} from '../base-governments/Governments.js';
-import engine from 'engine';
 
 export class PlayerGovernment {
   #government;

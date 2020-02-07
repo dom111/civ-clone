@@ -1,16 +1,16 @@
 {
   "name": "base-science-units",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": [
     "base-player-science",
+    "core-rules",
     "base-science",
-    "base-unit",
-    "core-rules"
+    "base-unit"
   ],
   "components": [
     {
       "type": "script",
-      "file": "Rules/cityBuildAvailability.js"
+      "file": "Rules/City/build.js"
     }
   ]
 }
