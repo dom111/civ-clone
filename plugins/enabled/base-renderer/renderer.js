@@ -1,5 +1,7 @@
 'use strict';
 
+import Engine from '../../../app/engine.js';
+
 let _stringToNode = (html) => ((el) => {
     el.innerHTML = html;
 
@@ -8,8 +10,10 @@ let _stringToNode = (html) => ((el) => {
 
 // TODO: renderer base class - set up prototype method that must be implemented?
 // let BaseRenderer = class BaseRenderer extends Renderer {
-let BaseRenderer = class BaseRenderer {
-    constructor() {
+export class BaseRenderer {
+    #engine;
+
+    constructor(engine) {
         let renderer = this;
 
         renderer.layerOrder = [
@@ -25,15 +29,23 @@ let BaseRenderer = class BaseRenderer {
         ];
 
         renderer.layers = {};
+
+        this.#engine = engine;
+        this.#oldEngine = new Engine();
+        this.binCoreEvents();
+    }
+
+    binCoreEvents() {
+        this.#engine.on('world:built', (map) => this.#map = map);
     }
 
     init() {
         let renderer = this;
 
-        renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'layout'})));
+        renderer.addToBody(this.#oldEngine.template(this.#oldEngine.getAsset({type: 'template', package: 'base-renderer', label: 'layout'})));
 
         if (global.debug) {
-            renderer.addToBody(engine.template(engine.getAsset({type: 'template', package: 'base-renderer', label: 'debug'}), renderer));
+            renderer.addToBody(this.#oldEngine.template(this.#oldEngine.getAsset({type: 'template', package: 'base-renderer', label: 'debug'}), renderer));
 
             let layerDebug = document.getElementById('layerDebug');
             Array.from(layerDebug.querySelectorAll('input[type="checkbox"]')).forEach((el) => {
@@ -53,7 +65,7 @@ let BaseRenderer = class BaseRenderer {
         renderer.canvas.addEventListener('mousedown', (event) => {
             let x = event.pageX,
             y = event.pageY,
-            tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
+            tileSize = 16 * this.#oldEngine.scale;
 
             x -= parseInt(renderer.canvas.width / 2) - parseInt(tileSize / 2);
             y -= parseInt(renderer.canvas.height / 2) - parseInt(tileSize / 2);
@@ -64,7 +76,7 @@ let BaseRenderer = class BaseRenderer {
             x = renderer.center.x + x;
             y = renderer.center.y + y;
 
-            let tile = engine.map.get(x, y);
+            let tile = this.#get(x, y);
 
             if (tile.city) {
                 tile.city.showCityScreen();
@@ -81,7 +93,7 @@ let BaseRenderer = class BaseRenderer {
             if (event.shiftKey) {
                 let x = event.pageX,
                 y = event.pageY,
-                tileSize = engine.map.get(0, 0).terrain.size * engine.scale;
+                tileSize = 16 * this.#oldEngine.scale;
 
                 x -= parseInt(renderer.canvas.width / 2) - parseInt(tileSize / 2);
                 y -= parseInt(renderer.canvas.height / 2) - parseInt(tileSize / 2);
@@ -92,7 +104,7 @@ let BaseRenderer = class BaseRenderer {
                 x = renderer.center.x + x;
                 y = renderer.center.y + y;
 
-                let tile = engine.map.get(x, y);
+                let tile = this.#get(x, y);
                 console.log(tile.x, tile.y);
             }
         });
@@ -102,18 +114,18 @@ let BaseRenderer = class BaseRenderer {
             renderer.canvas.height = window.innerHeight;
             renderer.canvas.width = window.innerWidth;
 
-            engine.emit('build-layer');
-            engine.emit('update-display');
+            this.#oldEngine.emit('build-layer');
+            this.#oldEngine.emit('update-display');
         });
 
-        engine.on('build-layer', (layer) => renderer.buildLayer(layer || 'all'));
+        this.#engine.on('build-layer', (layer) => renderer.buildLayer(layer || 'all'));
 
-        engine.on('update-display', (layersToProcess) => renderer.updateDisplay(layersToProcess));
+        this.#oldEngine.on('update-display', (layersToProcess) => renderer.updateDisplay(layersToProcess));
 
         renderer.hideFlag = false;
         // TODO: request animation frame?
         renderer.interval = setInterval(() => {
-            engine.emit('update-display', renderer.layerOrder.filter((layer) => {
+            this.#oldEngine.emit('update-display', renderer.layerOrder.filter((layer) => {
                 if ((layer === 'activeUnits') && renderer.hideFlag) {
                     return false;
                 }
@@ -126,59 +138,59 @@ let BaseRenderer = class BaseRenderer {
             // TODO: pallette cycling for coast/river animations
         }, 125);
 
-        engine.on('tile-improvement-built', (tile, improvement) => {
+        this.#engine.on('tile:improvement-built', (tile, improvement) => {
             if (improvement === 'irrigation') {
-                engine.emit('build-layer', improvement);
+                this.#engine.emit('build-layer', improvement);
             }
             else {
-                engine.emit('build-layer', 'otherImprovements');
+                this.#engine.emit('build-layer', 'otherImprovements');
             }
         });
 
-        engine.on('tile-improvement-pillaged', (tile, improvement) => {
+        this.#engine.on('tile:improvement-pillaged', (tile, improvement) => {
             if (improvement === 'irrigation') {
-                engine.emit('build-layer', improvement);
+                this.#engine.emit('build-layer', improvement);
             }
             else {
-                engine.emit('build-layer', 'otherImprovements');
+                this.#engine.emit('build-layer', 'otherImprovements');
             }
         });
 
-        engine.on('tile-seen', (tile) => engine.emit('build-layer', 'visibility'));
+        this.#engine.on('tile:seen', (tile) => this.#engine.emit('build-layer', 'visibility'));
 
-        engine.on('city-created', (city) => engine.emit('build-layer', 'cities'));
-        engine.on('city-grow', (city) => engine.emit('build-layer', 'cities'));
-        engine.on('city-captured', (city) => engine.emit('build-layer', 'cities'));
-        engine.on('city-destroyed', (city) => engine.emit('build-layer', 'cities'));
+        this.#engine.on('city:created', (city) => this.#engine.emit('build-layer', 'cities'));
+        this.#engine.on('city:grow', (city) => this.#engine.emit('build-layer', 'cities'));
+        this.#engine.on('city:captured', (city) => this.#engine.emit('build-layer', 'cities'));
+        this.#engine.on('city:destroyed', (city) => this.#engine.emit('build-layer', 'cities'));
 
-        engine.on('unit-activate', (unit) => {
+        this.#engine.on('unit:activate', (unit) => {
             if (!renderer.tileIsVisible(unit.tile)) {
                 renderer.center = unit.tile;
             }
         });
 
-        ['unit-moved', 'unit-activate', 'unit-created', 'unit-destroyed', 'unit-action'].forEach((event) => {
-            engine.on(event, (unit) => {
-                engine.emit('build-layer', 'units');
-                engine.emit('build-layer', 'activeUnits');
-                engine.emit('build-layer', 'activeVisibility');
+        ['unit:moved', 'unit:activate', 'unit:created', 'unit:destroyed', 'unit:action'].forEach((event) => {
+            this.#engine.on(event, (unit) => {
+                this.#engine.emit('build-layer', 'units');
+                this.#engine.emit('build-layer', 'activeUnits');
+                this.#engine.emit('build-layer', 'activeVisibility');
             });
         });
 
-        engine.on('player-turn-start', (unit) => {
-            engine.emit('build-layer', 'visibility');
+        this.#engine.on('player-turn-start', (unit) => {
+            this.#engine.emit('build-layer', 'visibility');
         });
 
-        engine.emit('bind-key', 'unit', 'c', () => {
-            if (engine.currentPlayer && engine.currentPlayer.activeUnit) {
-                renderer.center = engine.currentPlayer.activeUnit.tile;
+        this.#engine.emit('bind-key', 'unit', 'c', () => {
+            if (this.#oldEngine.currentPlayer && this.#oldEngine.currentPlayer.activeUnit) {
+                renderer.center = this.#oldEngine.currentPlayer.activeUnit.tile;
             }
         });
 
         renderer.canvas.height = window.innerHeight;
         renderer.canvas.width = window.innerWidth;
 
-        engine.emit('build-layer');
+        this.#engine.emit('build-layer');
     }
 
     addToBody(element) {
@@ -195,8 +207,7 @@ let BaseRenderer = class BaseRenderer {
         let renderer = this,
         tiles = {};
 
-        engine.map.map.forEach((row) => {
-            row.forEach((tile) => {
+        this.#map.getBy(() => true).forEach((tile) => {
                 if ((layer === 'land') || (layer === 'all')) {
                     if (!('land' in tiles)) {
                         tiles.land = [];
@@ -207,10 +218,10 @@ let BaseRenderer = class BaseRenderer {
                             let images = [];
 
                             if (tile.isOcean) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/ocean.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/Ocean.png'));
                             }
                             else if (tile.isLand) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/land.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/Land.png'));
                             }
                             else {
                                 console.log(`tile at ${tile.x}, ${tile.y} is not land or ocean...`);
@@ -218,10 +229,10 @@ let BaseRenderer = class BaseRenderer {
 
                             return images;
                         })(),
-                        height: tile.terrain.size,
-                        width: tile.terrain.size,
-                        x: tile.terrain.size * tile.x,
-                        y: tile.terrain.size * tile.y
+                        height: 16,
+                        width: 16,
+                        x: 16 * tile.x,
+                        y: 16 * tile.y
                     });
                 }
 
@@ -230,13 +241,13 @@ let BaseRenderer = class BaseRenderer {
                         tiles.irrigation = [];
                     }
 
-                    if (tile.improvements.includes('irrigation')) {
+                    if (tile.improvements.some((improvement) => improvement.constructor.name === 'Irrigation')) {
                         tiles.irrigation.push({
-                            images: [renderer._getPreloadedImage('assets/improvements/irrigation.png')],
-                            height: tile.terrain.size,
-                            width: tile.terrain.size,
-                            x: tile.terrain.size * tile.x,
-                            y: tile.terrain.size * tile.y
+                            images: [renderer._getPreloadedImage('assets/improvements/Irrigation.png')],
+                            height: 16,
+                            width: 16,
+                            x: 16 * tile.x,
+                            y: 16 * tile.y
                         });
                     }
                 }
@@ -296,32 +307,32 @@ let BaseRenderer = class BaseRenderer {
                         }
 
                         if (tile.terrain.special) {
-                            images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.png'));
+                            images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.feature.constructor.name + '.png'));
                         }
                     }
                     else {
-                        if (tile.terrain.name === 'river') {
-                            let adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.adjacent[direction].isOcean || (tile.adjacent[direction].terrainId === tile.terrainId))).join('');
+                        if (tile.terrain.constructor.name === 'River') {
+                            let adjoining = ['n', 'e', 's', 'w'].filter((direction) => (tile.getNeighbour(direction).isOcean() || (tile.getNeighbour(direction).terrain.constructor.name === 'River'))).join('');
 
                             if (adjoining) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.constructor.name + '_' + adjoining + '.png'));
                             }
                             else {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.constructor.name + '.png'));
                             }
                         }
                         else {
                             let adjoining = tile.adjacentTerrain;
 
                             if (adjoining) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '_' + adjoining + '.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.constructor.name + '_' + adjoining + '.png'));
                             }
                             else {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.name + '.png'));
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.constructor.name + '.png'));
                             }
 
-                            if (tile.terrain.special) {
-                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.special.name + '.png'));
+                            if (tile.terrain.features.length) {
+                                images.push(renderer._getPreloadedImage('assets/terrain/' + tile.terrain.features.map((feature) => feature.constructor.name)[0] + '.png'));
                             }
                         }
                     }
@@ -329,10 +340,10 @@ let BaseRenderer = class BaseRenderer {
                     if (images.length && images[0]) {
                         tiles.baseTerrain.push({
                             images: images,
-                            height: tile.terrain.size,
-                            width: tile.terrain.size,
-                            x: tile.terrain.size * tile.x,
-                            y: tile.terrain.size * tile.y
+                            height: 16,
+                            width: 16,
+                            x: 16 * tile.x,
+                            y: 16 * tile.y
                         });
                     }
                 }
@@ -342,7 +353,7 @@ let BaseRenderer = class BaseRenderer {
                         tiles.otherImprovements = [];
                     }
 
-                    let otherImprovements = tile.improvements.filter((improvement) => improvement !== 'irrigation');
+                    let otherImprovements = tile.improvements.filter((improvement) => improvement.constructor.name !== 'Irrigation');
 
                     if (otherImprovements.length) {
                         tiles.otherImprovements.push({
@@ -351,37 +362,37 @@ let BaseRenderer = class BaseRenderer {
                                 adjoining;
 
                                 otherImprovements.forEach((improvement) => {
-                                    if (improvement === 'road' && !otherImprovements.includes('railroad')) {
-                                        adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
+                                    if (improvement.constructor.name === 'Road'/* && !otherImprovements.includes('railroad')*/) {
+                                        adjoining = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].filter((direction) => tile.getNeighbor(direction).improvements.some((improvement) => improvement.constructor.name === 'Road'));
 
                                         if (adjoining.length) {
-                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.png')));
+                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement.constructor.name + '_' + direction + '.png')));
                                         }
                                         else {
-                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
+                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement.constructor.name + '.png'));
                                         }
                                     }
-                                    else if (improvement === 'railroad') {
-                                        adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
-
-                                        if (adjoining.length) {
-                                            adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.png')));
-                                        }
-                                        else {
-                                            images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
-                                        }
-                                    }
+                                    // else if (improvement === 'railroad') {
+                                    //     adjoining = Object.keys(tile.neighbours).filter((direction) => tile.neighbours[direction].improvements.includes('road'));
+                                    //
+                                    //     if (adjoining.length) {
+                                    //         adjoining.forEach((direction) => images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '_' + direction + '.png')));
+                                    //     }
+                                    //     else {
+                                    //         images.push(renderer._getPreloadedImage('assets/improvements/' + improvement.constructor.name + '.png'));
+                                    //     }
+                                    // }
                                     else {
-                                        images.push(renderer._getPreloadedImage('assets/improvements/' + improvement + '.png'));
+                                        images.push(renderer._getPreloadedImage('assets/improvements/' + improvement.constructor.name + '.png'));
                                     }
                                 });
 
                                 return images;
                             })(),
-                            height: tile.terrain.size,
-                            width: tile.terrain.size,
-                            x: tile.terrain.size * tile.x,
-                            y: tile.terrain.size * tile.y
+                            height: 16,
+                            width: 16,
+                            x: 16 * tile.x,
+                            y: 16 * tile.y
                         });
                     }
                 }
@@ -392,11 +403,11 @@ let BaseRenderer = class BaseRenderer {
                     }
 
                     if (tile.units.length) {
-                        if (!engine.currentPlayer || !engine.currentPlayer.activeUnit || !tile.units.includes(engine.currentPlayer.activeUnit)) {
-                            let unit = tile.units.sort((a, b) => a.defence > b.defence ? -1 : a.defence == a.defence ? 0 : 1)[0],
+                        // if (!this.#oldEngine.currentPlayer || !this.#oldEngine.currentPlayer.activeUnit || !tile.units.includes(this.#oldEngine.currentPlayer.activeUnit)) {
+                            let unit = tile.units.sort((a, b) => b.defence - a.defence)[0],
                             image = renderer._createPreloadCanvas(),
                             imageContext = image.getContext('2d'),
-                            unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.png'), // TODO: have each unit details as a component
+                            unitImage = renderer._getPreloadedImage('assets/units/' + unit.constructor.name + '.png'), // TODO: have each unit details as a component
                             sourceColors = Engine.Plugin.filter({type: 'asset', label: 'units'})[0].sourceColors,
                             replaceColors = unit.player.colors;
 
@@ -419,10 +430,10 @@ let BaseRenderer = class BaseRenderer {
                                 text: unit.busy ? unit.currentAction.key.toUpperCase() : '',
                                 height: unit.height,
                                 width: unit.width,
-                                x: (unit.tile.terrain.size * unit.tile.x) + unit.offsetX,
-                                y: (unit.tile.terrain.size * unit.tile.y) + unit.offsetY
+                                x: (16 * unit.tile.x) + unit.offsetX,
+                                y: (16 * unit.tile.y) + unit.offsetY
                             });
-                        }
+                        // }
                     }
                 }
 
@@ -438,10 +449,10 @@ let BaseRenderer = class BaseRenderer {
                         cityImage = renderer._getPreloadedImage('assets/map/city.png'),
                         replaceColors = city.player.colors;
 
-                        image.width = city.tile.terrain.size;
-                        image.height = city.tile.terrain.size;
+                        image.width = 16;
+                        image.height = 16;
                         imageContext.beginPath();
-                        imageContext.rect(0, 0, city.tile.terrain.size, city.tile.terrain.size);
+                        imageContext.rect(0, 0, 16, 16);
                         imageContext.fillStyle = replaceColors[0];
                         imageContext.fill();
                         imageContext.drawImage(cityImage, 0, 0);
@@ -453,10 +464,10 @@ let BaseRenderer = class BaseRenderer {
                             background: city.player.colour,
                             text: city.size,
                             textBelow: city.name,
-                            height: city.tile.terrain.size,
-                            width: city.tile.terrain.size,
-                            x: city.tile.terrain.size * city.tile.x,
-                            y: city.tile.terrain.size * city.tile.y
+                            height: 16,
+                            width: 16,
+                            x: 16 * city.tile.x,
+                            y: 16 * city.tile.y
                         });
                     }
                 }
@@ -466,12 +477,13 @@ let BaseRenderer = class BaseRenderer {
                         tiles.activeUnits = [];
                     }
 
-                    if (engine.currentPlayer && engine.currentPlayer.activeUnit && tile.units.includes(engine.currentPlayer.activeUnit)) {
-                        let unit = engine.currentPlayer.activeUnit,
+                    // TODO
+                    if (this.#oldEngine.currentPlayer && this.#oldEngine.currentPlayer.activeUnit && tile.units.includes(this.#oldEngine.currentPlayer.activeUnit)) {
+                        let unit = this.#oldEngine.currentPlayer.activeUnit,
                         tile = unit.tile,
                         image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d'),
-                        unitImage = renderer._getPreloadedImage('assets/units/' + unit.name + '.png');
+                        unitImage = renderer._getPreloadedImage('assets/units/' + unit.constructor.name + '.png');
 
                         image.width = unitImage.width;
                         image.height = unitImage.height;
@@ -486,14 +498,14 @@ let BaseRenderer = class BaseRenderer {
                         imageContext.save();
 
                         let sourceColors = Engine.Plugin.first({package: 'base-renderer', type: 'asset', label: 'units'}).sourceColors,
-                        replaceColors = engine.currentPlayer.colors;
+                        replaceColors = this.#oldEngine.currentPlayer.colors;
 
                         tiles.activeUnits.push({
                             images: [renderer.replaceColor(image, sourceColors, replaceColors)],
                             height: unit.height,
                             width: unit.width,
-                            x: unit.tile.terrain.size * unit.tile.x,
-                            y: unit.tile.terrain.size * unit.tile.y
+                            x: 16 * unit.tile.x,
+                            y: 16 * unit.tile.y
                         });
                     }
                 }
@@ -505,16 +517,16 @@ let BaseRenderer = class BaseRenderer {
 
                     let player;
 
-                    if (engine.currentPlayer) {
-                        player = engine.currentPlayer;
+                    if (this.#oldEngine.currentPlayer) {
+                        player = this.#oldEngine.currentPlayer;
 
                         if (!tile.isVisible(player.id)) {
                             tiles.visibility.push({
                                 background: '#000',
-                                height: tile.terrain.size,
-                                width: tile.terrain.size,
-                                x: tile.terrain.size * tile.x,
-                                y: tile.terrain.size * tile.y
+                                height: 16,
+                                width: 16,
+                                x: 16 * tile.x,
+                                y: 16 * tile.y
                             });
                         }
                         else {
@@ -529,10 +541,10 @@ let BaseRenderer = class BaseRenderer {
                             if (images.length) {
                                 tiles.visibility.push({
                                     images: images,
-                                    height: tile.terrain.size,
-                                    width: tile.terrain.size,
-                                    x: tile.terrain.size * tile.x,
-                                    y: tile.terrain.size * tile.y
+                                    height: 16,
+                                    width: 16,
+                                    x: 16 * tile.x,
+                                    y: 16 * tile.y
                                 });
                             }
                         }
@@ -546,16 +558,16 @@ let BaseRenderer = class BaseRenderer {
 
                     let player;
 
-                    if (engine.currentPlayer) {
-                        player = engine.currentPlayer;
+                    if (this.#oldEngine.currentPlayer) {
+                        player = this.#oldEngine.currentPlayer;
 
                         if (!tile.isActivelyVisible(player.id)) {
                             tiles.activeVisibility.push({
                                 background: '#000',
-                                height: tile.terrain.size,
-                                width: tile.terrain.size,
-                                x: tile.terrain.size * tile.x,
-                                y: tile.terrain.size * tile.y
+                                height: 16,
+                                width: 16,
+                                x: 16 * tile.x,
+                                y: 16 * tile.y
                             });
                         }
                         else {
@@ -570,10 +582,10 @@ let BaseRenderer = class BaseRenderer {
                             if (images.length) {
                                 tiles.activeVisibility.push({
                                     images: images,
-                                    height: tile.terrain.size,
-                                    width: tile.terrain.size,
-                                    x: tile.terrain.size * tile.x,
-                                    y: tile.terrain.size * tile.y
+                                    height: 16,
+                                    width: 16,
+                                    x: 16 * tile.x,
+                                    y: 16 * tile.y
                                 });
                             }
                         }
@@ -587,8 +599,8 @@ let BaseRenderer = class BaseRenderer {
                         let image = renderer._createPreloadCanvas(),
                         imageContext = image.getContext('2d');
 
-                        image.width = tile.terrain.size;
-                        image.height = tile.terrain.size;
+                        image.width = 16;
+                        image.height = 16;
 
                         imageContext.fillStyle = '#000';
                         imageContext.fillRect(0, 0, image.width, 1);
@@ -598,14 +610,13 @@ let BaseRenderer = class BaseRenderer {
 
                         tiles.grid.push({
                             images: [image],
-                            height: tile.terrain.size,
-                            width: tile.terrain.size,
-                            x: tile.terrain.size * tile.x,
-                            y: tile.terrain.size * tile.y
+                            height: 16,
+                            width: 16,
+                            x: 16 * tile.x,
+                            y: 16 * tile.y
                         });
                     }
                 }
-            });
         });
 
         renderer.layerOrder.forEach((layerName) => {
@@ -751,23 +762,23 @@ let BaseRenderer = class BaseRenderer {
         renderer.portal.height = window.innerHeight;
         renderer.portalContext = renderer.portal.getContext('2d');
 
-        engine.scale = engine.scale || 1;
+        this.#oldEngine.scale = this.#oldEngine.scale || 1;
 
         if (!renderer.center) {
-            renderer.center = engine.currentPlayer && engine.currentPlayer.activeUnit ?
-                engine.currentPlayer.activeUnit.tile :
-                engine.map.get(0, 0);
+            renderer.center = this.#oldEngine.currentPlayer && this.#oldEngine.currentPlayer.activeUnit ?
+                this.#oldEngine.currentPlayer.activeUnit.tile :
+                this.#get(0, 0);
         }
 
         renderer.portal.centerX = parseInt(renderer.portal.width / 2);
         renderer.portal.centerY = parseInt(renderer.portal.height / 2);
 
-        let tileSize = renderer.center.terrain.size * engine.scale,
-        layerWidth = engine.map.width * tileSize,
+        let tileSize = 16 * this.#oldEngine.scale,
+        layerWidth = this.#width * tileSize,
         centerX = (renderer.center.x * tileSize) + parseInt(tileSize / 2),
         startX = renderer.portal.centerX - centerX,
         endX = renderer.portal.centerX + layerWidth,
-        layerHeight = engine.map.height * tileSize,
+        layerHeight = this.#height * tileSize,
         centerY = (renderer.center.y * tileSize) + parseInt(tileSize / 2),
         startY = renderer.portal.centerY - centerY,
         endY = renderer.portal.centerY + layerHeight;
@@ -789,10 +800,10 @@ let BaseRenderer = class BaseRenderer {
         }
 
         (layersToProcess || renderer.layerOrder).forEach((layer) => {
-            for (let x = startX; x < endX; x += layerWidth * engine.scale) {
-                for (let y = startY; y < endY; y += layerHeight * engine.scale) {
+            for (let x = startX; x < endX; x += layerWidth * this.#oldEngine.scale) {
+                for (let y = startY; y < endY; y += layerHeight * this.#oldEngine.scale) {
                     if (renderer.layers[layer]) {
-                        renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * engine.scale, layerHeight * engine.scale);
+                        renderer.portalContext.drawImage(renderer.layers[layer], x, y, layerWidth * this.#oldEngine.scale, layerHeight * this.#oldEngine.scale);
                     }
                 }
             }
@@ -827,11 +838,11 @@ BaseRenderer.Layer = class BaseLayer {
             extend(layer, layerDefaults[layer.name]);
         }
 
-        layer.tileSize = engine.map.terrainTypes[0].size;
+        layer.tileSize = 16;
 
         layer.canvas = document.createElement('canvas');
-        layer.width = layer.canvas.width = engine.map.width * layer.tileSize;
-        layer.height = layer.canvas.height = engine.map.height * layer.tileSize;
+        layer.width = layer.canvas.width = this.#width * layer.tileSize;
+        layer.height = layer.canvas.height = this.#height * layer.tileSize;
         layer.context = layer.canvas.getContext('2d');
 
         layer.tiles.forEach((tile) => {
@@ -888,10 +899,4 @@ BaseRenderer.Layer = class BaseLayer {
     }
 };
 
-global.renderer = new BaseRenderer();
-
-engine.on('start', () => global.renderer.init());
-
-engine.on('player-turn-start', (player) => {
-    ['visibility', 'activeVisibility'].forEach((layer) => engine.emit('build-layer', layer));
-});
+export default BaseRenderer;

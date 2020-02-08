@@ -1,24 +1,17 @@
 'use strict';
 
-const Engine = require('../../../app/engine.js');
+import BaseRenderer from '/plugins/enabled/base-renderer/renderer.js';
+import electron from 'electron';
 
-window.addEventListener('load', function() {
-    global.debug = (window.location.href.indexOf('debug=true') > -1);
-    const engine = global.engine = new Engine();
+window.addEventListener('load', () => {
+  document.querySelector('#main-menu').innerHTML = engine.template('main/mustache/menu.mustache');
 
-    var preload = document.getElementById('preload');
+  document.querySelector('#main-menu a.start-new-game').addEventListener('click', () => {
+    const renderer = new BaseRenderer(electron.ipcRenderer);
 
-    Engine.Plugin.filter({type: 'asset', package: 'base-renderer'}).forEach((component) => component.contents.forEach((assetPath) => preload.innerHTML += '<img src="file://' + assetPath + '" data-path="' + assetPath + '"/>'));
-
-    document.querySelector('#main-menu').innerHTML = engine.template('main/mustache/menu.mustache');
-
-    document.querySelector('#main-menu a.start-new-game').addEventListener('click', function(event) {
-        event.preventDefault();
-
-        if (engine.started) {
-            return false;
-        }
-
-        engine.start();
+    electron.ipcRenderer.on('engine:start', () => renderer.init());
+    electron.ipcRenderer.on('player:turn-start', () => {
+      ['visibility', 'activeVisibility'].forEach((layer) => engine.emit('build-layer', layer));
     });
+  });
 });

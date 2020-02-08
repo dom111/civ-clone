@@ -1,6 +1,6 @@
 'use strict';
 
-if ('comabt' in engine.Unit) {
+if ('comabt' in this.#engine.Unit) {
     console.log('Combat module ' + engine.Unit.combat.package + ' already loaded, skipping base-combat');
 }
 else {

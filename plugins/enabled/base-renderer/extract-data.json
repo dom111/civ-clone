@@ -26,21 +26,21 @@
                     { "name": "" }
                 ]
             }],
-            "improvements/irrigation": [{
+            "improvements/Irrigation": [{
                 "y": 32,
                 "x": 64,
                 "contents": [
                     { "name": "" }
                 ]
             }],
-            "improvements/mine": [{
+            "improvements/Mine": [{
                 "y": 32,
                 "x": 80,
                 "contents": [
                     { "name": "" }
                 ]
             }],
-            "improvements/pollution": [{
+            "improvements/Pollution": [{
                 "y": 32,
                 "x": 96,
                 "contents": [
@@ -56,7 +56,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/food": [{
+            "city/Food": [{
                 "y": 32,
                 "x": 128,
                 "height": 8,
@@ -65,7 +65,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/shield": [{
+            "city/Shield": [{
                 "y": 32,
                 "x": 136,
                 "height": 8,
@@ -74,7 +74,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/trade": [{
+            "city/Trade": [{
                 "y": 32,
                 "x": 144,
                 "height": 8,
@@ -83,7 +83,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/gold": [{
+            "city/Gold": [{
                 "y": 32,
                 "x": 152,
                 "height": 8,
@@ -92,7 +92,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/bulb": [{
+            "city/Bulb": [{
                 "y": 40,
                 "x": 128,
                 "height": 8,
@@ -101,7 +101,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/sad": [{
+            "city/Sad": [{
                 "y": 40,
                 "x": 136,
                 "height": 8,
@@ -110,7 +110,7 @@
                     { "name": "" }
                 ]
             }],
-            "city/luxury": [{
+            "city/Luxury": [{
                 "y": 40,
                 "x": 144,
                 "height": 8,
@@ -125,10 +125,10 @@
                 "height": 8,
                 "width": 8,
                 "contents": [
-                    { "name": "shield" }
+                    { "name": "Shield" }
                 ]
             }],
-            "improvements/road": [{
+            "improvements/Road": [{
                 "y": 48,
                 "contents": [
                     { "name": "_n", "x": 0 },
@@ -141,7 +141,7 @@
                     { "name": "_nw", "x": 112 }
                 ]
             }],
-            "status/science": [{
+            "status/Science": [{
                 "y": 48,
                 "height": 8,
                 "width": 8,
@@ -152,7 +152,7 @@
                     { "name": "_75", "x": 152 }
                 ]
             }],
-            "status/pollution": [{
+            "status/Pollution": [{
                 "y": 56,
                 "height": 8,
                 "width": 8,
@@ -163,13 +163,13 @@
                     { "name": "_75", "x": 152 }
                 ]
             }],
-            "terrain/land": [{
+            "terrain/Land": [{
                 "y": 64,
                 "contents": [
                     { "name": "", "x": 0 }
                 ]
             }],
-            "terrain/river": [{
+            "terrain/River": [{
                 "y": 64,
                 "contents": [
                     { "name": "_n", "x": 16 },
@@ -202,7 +202,7 @@
                     { "name": "_8", "x": 112 }
                 ]
             }],
-            "improvements/railroad": [{
+            "improvements/Railroad": [{
                 "y": 96,
                 "contents": [
                     { "name": "_n", "x": 128 },
@@ -215,61 +215,61 @@
                     { "name": "_nw", "x": 240 }
                 ]
             }],
-            "terrain/oasis": [{
+            "terrain/Oasis": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 0 }
                 ]
             }],
-            "terrain/horse": [{
+            "terrain/Horse": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 16 }
                 ]
             }],
-            "terrain/doe": [{
+            "terrain/Game": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 48 }
                 ]
             }],
-            "terrain/coal": [{
+            "terrain/Coal": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 64 }
                 ]
             }],
-            "terrain/gold": [{
+            "terrain/Gold": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 80 }
                 ]
             }],
-            "terrain/stag": [{
+            "terrain/Deer": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 96 }
                 ]
             }],
-            "terrain/seal": [{
+            "terrain/Seal": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 112 }
                 ]
             }],
-            "terrain/oil": [{
+            "terrain/Oil": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 128 }
                 ]
             }],
-            "terrain/gems": [{
+            "terrain/Gems": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 144 }
                 ]
             }],
-            "terrain/fish": [{
+            "terrain/Fish": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 160 }
@@ -281,13 +281,13 @@
                     { "name": "", "x": 192 }
                 ]
             }],
-            "map/fortify": [{
+            "map/Fortified": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 208 }
                 ]
             }],
-            "map/fort": [{
+            "map/Fort": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 224 }
@@ -327,38 +327,38 @@
             "units/": [{
                 "y": 160,
                 "contents": [
-                    { "name": "settlers", "x": 0 },
-                    { "name": "militia", "x": 16 },
-                    { "name": "phalanx", "x": 32 },
-                    { "name": "legion", "x": 48 },
-                    { "name": "musketeers", "x": 64 },
-                    { "name": "rifleman", "x": 80 },
-                    { "name": "cavalry", "x": 96 },
-                    { "name": "knights", "x": 112 },
-                    { "name": "catapult", "x": 128 },
-                    { "name": "cannon", "x": 144 },
-                    { "name": "chariot", "x": 160 },
-                    { "name": "armor", "x": 176 },
-                    { "name": "mechinf", "x": 192 },
-                    { "name": "artillery", "x": 208 },
-                    { "name": "fighter", "x": 224 },
-                    { "name": "bomber", "x": 240 },
-                    { "name": "tririme", "x": 256 },
-                    { "name": "sail", "x": 272 },
-                    { "name": "frigate", "x": 288 },
-                    { "name": "ironclad", "x": 304 }
+                    { "name": "Settlers", "x": 0 },
+                    { "name": "Militia", "x": 16 },
+                    { "name": "Phalanx", "x": 32 },
+                    { "name": "Legion", "x": 48 },
+                    { "name": "Musketeers", "x": 64 },
+                    { "name": "Rifleman", "x": 80 },
+                    { "name": "Cavalry", "x": 96 },
+                    { "name": "Knights", "x": 112 },
+                    { "name": "Catapult", "x": 128 },
+                    { "name": "Cannon", "x": 144 },
+                    { "name": "Chariot", "x": 160 },
+                    { "name": "Armor", "x": 176 },
+                    { "name": "Mechinf", "x": 192 },
+                    { "name": "Artillery", "x": 208 },
+                    { "name": "Fighter", "x": 224 },
+                    { "name": "Bomber", "x": 240 },
+                    { "name": "Tririme", "x": 256 },
+                    { "name": "Sail", "x": 272 },
+                    { "name": "Frigate", "x": 288 },
+                    { "name": "Ironclad", "x": 304 }
                 ]
             }, {
                 "y": 176,
                 "contents": [
-                    { "name": "cruiser", "x": 0 },
-                    { "name": "battleship", "x": 16 },
-                    { "name": "submarine", "x": 32 },
-                    { "name": "carrier", "x": 48 },
-                    { "name": "transport", "x": 64 },
-                    { "name": "nuclear", "x": 80 },
-                    { "name": "diplomat", "x": 96 },
-                    { "name": "caravan", "x": 112 }
+                    { "name": "Cruiser", "x": 0 },
+                    { "name": "Battleship", "x": 16 },
+                    { "name": "Submarine", "x": 32 },
+                    { "name": "Carrier", "x": 48 },
+                    { "name": "Transport", "x": 64 },
+                    { "name": "Nuclear", "x": 80 },
+                    { "name": "Diplomat", "x": 96 },
+                    { "name": "Caravan", "x": 112 }
                 ]
             }],
             "general/texture": [{
@@ -370,7 +370,7 @@
             }]
         },
         "TER257.png": {
-            "terrain/desert": [{
+            "terrain/Desert": [{
                 "y": 0,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -391,7 +391,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/plains": [{
+            "terrain/Plains": [{
                 "y": 16,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -412,7 +412,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/grassland": [{
+            "terrain/Grassland": [{
                 "y": 32,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -433,7 +433,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/forest": [{
+            "terrain/Forest": [{
                 "y": 48,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -454,7 +454,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/hills": [{
+            "terrain/Hills": [{
                 "y": 64,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -475,7 +475,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/mountains": [{
+            "terrain/Mountains": [{
                 "y": 80,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -496,7 +496,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/tundra": [{
+            "terrain/Tundra": [{
                 "y": 96,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -517,7 +517,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/arctic": [{
+            "terrain/Arctic": [{
                 "y": 112,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -538,7 +538,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/swamp": [{
+            "terrain/Swamp": [{
                 "y": 128,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -559,7 +559,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/jungle": [{
+            "terrain/Jungle": [{
                 "y": 144,
                 "contents": [
                     { "name": "", "x": 0 },
@@ -580,7 +580,7 @@
                     { "name": "_nesw", "x": 228 }
                 ]
             }],
-            "terrain/ocean": [{
+            "terrain/Ocean": [{
                 "y": 160,
                 "contents": [
                     { "name": "", "x": 0 }
@@ -624,7 +624,7 @@
                     { "name": "" }
                 ]
             }],
-            "terrain/river": [{
+            "terrain/River": [{
                 "y": 176,
                 "contents": [
                     { "name": "_mouth_n", "x": 128 },

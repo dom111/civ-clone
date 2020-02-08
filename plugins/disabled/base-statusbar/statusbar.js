@@ -24,22 +24,22 @@ var Statusbar = global.Statusbar = class Statusbar {
 
         var statusbar = this;
 
-        engine.on('statusbar-update', () => statusbar.update());
-        engine.on('turn-over', () => engine.emit('statusbar-update'));
-        engine.on('turn-start', () => engine.emit('statusbar-update'));
-        engine.on('unit-activate', () => engine.emit('statusbar-update'));
-        engine.on('unit-activate-next', () => engine.emit('statusbar-update'));
-        engine.on('unit-destroyed', () => engine.emit('statusbar-update'));
-        engine.on('unit-moved', () => engine.emit('statusbar-update'));
+        this.#engine.on('statusbar-update', () => statusbar.update());
+        this.#engine.on('turn-over', () => this.#engine.emit('statusbar-update'));
+        this.#engine.on('turn-start', () => this.#engine.emit('statusbar-update'));
+        this.#engine.on('unit-activate', () => this.#engine.emit('statusbar-update'));
+        this.#engine.on('unit-activate-next', () => this.#engine.emit('statusbar-update'));
+        this.#engine.on('unit-destroyed', () => this.#engine.emit('statusbar-update'));
+        this.#engine.on('unit-moved', () => this.#engine.emit('statusbar-update'));
     }
 
     update() {
         // statusbar.getData();
-        this.element.querySelector('.year').innerHTML = Math.abs(engine.year) + ' ' + ['BC','AD'][engine.year < 0 ? 0 : 1];
-        this.element.querySelector('.year').title = 'Turn ' + engine.turn;
+        this.element.querySelector('.year').innerHTML = Math.abs(this.#engine.year) + ' ' + ['BC','AD'][this.#engine.year < 0 ? 0 : 1];
+        this.element.querySelector('.year').title = 'Turn ' + this.#engine.turn;
 
-        if (engine.currentPlayer) {
-            var player = engine.currentPlayer;
+        if (this.#engine.currentPlayer) {
+            var player = this.#engine.currentPlayer;
 
             if (player.activeUnit) {
                 var unit = player.activeUnit;
@@ -50,7 +50,7 @@ var Statusbar = global.Statusbar = class Statusbar {
             }
         }
         else {
-            // console.log('No currentPlayer', engine);
+            // console.log('No currentPlayer', this.#engine);
         }
     }
 };

@@ -1,6 +1,7 @@
 {
     "productName": "Civ One",
     "name": "civ-one",
+    "type": "module",
     "version": "0.0.1",
     "homepage": "https://github.com/dom111/civ-one",
     "description": "CivOne base libraries and plugin infrastructure.",
@@ -23,7 +24,9 @@
     ],
     "dependencies": {
         "canvas": "^2.6.1",
-        "electron-prebuilt": "^0.36.0",
+        "civ-clone": "git+ssh://git@github.com:dom111/civ-clone.git#feature/rewrite-as-modules",
+        "electron": "^8.0.0",
+        "esm": "^3.2.25",
         "extend": "~3.0.0",
         "mustache": "^2.0.0"
     }
