@@ -1,4 +1,16 @@
-import {Catapult, Cavalry, Chariot, Knights, Militia, Sail, Settlers, Spearman, Swordman, Trireme} from '../../Units.js';
+import {
+  Catapult,
+  Cavalry,
+  Chariot,
+  Knights,
+  Militia,
+  Musketman,
+  Sail,
+  Settlers,
+  Spearman,
+  Swordman,
+  Trireme,
+} from '../../Units.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
@@ -10,6 +22,7 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
   [Chariot, 40],
   [Knights, 40],
   [Militia, 10],
+  [Musketman, 30],
   [Sail, 40],
   [Settlers, 40],
   [Spearman, 20],

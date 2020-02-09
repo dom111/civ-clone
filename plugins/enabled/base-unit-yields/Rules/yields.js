@@ -1,5 +1,17 @@
 import {Attack, Defence, Movement, Visibility} from '../../core-unit-yields/Yields.js';
-import {Catapult, Cavalry, Chariot, Militia, Settlers, Spearman, Swordman, Trireme} from '../../base-unit/Units.js';
+import {
+  Catapult,
+  Cavalry,
+  Chariot,
+  Knights,
+  Militia,
+  Musketman,
+  Sail,
+  Settlers,
+  Spearman,
+  Swordman,
+  Trireme,
+} from '../../base-unit/Units.js';
 import Criterion from '../../core-rules/Criterion.js';
 import Effect from '../../core-rules/Effect.js';
 import Rule from '../../core-rules/Rule.js';
@@ -9,7 +21,10 @@ import RulesRegistry from '../../core-rules/RulesRegistry.js';
   [Catapult, 4],
   [Cavalry, 2, 1, 2],
   [Chariot, 4, 1, 2],
+  [Knights, 4, 1, 2],
   [Militia],
+  [Musketman, 2, 3],
+  [Sail, 1, 1, 3],
   [Settlers, 0],
   [Spearman, 1, 2],
   [Swordman, 3],

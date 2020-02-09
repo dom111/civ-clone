@@ -5,9 +5,8 @@ import UnitRegistry from '../core-unit/UnitRegistry.js';
 const observingPlayers = [];
 
 let map;
-engine.on('world:built', (world) => map = world);
 
-engine.on('turn:start', () => {
+const renderMap = () => {
   if (! map) {
     return;
   }
@@ -44,16 +43,16 @@ engine.on('turn:start', () => {
       Tundra: '\u001b[38;5;174;48;5;223m',
 
       Terrain: '\u001b[0m',
+
+      // units
+      Catapult: 'T',
+      Cavalry: 'H',
+      Musketman: 'G',
+      Spearman: 'P',
+      Swordman: 'L',
     };
 
-    // Specials
-    lookup.Seal = lookup.Arctic;
-    lookup.Oasis = lookup.Desert;
-    lookup.Horse = lookup.Forest;
-    lookup.Cow = lookup.Shield = lookup.Grassland;
-    lookup.Caribou = lookup.Tundra;
-
-    console.log(`${
+    console.log(`\x1b[1;1H${
       map.getBy(() => true)
         .map((tile) => {
           const tileUnits = UnitRegistry.getBy('tile', tile),
@@ -82,7 +81,7 @@ engine.on('turn:start', () => {
               tile.city ?
                 `${lookup[tile.city.player]}#\u001b[0m` :
                 tile.units.length ?
-                  `${lookup[tile.units[0].player]}${tile.units[0].name.substr(0, 1)}\u001b[0m` :
+                  `${lookup[tile.units[0].player]}${lookup[tile.units[0].name] || tile.units[0].name.substr(0, 1)}\u001b[0m` :
                   `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
               ' '
           ) + (
@@ -119,7 +118,12 @@ engine.on('turn:start', () => {
       throw new Error('earlyExit');
     }
   }
-});
+};
+
+engine.on('world:built', (world) => map = world);
+
+engine.on('unit:moved', renderMap);
+engine.on('city:created', renderMap);
 
 engine.on('player:turn-start', (player) => {
   if (! observingPlayers.includes(player)) {

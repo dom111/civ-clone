@@ -101,6 +101,10 @@
     {
       "type": "script",
       "file": "Units/Sail.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Musketman.js"
     }
   ]
 }

@@ -3,6 +3,7 @@ export {Cavalry} from './Units/Cavalry.js';
 export {Chariot} from './Units/Chariot.js';
 export {Knights} from './Units/Knights.js';
 export {Militia} from './Units/Militia.js';
+export {Musketman} from './Units/Musketman.js';
 export {Sail} from './Units/Sail.js';
 export {Settlers} from './Units/Settlers.js';
 export {Spearman} from './Units/Spearman.js';

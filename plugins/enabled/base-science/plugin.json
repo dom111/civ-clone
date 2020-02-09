@@ -106,6 +106,26 @@
     {
       "type": "script",
       "file": "Advances.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Construction.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Literacy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Gunpowder.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Invention.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Engineering.js"
     }
   ]
 }
