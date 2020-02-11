@@ -8,6 +8,14 @@
     {
       "type": "script",
       "file": "init.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-built.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/government-changed.js"
     }
   ]
 }

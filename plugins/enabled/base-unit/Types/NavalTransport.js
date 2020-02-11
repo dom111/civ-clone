@@ -31,7 +31,6 @@ export class NavalTransport extends NavalUnit {
       return false;
     }
 
-    unit.sleep();
     unit.transport = this;
 
     this.cargo.push(unit);

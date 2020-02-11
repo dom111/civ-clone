@@ -55,7 +55,7 @@ Object.entries({
   'city:grow': (city) => `${city.player.civilization.people} city of ${city.name} has grown to (${city.size + 1}).`,
   'city:shrink': (city) => `${city.player.civilization.people} city of ${city.name} has shrunk to (${city.size - 1}).`,
   'city:yield': (cityYield, city) => `${city.player.civilization.people} city of ${city.name} provides ${cityYield.value()} ${cityYield.constructor.name}.`,
-  'city-improvement:built': (city, improvement) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
+  'city-improvement:created': (improvement, city) => `${city.player.civilization.people} city of ${city.name} has built a ${improvement.constructor.name}.`,
   // 'engine:initialise': () => '',
   // 'engine:plugins-loaded': () => '',
   // 'engine:settings-loaded': () => '',

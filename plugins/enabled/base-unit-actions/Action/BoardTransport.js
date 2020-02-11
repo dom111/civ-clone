@@ -15,6 +15,9 @@ export class BoardTransport extends Move {
     }
 
     targetVessel.stow(this.unit);
+
+    this.busy = Infinity;
+    this.active = false;
   }
 }
 

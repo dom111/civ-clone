@@ -1,18 +1,26 @@
 {
-    "name": "core-city-improvement",
-    "title": "Core City Improvement",
-    "version": "0.1.0",
-    "dependencies": [
-        "core-registry"
-    ],
-    "components": [
-        {
-            "type": "script",
-            "file": "Improvement.js"
-        },
-        {
-            "type": "script",
-            "file": "Registry.js"
-        }
-    ]
+  "name": "core-city-improvement",
+  "title": "Core City Improvement",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Improvement.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableCityImprovementRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovementRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/CityImprovement/created.js"
+    }
+  ]
 }

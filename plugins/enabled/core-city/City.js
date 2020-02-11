@@ -1,5 +1,5 @@
 import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
-import CityImprovementRegistry from '../core-city-improvement/Registry.js';
+import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 
@@ -87,7 +87,7 @@ export class City {
   availableBuildImprovements() {
     const buildRulesRegistry = RulesRegistry.get('city:build:improvement');
 
-    return CityImprovementRegistry
+    return AvailableCityImprovementRegistry
       .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
         .every((rule) => rule.process(this, buildItem).validate())
       )

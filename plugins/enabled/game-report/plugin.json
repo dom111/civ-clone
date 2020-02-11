@@ -6,7 +6,10 @@
     "base-player-science",
     "core-city",
     "core-turn-based-game",
-    "core-unit"
+    "core-unit",
+    "core-city-improvement",
+    "base-player-government",
+    "core-rules"
   ],
   "components": [
     {

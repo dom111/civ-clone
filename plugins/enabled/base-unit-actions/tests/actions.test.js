@@ -56,12 +56,12 @@ describe('Unit:actions', () => {
   CityRegistry.register(city);
 
   it('should be able to attack enemy unit next to it', () => {
-    const [attack] = RulesRegistry.get('unit:action')
+    const actions = RulesRegistry.get('unit:action')
       .filter((rule) => rule.validate(unit1, unit2.tile, unit1.tile))
       .map((rule) => rule.process(unit1, unit2.tile, unit1.tile))
     ;
 
-    assert.strictEqual(attack instanceof Attack, true);
+    assert.strictEqual(actions.some((action) => action instanceof Attack), true);
   });
 
   it('should be able to fortify', () => {
@@ -82,12 +82,12 @@ describe('Unit:actions', () => {
       world.get(1, 9),
     ]
       .forEach((destination) => {
-        const adjacencyValidActions = RulesRegistry.get('unit:action')
+        assert.strictEqual(RulesRegistry.get('unit:action')
           .filter((rule) => rule.validate(unit1, destination, unit1.tile))
           .map((rule) => rule.process(unit1, destination, unit1.tile))
-        ;
-
-        assert.strictEqual(adjacencyValidActions.every((action) => ! (action instanceof Move)), true);
+          .every((action) => ! (action instanceof Move)),
+          true
+        );
       })
     ;
   });
@@ -99,22 +99,22 @@ describe('Unit:actions', () => {
       world.get(9, 1),
     ]
       .forEach((destination) => {
-        const [move] = RulesRegistry.get('unit:action')
+        assert.strictEqual(RulesRegistry.get('unit:action')
           .filter((rule) => rule.validate(unit1, destination, unit1.tile))
           .map((rule) => rule.process(unit1, destination, unit1.tile))
-        ;
-
-        assert.strictEqual(move instanceof Move, true);
+          .some((action) => action instanceof Move),
+          true
+        );
       })
     ;
   });
 
   it('should be possible to capture an unprotected enemy city', () => {
-    const [captureCity] = RulesRegistry.get('unit:action')
+    assert.strictEqual(RulesRegistry.get('unit:action')
       .filter((rule) => rule.validate(unit3, city.tile, unit3.tile))
       .map((rule) => rule.process(unit3, city.tile, unit3.tile))
-    ;
-
-    assert.strictEqual(captureCity instanceof CaptureCity, true);
+      .some((action) => action instanceof CaptureCity),
+      true
+    );
   });
 });

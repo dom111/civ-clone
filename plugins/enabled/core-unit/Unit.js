@@ -99,6 +99,10 @@ export class Unit {
   //   this.action = 'sleep';
   // }
 
+  get city() {
+    return this.#city;
+  }
+
   get tile() {
     return this.#tile;
   }

@@ -15,7 +15,7 @@ export class PlayerResearch {
   add(researchYield) {
     this.#researchProgress += researchYield;
 
-    if (this.isResearching() && (this.#researchProgress > this.#researchCost)) {
+    if (this.isResearching() && (this.#researchProgress >= this.#researchCost)) {
       const completedResearch = new (this.#currentResearch)();
 
       engine.emit('player:research-complete', this.#player, completedResearch);
@@ -23,12 +23,17 @@ export class PlayerResearch {
       this.#completedResearch.push(completedResearch);
       this.#currentResearch = null;
       this.#researchProgress -= this.#researchCost;
-      this.#researchCost = Infinity;
+
+      if (this.#researchProgress < 0) {
+        this.#researchProgress = 0;
+      }
+
+      this.#researchCost = 0;
     }
   }
 
   completedResearch() {
-    return this.#completedResearch.slice(0);
+    return [...this.#completedResearch];
   }
 
   availableResearch() {

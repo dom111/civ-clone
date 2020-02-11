@@ -5,6 +5,9 @@ import {Yield} from '../core-yields/Yield.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class Tile {
+  #neighbours;
+  #yieldCache = new Map();
+
   constructor({x, y, terrain, map}) {
     this.x = x;
     this.y = y;
@@ -18,6 +21,24 @@ export class Tile {
     // this.seed = Math.ceil(Math.random() * 1e7);
     // this.seed = this.seed || (this.x * this.y);
     this.seed = this.seed || (this.x ^ this.y);
+  }
+
+  clearYieldCache(player) {
+    if (! player) {
+      this.#yieldCache.clear();
+
+      return;
+    }
+
+    this.#yieldCache.set(player, new Map());
+  }
+
+  getYieldCache(player) {
+    if (! this.#yieldCache.has(player)) {
+      this.#yieldCache.set(player, new Map());
+    }
+
+    return this.#yieldCache.get(player);
   }
 
   get(tile) {
@@ -73,9 +94,13 @@ export class Tile {
   }
 
   getNeighbours() {
-    return ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
-      .map((direction) => this.getNeighbour(direction))
-    ;
+    if (! this.#neighbours) {
+      this.#neighbours = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+        .map((direction) => this.getNeighbour(direction))
+      ;
+    }
+
+    return this.#neighbours;
   }
 
   getAdjacent() {
@@ -134,26 +159,42 @@ export class Tile {
   }
 
   resource(type, player) {
+    const yieldCache = this.getYieldCache(player);
+
+    if (yieldCache.has(type.constructor)) {
+      const cachedYield = yieldCache.get(type.constructor);
+
+      return type.add(cachedYield);
+    }
+
     RulesRegistry.get('tile:yield')
       .filter((rule) => rule.validate(type, this, player))
       .forEach((rule) => rule.process(type, this, player))
     ;
+
+    yieldCache.set(type.constructor, type.value());
 
     return type;
   }
 
   yields(
     player,
-    yields = YieldRegistry.entries()
-      .map((YieldType) => new YieldType())
+    yields
   ) {
-    return yields
+    const yieldCache = this.getYieldCache(player);
+
+    if (yieldCache.size) {
+      return [...yieldCache.entries()].map(([Yield, tileYield]) => new Yield(tileYield));
+    }
+
+    return (yields || YieldRegistry.entries())
+      .map((YieldType) => new YieldType())
       .map((tileYield) => this.resource(tileYield, player))
     ;
   }
 
   score({player, values = [[Yield, 3]]}) {
-    const yields = this.yields(player);
+    const yields = this.yields(player, values.map(([YieldType]) => YieldType));
 
     return yields.map((tileYield) => {
       const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),
@@ -164,7 +205,9 @@ export class Tile {
     })
       .reduce((total, value) => total + value, 0) *
       // Ensure we have some of each scored yield
-      (values.every(([YieldType, value]) => (value < 1) || yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0)
+      (values.every(([YieldType, value]) => (value < 1) ||
+        yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0
+      )
     ;
   }
 

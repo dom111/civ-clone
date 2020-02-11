@@ -130,20 +130,13 @@ export class SimpleAIPlayer extends AIPlayer {
           let score = 0;
 
           // TODO: consider appending all the positives to the score instead of returning immediately
-          if (foundCity && this.#shouldBuildCity(tile)) {
-            score += 16;
-          }
-
-          if (buildMine && this.#shouldMine(tile)) {
-            score += 4;
-          }
-
-          if (buildIrrigation && this.#shouldIrrigate(tile)) {
-            score += 8;
-          }
-
-          if (buildRoad && this.#shouldRoad(tile)) {
-            score += 2;
+          if (
+            foundCity && this.#shouldBuildCity(tile) ||
+            buildMine && this.#shouldMine(tile) ||
+            buildIrrigation && this.#shouldIrrigate(tile) ||
+            buildRoad && this.#shouldRoad(tile)
+          ) {
+            score += 24;
           }
 
           const tileUnits = UnitRegistry.getBy('tile', tile)
@@ -179,17 +172,25 @@ export class SimpleAIPlayer extends AIPlayer {
             score += 100;
           }
 
+          // TODO: weight attacking dependent on leader's personality
           if (
             attack &&
             unit.attack > defender.defence
           ) {
-            score += 12;
+            score += 24;
+          }
+
+          if (
+            attack &&
+            unit.attack >= defender.defence
+          ) {
+            score += 16;
           }
 
           // add some jeopardy
           if (
             attack &&
-            unit.attack > (defender.defence * .66)
+            unit.attack >= (defender.defence * .66)
           ) {
             score += 8;
           }

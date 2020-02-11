@@ -57,7 +57,7 @@ const renderMap = () => {
         .map((tile) => {
           const tileUnits = UnitRegistry.getBy('tile', tile),
             [city] = CityRegistry.getBy('tile', tile)
-            ;
+          ;
 
           return {
             terrain: tile.terrain.constructor.name,
@@ -122,6 +122,7 @@ const renderMap = () => {
 
 engine.on('world:built', (world) => map = world);
 
+engine.on('turn:start', renderMap);
 engine.on('unit:moved', renderMap);
 engine.on('city:created', renderMap);
 

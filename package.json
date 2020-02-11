@@ -11,6 +11,7 @@
         "jsonlint:plugins": "find ./ -name plugin.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -n1 ajv -s src/Plugin/Schema.json -d",
         "lint": "npm run jsonlint:plugins && npm run eslint",
         "start": "node --experimental-vm-modules ./boot.js",
+        "profile": "node --prof --experimental-vm-modules ./boot.js -- --reportTurns=150 --reportAndQuit=1",
         "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
         "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
         "test": "mocha --delay run-tests.cjs",
