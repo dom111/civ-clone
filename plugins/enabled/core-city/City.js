@@ -1,5 +1,5 @@
-import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
 import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
+import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 
@@ -79,7 +79,9 @@ export class City {
 
     return AvailableUnitRegistry
       .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
-        .every((rule) => rule.process(this, buildItem).validate())
+        .every((rule) => rule.process(this, buildItem)
+          .validate()
+        )
       )
     ;
   }
@@ -89,7 +91,9 @@ export class City {
 
     return AvailableCityImprovementRegistry
       .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this, buildItem))
-        .every((rule) => rule.process(this, buildItem).validate())
+        .every((rule) => rule.process(this, buildItem)
+          .validate()
+        )
       )
     ;
   }

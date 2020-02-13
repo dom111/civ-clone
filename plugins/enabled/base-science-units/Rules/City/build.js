@@ -14,6 +14,7 @@ import {
   Cavalry,
   Chariot,
   Knights,
+  Militia,
   Musketman,
   Sail,
   Spearman,
@@ -33,32 +34,33 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
   [Cavalry, HorsebackRiding, Gunpowder],
   [Chariot, TheWheel, Chivalry],
   [Knights, Chivalry],
+  [Militia, false, Gunpowder],
   [Musketman, Gunpowder],
   [Sail, Navigation],
-  [Spearman, BronzeWorking],
+  [Spearman, BronzeWorking, Gunpowder],
   [Swordman, IronWorking],
   [Trireme, MapMaking, Navigation],
 ]
   .forEach(([Unit, RequiredAdvance, ObseletionAdvance]) => {
     RulesRegistry.register(new Rule(
-      `city:build:unit:${[Unit, RequiredAdvance].map((entity) => entity.name.toLowerCase()).join(':')}`,
+      `city:build:unit:${[Unit, RequiredAdvance, ObseletionAdvance].map((entity) => entity ? entity.name.toLowerCase() : 'none').join(':')}`,
       new Criterion((city, buildItem) => buildItem === Unit),
-      new Effect((city) => new OneCriteria(
-        new Criterion(() => ! RequiredAdvance),
-        new Criteria(
+      new Effect((city) => new Criteria(
+        new OneCriteria(
+          new Criterion(() => ! RequiredAdvance),
           new Criterion(() => PlayerResearchRegistry
             .getBy('player', city.player)
             .every((playerResearch) => playerResearch.hasCompleted(RequiredAdvance))
-          ),
-          new OneCriteria(
-            new Criterion(() => ! ObseletionAdvance),
-            new Criterion(() => ! PlayerResearchRegistry
-              .getBy('player', city.player)
-              .every((playerResearch) => playerResearch.hasCompleted(ObseletionAdvance))
-            )
           )
-        ))
-      )
+        ),
+        new OneCriteria(
+          new Criterion(() => ! ObseletionAdvance),
+          new Criterion(() => ! PlayerResearchRegistry
+            .getBy('player', city.player)
+            .every((playerResearch) => playerResearch.hasCompleted(ObseletionAdvance))
+          )
+        )
+      ))
     ));
   })
 ;

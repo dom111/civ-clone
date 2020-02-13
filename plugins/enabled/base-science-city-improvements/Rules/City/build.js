@@ -1,5 +1,5 @@
-import {CeremonialBurial, CodeOfLaws, Currency, Masonry, Pottery, Writing} from '../../../base-science/Advances.js';
-import {CityWalls, Courthouse, Granary, Library, Marketplace, Palace, Temple} from '../../../base-city-improvements/Improvements.js';
+import {Aqueduct, CityWalls, Courthouse, Granary, Library, Marketplace, Palace, Temple} from '../../../base-city-improvements/Improvements.js';
+import {CeremonialBurial, CodeOfLaws, Construction, Currency, Masonry, Pottery, Writing} from '../../../base-science/Advances.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
@@ -7,6 +7,7 @@ import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
 [
+  [Aqueduct, Construction],
   [CityWalls, Masonry],
   [Courthouse, CodeOfLaws],
   [Granary, Pottery],

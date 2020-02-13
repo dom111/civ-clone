@@ -1,3 +1,4 @@
+export {Aqueduct} from './Improvements/Aqueduct.js';
 export {Barracks} from './Improvements/Barracks.js';
 export {CityWalls} from './Improvements/CityWalls.js';
 export {Courthouse} from './Improvements/Courthouse.js';

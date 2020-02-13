@@ -86,7 +86,7 @@ describe('Unit:actions', () => {
           .filter((rule) => rule.validate(unit1, destination, unit1.tile))
           .map((rule) => rule.process(unit1, destination, unit1.tile))
           .every((action) => ! (action instanceof Move)),
-          true
+        true
         );
       })
     ;
@@ -103,7 +103,7 @@ describe('Unit:actions', () => {
           .filter((rule) => rule.validate(unit1, destination, unit1.tile))
           .map((rule) => rule.process(unit1, destination, unit1.tile))
           .some((action) => action instanceof Move),
-          true
+        true
         );
       })
     ;
@@ -114,7 +114,7 @@ describe('Unit:actions', () => {
       .filter((rule) => rule.validate(unit3, city.tile, unit3.tile))
       .map((rule) => rule.process(unit3, city.tile, unit3.tile))
       .some((action) => action instanceof CaptureCity),
-      true
+    true
     );
   });
 });

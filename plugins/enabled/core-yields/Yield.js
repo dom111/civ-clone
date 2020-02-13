@@ -1,6 +1,7 @@
 import YieldModifiers from './YieldModifiers.js';
 
 export class Yield {
+  #cachedTotal = 0;
   #modifiers = new YieldModifiers();
   #value = 0;
 
@@ -9,10 +10,12 @@ export class Yield {
   }
 
   add(n) {
+    this.#cachedTotal = false;
     this.#value += n;
   }
 
   addModifier(...modifiers) {
+    this.#cachedTotal = false;
     this.#modifiers.add(...modifiers);
   }
 
@@ -25,15 +28,22 @@ export class Yield {
   }
 
   removeModifier(modifier) {
+    this.#cachedTotal = false;
+
     return this.#modifiers.splice(this.#modifiers.indexOf(modifier), 1);
   }
 
   subtract(n) {
+    this.#cachedTotal = false;
     this.#value -= n;
   }
 
   value() {
-    return this.#modifiers.apply(this.#value);
+    if (! this.#cachedTotal) {
+      this.#cachedTotal = this.#modifiers.apply(this.#value);
+    }
+
+    return this.#cachedTotal;
   }
 
   valueOf() {

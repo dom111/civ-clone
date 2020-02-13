@@ -19,31 +19,7 @@
     },
     {
       "type": "script",
-      "file": "Civilizations/Greek.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/Roman.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/German.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/English.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/Russian.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/Japanese.js"
-    },
-    {
-      "type": "script",
-      "file": "Civilizations/Indian.js"
+      "file": "Civilizations/Aztec.js"
     },
     {
       "type": "script",
@@ -51,11 +27,43 @@
     },
     {
       "type": "script",
-      "file": "Civilizations/Spanish.js"
+      "file": "Civilizations/English.js"
     },
     {
       "type": "script",
       "file": "Civilizations/French.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/German.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Greek.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Indian.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Japanese.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Roman.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Russian.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Spanish.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations/Polish.js"
     }
   ]
 }

@@ -1,4 +1,5 @@
 import {
+  Aqueduct,
   Barracks,
   CityWalls,
   Courthouse,
@@ -10,6 +11,7 @@ import {
 import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
 
 [
+  Aqueduct,
   Barracks,
   CityWalls,
   Courthouse,

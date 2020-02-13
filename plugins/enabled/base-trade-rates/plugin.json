@@ -6,7 +6,8 @@
     "base-science",
     "base-terrain-yield-trade",
     "core-registry",
-    "core-yields"
+    "core-yields",
+    "core-rules"
   ],
   "components": [
     {

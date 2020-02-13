@@ -68,6 +68,10 @@
     {
       "type": "script",
       "file": "Rules/City/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Improvements/Aqueduct.js"
     }
   ]
 }

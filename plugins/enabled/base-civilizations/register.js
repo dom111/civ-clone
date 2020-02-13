@@ -1,5 +1,6 @@
 import {
   American,
+  Aztec,
   Babylonian,
   English,
   French,
@@ -7,6 +8,7 @@ import {
   Greek,
   Indian,
   Japanese,
+  Polish,
   Roman,
   Russian,
   Spanish,
@@ -15,6 +17,7 @@ import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
 
 [
   American,
+  Aztec,
   Babylonian,
   English,
   French,
@@ -22,6 +25,7 @@ import CivilizationRegistry from '../core-civilization/CivilizationRegistry.js';
   Greek,
   Indian,
   Japanese,
+  Polish,
   Roman,
   Russian,
   Spanish,

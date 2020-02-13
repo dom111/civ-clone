@@ -1,11 +1,12 @@
+import CityImprovementRegistry from '../core-city-improvement/CityImprovementRegistry.js';
 import CityRegistry from '../core-city/CityRegistry.js';
+import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerRegistry from '../base-player/PlayerRegistry.js';
 import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Time from '../core-turn-based-game/Time.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
-import CityImprovementRegistry from '../core-city-improvement/CityImprovementRegistry.js';
-import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import PlayerTreasuryRegistry from '../base-currency/PlayerTreasuryRegistry.js';
 
 const reportTurns = parseInt(engine.option('reportTurns', 0), 10);
 
@@ -24,6 +25,8 @@ engine.on('turn:end', () => {
         console.log(`${player.leader.name} of ${player.civilization.nation}
 Government: ${PlayerGovernmentRegistry.getBy('player', player)
     .map((playerGovernment) => playerGovernment.get().name)}
+Treasury: ${PlayerTreasuryRegistry.getBy('player', player)
+    .map((playerTreasury) => playerTreasury.value())}
 Completed research:
 ${PlayerResearchRegistry.getBy('player', player)
     .map((playerResearch) => playerResearch.completedResearch()

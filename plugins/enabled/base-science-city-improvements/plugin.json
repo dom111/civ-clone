@@ -5,12 +5,22 @@
     "base-city-improvements",
     "base-player-science",
     "base-science",
-    "core-rules"
+    "core-rules",
+    "core-city-improvement",
+    "core-yields"
   ],
   "components": [
     {
       "type": "script",
       "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifier/Library.js"
     }
   ]
 }

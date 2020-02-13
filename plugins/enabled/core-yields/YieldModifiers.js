@@ -17,7 +17,13 @@ export class YieldModifiers {
     return this.#stack
       // sorting by highest priority first
       .sort((a, b) => b.priority - a.priority)
-      .reduce((total, yieldModifier) => yieldModifier.apply(total), value)
+      .reduce((total, yieldModifier) => total + yieldModifier.apply(value), value)
+    ;
+  }
+
+  has(Modifier) {
+    return this.#stack
+      .some((modifier) => modifier instanceof Modifier)
     ;
   }
 }

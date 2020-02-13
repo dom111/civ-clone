@@ -194,7 +194,7 @@ export class Tile {
   }
 
   score({player, values = [[Yield, 3]]}) {
-    const yields = this.yields(player, values.map(([YieldType]) => YieldType));
+    const yields = this.yields(player);
 
     return yields.map((tileYield) => {
       const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),

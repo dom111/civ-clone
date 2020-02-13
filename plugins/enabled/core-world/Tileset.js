@@ -79,10 +79,24 @@ export class Tileset {
     return this.#tiles.some(iterator);
   }
 
-  yields(player, yields = YieldRegistry.entries().map((YieldType) => new YieldType())) {
-    yields.forEach((tileYield) => this.#tiles.forEach((tile) => tile.resource(tileYield, player)));
+  yields(player) {
+    return YieldRegistry.entries()
+      .map((Yield) => {
+        const tilesetYield = new Yield();
 
-    return yields;
+        this.#tiles
+          .forEach((tile) => tile.yields(player)
+            .forEach((tileYield) => {
+              if (tileYield instanceof Yield) {
+                tilesetYield.add(tileYield.value());
+              }
+            })
+          )
+        ;
+
+        return tilesetYield;
+      })
+    ;
   }
 }
 

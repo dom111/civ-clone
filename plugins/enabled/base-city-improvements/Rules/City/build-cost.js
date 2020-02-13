@@ -1,10 +1,11 @@
-import {Barracks, CityWalls, Courthouse, Granary, Library, Palace, Temple} from '../../Improvements.js';
+import {Aqueduct, Barracks, CityWalls, Courthouse, Granary, Library, Palace, Temple} from '../../Improvements.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
 [
+  [Aqueduct, 120],
   [Barracks, 40],
   [CityWalls, 120],
   [Courthouse, 80],
