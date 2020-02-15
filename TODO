@@ -34,6 +34,9 @@
 - [X] Add tax trade rate
 - [-] Look at the benefit of creating a single entity registry with helper methods like `.is(...)`. - `const [entity] = Registry.getBy(...)` is sufficient for this.
 - [X] Obseletion mechanism (primarily units, but potentially anything...) - Covered by research with an extra criteria check.
+- [X] Add `Modifier`s to `Yield`s with either a priority field, or a `Queue` of some sort.
+- [X] Add Science and Gold multipliers (Library, Marketplace, etc)
+- [X] Add maintenance costs
 - [ ] Add luxuries trade rate
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
@@ -57,7 +60,6 @@
 - [ ] Add wealth.
 - [ ] Add build-queue.
 - [ ] Add Barbarians.
-- [ ] Add `Modifier`s to `Yield`s with either a priority field, or a `Queue` of some sort.
 - [ ] Replace all the `.improvements`, `.features` with some kind of registry value object. Alternatively, consider using the `Registry` pattern, return all entities to be self-contained and augment separately (e.g. `base-city-improvements` could provide a registry of improvements associated to a city)
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
@@ -66,4 +68,6 @@
 - [ ] Convert terrain improvements `availableOn` into `Rule`s.
 - [ ] Consider building a 'compiler' that can build a static version of the game including all rules that would run better and consider the current state as 'dev' mode.
 - [ ] Add version checking to plugin system.
-- [ ] Add Science and Gold multipliers (Library, Marketplace, etc)
+- [ ] Add diplomacy
+- [ ] Add leader traits
+- [ ] Add starting technologies

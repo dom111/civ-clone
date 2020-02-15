@@ -36,14 +36,10 @@ loadJSON(manifestPath)
     ) {
       contents.components
         .filter((component) => !components.includes(component.file))
-        .forEach((component) => {
+        .forEach((component, index) => {
           console.log(`\x1b[33m${manifestPath} has unused component '${component.file}'.\x1b[0m`);
           contents.components
-            .splice(
-              contents.components
-                .findIndex((contentsComponent) => contentsComponent.file === component),
-              1
-            )
+            .splice(index, 1)
           ;
 
           changed = true;

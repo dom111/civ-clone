@@ -7,7 +7,11 @@
   "components": [
     {
       "type": "script",
-      "file": "init.js"
+      "file": "Events/Engine/start.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/government-changed.js"
     },
     {
       "type": "script",
@@ -15,7 +19,7 @@
     },
     {
       "type": "script",
-      "file": "Events/Player/government-changed.js"
+      "file": "Events/Tile/seen.js"
     }
   ]
 }

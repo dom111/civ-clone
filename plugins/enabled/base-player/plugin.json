@@ -16,10 +16,6 @@
   "components": [
     {
       "type": "script",
-      "file": "unit.js"
-    },
-    {
-      "type": "script",
       "file": "Events/City/yield.js"
     },
     {
@@ -36,11 +32,51 @@
     },
     {
       "type": "script",
-      "file": "init.js"
+      "file": "PlayerRegistry.js"
     },
     {
       "type": "script",
-      "file": "PlayerRegistry.js"
+      "file": "CurrentPlayerRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/World/built.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/defeated.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-end.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Unit/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Unit/activate.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Unit/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Turn/start.js"
     }
   ]
 }

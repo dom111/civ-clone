@@ -1,14 +1,14 @@
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import {Library} from '../../../base-city-improvements/Improvements.js';
-import {Library as LibraryModifier} from '../../YieldModifier/Library.js';
+import {Gold} from '../../../base-currency/Yields.js';
+import {Marketplace} from '../../../base-city-improvements/Improvements.js';
+import {Marketplace as MarketplaceModifier} from '../../YieldModifier/Marketplace.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
-import {Science} from '../../../base-science/Yields.js';
 
 [
-  [Library, Science, LibraryModifier],
+  [Marketplace, Gold, MarketplaceModifier],
 ]
   .forEach(([Improvment, Yield, YieldModifier]) => {
     RulesRegistry.register(new Rule(

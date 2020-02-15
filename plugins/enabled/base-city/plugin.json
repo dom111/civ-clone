@@ -3,15 +3,11 @@
   "title": "Base City",
   "version": "0.1.0",
   "dependencies": [
-    "base-governments",
-    "base-player-government",
     "base-terrain-improvements",
     "base-terrain-yields",
-    "base-unit",
     "core-city",
     "core-rules",
-    "core-turn-based-game",
-    "core-unit"
+    "core-turn-based-game"
   ],
   "components": [
     {

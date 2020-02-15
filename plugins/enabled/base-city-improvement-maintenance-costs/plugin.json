@@ -1,0 +1,16 @@
+{
+  "name": "base-city-improvement-maintenance-costs",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city-improvements",
+    "base-currency",
+    "core-city-improvement",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    }
+  ]
+}

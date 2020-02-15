@@ -13,7 +13,10 @@
     },
     {
       "type": "script",
-      "file": "init.js"
+      "file": "Events/Engine/start.js"
     }
+  ],
+  "dependencies": [
+    "core-rules"
   ]
 }

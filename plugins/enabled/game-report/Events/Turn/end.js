@@ -1,16 +1,16 @@
-import CityImprovementRegistry from '../core-city-improvement/CityImprovementRegistry.js';
-import CityRegistry from '../core-city/CityRegistry.js';
-import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
-import PlayerRegistry from '../base-player/PlayerRegistry.js';
-import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
-import Time from '../core-turn-based-game/Time.js';
-import UnitRegistry from '../core-unit/UnitRegistry.js';
-import PlayerTreasuryRegistry from '../base-currency/PlayerTreasuryRegistry.js';
-
-const reportTurns = parseInt(engine.option('reportTurns', 0), 10);
+import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
+import CityRegistry from '../../../core-city/CityRegistry.js';
+import PlayerGovernmentRegistry from '../../../base-player-government/PlayerGovernmentRegistry.js';
+import PlayerRegistry from '../../../base-player/PlayerRegistry.js';
+import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
+import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
+import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import Time from '../../../core-turn-based-game/Time.js';
+import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 engine.on('turn:end', () => {
+  const reportTurns = parseInt(engine.option('reportTurns', 0), 10);
+
   if (! reportTurns) {
     return;
   }

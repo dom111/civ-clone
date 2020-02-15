@@ -10,7 +10,8 @@
     "core-player",
     "core-registry",
     "core-rules",
-    "core-unit"
+    "core-unit",
+    "base-unit"
   ],
   "components": [
     {
@@ -23,11 +24,15 @@
     },
     {
       "type": "script",
-      "file": "Rules/Tile/yield.js"
+      "file": "Events/Player/added.js"
     },
     {
       "type": "script",
-      "file": "Rules/City/unitSupportCosts.js"
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/yield.js"
     },
     {
       "type": "script",

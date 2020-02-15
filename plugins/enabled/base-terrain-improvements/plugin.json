@@ -1,4 +1,4 @@
-  {
+{
   "name": "base-terrain-improvements",
   "version": "0.1.0",
   "dependencies": [
@@ -51,6 +51,14 @@
     {
       "type": "script",
       "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-pillaged.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-built.js"
     }
   ]
 }

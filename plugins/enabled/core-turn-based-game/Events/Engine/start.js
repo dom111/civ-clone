@@ -1,4 +1,4 @@
-import Time from './Time.js';
+import Time from '../../Time.js';
 
 ['game:start', 'turn:end']
   .forEach((event) => engine.on(event, () =>

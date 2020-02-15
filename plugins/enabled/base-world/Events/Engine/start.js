@@ -1,5 +1,5 @@
-import World from '../core-world/World.js';
-import WorldGeneratorRegistry from '../core-world-generator/WorldGeneratorRegistry.js';
+import World from '../../../core-world/World.js';
+import WorldGeneratorRegistry from '../../../core-world-generator/WorldGeneratorRegistry.js';
 
 engine.on('engine:start', () => {
   const availableGenerators = WorldGeneratorRegistry.entries(),
@@ -22,12 +22,4 @@ engine.on('engine:start', () => {
   world.build();
 
   engine.emit('world:built', world);
-});
-
-engine.on('tile:seen', (tile, player) => {
-  if (! player.seenTiles.includes(tile)) {
-    player.seenTiles.push(tile);
-
-    engine.emit('player:visibility-changed', player);
-  }
 });

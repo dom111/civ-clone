@@ -13,7 +13,7 @@
     },
     {
       "type": "script",
-      "file": "events.js"
+      "file": "Events/Unit/created.js"
     }
   ]
 }

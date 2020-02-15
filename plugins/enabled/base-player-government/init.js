@@ -1,13 +1,5 @@
 // import Effect from '../core-rules/Effect.js';
 // import PlayerActionRegistry from '../core-player/PlayerActionRegistry.js';
-import PlayerGovernment from './PlayerGovernment.js';
-import PlayerGovernmentRegistry from './PlayerGovernmentRegistry.js';
-
-engine.on('player:added', (player) => {
-  const playerGovernment = new PlayerGovernment(player);
-
-  PlayerGovernmentRegistry.register(playerGovernment);
-});
 
 // engine.on('player:revolt', (player) => {
 //   const [playerGovernment] = PlayerGovernmentRegistry.entries()

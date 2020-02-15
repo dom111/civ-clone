@@ -12,7 +12,7 @@ engine.on('city:yield', (cityYield, city) => {
       .forEach((TradeRate) => {
         const tradeYield = new (TradeRate.tradeYield)(cityYield.value());
 
-        tradeYield.addModifier(new YieldModifier((value) => value * playerRates.get(TradeRate), 1000));
+        tradeYield.addModifier(new YieldModifier((value) => -(value * (1 - playerRates.get(TradeRate))), 1000));
 
         RulesRegistry.get('city:yield')
           .filter((rule) => rule.validate(tradeYield, city))

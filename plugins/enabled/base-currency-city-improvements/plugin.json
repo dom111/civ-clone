@@ -1,0 +1,21 @@
+{
+  "name": "base-currency-city-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city-improvements",
+    "base-currency",
+    "core-city-improvement",
+    "core-rules",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "YieldModifier/Marketplace.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    }
+  ]
+}

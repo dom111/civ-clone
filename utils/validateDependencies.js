@@ -31,14 +31,10 @@ loadJSON(manifestPath)
     ) {
       contents.dependencies
         .filter((dependency) => !dependencies.includes(dependency))
-        .forEach((dependency) => {
+        .forEach((dependency, index) => {
           console.log(`\x1b[33m${manifestPath} has unused dependency '${dependency}'.\x1b[0m`);
           contents.dependencies
-            .splice(
-              contents.dependencies
-                .indexOf(dependency),
-              1
-            )
+            .splice(index, 1)
           ;
 
           changed = true;
