@@ -14,9 +14,7 @@ RulesRegistry.register(new Rule(
     {
       from: .1,
       to: .9,
-      coverage: .05,
       cluster: true,
-      clusterChange: .8,
       path: true,
     },
   ])

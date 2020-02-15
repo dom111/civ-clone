@@ -14,16 +14,16 @@ RulesRegistry.register(new Rule(
     {
       from: .3,
       to: .45,
-      coverage: .3,
       cluster: true,
-      path: false,
+      clusterChance: .2,
+      coverage: .4,
     },
     {
       from: .55,
       to: .7,
-      coverage: .3,
       cluster: true,
-      path: false,
+      clusterChance: .2,
+      coverage: .4,
     },
   ])
 ));

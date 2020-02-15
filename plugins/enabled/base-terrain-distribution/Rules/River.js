@@ -14,9 +14,9 @@ RulesRegistry.register(new Rule(
     {
       from: .1,
       to: .9,
-      coverage: .1,
+      coverage: .2,
       path: true,
-      pathChance: .05,
+      pathChance: .75,
     },
   ])
 ));

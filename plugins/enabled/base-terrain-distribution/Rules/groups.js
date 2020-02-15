@@ -17,26 +17,20 @@ import Rule from '../../core-rules/Rule.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
 RulesRegistry.register(new Rule(
-  'terrain:distributionGroups:root',
+  'terrain:distributionGroups:core',
   // first pass (root terrain types)
   new Effect(() => [
     Ocean,
     Grassland,
-  ])
-));
-RulesRegistry.register(new Rule(
-  'terrain:distributionGroups:base',
-  // first pass (terrain types)
-  new Effect(() => [
-    Arctic,
-    Desert,
-    Forest,
-    Hills,
-    Jungle,
-    Mountains,
-    Plains,
-    River,
     Swamp,
+    Mountains,
+    Jungle,
+    Hills,
+    Forest,
+    Desert,
+    Plains,
     Tundra,
+    Arctic,
+    River,
   ])
 ));

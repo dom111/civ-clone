@@ -20,12 +20,10 @@ RulesRegistry.register(new Rule(
     {
       from: .02,
       to: .1,
-      coverage: .05,
     },
     {
       from: .90,
       to: .98,
-      coverage: .05,
     },
     {
       from: .98,

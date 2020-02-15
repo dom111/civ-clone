@@ -18,7 +18,7 @@ import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-const baseChance = .06;
+const baseChance = .2;
 
 [
   [Coal, baseChance, Hills],

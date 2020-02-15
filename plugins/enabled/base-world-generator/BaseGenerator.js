@@ -7,6 +7,7 @@ import TerrainRegistry from '../core-terrain/TerrainRegistry.js';
 export class IslandsGenerator extends BaseGenerator {
   #chanceToBecomeLand;
   #clusterChance;
+  #coverage;
   #pathChance;
   #landCoverage;
   #landMassReductionScale;
@@ -17,17 +18,19 @@ export class IslandsGenerator extends BaseGenerator {
     height = 100,
     width = 160,
     landCoverage = .66,
-    landMassReductionScale = 1,
-    chanceToBecomeLand = .05,
-    clusterChance = .33,
-    pathChance = .33,
-    maxIterations = 3,
+    coverage = .1,
+    landMassReductionScale = 3,
+    chanceToBecomeLand = 5,
+    clusterChance = .05,
+    pathChance = .05,
+    maxIterations = 1,
   } = {}) {
     super({height, width});
 
     this.#landCoverage = landCoverage; // total coverage required
     this.#chanceToBecomeLand = chanceToBecomeLand; // chance to become land
     this.#clusterChance = clusterChance; // chance for adjacent tiles to cluster
+    this.#coverage = coverage; // total coverage of terrain type
     this.#pathChance = pathChance; // chance for directly adjacent tiles to be part of the path
     this.#maxIterations = maxIterations; // number of times a tile can be tested to change to land
     this.#landMassReductionScale = landMassReductionScale;
@@ -64,7 +67,7 @@ export class IslandsGenerator extends BaseGenerator {
         const distance = this.distanceFrom(seedTile, currentTile);
 
         if (
-          (Math.random() / (distance * this.#landMassReductionScale)) > this.#chanceToBecomeLand ||
+          ((this.#chanceToBecomeLand / distance) >= Math.random()) ||
           this.getNeighbours(currentTile, false)
             .reduce((total, n) => total + (this.#map[n] instanceof Land ? 1 : 0), 0) > 5
         ) {
@@ -77,18 +80,16 @@ export class IslandsGenerator extends BaseGenerator {
       }
     }
 
-    const [water, land] = [Water, Land]
-      .map((Type) => this.#map
-        .filter((tile) => tile instanceof Type)
-        .length
-      )
+    const land = this.#map
+      .filter((tile) => tile instanceof Land)
+      .length
     ;
 
-    if ((land / water) < this.#landCoverage) {
-      return this.generateLand();
+    if ((land / this.#map.length) >= this.#landCoverage) {
+      return this.#map;
     }
 
-    return this.#map;
+    return this.generateLand();
   }
 
   generate() {
@@ -101,7 +102,6 @@ export class IslandsGenerator extends BaseGenerator {
   getNeighbours(index, directNeighbours = true) {
     const [x, y] = this.indexToCoords(index),
 
-      // TODO: validate these
       n = this.coordsToIndex(x, y - 1),
       ne = this.coordsToIndex(x + 1, y - 1),
       e = this.coordsToIndex(x + 1, y),
@@ -123,111 +123,99 @@ export class IslandsGenerator extends BaseGenerator {
     RulesRegistry.get('terrain:distributionGroups')
       .filter((rule) => rule.validate())
       .map((rule) => rule.process())
-      .forEach((group) => group.forEach((TerrainType) => {
-        RulesRegistry.get('terrain:distribution')
-          .filter((rule) => rule.validate(TerrainType, this.#map))
-          .map((rule) => rule.process(TerrainType, this.#map))
-          .forEach((distribution) => distribution.forEach(
-            ({
-              cluster,
-              clusterChance = this.#clusterChance,
-              coverage,
-              fill = false,
-              from = 0,
-              path,
-              pathChance = this.#pathChance,
-              to = 1,
-            }) => {
-              const validIndices = Object.keys(this.#map)
-                .filter((i) => this.#map[i] instanceof TerrainType.__proto__)
-                .filter((i) =>
-                  (
-                    i >= ((from * this.height) * this.width) &&
-                    i <= ((to * this.height) * this.width)
-                  )
+      .forEach((group) => group.forEach((TerrainType) => RulesRegistry.get('terrain:distribution')
+        .filter((rule) => rule.validate(TerrainType, this.#map))
+        .map((rule) => rule.process(TerrainType, this.#map))
+        .forEach((distribution) => distribution.forEach(
+          ({
+            cluster = false,
+            clusterChance = this.#clusterChance,
+            coverage = this.#coverage,
+            fill = false,
+            from = 0,
+            path = false,
+            pathChance = this.#pathChance,
+            to = 1,
+          }) => {
+            const validIndices = Object.keys(this.#map)
+              .filter((i) => this.#map[i] instanceof TerrainType.__proto__)
+              .filter((i) =>
+                (
+                  i >= ((from * this.height) * this.width) &&
+                  i <= ((to * this.height) * this.width)
                 )
-              ;
+              )
+            ;
 
-              if (fill) {
-                validIndices.forEach((index) => this.#map[index] = new TerrainType());
+            if (fill) {
+              validIndices.forEach((index) => this.#map[index] = new TerrainType());
 
-                return;
-              }
+              return;
+            }
 
-              let max = validIndices.length * coverage;
+            let max = validIndices.length * coverage;
 
-              while (max > 0) {
-                const currentIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
+            while (max > 0) {
+              const currentIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
 
-                this.#map[currentIndex] = new TerrainType();
-                max--;
+              this.#map[currentIndex] = new TerrainType();
+              max--;
 
-                if (cluster) {
-                  const clusteredNeighbours = this.getNeighbours(currentIndex)
-                    .filter((index) => ! (this.#map[index] instanceof TerrainType))
-                  ;
+              if (cluster) {
+                const clusteredNeighbours = this.getNeighbours(currentIndex)
+                  .filter((index) => ! (this.#map[index] instanceof TerrainType))
+                ;
 
-                  while (clusteredNeighbours.length) {
-                    const index = clusteredNeighbours.shift();
+                while (clusteredNeighbours.length) {
+                  const index = clusteredNeighbours.shift();
 
-                    if ((Math.random() / this.distanceFrom(currentIndex, index)) >= clusterChance) {
-                      this.#map[index] = new TerrainType();
-                      max--;
-
-                      this.getNeighbours(index)
-                        .filter((index) => ! (this.#map[index] instanceof TerrainType) &&
-                          (this.#map[index] instanceof TerrainType.__proto__) &&
-                          ! clusteredNeighbours.includes(index)
-                        )
-                        .forEach((index) => clusteredNeighbours.push(index))
-                      ;
-                    }
-                  }
-                }
-
-                if (path) {
-                  let index = currentIndex;
-
-                  while (Math.random() > pathChance) {
-                    const candidates = this.getNeighbours(index)
-                      .filter((index) => (this.#map[index] instanceof TerrainType.__proto__) &&
-                        ! (this.#map[index] instanceof TerrainType)
-                      )
-                    ;
-
-                    index = candidates[Math.floor(Math.random() * candidates.length)];
-
+                  if (clusterChance >= (Math.random() / this.distanceFrom(currentIndex, index))) {
                     this.#map[index] = new TerrainType();
                     max--;
+
+                    clusteredNeighbours.push(
+                      ...this.getNeighbours(index)
+                        .filter((index) => ! (this.#map[index] instanceof TerrainType))
+                        .filter((index) => this.#map[index] instanceof TerrainType.__proto__)
+                        .filter((index) => !(! clusteredNeighbours.includes(index)))
+                    );
                   }
+                }
+              }
+
+              if (path) {
+                let index = currentIndex;
+
+                while (pathChance >= Math.random()) {
+                  const candidates = this.getNeighbours(index)
+                    .filter((index) => (this.#map[index] instanceof TerrainType.__proto__) &&
+                      ! (this.#map[index] instanceof TerrainType)
+                    )
+                  ;
+
+                  index = candidates[Math.floor(Math.random() * candidates.length)];
+
+                  this.#map[index] = new TerrainType();
+                  max--;
                 }
               }
             }
-          ))
-        ;
-      }))
+          }
+        ))
+      ))
     ;
 
     TerrainFeatureRegistry.entries()
-      .forEach((TerrainFeature) => {
-        TerrainRegistry.entries()
-          .forEach((Terrain) => {
-            this.#map
-              .filter((terrain) => terrain instanceof Terrain)
-              .forEach((terrain) => {
-                RulesRegistry.get('terrain:feature')
-                  .filter((rule) => rule.validate(TerrainFeature, Terrain))
-                  .forEach((rule) => {
-                    if (rule.process()) {
-                      terrain.features.push(new TerrainFeature());
-                    }
-                  })
-                ;
-              })
-            ;
-          })
-        ;
-      })
+      .forEach((TerrainFeature) => TerrainRegistry.entries()
+        .forEach((Terrain) => this.#map
+          .filter((terrain) => terrain instanceof Terrain)
+          .forEach((terrain) => RulesRegistry.get('terrain:feature')
+            .filter((rule) => rule.validate(TerrainFeature, Terrain))
+            .filter((rule) => rule.process())
+            .forEach(() => terrain.features.push(new TerrainFeature()))
+          )
+        )
+      )
     ;
   }
 }

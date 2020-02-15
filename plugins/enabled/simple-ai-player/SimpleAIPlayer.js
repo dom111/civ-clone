@@ -97,7 +97,7 @@ export class SimpleAIPlayer extends AIPlayer {
   #undefendedCities = [];
 
   moveUnit(unit) {
-    while (unit.active && unit.movesLeft > 0) {
+    while (unit.active && unit.movesLeft > .1) {
       const currentTile = unit.tile,
         scoreMove = (tile) => {
           const actions = RulesRegistry.get('unit:action')
