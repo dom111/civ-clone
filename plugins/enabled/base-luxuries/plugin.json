@@ -1,0 +1,36 @@
+{
+  "name": "base-luxuries",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-trade-rates",
+    "core-yields",
+    "base-city-happiness",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Luxuries.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRates.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRate/Luxuries.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/happiness.js"
+    }
+  ]
+}

@@ -28,10 +28,6 @@
     {
       "type": "script",
       "file": "Events/Game/start.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/yield.js"
     }
   ]
 }

@@ -164,7 +164,9 @@ export class Tile {
     if (yieldCache.has(type.constructor)) {
       const cachedYield = yieldCache.get(type.constructor);
 
-      return type.add(cachedYield);
+      type.add(cachedYield);
+
+      return type;
     }
 
     RulesRegistry.get('tile:yield')
@@ -181,15 +183,14 @@ export class Tile {
     player,
     yields
   ) {
-    const yieldCache = this.getYieldCache(player);
-
-    if (yieldCache.size) {
-      return [...yieldCache.entries()].map(([Yield, tileYield]) => new Yield(tileYield));
-    }
-
+    // const yieldCache = this.getYieldCache(player);
+    //
+    // if (yieldCache.size) {
+    //   return [...yieldCache.entries()].map(([Yield, tileYield]) => new Yield(tileYield));
+    // }
+    //
     return (yields || YieldRegistry.entries())
-      .map((YieldType) => new YieldType())
-      .map((tileYield) => this.resource(tileYield, player))
+      .map((YieldType) => this.resource(new YieldType(), player))
     ;
   }
 

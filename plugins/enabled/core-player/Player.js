@@ -10,8 +10,6 @@ export class Player {
 
   constructor() {
     this.id = Player.id++;
-
-    engine.emit('player:added', this);
   }
 
   getAction() {
@@ -38,7 +36,7 @@ export class Player {
 
   takeTurn() {
     return promiseFactory((resolve, reject) => {
-      reject('Not implemented.');
+      reject(new Error('Not implemented.'));
     });
   }
 }

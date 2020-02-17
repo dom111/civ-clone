@@ -4,7 +4,6 @@ import PlayerGovernmentRegistry from '../../../base-player-government/PlayerGove
 import PlayerRegistry from '../../../base-player/PlayerRegistry.js';
 import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import Time from '../../../core-turn-based-game/Time.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
@@ -64,21 +63,9 @@ Improvements: ${
     .map((improvement) => improvement.constructor.name)
     .join(', ')
 }
-Yields: ${
-  city.yields()
-    .map((cityYield) => `${cityYield.value()} ${cityYield.constructor.name}`)
-    .join(', ')
-}
 Yields (after costs): ${
   city.yields()
-    .map((cityYield) => {
-      RulesRegistry.get('city:cost')
-        .filter((rule) => rule.validate(cityYield, city))
-        .forEach((rule) => rule.process(cityYield, city))
-      ;
-
-      return `${cityYield.value()} ${cityYield.constructor.name}`;
-    })
+    .map((cityYield) => `${cityYield.value()} ${cityYield.constructor.name}`)
     .join(', ')
 }
 `)

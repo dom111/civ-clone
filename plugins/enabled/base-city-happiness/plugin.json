@@ -1,0 +1,27 @@
+{
+  "name": "base-city-happiness",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city",
+    "core-rules",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Unhappiness.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Happiness.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    }
+  ]
+}

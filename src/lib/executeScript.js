@@ -12,6 +12,10 @@ export const executeScript = (code, context, resolver, script) => {
       await module.link(resolver);
       await module.evaluate();
 
+      if (module.status === 'errored') {
+        reject(module.error);
+      }
+
       resolve(module);
     }
     catch (e) {

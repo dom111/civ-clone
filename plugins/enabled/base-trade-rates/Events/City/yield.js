@@ -1,26 +1,32 @@
 import AvailableTradeRateRegistry from '../../AvailableTradeRateRegistry.js';
+import Criterion from '../../../core-rules/Criterion.js';
+import Effect from '../../../core-rules/Effect.js';
 import PlayerTradeRatesRegistry from '../../PlayerTradeRatesRegistry.js';
+import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import {Trade} from '../../../base-terrain-yield-trade/Yields.js';
-import {YieldModifier} from '../../../core-yields/YieldModifier.js';
 
-engine.on('city:yield', (cityYield, city) => {
-  if (cityYield instanceof Trade) {
+RulesRegistry.register(new Rule(
+  'city:yield:trade-rates',
+  new Criterion((cityYield) => cityYield instanceof Trade),
+  new Effect((cityYield, city, yields) => {
     const [playerRates] = PlayerTradeRatesRegistry.getBy('player', city.player);
 
     AvailableTradeRateRegistry.entries()
       .forEach((TradeRate) => {
-        const tradeYield = new (TradeRate.tradeYield)(cityYield.value());
+        let [tradeYield] = yields.filter((existingYield) => existingYield instanceof (TradeRate.tradeYield));
 
-        tradeYield.addModifier(new YieldModifier((value) => -(value * (1 - playerRates.get(TradeRate))), 1000));
+        if (! tradeYield) {
+          tradeYield = new (TradeRate.tradeYield)(cityYield.value() * playerRates.get(TradeRate));
+          yields.push(tradeYield);
+          // cityYield.subtract(tradeYield.value());
+        }
 
         RulesRegistry.get('city:yield')
-          .filter((rule) => rule.validate(tradeYield, city))
-          .forEach((rule) => rule.process(tradeYield, city))
+          .filter((rule) => rule.validate(tradeYield, city, yields))
+          .forEach((rule) => rule.process(tradeYield, city, yields))
         ;
-
-        engine.emit('city:yield', tradeYield, city);
       })
     ;
-  }
-});
+  })
+));

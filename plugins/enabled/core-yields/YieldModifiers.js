@@ -6,7 +6,7 @@ export class YieldModifiers {
   add(...yieldModifiers) {
     yieldModifiers.forEach((yieldModifier) => {
       if (! (yieldModifier instanceof YieldModifier)) {
-        throw new TypeError(`Expected instance of 'YieldModifier', got ${yieldModifier || yieldModifier.constructor.name}`);
+        throw new TypeError(`Expected instance of 'YieldModifier', got '${yieldModifier.constructor.name}'`);
       }
 
       this.#stack.push(yieldModifier);
@@ -19,6 +19,16 @@ export class YieldModifiers {
       .sort((a, b) => b.priority - a.priority)
       .reduce((total, yieldModifier) => total + yieldModifier.apply(value), value)
     ;
+  }
+
+  get(Modifier) {
+    return this.#stack
+      .filter((modifier) => modifier instanceof Modifier)
+    ;
+  }
+
+  modifiers() {
+    return [...this.#stack];
   }
 
   has(Modifier) {

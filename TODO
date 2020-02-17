@@ -71,3 +71,5 @@
 - [ ] Add diplomacy
 - [ ] Add leader traits
 - [ ] Add starting technologies
+- [ ] Modify AI to adjust trade rates
+- [ ] Re-do tile yields to calculate `Gold`/`Science` immediately, rather than via events.

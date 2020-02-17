@@ -1,12 +1,22 @@
+import {Science, Tax} from '../../TradeRates.js';
 import AvailableTradeRateRegistry from '../../AvailableTradeRateRegistry.js';
 import {PlayerTradeRates} from '../../PlayerTradeRates.js';
 import PlayerTradeRatesRegistry from '../../PlayerTradeRatesRegistry.js';
 
 engine.on('player:added', (player) => {
-  const availableRates = AvailableTradeRateRegistry.entries(),
+  // TODO: rules!
+  const defaultRates = [
+      new Tax(.5),
+      new Science(.5),
+    ],
+    availableRates = AvailableTradeRateRegistry.entries(),
     playerTradeRates = new PlayerTradeRates(
       player,
-      ...availableRates.map((TradeRate) => new TradeRate(1 / availableRates.length))
+      ...availableRates.map((TradeRate) => {
+        const [defaultRate] = defaultRates.filter((rate) => rate instanceof TradeRate);
+
+        return new TradeRate(defaultRate || 0);
+      })
     )
   ;
 

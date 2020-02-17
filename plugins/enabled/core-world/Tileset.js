@@ -1,5 +1,3 @@
-import YieldRegistry from '../core-yields/YieldRegistry.js';
-
 export class Tileset {
   #tiles;
 
@@ -80,22 +78,26 @@ export class Tileset {
   }
 
   yields(player) {
-    return YieldRegistry.entries()
-      .map((Yield) => {
-        const tilesetYield = new Yield();
+    return this.#tiles
+      .reduce((yields, tile) => {
+        tile.yields(player)
+          .forEach((tileYield) => {
+            const [existingYield] = yields.filter((existingYield) => existingYield instanceof (tileYield.constructor));
 
-        this.#tiles
-          .forEach((tile) => tile.yields(player)
-            .forEach((tileYield) => {
-              if (tileYield instanceof Yield) {
-                tilesetYield.add(tileYield.value());
-              }
-            })
-          )
+            if (existingYield) {
+              existingYield.add(tileYield);
+
+              return;
+            }
+
+            const newYield = new (tileYield.constructor)(tileYield);
+
+            yields.push(newYield);
+          })
         ;
 
-        return tilesetYield;
-      })
+        return yields;
+      }, [])
     ;
   }
 }

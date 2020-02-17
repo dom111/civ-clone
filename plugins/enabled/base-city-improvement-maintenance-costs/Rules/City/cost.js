@@ -1,4 +1,12 @@
-import {Aqueduct, CityWalls, Courthouse, Granary, Library, Marketplace, Temple} from '../../../base-city-improvements/Improvements.js';
+import {
+  Aqueduct,
+  CityWalls,
+  Courthouse,
+  Granary,
+  Library,
+  Marketplace,
+  Temple,
+} from '../../../base-city-improvements/Improvements.js';
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
@@ -15,14 +23,12 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
   [Marketplace, 1, Gold],
   [Temple, 1, Gold],
 ]
-  .forEach(([Improvement, value, Yield]) => {
-    RulesRegistry.register(new Rule(
-      `city:cost:${[Improvement, Yield].map((Entity) => Entity.name).join(':')}`,
-      new Criterion((tileYield) => tileYield instanceof Yield),
-      new Criterion((tileYield, city) => CityImprovementRegistry.getBy('city', city)
-        .every((cityImprovementRegistry) => cityImprovementRegistry.some((improvement) => improvement instanceof Improvement))
-      ),
-      new Effect((tileYield) => tileYield.subtract(value))
-    ));
-  })
+  .forEach(([Improvement, value, Yield]) => RulesRegistry.register(new Rule(
+    `city:cost:${[Improvement, Yield].map((Entity) => Entity.name).join(':')}`,
+    new Criterion((tileYield) => tileYield instanceof Yield),
+    new Criterion((tileYield, city) => CityImprovementRegistry.getBy('city', city)
+      .some((improvement) => improvement instanceof Improvement)
+    ),
+    new Effect((tileYield) => tileYield.subtract(value))
+  )))
 ;

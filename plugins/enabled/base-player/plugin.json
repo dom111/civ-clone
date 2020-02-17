@@ -11,7 +11,9 @@
     "core-registry",
     "core-rules",
     "core-terrain",
-    "core-unit"
+    "core-unit",
+    "base-currency",
+    "base-science"
   ],
   "components": [
     {

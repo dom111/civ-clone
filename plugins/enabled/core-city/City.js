@@ -121,10 +121,25 @@ export class City {
     engine.emit('city:build', this, item);
   }
 
+  // TODO: separate this from the core implementation
   yields() {
-    return this.tilesWorked
+    const yields = this.tilesWorked
       .yields(this.player)
     ;
+
+    yields.forEach((cityYield) => {
+      RulesRegistry.get('city:yield')
+        .filter((rule) => rule.validate(cityYield, this, yields))
+        .forEach((rule) => rule.process(cityYield, this, yields))
+      ;
+
+      RulesRegistry.get('city:cost')
+        .filter((rule) => rule.validate(cityYield, this, yields))
+        .forEach((rule) => rule.process(cityYield, this, yields))
+      ;
+    });
+
+    return yields;
   }
 }
 

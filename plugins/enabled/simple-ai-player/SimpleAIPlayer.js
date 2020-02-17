@@ -2,6 +2,7 @@ import {Attack, Defence} from '../core-unit-yields/Yields.js';
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
+import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
 import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
 import {Land, Water} from '../core-terrain/Types.js';
 import {Move, NoOrders} from '../base-unit-actions/Actions.js';
@@ -24,7 +25,13 @@ import UnitRegistry from '../core-unit/UnitRegistry.js';
 export class SimpleAIPlayer extends AIPlayer {
   #shouldBuildCity = (tile) => {
     return (
-      tile.isLand() &&
+      (
+        tile.terrain instanceof Grassland ||
+        tile.terrain instanceof River ||
+        tile.terrain instanceof Plains ||
+        tile.features.some((feature) => feature instanceof Oasis) ||
+        tile.features.some((feature) => feature instanceof Game)
+      ) &&
       tile.getSurroundingArea()
         .score({
           player: this,
@@ -76,9 +83,8 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldRoad = (tile) => {
-    return Road.availableOn(tile.terrain) &&
-      ! tile.improvements
-        .some((improvement) => improvement instanceof Road) &&
+    return ! tile.improvements
+      .some((improvement) => improvement instanceof Road) &&
       tile.getSurroundingArea()
         .some((tile) => CityRegistry.getBy('tile', tile)
           .some((city) => city.player === this)
@@ -115,7 +121,9 @@ export class SimpleAIPlayer extends AIPlayer {
             } = actions.reduce((object, entity) => ({
               ...object,
               [
-              entity.constructor.name.replace(/^./, (char) => char.toLowerCase())
+              entity.constructor
+                .name
+                .replace(/^./, (char) => char.toLowerCase())
               ]: entity,
             }), {})
           ;

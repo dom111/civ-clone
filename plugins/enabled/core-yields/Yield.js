@@ -1,17 +1,30 @@
 import YieldModifiers from './YieldModifiers.js';
 
 export class Yield {
-  #cachedTotal = 0;
+  #cachedTotal = false;
   #modifiers = new YieldModifiers();
   #value = 0;
 
   constructor(value = 0) {
+    if (value instanceof Yield) {
+      this.addYield(value);
+
+      return;
+    }
+
     this.#value += value;
   }
 
-  add(n) {
+  add(value) {
     this.#cachedTotal = false;
-    this.#value += n;
+
+    if (value instanceof Yield) {
+      this.addYield(value);
+
+      return;
+    }
+
+    this.#value += value;
   }
 
   addModifier(...modifiers) {
@@ -19,27 +32,30 @@ export class Yield {
     this.#modifiers.add(...modifiers);
   }
 
-  hasModifier(Modifier) {
-    return this.#modifiers.some((modifier) => modifier instanceof Modifier);
+  addYield(otherYield) {
+    this.#cachedTotal = false;
+    this.#value += otherYield.value();
+    this.#modifiers.add(...otherYield.#modifiers.modifiers());
   }
 
-  get modifiers() {
-    return this.#modifiers.slice(0);
+  set(value) {
+    this.#value = value;
   }
 
-  removeModifier(modifier) {
+  subtract(value) {
     this.#cachedTotal = false;
 
-    return this.#modifiers.splice(this.#modifiers.indexOf(modifier), 1);
-  }
+    if (value instanceof Yield) {
+      this.addYield(value);
 
-  subtract(n) {
-    this.#cachedTotal = false;
-    this.#value -= n;
+      return;
+    }
+
+    this.#value -= value;
   }
 
   value() {
-    if (! this.#cachedTotal) {
+    if (this.#cachedTotal === false) {
       this.#cachedTotal = this.#modifiers.apply(this.#value);
     }
 

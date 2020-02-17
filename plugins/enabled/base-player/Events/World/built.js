@@ -38,6 +38,8 @@ engine.on('world:built', (map) => {
   for (let i = 0; i < numberOfPlayers; i++) {
     const player = AIPlayer.get();
 
+    engine.emit('player:added', player);
+
     player.chooseCivilization(availableCivilizations);
     availableCivilizations = availableCivilizations.filter((Civilization) => ! (player.civilization instanceof Civilization));
 

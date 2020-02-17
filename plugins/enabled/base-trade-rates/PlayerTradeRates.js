@@ -6,6 +6,14 @@ export class PlayerTradeRates {
   constructor(player, ...rates) {
     this.#player = player;
     this.#rates = rates;
+
+    if (rates.reduce((t,v)=>t+v.value(),0) === 0) {
+      throw new Error(rates);
+    }
+  }
+
+  all() {
+    return [...this.#rates];
   }
 
   balance(fixed) {
@@ -21,7 +29,7 @@ export class PlayerTradeRates {
         .reduce((total, rate) => total + rate.value(), 0)
     ;
 
-    others.forEach((rate) => rate.set((rate.value / current) * available));
+    others.forEach((rate) => rate.set((rate.value() / current) * available));
 
     if (this.total() < 1) {
       others[Math.floor(others.length * Math.random())].add(1 - this.total());
@@ -33,11 +41,10 @@ export class PlayerTradeRates {
   }
 
   get(Type) {
-    const [rate] = this.#rates
+    return this.#rates
       .filter((rate) => rate instanceof Type)
+      .reduce((total, rate) => total + rate, 0)
     ;
-
-    return rate;
   }
 
   get player() {

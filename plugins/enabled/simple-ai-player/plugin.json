@@ -20,7 +20,8 @@
     "core-terrain",
     "core-unit",
     "base-city-improvements",
-    "core-unit-yields"
+    "core-unit-yields",
+    "base-terrain-features"
   ],
   "components": [
     {

@@ -129,48 +129,41 @@ RulesRegistry.register(new Rule(
   new Effect((unit, to, from = unit.tile) => new BoardTransport(unit, to, from))
 ));
 
-RulesRegistry.register(new Rule(
-  'unit:action:buildIrrigation',
-  hasEnoughMovesLeft,
-  new Criterion((unit) => unit instanceof Worker),
-  new Criterion((unit) => Irrigation.availableOn(unit.tile.terrain)),
-  new Criterion((unit, to) => unit.tile === to),
-  // TODO: doing this a lot already, need to make improvements a value object with a helper method
-  new Criterion((unit) => ! unit.tile.improvements.some((improvement) => improvement instanceof Irrigation)),
-  new Criterion((unit) => [...unit.tile.getAdjacent(), unit.tile]
-    .some((tile) => tile.terrain instanceof River ||
-      tile.isCoast() ||
-      (
-        tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
-        ! CityRegistry.getBy('tile', tile)
-          .length
+[
+  [Irrigation, BuildIrrigation, new OneCriteria(
+    new Criterion((unit) => unit.tile
+      .terrain instanceof River
+    ),
+    new Criterion((unit) => unit.tile.isCoast()),
+    new Criterion((unit) => unit.tile
+      .getAdjacent()
+      .some((tile) => tile.terrain instanceof River ||
+        (
+          tile.improvements.some((improvement) => improvement instanceof Irrigation) &&
+          ! CityRegistry.getBy('tile', tile)
+            .length
+        )
       )
     )
-  ),
-  new Effect((unit, to, from = unit.tile) => new BuildIrrigation(unit, to, from))
-));
-
-RulesRegistry.register(new Rule(
-  'unit:action:buildMine',
-  hasEnoughMovesLeft,
-  new Criterion((unit) => unit instanceof Worker),
-  new Criterion((unit, to, from) => Mine.availableOn(from.terrain)),
-  new Criterion((unit, to) => unit.tile === to),
-  // TODO: doing this a lot already, need to make improvements a value object with a helper method
-  new Criterion((unit, to, from) => ! from.improvements.some((improvement) => improvement instanceof Mine)),
-  new Effect((unit, to, from = unit.tile) => new BuildMine(unit, to, from))
-));
-
-RulesRegistry.register(new Rule(
-  'unit:action:buildRoad',
-  hasEnoughMovesLeft,
-  new Criterion((unit) => unit instanceof Worker),
-  new Criterion((unit, to, from) => Mine.availableOn(from.terrain)),
-  new Criterion((unit, to) => unit.tile === to),
-  // TODO: doing this a lot already, need to make improvements a value object with a helper method
-  new Criterion((unit, to, from) => ! from.improvements.some((improvement) => improvement instanceof Road)),
-  new Effect((unit, to, from = unit.tile) => new BuildRoad(unit, to, from))
-));
+  )],
+  [Mine, BuildMine],
+  [Road, BuildRoad],
+]
+  .forEach(([Improvement, Action, ...additionalCriteria]) => RulesRegistry.register(new Rule(
+    `unit:action:${Action.name.replace(/^./, (char) => char.toLowerCase())}`,
+    hasEnoughMovesLeft,
+    new Criterion((unit) => unit instanceof Worker),
+    new Criterion((unit) => RulesRegistry.get('tile:improvement:available')
+      .filter((rule) => rule.validate(Improvement, unit.tile))
+      .every((rule) => rule.process(Improvement, unit.tile))
+    ),
+    new Criterion((unit, to) => unit.tile === to),
+    // TODO: doing this a lot already, need to make improvements a value object with a helper method
+    new Criterion((unit) => ! unit.tile.improvements.some((improvement) => improvement instanceof Improvement)),
+    new Effect((unit, to, from = unit.tile) => new Action(unit, to, from)),
+    ...additionalCriteria
+  )))
+;
 
 RulesRegistry.register(new Rule(
   'unit:action:captureCity',
