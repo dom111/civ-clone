@@ -9,7 +9,8 @@
     "core-unit",
     "core-city-improvement",
     "base-player-government",
-    "base-currency"
+    "base-currency",
+    "core-tile-improvements"
   ],
   "components": [
     {

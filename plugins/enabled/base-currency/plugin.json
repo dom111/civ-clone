@@ -36,6 +36,10 @@
     {
       "type": "script",
       "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
     }
   ]
 }

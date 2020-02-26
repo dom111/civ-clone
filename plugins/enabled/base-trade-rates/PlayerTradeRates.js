@@ -6,10 +6,6 @@ export class PlayerTradeRates {
   constructor(player, ...rates) {
     this.#player = player;
     this.#rates = rates;
-
-    if (rates.reduce((t,v)=>t+v.value(),0) === 0) {
-      throw new Error(rates);
-    }
   }
 
   all() {

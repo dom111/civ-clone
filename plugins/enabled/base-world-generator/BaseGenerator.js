@@ -1,7 +1,7 @@
 import {Land, Water} from '../core-terrain/Types.js';
+import AvailableTerrainFeatureRegistry from '../core-terrain-features/AvailableTerrainFeatureRegistry.js';
 import {Generator as BaseGenerator} from '../core-world-generator/Generator.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
-import TerrainFeatureRegistry from '../core-terrain-features/TerrainFeatureRegistry.js';
 import TerrainRegistry from '../core-terrain/TerrainRegistry.js';
 
 export class IslandsGenerator extends BaseGenerator {
@@ -205,7 +205,7 @@ export class IslandsGenerator extends BaseGenerator {
       ))
     ;
 
-    TerrainFeatureRegistry.entries()
+    AvailableTerrainFeatureRegistry.entries()
       .forEach((TerrainFeature) => TerrainRegistry.entries()
         .forEach((Terrain) => this.#map
           .filter((terrain) => terrain instanceof Terrain)

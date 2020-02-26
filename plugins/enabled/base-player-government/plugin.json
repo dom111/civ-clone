@@ -5,13 +5,14 @@
     "base-governments",
     "base-terrain",
     "base-terrain-features",
-    "base-terrain-improvements",
     "base-terrain-yields",
     "core-player",
     "core-registry",
     "core-rules",
     "core-unit",
-    "base-unit"
+    "base-unit",
+    "base-tile-improvements",
+    "core-tile-improvements"
   ],
   "components": [
     {

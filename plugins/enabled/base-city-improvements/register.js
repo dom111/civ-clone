@@ -7,7 +7,7 @@ import {
   Library,
   Palace,
   Temple,
-} from './Improvements.js';
+} from './CityImprovements.js';
 import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
 
 [

@@ -1,13 +1,14 @@
 import {Coal, Fish, Game, Horse, Oasis, Oil} from '../../../base-terrain-features/TerrainFeatures.js';
 import {Food, Production} from '../../../base-terrain-yields/Yields.js';
 import {Grassland, Hills, Plains, River, Tundra} from '../../../base-terrain/Terrains.js';
-import {Irrigation, Mine} from '../../../base-terrain-improvements/Improvements.js';
+import {Irrigation, Mine} from '../../../base-tile-improvements/TileImprovements.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {Monarchy} from '../../../base-governments/Governments/Monarchy.js';
 import PlayerGovernmentRegistry from '../../PlayerGovernmentRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 
 [
   [Production, Coal, 1, Monarchy],
@@ -69,7 +70,9 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
       `tile:yield:${[Yield.name, Terrain.name, Improvement.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
       new Criterion((tileYield, tile) => tile.terrain instanceof Terrain),
-      new Criterion((tileYield, tile) => tile.improvements.some((improvement) => improvement instanceof Improvement)),
+      new Criterion((tileYield, tile) => TileImprovementRegistry.getBy('tile', tile)
+        .some((improvement) => improvement instanceof Improvement)
+      ),
       new Criterion((tileYield, tile, player) => {
         const [playerGovernment] = PlayerGovernmentRegistry.getBy('player', player);
 

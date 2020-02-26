@@ -1,4 +1,4 @@
-import {Aqueduct, Granary} from '../../Improvements.js';
+import {Aqueduct, Granary} from '../../CityImprovements.js';
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';

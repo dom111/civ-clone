@@ -4,7 +4,13 @@
   "dependencies": [
     "core-city",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "base-governments",
+    "base-luxuries",
+    "base-player-government",
+    "base-terrain-yields",
+    "core-unit",
+    "base-terrain-yield-trade"
   ],
   "components": [
     {
@@ -17,11 +23,27 @@
     },
     {
       "type": "script",
-      "file": "init.js"
+      "file": "Yields.js"
     },
     {
       "type": "script",
-      "file": "Yields.js"
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/celebrate-leader.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/civil-disorder.js"
     }
   ]
 }

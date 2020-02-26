@@ -1,4 +1,4 @@
-// import {Barracks} from '../base-city-improvements/Improvements.js';
+// import {Barracks} from '../base-city-improvements/CityImprovements.js';
 import Criteria from '../../../core-rules/Criteria.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';

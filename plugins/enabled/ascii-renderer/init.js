@@ -18,7 +18,7 @@ const renderMap = () => {
   if (showMap && (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1))) {
     const lookup = {
       American: '\u001b[38;5;17;48;5;231m',
-      Aztec: '\u001b[38;5;202;48;5;70m',
+      Aztec: '\u001b[38;5;227;48;5;70m',
       Babylonian: '\u001b[38;5;233;48;5;47m',
       English: '\u001b[38;5;88;48;5;255m',
       French: '\u001b[38;5;255;48;5;27m',
@@ -29,7 +29,7 @@ const renderMap = () => {
       Polish: '\u001b[38;5;16;48;5;160m',
       Roman: '\u001b[38;5;255;48;5;53m',
       Russian: '\u001b[38;5;0;48;5;214m',
-      Spanish: '\u001b[38;5;208;48;5;167m',
+      Spanish: '\u001b[38;5;227;48;5;167m',
 
       Arctic: '\u001b[38;5;250;48;5;254m',
       Desert: '\u001b[38;5;248;48;5;227m',

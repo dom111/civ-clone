@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "dependencies": [
     "base-trade-rates",
-    "core-yields",
-    "base-city-happiness",
-    "core-rules"
+    "core-yields"
   ],
   "components": [
     {
@@ -27,10 +25,6 @@
     {
       "type": "script",
       "file": "Yields.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/City/happiness.js"
     }
   ]
 }

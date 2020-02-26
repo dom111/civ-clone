@@ -232,7 +232,7 @@ const BaseRenderer = class BaseRenderer {
             tiles.irrigation = [];
           }
 
-          if (tile.improvements.includes('irrigation')) {
+          if (TileImprovementRegistry.getBy('tile', tile).includes('irrigation')) {
             tiles.irrigation.push({
               images: [renderer._getPreloadedImage('assets/improvements/irrigation.gif')],
               height: tile.terrain.size,
@@ -348,7 +348,7 @@ const BaseRenderer = class BaseRenderer {
             tiles.otherImprovements = [];
           }
 
-          const otherImprovements = tile.improvements.filter((improvement) => improvement !== 'irrigation');
+          const otherImprovements = TileImprovementRegistry.getBy('tile', tile).filter((improvement) => improvement !== 'irrigation');
 
           if (otherImprovements.length) {
             tiles.otherImprovements.push({

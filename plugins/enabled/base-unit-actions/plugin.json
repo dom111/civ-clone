@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "dependencies": [
     "base-terrain",
-    "base-terrain-improvements",
     "base-unit",
     "base-unit-improvements",
     "core-city",
     "core-rules",
     "core-terrain",
     "core-unit",
-    "core-unit-actions"
+    "core-unit-actions",
+    "base-tile-improvements",
+    "core-tile-improvements"
   ],
   "components": [
     {
@@ -67,7 +68,7 @@
     },
     {
       "type": "script",
-      "file": "Rules/rules.js"
+      "file": "Rules/Unit/action.js"
     }
   ]
 }

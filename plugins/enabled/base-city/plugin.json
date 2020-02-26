@@ -3,11 +3,12 @@
   "title": "Base City",
   "version": "0.1.0",
   "dependencies": [
-    "base-terrain-improvements",
     "base-terrain-yields",
     "core-city",
     "core-rules",
-    "core-turn-based-game"
+    "core-turn-based-game",
+    "base-tile-improvements",
+    "core-tile-improvements"
   ],
   "components": [
     {
@@ -16,19 +17,19 @@
     },
     {
       "type": "script",
-      "file": "Events/City/created.js"
-    },
-    {
-      "type": "script",
       "file": "Events/City/shrink.js"
     },
     {
       "type": "script",
-      "file": "Events/City/destroyed.js"
+      "file": "Rules/City/cost.js"
     },
     {
       "type": "script",
-      "file": "Rules/City/cost.js"
+      "file": "Rules/City/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/destroyed.js"
     }
   ]
 }

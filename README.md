@@ -19,19 +19,22 @@ me check the current state of the rules and mechanics.
 
 The world generation is pretty rudimentary, but should be very easy to replace with something else in the future.
 
-In `base-player/init.js` there's currently a crude ASCII map output that shows the state of play every 50 turns so you
+In the `ascii-renderer` plugin there's currently a crude ASCII map output that shows the state of play every turn so you
 can observe progress.
-
-## Set up
-
-```sh
-yarn install
-```
 
 ## Running
 
 ```sh
 yarn start
+#  or:
+# yarn start:fit
+#  will fill the available terminal space
+# --renderTurns=n
+#  will update the renderer every x turns, setting to 0 disables the renderer and produces text based output instead
+# --reportTurns=n 
+#  will print out a status report of all civilizations in game
+# --players=n
+#  will add n players to the game
 ```
 
 ## Core Concepts
@@ -45,8 +48,7 @@ Plugins are executed in a separate environment to help segregate external script
 without your say, but this system could do with a bit more work. Currently the `Engine` instance is shared with the
 plugins, but it might be better to just expose a dummy object that only provides the event system.
 
-The plugin resolution allows for simple dependencies but there are some issues that need to be ironed out (cyclic
-dependencies, failed initialisation, etc).
+The plugin resolution allows for simple dependencies and most major bugs have been worked out.
 
 ### Rules
 
@@ -57,10 +59,18 @@ the game versions in the Civilization series without too much work.
 
 ## TODO
 
-Loads! See [`TODO.md`](./TODO.md) for the bigger ideas that are outstanding as well as looking for `// TODO` in the
+Loads! See [`TODO`](./TODO) for the bigger ideas that are outstanding as well as looking for `// TODO` in the
 codebase.
 
 ## Contributing
 
+Please run:
+
+```sh
+yarn install # or npm install
+```
+
+to add the dev dependencies to help make your life easier.
+
 The contribute to the project, fork the repo, create a branch and make your changes. Once you are happy with them,
-ensure that `yarn lint # or npm run lint` returns successfully and open a PR!
+ensure that `yarn lint # or npm run lint` and `yarn test # or npm run test` return successfully and open a PR!

@@ -6,7 +6,7 @@ import {
   Library,
   Marketplace,
   Temple,
-} from '../../../base-city-improvements/Improvements.js';
+} from '../../../base-city-improvements/CityImprovements.js';
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';

@@ -8,7 +8,7 @@
   "components": [
     {
       "type": "script",
-      "file": "Improvement.js"
+      "file": "CityImprovement.js"
     },
     {
       "type": "script",

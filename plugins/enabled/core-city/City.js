@@ -10,7 +10,6 @@ export class City {
   building = false;
   destroyed = false;
   foodStorage = 0;
-  improvements = [];
   name;
   player;
   size = 1;
@@ -29,7 +28,12 @@ export class City {
 
     this.tiles = this.tile.getSurroundingArea();
 
-    engine.emit('city:created', this, tile);
+    RulesRegistry.get('city:created')
+      .filter((rule) => rule.validate(this))
+      .forEach((rule) => rule.process(this))
+    ;
+
+    engine.emit('city:created', this);
 
     // setup
     this.assignUnassignedWorkers();
@@ -68,7 +72,7 @@ export class City {
 
   // TODO: just pass this through to the Tileset
   resource(type) {
-    return this.tilesWorked.map((tile) => tile.resource(this.player, type))
+    return this.tilesWorked.map((tile) => tile.resource(type, this.player))
       .reduce((total, value) => total + value, 0)
     ;
   }
@@ -121,13 +125,23 @@ export class City {
     engine.emit('city:build', this, item);
   }
 
+  destroy() {
+    RulesRegistry.get('city:destroyed')
+      .filter((rule) => rule.validate(this))
+      .forEach((rule) => rule.process(this))
+    ;
+
+    engine.emit('city:destroyed');
+  }
+
   // TODO: separate this from the core implementation
   yields() {
     const yields = this.tilesWorked
       .yields(this.player)
     ;
 
-    yields.forEach((cityYield) => {
+    // Do for...of so that as yields are added, they too are processed.
+    for (const cityYield of yields) {
       RulesRegistry.get('city:yield')
         .filter((rule) => rule.validate(cityYield, this, yields))
         .forEach((rule) => rule.process(cityYield, this, yields))
@@ -137,7 +151,7 @@ export class City {
         .filter((rule) => rule.validate(cityYield, this, yields))
         .forEach((rule) => rule.process(cityYield, this, yields))
       ;
-    });
+    }
 
     return yields;
   }

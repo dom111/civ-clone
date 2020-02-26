@@ -11,7 +11,7 @@
     },
     {
       "type": "script",
-      "file": "TerrainFeatureRegistry.js"
+      "file": "AvailableTerrainFeatureRegistry.js"
     }
   ]
 }

@@ -1,0 +1,56 @@
+{
+  "name": "base-tile-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain",
+    "base-terrain-yields",
+    "core-rules",
+    "core-tile-improvements"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-pillaged.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-built.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/improvement.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements/Railroad.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements/Mine.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements/Irrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements/Road.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements/Pollution.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovements.js"
+    }
+  ]
+}

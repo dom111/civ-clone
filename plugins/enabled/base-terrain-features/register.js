@@ -10,7 +10,7 @@ import {
   Seal,
   Shield,
 } from './TerrainFeatures.js';
-import TerrainFeatureRegistry from '../core-terrain-features/TerrainFeatureRegistry.js';
+import AvailableTerrainFeatureRegistry from '../core-terrain-features/AvailableTerrainFeatureRegistry.js';
 
 [
   Coal,
@@ -24,5 +24,5 @@ import TerrainFeatureRegistry from '../core-terrain-features/TerrainFeatureRegis
   Seal,
   Shield,
 ]
-  .forEach((TerrainFeature) => TerrainFeatureRegistry.register(TerrainFeature))
+  .forEach((TerrainFeature) => AvailableTerrainFeatureRegistry.register(TerrainFeature))
 ;

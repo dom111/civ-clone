@@ -4,7 +4,6 @@ const glob = require('glob');
 global.engine = {
   emit: () => {},
   on: () => {},
-  options: () => {},
 };
 
 glob('./**/tests/*.test.js', {}, async (error, matches) => {

@@ -1,5 +1,6 @@
 import Action from '../../core-unit-actions/Action.js';
 import CityRegistry from '../../core-city/CityRegistry.js';
+import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 export class Attack extends Action {
@@ -16,7 +17,7 @@ export class Attack extends Action {
         CityRegistry.getBy('tile', tile)
           .length ||
         // TODO: unit tile improvement registry
-        tile.improvements.includes('fortress')
+        TileImprovementRegistry.getBy('tile', tile).includes('fortress')
       ) {
         defender.destroy(this.unit.player);
       }

@@ -3,7 +3,7 @@ import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrai
 import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
 import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
-import {Irrigation, Mine, Road} from '../base-terrain-improvements/Improvements.js';
+import {Irrigation, Mine, Road} from '../base-tile-improvements/TileImprovements.js';
 import {Land, Water} from '../core-terrain/Types.js';
 import {Move, NoOrders} from '../base-unit-actions/Actions.js';
 import {Settlers, Worker} from '../base-unit/Units.js';
@@ -13,11 +13,12 @@ import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/Improvements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
-import {Palace} from '../base-city-improvements/Improvements.js';
+import {Palace} from '../base-city-improvements/CityImprovements.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-player-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-player-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
+import TileImprovementRegistry from '../core-tile-improvements/TileImprovementRegistry.js';
 import {Trade} from '../base-terrain-yield-trade/Yields.js';
 import Unit from '../core-unit/Unit.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
@@ -52,7 +53,7 @@ export class SimpleAIPlayer extends AIPlayer {
   #shouldIrrigate = (tile) => {
     return [Desert, Plains, Grassland, River].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
-      ! tile.improvements
+      ! TileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Irrigation) &&
       tile.getSurroundingArea()
         .some((tile) => CityRegistry.getBy('tile', tile)
@@ -62,7 +63,7 @@ export class SimpleAIPlayer extends AIPlayer {
         .some((tile) => tile.terrain instanceof River ||
           tile.isCoast() ||
           (
-            tile.improvements
+            TileImprovementRegistry.getBy('tile', tile)
               .some((improvement) => improvement instanceof Irrigation) &&
             ! CityRegistry.getBy('tile', tile)
               .length
@@ -73,7 +74,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
   #shouldMine = (tile) => {
     return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
-      ! tile.improvements
+      ! TileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Mine) &&
       tile.getSurroundingArea()
         .some((tile) => CityRegistry.getBy('tile', tile)
@@ -83,7 +84,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldRoad = (tile) => {
-    return ! tile.improvements
+    return ! TileImprovementRegistry.getBy('tile', tile)
       .some((improvement) => improvement instanceof Road) &&
       tile.getSurroundingArea()
         .some((tile) => CityRegistry.getBy('tile', tile)
@@ -103,7 +104,19 @@ export class SimpleAIPlayer extends AIPlayer {
   #undefendedCities = [];
 
   moveUnit(unit) {
+    let loopCheck = 0;
+
     while (unit.active && unit.movesLeft > .1) {
+      if (loopCheck++ > 1e3) {
+        console.log('');
+        console.log(' !!ERROR!!');
+        unit.action(new NoOrders(unit));
+        console.log(' !!ERROR!!');
+        console.log('');
+
+        return;
+      }
+
       const currentTile = unit.tile,
         scoreMove = (tile) => {
           const actions = RulesRegistry.get('unit:action')
@@ -363,8 +376,11 @@ export class SimpleAIPlayer extends AIPlayer {
         while (this.hasActions()) {
           if (loopCheck++ > 1e3) {
             // TODO: raise warning - notification?
-            // reject(new Error(`SimpleAIPlayer: Couldn't pick an action to do.`));
-            resolve();
+            console.log('');
+            console.log('');
+            console.log(this.getAction());
+            reject(new Error('SimpleAIPlayer: Couldn\'t pick an action to do.'));
+            // resolve();
 
             break;
           }

@@ -76,28 +76,9 @@ export class Unit {
     action.perform();
   }
 
-  // pillage() {
-  //   // TODO: investigate using promises here instead...
-  //   this.delayedAction({
-  //     status: 'pillaging',
-  //     action: () => {
-  //       engine.emit('tile:improvement-pillaged', this.tile, [...this.tile.improvements].pop());
-  //       engine.emit('unit:activate', this);
-  //     },
-  //     turns: 1,
-  //   });
-  // }
-
   get player() {
     return this.#player;
   }
-
-  // sleep() {
-  //   engine.emit('unit:action', this, 'sleep');
-  //   this.active = false;
-  //   this.busy = Infinity;
-  //   this.action = 'sleep';
-  // }
 
   get city() {
     return this.#city;

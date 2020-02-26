@@ -31,47 +31,47 @@
     },
     {
       "type": "script",
-      "file": "Improvements.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Temple.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Library.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Granary.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Barracks.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Marketplace.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Courthouse.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/CityWalls.js"
-    },
-    {
-      "type": "script",
-      "file": "Improvements/Palace.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/City/created.js"
     },
     {
       "type": "script",
-      "file": "Improvements/Aqueduct.js"
+      "file": "CityImprovements.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Temple.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Library.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Granary.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Aqueduct.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Barracks.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Marketplace.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Courthouse.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/CityWalls.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Palace.js"
     }
   ]
 }

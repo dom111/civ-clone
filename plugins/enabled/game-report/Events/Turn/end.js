@@ -4,6 +4,7 @@ import PlayerGovernmentRegistry from '../../../base-player-government/PlayerGove
 import PlayerRegistry from '../../../base-player/PlayerRegistry.js';
 import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
+import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Time from '../../../core-turn-based-game/Time.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
@@ -47,8 +48,8 @@ ${
         ` (${tile.terrain.features.map((feature) => feature.constructor.name).join(', ')})` :
         ''
     }${
-      tile.improvements.length ?
-        ` (${tile.improvements.map((improvement) => improvement.constructor.name).join(', ')})` :
+      TileImprovementRegistry.getBy('tile', tile).length ?
+        ` (${TileImprovementRegistry.getBy('tile', tile).map((improvement) => improvement.constructor.name).join(', ')})` :
         ''
     } - ${
       tile.yields(player)

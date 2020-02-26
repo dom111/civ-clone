@@ -14,7 +14,6 @@ export class Tile {
     this.terrain = terrain;
     this.map = map;
 
-    this.improvements = [];
     this.features = [];
 
     // when generating use this:
@@ -214,20 +213,6 @@ export class Tile {
 
   getSurroundingArea(radius = 2) {
     return Tileset.fromSurrounding(this, radius);
-  }
-
-  movementCost(to) {
-    // TODO: these defined separately, improvement plugins?
-    if (this.improvements.includes('railroad') && to.improvements.includes('railroad')) {
-      // TODO: unless goto...
-      return 0;
-    }
-    else if (this.improvements.includes('road') && to.improvements.includes('road')) {
-      return 1 / 3;
-    }
-    else {
-      return to.terrain.movementCost;
-    }
   }
 }
 

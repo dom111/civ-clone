@@ -4,10 +4,11 @@
   "version": "0.1.0",
   "dependencies": [
     "base-city-improvements",
-    "base-terrain-improvements",
     "core-rules",
     "core-unit",
-    "base-unit-improvements"
+    "base-unit-improvements",
+    "base-tile-improvements",
+    "core-tile-improvements"
   ],
   "components": [
     {

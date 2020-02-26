@@ -5,10 +5,11 @@ import PlayerResearchRegistry from '../../PlayerResearchRegistry.js';
 engine.on('game:start', () => {
   PlayerActionRegistry.register(new PlayerActionProvider((player) => {
     const [research] = PlayerResearchRegistry
-      .filter((playerResearch) => playerResearch.player === player)
+        .filter((playerResearch) => playerResearch.player === player),
+      [availableResearch] = research.availableResearch()
     ;
 
-    if (! research.isResearching()) {
+    if (! research.isResearching() && availableResearch) {
       return [research];
     }
 

@@ -37,14 +37,19 @@
 - [X] Add `Modifier`s to `Yield`s with either a priority field, or a `Queue` of some sort.
 - [X] Add Science and Gold multipliers (Library, Marketplace, etc)
 - [X] Add maintenance costs
-- [ ] Add luxuries trade rate
+- [X] Re-do tile yields to calculate `Gold`/`Science` immediately, rather than via events.
+- [X] Add luxuries trade rate
+- [X] City Happiness.
+- [X] Convert terrain improvements `availableOn` into `Rule`s.
+- [X] Write more tests.
+- [X] Replace `Tile#improvements` with `Registry`.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
-- [ ] Renderer interface.
+- [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency.
+- [ ] Break the engine into it's own `core-engine` repo.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.
-- [ ] City Happiness.
 - [ ] Remote network players.
 - [ ] Even more civilizations.
 - [ ] Difficulties.
@@ -60,16 +65,15 @@
 - [ ] Add wealth.
 - [ ] Add build-queue.
 - [ ] Add Barbarians.
-- [ ] Replace all the `.improvements`, `.features` with some kind of registry value object. Alternatively, consider using the `Registry` pattern, return all entities to be self-contained and augment separately (e.g. `base-city-improvements` could provide a registry of improvements associated to a city)
+- [ ] Replace the rest of the `.improvements`, `.features` with `Registry` pattern
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
 - [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
 - [ ] Add goody huts
-- [ ] Convert terrain improvements `availableOn` into `Rule`s.
 - [ ] Consider building a 'compiler' that can build a static version of the game including all rules that would run better and consider the current state as 'dev' mode.
 - [ ] Add version checking to plugin system.
 - [ ] Add diplomacy
 - [ ] Add leader traits
-- [ ] Add starting technologies
 - [ ] Modify AI to adjust trade rates
-- [ ] Re-do tile yields to calculate `Gold`/`Science` immediately, rather than via events.
+- [ ] Move `buildProgress` and the entire `build` mechanism into a value object instead of a property.
+- [ ] Move `foodStorage` into a value object instead of a property.

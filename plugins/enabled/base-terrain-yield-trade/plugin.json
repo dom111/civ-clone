@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "dependencies": [
     "base-terrain",
-    "base-terrain-improvements",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "base-tile-improvements",
+    "core-tile-improvements"
   ],
   "components": [
     {
@@ -19,11 +20,11 @@
     },
     {
       "type": "script",
-      "file": "Rules/yields.js"
+      "file": "register.js"
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "Rules/Tile/yield.js"
     }
   ]
 }
