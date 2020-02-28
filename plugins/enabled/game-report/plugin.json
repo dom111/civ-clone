@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "dependencies": [
     "base-player",
-    "base-player-science",
     "core-city",
     "core-turn-based-game",
     "core-unit",
     "core-city-improvement",
     "base-player-government",
     "base-currency",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "base-science"
   ],
   "components": [
     {

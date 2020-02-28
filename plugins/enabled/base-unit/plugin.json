@@ -8,7 +8,8 @@
     "core-unit",
     "base-unit-improvements",
     "base-tile-improvements",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "base-terrain"
   ],
   "components": [
     {
@@ -106,6 +107,10 @@
     {
       "type": "script",
       "file": "Units/Musketman.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/destroyed.js"
     }
   ]
 }

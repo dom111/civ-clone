@@ -1,8 +1,8 @@
-import {Science, Tax} from './TradeRates.js';
+import {Research, Tax} from './TradeRates.js';
 import AvailableTradeRateRegistry from './AvailableTradeRateRegistry.js';
 
 [
-  Science,
+  Research,
   Tax,
 ]
   .forEach((TradeRate) => AvailableTradeRateRegistry.register(TradeRate))

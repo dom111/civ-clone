@@ -1,2 +1,2 @@
-export {Science} from './TradeRate/Science.js';
+export {Research} from './TradeRate/Research.js';
 export {Tax} from './TradeRate/Tax.js';

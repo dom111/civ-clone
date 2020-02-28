@@ -3,7 +3,6 @@
   "title": "Core Player",
   "version": "0.1.0",
   "dependencies": [
-    "core-city",
     "core-registry",
     "core-unit",
     "core-world"

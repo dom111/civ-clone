@@ -1,6 +1,7 @@
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import CurrentPlayerRegistry from '../../CurrentPlayerRegistry.js';
 import PlayerRegistry from '../../PlayerRegistry.js';
+import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 engine.on('turn:start', () => {
@@ -9,9 +10,10 @@ engine.on('turn:start', () => {
       // process cities first in case units are created
       CityRegistry.getBy('player', player)
         .forEach((city) => city.yields(player)
-          .forEach((cityYield) => {
-            engine.emit('city:yield', cityYield, city);
-          })
+          .forEach((cityYield) => RulesRegistry.get('city:process-yield')
+            .filter((rule) => rule.validate(cityYield, city))
+            .forEach((rule) => rule.process(cityYield, city))
+          )
         )
       ;
 

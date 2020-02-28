@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "dependencies": [
     "base-city-improvements",
-    "base-player-science",
     "base-science",
     "core-rules",
     "core-city-improvement",

@@ -7,5 +7,5 @@ import {Settlers} from '../../Units/Settlers.js';
 RulesRegistry.register(new Rule(
   'city:building-complete:unit:settlers',
   new Criterion((city, unit) => unit instanceof Settlers),
-  new Effect((city) => city && engine.emit('city:shrink', city))
+  new Effect((city) => city.shrink())
 ));

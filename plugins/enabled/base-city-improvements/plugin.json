@@ -6,7 +6,8 @@
     "base-unit-improvements",
     "core-city",
     "core-city-improvement",
-    "core-rules"
+    "core-rules",
+    "base-currency"
   ],
   "components": [
     {
@@ -72,6 +73,14 @@
     {
       "type": "script",
       "file": "CityImprovements/Palace.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/improvement-created.js"
     }
   ]
 }

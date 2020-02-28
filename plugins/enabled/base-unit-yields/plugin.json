@@ -4,16 +4,17 @@
   "dependencies": [
     "base-unit",
     "core-rules",
-    "core-unit-yields"
+    "core-unit-yields",
+    "core-unit"
   ],
   "components": [
     {
       "type": "script",
-      "file": "Rules/yields.js"
+      "file": "Rules/Unit/yield.js"
     },
     {
       "type": "script",
-      "file": "Events/Unit/created.js"
+      "file": "Rules/Unit/created.js"
     }
   ]
 }

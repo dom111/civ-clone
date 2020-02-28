@@ -1,3 +1,5 @@
+import RulesRegistry from '../core-rules/RulesRegistry.js';
+
 export class CityImprovement {
   #city;
   #player;
@@ -6,7 +8,10 @@ export class CityImprovement {
     this.#player = player;
     this.#city   = city;
 
-    engine.emit('city-improvement:created', this, city);
+    RulesRegistry.get('city:improvement:created')
+      .filter((rule) => rule.validate(this, city))
+      .forEach((rule) => rule.process(this, city))
+    ;
   }
 
   get city() {

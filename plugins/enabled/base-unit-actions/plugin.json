@@ -16,50 +16,6 @@
   "components": [
     {
       "type": "script",
-      "file": "Action/Attack.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/CaptureCity.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/BoardTransport.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/BuildIrrigation.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/BuildMine.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/BuildRoad.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/DelayedAction.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/Fortify.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/FoundCity.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/Move.js"
-    },
-    {
-      "type": "script",
-      "file": "Action/NoOrders.js"
-    },
-    {
-      "type": "script",
       "file": "Actions.js"
     },
     {
@@ -69,6 +25,54 @@
     {
       "type": "script",
       "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildIrrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildRoad.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/CaptureCity.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildMine.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Attack.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Move.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Unload.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/DelayedAction.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/NoOrders.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Fortify.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/FoundCity.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BoardTransport.js"
     }
   ]
 }

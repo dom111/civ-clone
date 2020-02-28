@@ -7,7 +7,7 @@ export class Yield {
 
   constructor(value = 0) {
     if (value instanceof Yield) {
-      this.addYield(value);
+      this.#value = value.value();
 
       return;
     }
@@ -19,7 +19,7 @@ export class Yield {
     this.#cachedTotal = false;
 
     if (value instanceof Yield) {
-      this.addYield(value);
+      this.#value += value.value();
 
       return;
     }
@@ -32,12 +32,6 @@ export class Yield {
     this.#modifiers.add(...modifiers);
   }
 
-  addYield(otherYield) {
-    this.#cachedTotal = false;
-    this.#value += otherYield.value();
-    this.#modifiers.add(...otherYield.#modifiers.modifiers());
-  }
-
   set(value) {
     this.#value = value;
   }
@@ -46,7 +40,7 @@ export class Yield {
     this.#cachedTotal = false;
 
     if (value instanceof Yield) {
-      this.addYield(value);
+      this.#value -= value.value();
 
       return;
     }

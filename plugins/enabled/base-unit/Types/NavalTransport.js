@@ -19,11 +19,6 @@ export class NavalTransport extends NavalUnit {
 
   action(action) {
     super.action(action);
-
-    // TODO: need to make unload an action and deal with this differently, perhaps have a `Transport` action?
-    this.cargo.forEach((unit) => {
-      unit.action(action);
-    });
   }
 
   stow(unit) {

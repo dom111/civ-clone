@@ -1,29 +1,16 @@
-export class PlayerTreasury {
+import Yield from '../core-yields/Yield.js';
+
+export class PlayerTreasury extends Yield {
   #player;
-  #value = 0;
 
   constructor(player) {
-    this.#player = player;
-  }
+    super();
 
-  add(amount) {
-    this.#value += amount;
+    this.#player = player;
   }
 
   get player() {
     return this.#player;
-  }
-
-  remove(amount) {
-    this.#value -= amount;
-  }
-
-  value() {
-    return Math.floor(this.#value);
-  }
-
-  valueOf() {
-    return this.#value;
   }
 }
 

@@ -9,6 +9,10 @@ export class Action {
     this.#unit = unit;
   }
 
+  forUnit(unit) {
+    return new (this.constructor)(unit, this.#to, this.#from);
+  }
+
   get from() {
     return this.#from;
   }

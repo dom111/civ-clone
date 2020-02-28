@@ -41,9 +41,13 @@ export class World {
     return this.#height;
   }
 
-  load() {
-    // TODO
-  }
+  // static load(data) {
+  //   this.#map = data.map((tileData) => Tile.load(tileData));
+  // }
+
+  // save() {
+  //   return this.#map.map((tile) => tile.save())
+  // }
 
   get width() {
     return this.#width;

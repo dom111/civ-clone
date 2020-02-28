@@ -5,7 +5,6 @@
   "dependencies": [
     "base-governments",
     "base-player-government",
-    "base-player-science",
     "base-science",
     "base-terrain",
     "base-terrain-yield-trade",
@@ -22,7 +21,8 @@
     "core-unit-yields",
     "base-terrain-features",
     "base-tile-improvements",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "base-city"
   ],
   "components": [
     {

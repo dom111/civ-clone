@@ -1,1 +1,1 @@
-export {Science} from './Yields/Science.js';
+export {Research} from './Yields/Research.js';

@@ -2,7 +2,6 @@
   "name": "base-governments",
   "version": "0.1.0",
   "dependencies": [
-    "base-player-science",
     "base-science",
     "core-government",
     "core-rules"

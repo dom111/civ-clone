@@ -25,7 +25,7 @@ import Criteria from '../../../core-rules/Criteria.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import OneCriteria from '../../../core-rules/OneCriteria.js';
-import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
+import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
@@ -50,14 +50,14 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
           new Criterion(() => ! RequiredAdvance),
           new Criterion(() => PlayerResearchRegistry
             .getBy('player', city.player)
-            .every((playerResearch) => playerResearch.hasCompleted(RequiredAdvance))
+            .every((playerResearch) => playerResearch.completed(RequiredAdvance))
           )
         ),
         new OneCriteria(
           new Criterion(() => ! ObseletionAdvance),
           new Criterion(() => ! PlayerResearchRegistry
             .getBy('player', city.player)
-            .every((playerResearch) => playerResearch.hasCompleted(ObseletionAdvance))
+            .every((playerResearch) => playerResearch.completed(ObseletionAdvance))
           )
         )
       ))

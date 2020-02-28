@@ -3,7 +3,6 @@
   "title": "Base Currency",
   "version": "0.1.0",
   "dependencies": [
-    "core-city",
     "core-registry",
     "core-rules",
     "core-yields"
@@ -23,15 +22,7 @@
     },
     {
       "type": "script",
-      "file": "Events/Player/yield.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Player/added.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/Player/turn-start.js"
     },
     {
       "type": "script",
@@ -40,6 +31,14 @@
     {
       "type": "script",
       "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/treasury-updated.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
     }
   ]
 }

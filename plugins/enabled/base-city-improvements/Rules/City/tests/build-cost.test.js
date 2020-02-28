@@ -1,6 +1,7 @@
 import '../../../register.js';
 import '../build-cost.js';
 import {Aqueduct, Barracks, CityWalls, Courthouse, Granary, Library, Palace, Temple} from '../../../CityImprovements.js';
+import CityBuild from '../../../../base-city/CityBuild.js';
 import assert from 'assert';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 
@@ -17,11 +18,14 @@ describe('city:build-cost', () => {
   ]
     .forEach(([Improvement, cost]) => {
       it(`should cost ${cost} to build ${Improvement.name}`, () => {
-        const city = setUpCity();
+        const city = setUpCity(),
+          cityBuild = new CityBuild(city)
+        ;
 
-        city.build(Improvement);
+        cityBuild.build(Improvement);
 
-        assert.strictEqual(city.buildCost, cost);
+        assert.strictEqual(cityBuild.building(), Improvement);
+        assert.strictEqual(cityBuild.cost, cost);
       });
     })
   ;

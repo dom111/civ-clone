@@ -6,19 +6,15 @@
     "base-terrain-yields",
     "core-city",
     "core-rules",
-    "core-turn-based-game",
     "base-tile-improvements",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "core-city-improvement",
+    "core-player",
+    "core-registry",
+    "core-unit",
+    "core-yields"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Events/City/grow.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/shrink.js"
-    },
     {
       "type": "script",
       "file": "Rules/City/cost.js"
@@ -30,6 +26,50 @@
     {
       "type": "script",
       "file": "Rules/City/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/BuildProgress.js"
+    },
+    {
+      "type": "script",
+      "file": "register.js"
+    },
+    {
+      "type": "script",
+      "file": "CityBuildRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "CityBuild.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/growth.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/grow.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/shrink.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/captured.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/building-complete.js"
     }
   ]
 }

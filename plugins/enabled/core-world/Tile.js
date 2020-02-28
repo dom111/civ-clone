@@ -52,6 +52,12 @@ export class Tile {
     throw new TypeError(`Tile#get: Expected tile to be a neighbour alias or instance of Tile, got '${typeof tile}'.`);
   }
 
+  getAdjacent() {
+    return ['n', 'w', 's', 'w']
+      .map((direction) => this.getNeighbour(direction))
+    ;
+  }
+
   getNeighbour(direction) {
     if (direction === 'n') {
       return this.map.get(this.x, this.y - 1);
@@ -102,10 +108,8 @@ export class Tile {
     return this.#neighbours;
   }
 
-  getAdjacent() {
-    return ['n', 'w', 's', 'w']
-      .map((direction) => this.getNeighbour(direction))
-    ;
+  getSurroundingArea(radius = 2) {
+    return Tileset.fromSurrounding(this, radius);
   }
 
   distanceFrom(tile) {
@@ -125,10 +129,6 @@ export class Tile {
     ;
 
     return shortestDistance;
-  }
-
-  isOcean() {
-    return this.terrain instanceof Water;
   }
 
   isCoast() {
@@ -153,9 +153,22 @@ export class Tile {
     ;
   }
 
+  isOcean() {
+    return this.terrain instanceof Water;
+  }
+
   isVisible(player) {
     return player.seenTiles.includes(this);
   }
+
+  // static load(data, map) {
+  //   return new this({
+  //     map,
+  //     terrain: Terrain.load(data.terrain),
+  //     x: data.x,
+  //     y: data.y,
+  //   });
+  // }
 
   resource(type, player) {
     const yieldCache = this.getYieldCache(player);
@@ -178,20 +191,14 @@ export class Tile {
     return type;
   }
 
-  yields(
-    player,
-    yields
-  ) {
-    // const yieldCache = this.getYieldCache(player);
-    //
-    // if (yieldCache.size) {
-    //   return [...yieldCache.entries()].map(([Yield, tileYield]) => new Yield(tileYield));
-    // }
-    //
-    return (yields || YieldRegistry.entries())
-      .map((YieldType) => this.resource(new YieldType(), player))
-    ;
-  }
+  // save() {
+  //   return {
+  //     Type: this.constructor.name,
+  //     terrain: this.terrain.save(),
+  //     x: this.x,
+  //     y: this.y,
+  //   };
+  // }
 
   score({player, values = [[Yield, 3]]}) {
     const yields = this.yields(player);
@@ -199,20 +206,25 @@ export class Tile {
     return yields.map((tileYield) => {
       const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),
         [, weight] = value || []
-      ;
+        ;
 
       return tileYield.value() * (weight || 0);
     })
       .reduce((total, value) => total + value, 0) *
       // Ensure we have some of each scored yield
       (values.every(([YieldType, value]) => (value < 1) ||
-        yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0
+          yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0
       )
     ;
   }
 
-  getSurroundingArea(radius = 2) {
-    return Tileset.fromSurrounding(this, radius);
+  yields(
+    player,
+    yields
+  ) {
+    return (yields || YieldRegistry.entries())
+      .map((YieldType) => this.resource(new YieldType(), player))
+    ;
   }
 }
 

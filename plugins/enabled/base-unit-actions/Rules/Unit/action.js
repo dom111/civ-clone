@@ -9,6 +9,7 @@ import {
   FoundCity,
   Move,
   NoOrders,
+  Unload,
 } from '../../Actions.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../../../base-unit/Types.js';
 import {Irrigation, Mine, Road} from '../../../base-tile-improvements/TileImprovements.js';
@@ -47,9 +48,6 @@ RulesRegistry.register(new Rule(
     new Criteria(
       new Criterion((unit) => unit instanceof LandUnit),
       new Criterion((unit, to) => to.terrain instanceof Land),
-      new Criterion((unit, to) => CityRegistry.getBy('tile', to)
-        .every((city) => city.player === unit.player)
-      ),
       new Criterion((unit, to) => UnitRegistry.getBy('tile', to)
         .every((tileUnit) => tileUnit.player === unit.player)
       )
@@ -208,4 +206,12 @@ RulesRegistry.register(new Rule(
   'unit:action:noOrders',
   new Criterion((unit, to) => unit.tile === to),
   new Effect((unit, to, from = unit.tile) => new NoOrders(unit, to, from))
+));
+
+RulesRegistry.register(new Rule(
+  'unit:action:unload',
+  new Criterion((unit) => unit instanceof NavalTransport),
+  new Criterion((unit) => unit.hasCargo()),
+  new Criterion((unit, to) => unit.tile === to),
+  new Effect((unit, to, from = unit.tile) => new Unload(unit, to, from))
 ));

@@ -4,13 +4,11 @@
   "dependencies": [
     "core-rules",
     "core-science",
-    "core-yields"
+    "core-yields",
+    "core-player",
+    "core-registry"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Yields/Science.js"
-    },
     {
       "type": "script",
       "file": "register.js"
@@ -93,14 +91,6 @@
     },
     {
       "type": "script",
-      "file": "Rules/costs.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/research.js"
-    },
-    {
-      "type": "script",
       "file": "Yields.js"
     },
     {
@@ -126,6 +116,38 @@
     {
       "type": "script",
       "file": "Advances/Engineering.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerResearchRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Research.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerResearch.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Game/start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Research/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Research/requirements.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
     }
   ]
 }

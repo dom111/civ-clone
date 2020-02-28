@@ -16,10 +16,6 @@
     },
     {
       "type": "script",
-      "file": "TradeRate/Science.js"
-    },
-    {
-      "type": "script",
       "file": "TradeRate/Tax.js"
     },
     {
@@ -49,6 +45,10 @@
     {
       "type": "script",
       "file": "Events/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRate/Research.js"
     }
   ]
 }

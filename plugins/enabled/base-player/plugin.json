@@ -11,26 +11,12 @@
     "core-registry",
     "core-rules",
     "core-terrain",
-    "core-unit",
-    "base-currency",
-    "base-science"
+    "core-unit"
   ],
   "components": [
     {
       "type": "script",
       "file": "Events/City/yield.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/created.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/captured.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/building-complete.js"
     },
     {
       "type": "script",
@@ -62,10 +48,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Unit/created.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Unit/action.js"
     },
     {
@@ -74,11 +56,15 @@
     },
     {
       "type": "script",
-      "file": "Events/Unit/destroyed.js"
+      "file": "Events/Turn/start.js"
     },
     {
       "type": "script",
-      "file": "Events/Turn/start.js"
+      "file": "Rules/Unit/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/destroyed.js"
     }
   ]
 }

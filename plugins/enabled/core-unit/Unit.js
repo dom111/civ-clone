@@ -25,7 +25,21 @@ export class Unit {
     this.#city   = city;
     this.#tile   = tile;
 
-    engine.emit('unit:created', this);
+    RulesRegistry.get('unit:created')
+      .filter((rule) => rule.validate(this))
+      .forEach((rule) => rule.process(this))
+    ;
+  }
+
+  action(action) {
+    action.perform();
+  }
+
+  actions(to = this.tile) {
+    return RulesRegistry.get('unit:action')
+      .filter((rule) => rule.validate(this, to, this.tile))
+      .map((rule) => rule.process(this, to, this.tile))
+    ;
   }
 
   activate() {
@@ -40,8 +54,15 @@ export class Unit {
     ;
   }
 
+  get city() {
+    return this.#city;
+  }
+
   destroy(player = null) {
-    engine.emit('unit:destroyed', this, player);
+    RulesRegistry.get('unit:created')
+      .filter((rule) => rule.validate(this, player))
+      .forEach((rule) => rule.process(this, player))
+    ;
   }
 
   disband() {
@@ -72,16 +93,8 @@ export class Unit {
     return defence.value();
   }
 
-  action(action) {
-    action.perform();
-  }
-
   get player() {
     return this.#player;
-  }
-
-  get city() {
-    return this.#city;
   }
 
   get tile() {

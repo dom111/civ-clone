@@ -2,7 +2,7 @@ import CityImprovementRegistry from '../../../core-city-improvement/CityImprovem
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import PlayerGovernmentRegistry from '../../../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerRegistry from '../../../base-player/PlayerRegistry.js';
-import PlayerResearchRegistry from '../../../base-player-science/PlayerResearchRegistry.js';
+import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Time from '../../../core-turn-based-game/Time.js';
@@ -29,7 +29,7 @@ Treasury: ${PlayerTreasuryRegistry.getBy('player', player)
     .map((playerTreasury) => playerTreasury.value())}
 Completed research:
 ${PlayerResearchRegistry.getBy('player', player)
-    .map((playerResearch) => playerResearch.completedResearch()
+    .map((playerResearch) => playerResearch.complete()
       .map((advance) => advance.constructor.name)
       .join(', ')
     )

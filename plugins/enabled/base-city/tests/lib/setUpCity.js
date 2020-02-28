@@ -42,8 +42,8 @@ export const setUpCity = (size = 1) => {
     })
   ;
 
-  if (size !== 1) {
-    city.size = size;
+  while (city.size < size) {
+    city.grow();
   }
 
   city.autoAssignWorkers();

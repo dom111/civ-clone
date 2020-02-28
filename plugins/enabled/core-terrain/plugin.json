@@ -2,7 +2,8 @@
   "name": "core-terrain",
   "version": "0.1.0",
   "dependencies": [
-    "core-registry"
+    "core-registry",
+    "core-terrain-features"
   ],
   "components": [
     {

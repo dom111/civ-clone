@@ -11,7 +11,7 @@ RulesRegistry.register(new Rule(
     .some((improvement) => improvement instanceof Aqueduct)
   ),
   new Criterion((city) => city.size > 10),
-  new Effect((city) => city.size = 10)
+  new Effect((city) => city.shrink())
 ));
 
 RulesRegistry.register(new Rule(

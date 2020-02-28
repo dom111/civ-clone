@@ -15,7 +15,7 @@
 //     .filter((playerResearch) => playerResearch.player === player)
 //   ;
 //
-//   if (! research.isResearching()) {
+//   if (! research.researching()) {
 //     return [research];
 //   }
 //

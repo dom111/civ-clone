@@ -8,59 +8,59 @@
   "components": [
     {
       "type": "script",
-      "file": "Terrain/Arctic.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Desert.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Forest.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Grassland.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Hills.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Jungle.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Mountains.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Ocean.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Plains.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/River.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Swamp.js"
-    },
-    {
-      "type": "script",
-      "file": "Terrain/Tundra.js"
-    },
-    {
-      "type": "script",
       "file": "register.js"
     },
     {
       "type": "script",
       "file": "Terrains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Arctic.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Mountains.js"
     }
   ]
 }

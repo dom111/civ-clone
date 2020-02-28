@@ -1,3 +1,17 @@
+import {
+  Arctic,
+  Desert,
+  Forest,
+  Grassland,
+  Hills,
+  Jungle,
+  Mountains,
+  Ocean,
+  Plains,
+  River,
+  Swamp,
+  Tundra,
+} from '../../../base-terrain/Terrains.js';
 import {LandUnit, NavalTransport} from '../../Types.js';
 import {Railroad, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import Criterion from '../../../core-rules/Criterion.js';
@@ -6,8 +20,27 @@ import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 
-// movement cost
-RulesRegistry.register(new Rule('unit:movementCost:default', new Effect((unit, to) => to.terrain.movementCost)));
+[
+  [Arctic, 2],
+  [Desert, 1],
+  [Forest, 2],
+  [Grassland, 1],
+  [Hills, 2],
+  [Jungle, 2],
+  [Mountains, 3],
+  [Ocean, 1],
+  [Plains, 1],
+  [River, 1],
+  [Swamp, 2],
+  [Tundra, 1],
+]
+  .forEach(([Terrain, cost]) => RulesRegistry.register(new Rule(
+    `unit:movementCost:${[Terrain.name.toLowerCase()]}`,
+    new Criterion((unit, to) => to.terrain instanceof Terrain),
+    new Effect(() => cost)
+  )))
+;
+
 RulesRegistry.register(new Rule(
   'unit:movementCost:withRoad',
   new Criterion((unit, to, from) => TileImprovementRegistry.getBy('tile', from || unit.tile)

@@ -2,7 +2,6 @@
   "name": "base-science-units",
   "version": "0.1.0",
   "dependencies": [
-    "base-player-science",
     "core-rules",
     "base-science",
     "base-unit"

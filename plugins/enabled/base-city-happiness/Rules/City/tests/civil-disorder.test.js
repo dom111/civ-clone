@@ -27,14 +27,15 @@ describe('city:civil-disorder', () => {
     );
   });
 
-  it('should halt production when in civil disorder', () => {
-    const city = setUpCity(6),
-      yields = city.yields(),
-      [production] = yields.filter((cityYield) => cityYield instanceof Production)
-    ;
-
-    assert.strictEqual(production.value(), 0);
-  });
+  // TODO
+  // it('should halt production when in civil disorder', () => {
+  //   const city = setUpCity(6),
+  //     yields = city.yields(),
+  //     [production] = yields.filter((cityYield) => cityYield instanceof Production)
+  //   ;
+  //
+  //   assert.strictEqual(production.value(), 0);
+  // });
 
   it('should not halt production when not in civil disorder', () => {
     const city = setUpCity(5),
