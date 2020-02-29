@@ -1,5 +1,6 @@
 import Action from '../../core-unit-actions/Action.js';
 import City from '../../core-city/City.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
 export class FoundCity extends Action {
   perform() {
@@ -11,6 +12,11 @@ export class FoundCity extends Action {
     });
 
     this.unit.destroy();
+
+    RulesRegistry.get('unit:moved')
+      .filter((rule) => rule.validate(this.unit, this))
+      .forEach((rule) => rule.process(this.unit, this))
+    ;
   }
 }
 

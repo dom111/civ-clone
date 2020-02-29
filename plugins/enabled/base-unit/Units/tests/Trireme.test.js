@@ -1,8 +1,9 @@
 import '../../../base-unit/Rules/Unit/movementCost.js';
 import '../../../base-unit-actions/Rules/Unit/action.js';
+import '../../../base-unit-actions/Rules/Unit/moved.js';
 import '../../../base-unit-yields/Rules/Unit/created.js';
 import '../../../base-unit-yields/Rules/Unit/yield.js';
-import {BoardTransport, Move, Unload} from '../../../base-unit-actions/Actions.js';
+import {Disembark, Embark, Move, Unload} from '../../../base-unit-actions/Actions.js';
 import {Grassland, Ocean} from '../../../base-terrain/Terrains.js';
 import {Militia, Trireme} from '../../Units.js';
 import Generator from '../../../core-world-generator/Generator.js';
@@ -78,10 +79,10 @@ describe('Trireme', () => {
       }),
       to = world.get(2, 2),
       [boardTransport] = unit.actions(to)
-        .filter((action) => action instanceof BoardTransport)
+        .filter((action) => action instanceof Embark)
     ;
 
-    assert(boardTransport instanceof BoardTransport);
+    assert(boardTransport instanceof Embark);
 
     unit.action(boardTransport);
 
@@ -104,7 +105,7 @@ describe('Trireme', () => {
       }),
       to = world.get(2, 2),
       [boardTransport] = unit.actions(to)
-        .filter((action) => action instanceof BoardTransport)
+        .filter((action) => action instanceof Embark)
     ;
 
     unit.action(boardTransport);
@@ -133,7 +134,9 @@ describe('Trireme', () => {
 
     transport.action(move3);
 
-    transport.movesLeft = 1;
+    assert.strictEqual(transport.moves.value(), 0);
+
+    transport.moves.add(transport.movement);
 
     const [unload] = transport.actions()
       .filter((action) => action instanceof Unload)
@@ -143,11 +146,11 @@ describe('Trireme', () => {
 
     transport.action(unload);
 
-    const [unitMove] = unit.actions(world.get(6, 6));
+    const [disembark] = unit.actions(world.get(6, 6));
 
-    assert(unitMove instanceof Move);
+    assert(disembark instanceof Disembark);
 
-    unit.action(unitMove);
+    unit.action(disembark);
 
     assert(unit.tile === world.get(6, 6));
   });

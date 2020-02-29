@@ -1,15 +1,20 @@
 import {DelayedAction} from './DelayedAction.js';
-import {Road} from '../../base-tile-improvements/TileImprovements.js';
+import {Plains} from '../../base-terrain/Terrains.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
-import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';
 
-export class BuildRoad extends DelayedAction {
+export class ClearForest extends DelayedAction {
   perform() {
     this.delayedAction({
-      status: 'road',
-      action: () => TileImprovementRegistry.register(new Road(this.unit.tile)),
+      status: 'clearing',
+      action: () => {
+        const terrain = new Plains();
+
+        terrain.features.push(...this.from.features);
+
+        this.from.terrain = terrain;
+      },
       // TODO: calculate moves needed
-      turns: 1,
+      turns: 2,
     });
 
     RulesRegistry.get('unit:moved')
@@ -19,4 +24,4 @@ export class BuildRoad extends DelayedAction {
   }
 }
 
-export default BuildRoad;
+export default ClearForest;

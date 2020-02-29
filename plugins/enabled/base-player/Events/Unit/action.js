@@ -1,5 +1,5 @@
 engine.on('unit:action', (unit) => {
-  if ((unit.movesLeft <= .1)) {
+  if ((unit.moves.value() <= .1)) {
     unit.player.activeUnit = false;
     unit.active = false;
 

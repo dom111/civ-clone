@@ -1,5 +1,6 @@
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import CurrentPlayerRegistry from '../../CurrentPlayerRegistry.js';
+import {Moves} from '../../../core-unit/Yields.js';
 import PlayerRegistry from '../../PlayerRegistry.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
@@ -31,7 +32,7 @@ engine.on('turn:start', () => {
             }
           }
 
-          unit.movesLeft = unit.movement;
+          unit.moves = new Moves(unit.movement);
 
           if (! unit.busy) {
             unit.busy = false;

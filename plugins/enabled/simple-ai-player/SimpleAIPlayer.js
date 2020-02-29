@@ -1,4 +1,4 @@
-import {Attack, Defence} from '../core-unit-yields/Yields.js';
+import {Attack, Defence} from '../core-unit/Yields.js';
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-terrain-yields/Yields.js';
 import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
@@ -107,14 +107,8 @@ export class SimpleAIPlayer extends AIPlayer {
   moveUnit(unit) {
     let loopCheck = 0;
 
-    while (unit.active && unit.movesLeft >= .1) {
+    while (unit.active && unit.moves.value() >= .1) {
       if (loopCheck++ > 1e3) {
-        console.log('');
-        console.log(' !!ERROR!!');
-        unit.action(new NoOrders(unit));
-        console.log(' !!ERROR!!');
-        console.log('');
-
         return;
       }
 

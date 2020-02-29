@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "dependencies": [
     "core-registry",
-    "core-rules"
+    "core-rules",
+    "core-yields"
   ],
   "components": [
     {
@@ -18,6 +19,30 @@
     {
       "type": "script",
       "file": "UnitRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Defence.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Movement.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Attack.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Visibility.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Moves.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
     }
   ]
 }

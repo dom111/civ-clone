@@ -9,7 +9,7 @@ export class DelayedAction extends Action {
     this.unit.actionOnComplete = action;
     this.unit.active = false;
     this.unit.busy = turns;
-    this.unit.movesLeft = 0;
+    this.unit.moves.subtract(this.unit.moves);
     this.unit.status = status;
   }
 }

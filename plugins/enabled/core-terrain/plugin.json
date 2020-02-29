@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "dependencies": [
     "core-registry",
-    "core-terrain-features"
+    "core-terrain-features",
+    "core-rules"
   ],
   "components": [
     {

@@ -1,5 +1,6 @@
 import {DelayedAction} from './DelayedAction.js';
 import {Fortified} from '../../base-unit-improvements/Improvements.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
 export class Fortify extends DelayedAction {
   perform() {
@@ -12,6 +13,11 @@ export class Fortify extends DelayedAction {
       },
       turns: 1,
     });
+
+    RulesRegistry.get('unit:moved')
+      .filter((rule) => rule.validate(this.unit, this))
+      .forEach((rule) => rule.process(this.unit, this))
+    ;
   }
 }
 

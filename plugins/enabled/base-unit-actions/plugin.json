@@ -11,7 +11,8 @@
     "core-unit",
     "core-unit-actions",
     "base-tile-improvements",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "base-terrain-features"
   ],
   "components": [
     {
@@ -72,7 +73,31 @@
     },
     {
       "type": "script",
-      "file": "Actions/BoardTransport.js"
+      "file": "Rules/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/PlantForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearJungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearSwamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Disembark.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Embark.js"
     }
   ]
 }

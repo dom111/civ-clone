@@ -1,10 +1,8 @@
 import {Land, Water} from '../core-terrain/Types.js';
-import AvailableTerrainFeatureRegistry from '../core-terrain-features/AvailableTerrainFeatureRegistry.js';
-import {Generator as BaseGenerator} from '../core-world-generator/Generator.js';
+import {Generator} from '../core-world-generator/Generator.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
-import TerrainRegistry from '../core-terrain/TerrainRegistry.js';
 
-export class IslandsGenerator extends BaseGenerator {
+export class BaseGenerator extends Generator {
   #chanceToBecomeLand;
   #clusterChance;
   #coverage;
@@ -204,20 +202,7 @@ export class IslandsGenerator extends BaseGenerator {
         ))
       ))
     ;
-
-    AvailableTerrainFeatureRegistry.entries()
-      .forEach((TerrainFeature) => TerrainRegistry.entries()
-        .forEach((Terrain) => this.#map
-          .filter((terrain) => terrain instanceof Terrain)
-          .forEach((terrain) => RulesRegistry.get('terrain:feature')
-            .filter((rule) => rule.validate(TerrainFeature, Terrain))
-            .filter((rule) => rule.process())
-            .forEach(() => terrain.features.push(new TerrainFeature()))
-          )
-        )
-      )
-    ;
   }
 }
 
-export default IslandsGenerator;
+export default BaseGenerator;

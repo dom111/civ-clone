@@ -1,13 +1,12 @@
 import {DelayedAction} from './DelayedAction.js';
-import {Irrigation} from '../../base-tile-improvements/TileImprovements.js';
+import {Grassland} from '../../base-terrain/Terrains.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
-import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';
 
-export class BuildIrrigation extends DelayedAction {
+export class ClearJungle extends DelayedAction {
   perform() {
     this.delayedAction({
-      status: 'irrigating',
-      action: () => TileImprovementRegistry.register(new Irrigation(this.unit.tile)),
+      status: 'clearing',
+      action: () => this.from.terrain = new Grassland(),
       // TODO: calculate moves needed
       turns: 3,
     });
@@ -19,4 +18,4 @@ export class BuildIrrigation extends DelayedAction {
   }
 }
 
-export default BuildIrrigation;
+export default ClearJungle;

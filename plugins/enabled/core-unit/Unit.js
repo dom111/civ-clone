@@ -1,3 +1,4 @@
+import {Attack, Defence, Movement, Visibility} from './Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class Unit {
@@ -5,7 +6,6 @@ export class Unit {
   #player;
   #tile;
 
-  movesLeft = 0;
   waiting = false;
 
   // TODO: This should be a valueObject collection with ValueObjects for each bonus
@@ -21,8 +21,8 @@ export class Unit {
       throw new TypeError(`Unit#constructor: tile is '${tile}'.`);
     }
 
-    this.#player = player;
     this.#city   = city;
+    this.#player = player;
     this.#tile   = tile;
 
     RulesRegistry.get('unit:created')
@@ -54,12 +54,34 @@ export class Unit {
     ;
   }
 
+  get attack() {
+    const unitYield = new Attack();
+
+    RulesRegistry.get('unit:yield')
+      .filter((rule) => rule.validate(this, unitYield))
+      .forEach((rule) => rule.process(this, unitYield))
+    ;
+
+    return unitYield;
+  }
+
   get city() {
     return this.#city;
   }
 
+  get defence() {
+    const unitYield = new Defence();
+
+    RulesRegistry.get('unit:yield')
+      .filter((rule) => rule.validate(this, unitYield))
+      .forEach((rule) => rule.process(this, unitYield))
+    ;
+
+    return unitYield;
+  }
+
   destroy(player = null) {
-    RulesRegistry.get('unit:created')
+    RulesRegistry.get('unit:destroyed')
       .filter((rule) => rule.validate(this, player))
       .forEach((rule) => rule.process(this, player))
     ;
@@ -93,6 +115,17 @@ export class Unit {
     return defence.value();
   }
 
+  get movement() {
+    const unitYield = new Movement();
+
+    RulesRegistry.get('unit:yield')
+      .filter((rule) => rule.validate(this, unitYield))
+      .forEach((rule) => rule.process(this, unitYield))
+    ;
+
+    return unitYield;
+  }
+
   get player() {
     return this.#player;
   }
@@ -107,6 +140,17 @@ export class Unit {
 
   wait() {
     this.waiting = true;
+  }
+
+  get visibility() {
+    const unitYield = new Visibility();
+
+    RulesRegistry.get('unit:yield')
+      .filter((rule) => rule.validate(this, unitYield))
+      .forEach((rule) => rule.process(this, unitYield))
+    ;
+
+    return unitYield;
   }
 }
 

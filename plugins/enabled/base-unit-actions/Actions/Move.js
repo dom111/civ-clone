@@ -1,5 +1,4 @@
 import {Action} from '../../core-unit-actions/Action.js';
-import {NavalTransport} from '../../base-unit/Types.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
 export class Move extends Action {
@@ -11,28 +10,24 @@ export class Move extends Action {
     ;
 
     // TODO: this doesn't feel like it should be hard-coded...
-    if ((movementCost > this.unit.movesLeft) && ((Math.random() * 1.5) < (this.unit.movesLeft / movementCost))) {
-      this.unit.movesLeft = 0;
+    if ((movementCost > this.unit.moves.value()) && ((Math.random() * 1.5) < (this.unit.moves.value() / movementCost))) {
+      this.unit.moves.subtract(this.unit.moves);
 
       return;
     }
 
-    this.unit.movesLeft -= movementCost;
+    this.unit.moves.subtract(movementCost);
     this.unit.tile = this.to;
 
     // TODO: this probably shouldn't be hard-coded either
-    if (this.unit.movesLeft < .1) {
-      this.unit.movesLeft = 0;
+    if (this.unit.moves.value() < .1) {
+      this.unit.moves.subtract(this.unit.moves);
     }
 
-    engine.emit('unit:moved', this.unit, this.from, this.to);
-
-    // TODO: maybe do this with Rules?
-    if (this.unit instanceof NavalTransport && this.unit.hasCargo()) {
-      this.unit.cargo.forEach((unit) => {
-        unit.action(this.forUnit(unit));
-      });
-    }
+    RulesRegistry.get('unit:moved')
+      .filter((rule) => rule.validate(this.unit, this))
+      .forEach((rule) => rule.process(this.unit, this))
+    ;
 
     return true;
   }

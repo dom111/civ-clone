@@ -1,6 +1,6 @@
-import {BoardTransport, Move} from './Actions.js';
+import {Embark, Move} from './Actions.js';
 import UnitActionRegistry from '../core-unit-actions/UnitActionRegistry.js';
 
-[BoardTransport, Move]
+[Embark, Move]
   .forEach((Action) => UnitActionRegistry.register(Action))
 ;

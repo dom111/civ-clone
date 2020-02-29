@@ -17,10 +17,6 @@ export class NavalTransport extends NavalUnit {
     return this.cargo.length > 0;
   }
 
-  action(action) {
-    super.action(action);
-  }
-
   stow(unit) {
     if (! this.hasCapacity() || ! this.canStow(unit)) {
       return false;

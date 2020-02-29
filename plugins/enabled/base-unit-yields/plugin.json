@@ -4,7 +4,6 @@
   "dependencies": [
     "base-unit",
     "core-rules",
-    "core-unit-yields",
     "core-unit"
   ],
   "components": [

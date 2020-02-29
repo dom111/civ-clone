@@ -8,15 +8,17 @@ import TileImprovementRegistry from '../../../core-tile-improvements/TileImprove
 import Tileset from '../../../core-world/Tileset.js';
 import World from '../../../core-world/World.js';
 
-export const setUpCity = (size = 1) => {
-  const generator = new FillGenerator({
+export const setUpCity = (size = 1, world) => {
+  if (! world) {
+    const generator = new FillGenerator({
       height: 5,
       width: 5,
-    }),
-    world = new World(generator)
-  ;
+    });
 
-  world.build();
+    world = new World(generator);
+
+    world.build();
+  }
 
   const player = new Player(),
     city = new City({

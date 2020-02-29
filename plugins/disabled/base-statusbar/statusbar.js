@@ -45,7 +45,7 @@ export class Statusbar {
       if (player.activeUnit) {
         const unit = player.activeUnit;
 
-        this.element.querySelector('.unit').innerHTML = `<ul><li>${player.people} ${unit.title}</li><li>${unit.movesLeft} moves remaining</li></ul>`;
+        this.element.querySelector('.unit').innerHTML = `<ul><li>${player.people} ${unit.title}</li><li>${unit.moves.value()} moves remaining</li></ul>`;
       }
       else {
         // console.log('No activeUnit', player);

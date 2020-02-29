@@ -1,4 +1,4 @@
-import {Attack, Defence, Movement, Visibility} from '../../../core-unit-yields/Yields.js';
+import {Attack, Defence, Movement, Visibility} from '../../../core-unit/Yields.js';
 import {
   Catapult,
   Cavalry,
