@@ -1,3 +1,4 @@
+import '../../../../base-player-government/Rules/City/cost.js';
 import '../../../register.js';
 import '../cost.js';
 import {Happiness, Unhappiness} from '../../../Yields.js';

@@ -1,5 +1,6 @@
 export {Alphabet} from './Advances/Alphabet.js';
 export {Astronomy} from './Advances/Astronomy.js';
+export {BridgeBuilding} from './Advances/BridgeBuilding.js';
 export {BronzeWorking} from './Advances/BronzeWorking.js';
 export {CeremonialBurial} from './Advances/CeremonialBurial.js';
 export {Chivalry} from './Advances/Chivalry.js';
@@ -20,5 +21,6 @@ export {Monarchy} from './Advances/Monarchy.js';
 export {Mysticism} from './Advances/Mysticism.js';
 export {Navigation} from './Advances/Navigation.js';
 export {Pottery} from './Advances/Pottery.js';
+export {TheRepublic} from './Advances/TheRepublic.js';
 export {TheWheel} from './Advances/TheWheel.js';
 export {Writing} from './Advances/Writing.js';

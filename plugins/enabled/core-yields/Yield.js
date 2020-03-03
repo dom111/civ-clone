@@ -32,6 +32,10 @@ export class Yield {
     this.#modifiers.add(...modifiers);
   }
 
+  get modifiers() {
+    return this.#modifiers;
+  }
+
   set(value) {
     this.#value = value;
   }

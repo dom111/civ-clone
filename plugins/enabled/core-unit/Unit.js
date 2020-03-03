@@ -6,21 +6,13 @@ export class Unit {
   #player;
   #tile;
 
-  waiting = false;
-
-  // TODO: This should be a valueObject collection with ValueObjects for each bonus
-  improvements = [];
-
-  destroyed = false;
   active = true;
   busy = false;
+  destroyed = false;
   status = null;
+  waiting = false;
 
   constructor({player, city, tile}) {
-    if (! tile) {
-      throw new TypeError(`Unit#constructor: tile is '${tile}'.`);
-    }
-
     this.#city   = city;
     this.#player = player;
     this.#tile   = tile;
@@ -43,9 +35,10 @@ export class Unit {
   }
 
   activate() {
-    this.active = true;
-    this.busy = false;
-    this.status = null;
+    return RulesRegistry.get('unit:activate')
+      .filter((rule) => rule.validate(this))
+      .map((rule) => rule.process(this))
+    ;
   }
 
   applyVisibility() {
@@ -55,12 +48,7 @@ export class Unit {
   }
 
   get attack() {
-    const unitYield = new Attack();
-
-    RulesRegistry.get('unit:yield')
-      .filter((rule) => rule.validate(this, unitYield))
-      .forEach((rule) => rule.process(this, unitYield))
-    ;
+    const [unitYield] = this.yield(new Attack());
 
     return unitYield;
   }
@@ -70,12 +58,7 @@ export class Unit {
   }
 
   get defence() {
-    const unitYield = new Defence();
-
-    RulesRegistry.get('unit:yield')
-      .filter((rule) => rule.validate(this, unitYield))
-      .forEach((rule) => rule.process(this, unitYield))
-    ;
+    const [unitYield] = this.yield(new Defence());
 
     return unitYield;
   }
@@ -87,41 +70,8 @@ export class Unit {
     ;
   }
 
-  disband() {
-    engine.emit('unit:action', this, 'disband');
-    this.destroy();
-    engine.emit('unit:disbanded', this);
-  }
-
-  finalAttack() {
-    const {attack} = this;
-
-    RulesRegistry.get('unit:combat:attack')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => attack.addModifier(rule.process(this)))
-    ;
-
-    return attack.value();
-  }
-
-  finalDefence() {
-    const {defence} = this;
-
-    RulesRegistry.get('unit:combat:defence')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => defence.addModifier(rule.process(this)))
-    ;
-
-    return defence.value();
-  }
-
   get movement() {
-    const unitYield = new Movement();
-
-    RulesRegistry.get('unit:yield')
-      .filter((rule) => rule.validate(this, unitYield))
-      .forEach((rule) => rule.process(this, unitYield))
-    ;
+    const [unitYield] = this.yield(new Movement());
 
     return unitYield;
   }
@@ -138,19 +88,23 @@ export class Unit {
     this.#tile = tile;
   }
 
+  get visibility() {
+    const [unitYield] = this.yield(new Visibility());
+
+    return unitYield;
+  }
+
   wait() {
     this.waiting = true;
   }
 
-  get visibility() {
-    const unitYield = new Visibility();
-
-    RulesRegistry.get('unit:yield')
+  yield(...yields) {
+    yields.forEach((unitYield) => RulesRegistry.get('unit:yield')
       .filter((rule) => rule.validate(this, unitYield))
       .forEach((rule) => rule.process(this, unitYield))
-    ;
+    );
 
-    return unitYield;
+    return yields;
   }
 }
 

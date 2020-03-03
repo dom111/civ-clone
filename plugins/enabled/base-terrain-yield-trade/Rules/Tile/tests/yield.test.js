@@ -85,11 +85,15 @@ describe('tile:yields', () => {
         return;
       }
 
-      it(`${tile.terrain.constructor.name}${tile.terrain.features.length ? ` (${tile.terrain.features.map((feature) => feature.constructor.name).join('')})` : ''} should have expected ${tileYield.constructor.name}.`, () => {
+      const [value] = expectedData[i]
+        .filter(([Yield]) => tileYield instanceof Yield)
+        .map(([, value]) => value)
+      ;
+
+      it(`${tile.terrain.constructor.name}${tile.terrain.features.length ? ` (${tile.terrain.features.map((feature) => feature.constructor.name).join('')})` : ''} should have ${value} ${tileYield.constructor.name}.`, () => {
         assert.strictEqual(
           tileYield.value(),
-          ...expectedData[i].filter(([Yield]) => tileYield instanceof Yield)
-            .map(([, value]) => value)
+          value
         );
       });
     });

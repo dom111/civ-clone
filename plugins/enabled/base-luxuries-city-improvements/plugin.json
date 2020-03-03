@@ -1,0 +1,22 @@
+{
+  "name": "base-luxuries-city-improvements",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "YieldModifier/Marketplace.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/city/yield.js"
+    }
+  ],
+  "depdendencies": [],
+  "dependencies": [
+    "base-city-improvements",
+    "base-luxuries",
+    "core-city-improvement",
+    "core-rules",
+    "core-yields"
+  ]
+}

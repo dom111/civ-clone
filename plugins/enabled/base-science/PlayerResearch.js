@@ -65,8 +65,8 @@ export class PlayerResearch {
 
   research(Advance) {
     [this.#cost] = RulesRegistry.get('research:cost')
-      .filter((rule) => rule.validate(Advance))
-      .map((rule) => rule.process())
+      .filter((rule) => rule.validate(Advance, this.#player))
+      .map((rule) => rule.process(Advance, this.#player))
     ;
 
     this.#researching = Advance;

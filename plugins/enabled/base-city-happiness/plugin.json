@@ -5,11 +5,8 @@
     "core-city",
     "core-rules",
     "core-yields",
-    "base-governments",
     "base-luxuries",
-    "base-player-government",
     "base-terrain-yields",
-    "core-unit",
     "base-terrain-yield-trade"
   ],
   "components": [

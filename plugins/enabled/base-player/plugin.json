@@ -16,10 +16,6 @@
   "components": [
     {
       "type": "script",
-      "file": "Events/City/yield.js"
-    },
-    {
-      "type": "script",
       "file": "PlayerRegistry.js"
     },
     {
@@ -44,10 +40,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Unit/moved.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Unit/action.js"
     },
     {
@@ -65,6 +57,10 @@
     {
       "type": "script",
       "file": "Rules/Unit/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
     }
   ]
 }

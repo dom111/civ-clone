@@ -3,7 +3,6 @@
   "dependencies": [
     "core-rules",
     "core-terrain",
-    "core-terrain-features",
     "core-world-generator",
     "base-terrain",
     "base-terrain-features"

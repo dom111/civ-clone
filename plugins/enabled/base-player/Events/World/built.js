@@ -3,6 +3,7 @@ import AIPlayer from '../../../core-player/AIPlayer.js';
 import CivilizationRegistry from '../../../core-civilization/CivilizationRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
 import PlayerRegistry from '../../PlayerRegistry.js';
+import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import {Settlers} from '../../../base-unit/Units.js';
 
 const cache = new Map(),
@@ -38,7 +39,10 @@ engine.on('world:built', (map) => {
   for (let i = 0; i < numberOfPlayers; i++) {
     const player = AIPlayer.get();
 
-    engine.emit('player:added', player);
+    RulesRegistry.get('player:added')
+      .filter((rule) => rule.validate(player))
+      .forEach((rule) => rule.process(player))
+    ;
 
     player.chooseCivilization(availableCivilizations);
     availableCivilizations = availableCivilizations.filter((Civilization) => ! (player.civilization instanceof Civilization));

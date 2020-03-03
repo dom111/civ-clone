@@ -1,6 +1,7 @@
 export {Aqueduct} from './CityImprovements/Aqueduct.js';
 export {Barracks} from './CityImprovements/Barracks.js';
 export {CityWalls} from './CityImprovements/CityWalls.js';
+export {Colosseum} from './CityImprovements/Colosseum.js';
 export {Courthouse} from './CityImprovements/Courthouse.js';
 export {Granary} from './CityImprovements/Granary.js';
 export {Library} from './CityImprovements/Library.js';

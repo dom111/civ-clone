@@ -22,6 +22,7 @@ RulesRegistry.register(new Rule(
     // new Criterion(() => city.surplusFood > 0)
   ))
 ));
+
 RulesRegistry.register(new Rule(
   'city:build:unit:naval-unit',
   new Criterion((city, buildItem) => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
@@ -30,10 +31,3 @@ RulesRegistry.register(new Rule(
   ))
 ));
 
-// on built
-// For example:
-// RulesRegistry.register(new Rule(
-//   'unit:built:veteran',
-//   new Criterion((unit, city) => city.hasImprovement(Barracks)),
-//   new Effect((unit) => unit.improvements.push(new Veteran()))
-// ));

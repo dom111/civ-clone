@@ -44,11 +44,11 @@
     },
     {
       "type": "script",
-      "file": "Events/Player/added.js"
+      "file": "TradeRate/Research.js"
     },
     {
       "type": "script",
-      "file": "TradeRate/Research.js"
+      "file": "Rules/Player/added.js"
     }
   ]
 }

@@ -12,7 +12,8 @@
     "core-unit",
     "base-unit",
     "base-tile-improvements",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "base-city-happiness"
   ],
   "components": [
     {
@@ -25,10 +26,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Player/added.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/City/cost.js"
     },
     {
@@ -38,6 +35,10 @@
     {
       "type": "script",
       "file": "init.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
     }
   ]
 }

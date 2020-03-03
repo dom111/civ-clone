@@ -8,7 +8,7 @@ import TileImprovementRegistry from '../../../core-tile-improvements/TileImprove
 import Tileset from '../../../core-world/Tileset.js';
 import World from '../../../core-world/World.js';
 
-export const setUpCity = (size = 1, world) => {
+export const setUpCity = (size = 1, tile, world) => {
   if (! world) {
     const generator = new FillGenerator({
       height: 5,
@@ -24,7 +24,7 @@ export const setUpCity = (size = 1, world) => {
     city = new City({
       name: 'City',
       player,
-      tile: world.get(2, 2),
+      tile: tile || world.get(2, 2),
     })
   ;
 

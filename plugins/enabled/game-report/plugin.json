@@ -10,7 +10,8 @@
     "base-player-government",
     "base-currency",
     "core-tile-improvements",
-    "base-science"
+    "base-science",
+    "base-unit-improvements"
   ],
   "components": [
     {

@@ -1,3 +1,4 @@
+import '../../../base-tile-improvements/Rules/Tile/improvement.js';
 import {
   Attack,
   BuildIrrigation,
@@ -146,11 +147,9 @@ RulesRegistry.register(new Rule(
     hasEnoughMovesLeft,
     new Criterion((unit) => unit instanceof Worker),
     new Criterion((unit, to, from = unit.tile) => RulesRegistry.get('tile:improvement:available')
-      .filter((rule) => rule.validate(Improvement, from))
-      .every((rule) => rule.process(Improvement, from))
+      .some((rule) => rule.validate(from, Improvement, unit.player))
     ),
     new Criterion((unit, to, from = unit.tile) => from === to),
-    // TODO: doing this a lot already, need to make improvements a value object with a helper method
     new Criterion((unit) => ! TileImprovementRegistry.getBy('tile', unit.tile)
       .some((improvement) => improvement instanceof Improvement)
     ),

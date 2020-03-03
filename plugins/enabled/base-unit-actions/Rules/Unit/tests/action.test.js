@@ -1,6 +1,25 @@
 import '../../../../base-city/Rules/City/created.js';
+import '../../../../base-city/Rules/City/captured.js';
+import '../../../../base-science/Rules/Research/cost.js';
+import '../../../../base-terrain/register.js';
+import '../../../../base-tile-improvements/Rules/Tile/improvement.js';
 import '../../../../base-unit-yields/Rules/Unit/created.js';
 import '../action.js';
+import '../validateMove.js';
+import {
+  Arctic,
+  Desert,
+  Forest,
+  Grassland,
+  Hills,
+  Jungle,
+  Mountains,
+  Ocean,
+  Plains,
+  River,
+  Swamp,
+  Tundra,
+} from '../../../../base-terrain/Terrains.js';
 import {
   Attack,
   BuildIrrigation,
@@ -11,15 +30,20 @@ import {
   ClearJungle,
   ClearSwamp,
   Fortify,
+  FoundCity,
   Move,
   PlantForest,
 } from '../../../Actions.js';
-import {Forest, Grassland, Hills, Jungle, Plains, River, Swamp} from '../../../../base-terrain/Terrains.js';
 import {Militia, Settlers} from '../../../../base-unit/Units.js';
+import {BridgeBuilding} from '../../../../base-science/Advances.js';
 import City from '../../../../core-city/City.js';
 import FillGenerator from '../../../../base-world-generator/FillGenerator.js';
 import Player from '../../../../core-player/Player.js';
 import PlayerRegistry from '../../../../base-player/PlayerRegistry.js';
+import PlayerResearch from '../../../../base-science/PlayerResearch.js';
+import PlayerResearchRegistry from '../../../../base-science/PlayerResearchRegistry.js';
+import {Research} from '../../../../base-science/Yields.js';
+import TerrainRegistry from '../../../../core-terrain/TerrainRegistry.js';
 import World from '../../../../core-world/World.js';
 import assert from 'assert';
 
@@ -183,16 +207,62 @@ describe('Unit:actions', () => {
   });
 
   [
-    [BuildIrrigation, River],
-    [BuildMine, Hills],
-    [BuildRoad, Grassland],
+    [BuildIrrigation, Desert, Grassland, Hills, Plains, River],
+    [BuildMine, Desert, Hills, Mountains],
+    [BuildRoad, Arctic, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, Swamp, Tundra],
     [ClearForest, Forest],
     [ClearJungle, Jungle],
     [ClearSwamp, Swamp],
+    [FoundCity, Arctic, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, River, Swamp, Tundra],
     [PlantForest, Plains],
   ]
-    .forEach(([Action, Terrain]) => {
-      it(`should be possible for Settlers to ${Action.name} on ${Terrain.name}`, () => {
+    .forEach(([Action, ...validTerrains]) => {
+      validTerrains.forEach((Terrain) => {
+        it(`should be possible for Settlers to ${Action.name} on ${Terrain.name}`, () => {
+          const world = generateWorld(Terrain);
+
+          world.get(3, 4)
+            .terrain = new Ocean()
+          ;
+
+          const [player] = addPlayers(),
+            unit = new Settlers({
+              player,
+              tile: world.get(4, 4),
+            }),
+            [action] = unit.actions(unit.tile)
+              .filter((action) => action instanceof Action)
+          ;
+
+          assert(action);
+        });
+      });
+
+      TerrainRegistry.filter((Terrain) => ! validTerrains.includes(Terrain))
+        .forEach((Terrain) => {
+          it(`should not be possible for Settlers to ${Action.name} on ${Terrain.name}`, () => {
+            const world = generateWorld(Terrain),
+              [player] = addPlayers(),
+              unit = new Settlers({
+                player,
+                tile: world.get(4, 4),
+              }),
+              [action] = unit.actions(unit.tile)
+                .filter((action) => action instanceof Action)
+            ;
+
+            assert(! action);
+          });
+        })
+      ;
+    })
+  ;
+
+  [
+    [BuildRoad, BridgeBuilding, River],
+  ]
+    .forEach(([Action, Advance, Terrain]) => {
+      it(`should not be possible for Settlers to ${Action.name} on ${Terrain.name} before discovering ${Advance.name}`, () => {
         const world = generateWorld(Terrain),
           [player] = addPlayers(),
           unit = new Settlers({
@@ -201,11 +271,30 @@ describe('Unit:actions', () => {
           })
         ;
 
-        const [action] = unit.actions(unit.tile)
-          .filter((action) => action instanceof Action)
+        assert(! unit.actions(unit.tile)
+          .some((action) => action instanceof Action)
+        );
+      });
+
+      it(`should be possible for Settlers to ${Action.name} on ${Terrain.name} after discovering ${Advance.name}`, () => {
+        const world = generateWorld(Terrain),
+          [player] = addPlayers(),
+          unit = new Settlers({
+            player,
+            tile: world.get(4, 4),
+          }),
+          playerResearch = new PlayerResearch(player)
         ;
 
-        assert(action);
+        // TODO: have this wrapped to make it easier
+        PlayerResearchRegistry.register(playerResearch);
+        playerResearch.research(BridgeBuilding);
+        playerResearch.add(new Research(60));
+        playerResearch.check();
+
+        assert(unit.actions(unit.tile)
+          .some((action) => action instanceof Action)
+        );
       });
     })
   ;

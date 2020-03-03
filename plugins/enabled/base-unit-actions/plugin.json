@@ -98,6 +98,10 @@
     {
       "type": "script",
       "file": "Actions/Embark.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/validateMove.js"
     }
   ]
 }

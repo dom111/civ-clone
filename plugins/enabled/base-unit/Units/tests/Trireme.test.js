@@ -3,9 +3,10 @@ import '../../../base-unit-actions/Rules/Unit/action.js';
 import '../../../base-unit-actions/Rules/Unit/moved.js';
 import '../../../base-unit-yields/Rules/Unit/created.js';
 import '../../../base-unit-yields/Rules/Unit/yield.js';
-import {Disembark, Embark, Move, Unload} from '../../../base-unit-actions/Actions.js';
+import {Attack, Disembark, Embark, Move, Unload} from '../../../base-unit-actions/Actions.js';
 import {Grassland, Ocean} from '../../../base-terrain/Terrains.js';
 import {Militia, Trireme} from '../../Units.js';
+import City from '../../../core-city/City.js';
 import Generator from '../../../core-world-generator/Generator.js';
 import {Land} from '../../../core-terrain/Types.js';
 import Player from '../../../core-player/Player.js';
@@ -53,10 +54,8 @@ describe('Trireme', () => {
     ;
 
     assert.strictEqual(tile, world.get(2, 2));
-
-    assert(
-      transport.actions(to)
-        .some((action) => action instanceof Move)
+    assert(transport.actions(to)
+      .some((action) => action instanceof Move)
     );
 
     // clean up
@@ -77,8 +76,7 @@ describe('Trireme', () => {
         player,
         tile: world.get(1, 1),
       }),
-      to = world.get(2, 2),
-      [boardTransport] = unit.actions(to)
+      [boardTransport] = unit.actions(tile)
         .filter((action) => action instanceof Embark)
     ;
 
@@ -118,6 +116,8 @@ describe('Trireme', () => {
 
     transport.action(move1);
 
+    assert.strictEqual(transport.tile, world.get(3, 3));
+
     const [move2] = transport.actions(world.get(4, 4))
       .filter((action) => action instanceof Move)
     ;
@@ -125,6 +125,8 @@ describe('Trireme', () => {
     assert(move2 instanceof Move);
 
     transport.action(move2);
+
+    assert.strictEqual(transport.tile, world.get(4, 4));
 
     const [move3] = transport.actions(world.get(5, 5))
       .filter((action) => action instanceof Move)
@@ -134,6 +136,7 @@ describe('Trireme', () => {
 
     transport.action(move3);
 
+    assert.strictEqual(transport.tile, world.get(5, 5));
     assert.strictEqual(transport.moves.value(), 0);
 
     transport.moves.add(transport.movement);
@@ -152,6 +155,51 @@ describe('Trireme', () => {
 
     unit.action(disembark);
 
-    assert(unit.tile === world.get(6, 6));
+    assert.strictEqual(unit.tile, world.get(6, 6));
+  });
+
+  it('should be possible to Attack a defended enemy city', () => {
+    const world = generateIslands(),
+      tile = world.get(2, 2),
+      player = new Player(),
+      enemy = new Player(),
+      transport = new Trireme({
+        player,
+        tile,
+      }),
+      city = new City({
+        player: enemy,
+        tile: world.get(1, 1),
+      })
+    ;
+
+    new Militia({
+      player: enemy,
+      tile: world.get(1, 1),
+    });
+
+    assert(transport.actions(city.tile)
+      .some((action) => action instanceof Attack)
+    );
+  });
+
+  it('should not be possible to Attack an undefended enemy city', () => {
+    const world = generateIslands(),
+      tile = world.get(2, 2),
+      player = new Player(),
+      enemy = new Player(),
+      transport = new Trireme({
+        player,
+        tile,
+      }),
+      city = new City({
+        player: enemy,
+        tile: world.get(1, 1),
+      })
+    ;
+
+    assert(! transport.actions(city.tile)
+      .some((action) => action instanceof Attack)
+    );
   });
 });

@@ -1,15 +1,17 @@
 import {DelayedAction} from './DelayedAction.js';
-import {Fortified} from '../../base-unit-improvements/Improvements.js';
+import {Fortified} from '../../base-unit-improvements/UnitImprovements.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import UnitImprovementRegistry from '../../base-unit-improvements/UnitImprovementRegistry.js';
 
 export class Fortify extends DelayedAction {
   perform() {
     this.delayedAction({
       status: 'fortify',
       action: () => {
-        this.unit.improvements.push(new Fortified());
         this.unit.active = false;
         this.unit.busy = Infinity;
+
+        UnitImprovementRegistry.register(new Fortified(this.unit));
       },
       turns: 1,
     });

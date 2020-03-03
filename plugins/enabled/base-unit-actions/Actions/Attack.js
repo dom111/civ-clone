@@ -8,11 +8,11 @@ export class Attack extends Action {
   perform() {
     const [tile] = UnitRegistry.getBy('tile',  this.unit.tile),
       tileUnits = UnitRegistry.getBy('tile', this.to)
-        .sort((a,b) => b.finalDefence() - a.finalDefence()),
+        .sort((a,b) => b.defence - a.defence),
       [defender] = tileUnits
     ;
 
-    if ((this.unit.finalAttack() * Math.random()) >= (defender.finalDefence() * Math.random())) {
+    if ((this.unit.attack * Math.random()) >= (defender.defence * Math.random())) {
       this.unit.destroy(defender.player);
 
       return;

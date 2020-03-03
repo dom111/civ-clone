@@ -10,12 +10,12 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 [
   [Marketplace, Gold, MarketplaceModifier],
 ]
-  .forEach(([Improvment, Yield, YieldModifier]) => {
+  .forEach(([Improvement, Yield, YieldModifier]) => {
     RulesRegistry.register(new Rule(
-      `city:yield:${[Yield, Improvment].map((Entity) => Entity.name).join(':')}`,
+      `city:yield:${[Yield, Improvement].map((Entity) => Entity.name).join(':')}`,
       new Criterion((cityYield) => cityYield instanceof Yield),
       new Criterion((cityYield, city) => CityImprovementRegistry.getBy('city', city)
-        .some((improvement) => improvement instanceof Improvment)
+        .some((improvement) => improvement instanceof Improvement)
       ),
       new Effect((cityYield) => cityYield.addModifier(new YieldModifier()))
     ));

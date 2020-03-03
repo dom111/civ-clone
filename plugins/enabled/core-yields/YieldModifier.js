@@ -15,3 +15,5 @@ export class YieldModifier {
     return this.#priority;
   }
 }
+
+export default YieldModifier;

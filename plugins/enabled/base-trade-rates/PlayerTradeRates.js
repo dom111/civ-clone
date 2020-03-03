@@ -63,3 +63,5 @@ export class PlayerTradeRates {
     ;
   }
 }
+
+export default PlayerTradeRates;

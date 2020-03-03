@@ -25,5 +25,21 @@ RulesRegistry.register(new Rule(
   new Criterion((unit) => unit.moves.value() === 0),
   new Criterion((unit) => ! unit.tile.isCoast()),
   new Criterion(() => Math.random() <= .5),
-  new Effect((unit) => unit.destroy())
+  new Effect((unit) => {
+    unit.destroy();
+    engine.emit('trireme:lost-at-sea', unit);
+  })
+));
+
+RulesRegistry.register(new Rule(
+  'unit:moved:apply-visibility',
+  new Effect((unit) => unit.applyVisibility())
+));
+
+RulesRegistry.register(new Rule(
+  'unit:moved:deactivate',
+  new Criterion((unit) => unit.moves.value() < .1),
+  new Effect((unit) => {
+    unit.active = false;
+  })
 ));

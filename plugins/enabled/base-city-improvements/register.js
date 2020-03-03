@@ -2,9 +2,11 @@ import {
   Aqueduct,
   Barracks,
   CityWalls,
+  Colosseum,
   Courthouse,
   Granary,
   Library,
+  Marketplace,
   Palace,
   Temple,
 } from './CityImprovements.js';
@@ -14,9 +16,11 @@ import AvailableCityImprovementRegistry from '../core-city-improvement/Available
   Aqueduct,
   Barracks,
   CityWalls,
+  Colosseum,
   Courthouse,
   Granary,
   Library,
+  Marketplace,
   Palace,
   Temple,
 ]

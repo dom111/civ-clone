@@ -7,7 +7,9 @@
     "core-city",
     "core-city-improvement",
     "core-rules",
-    "base-currency"
+    "base-currency",
+    "base-science",
+    "base-city-happiness"
   ],
   "components": [
     {
@@ -81,6 +83,10 @@
     {
       "type": "script",
       "file": "Rules/City/improvement-created.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovements/Colosseum.js"
     }
   ]
 }

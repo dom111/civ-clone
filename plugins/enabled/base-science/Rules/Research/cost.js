@@ -1,6 +1,7 @@
 import {
   Alphabet,
   Astronomy,
+  BridgeBuilding,
   BronzeWorking,
   CeremonialBurial,
   Chivalry,
@@ -32,6 +33,7 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 [
   [Alphabet, 20],
   [Astronomy, 80],
+  [BridgeBuilding, 60],
   [BronzeWorking, 20],
   [CeremonialBurial, 20],
   [Chivalry, 70],

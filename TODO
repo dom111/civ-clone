@@ -46,7 +46,7 @@
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
-- [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency.
+- [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency. - Look at NodeGUI.
 - [ ] Break the engine into it's own `core-engine` repo.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.
@@ -78,3 +78,4 @@
 - [ ] Move `buildProgress` and the entire `build` mechanism into a value object instead of a property.
 - [ ] Move `foodStorage` into a value object instead of a property.
 - [ ] Add `load` and `save` methods to `World`.
+- [ ] Add ability to spend gold on city build items.

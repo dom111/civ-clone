@@ -10,7 +10,7 @@ import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import CityBuild from '../base-city/CityBuild.js';
 import CityRegistry from '../core-city/CityRegistry.js';
-import {Fortified} from '../base-unit-improvements/Improvements.js';
+import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
 import {Palace} from '../base-city-improvements/CityImprovements.js';
@@ -21,6 +21,7 @@ import RulesRegistry from '../core-rules/RulesRegistry.js';
 import TileImprovementRegistry from '../core-tile-improvements/TileImprovementRegistry.js';
 import {Trade} from '../base-terrain-yield-trade/Yields.js';
 import Unit from '../core-unit/Unit.js';
+import UnitImprovementRegistry from '../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 export class SimpleAIPlayer extends AIPlayer {
@@ -145,10 +146,10 @@ export class SimpleAIPlayer extends AIPlayer {
 
           // TODO: consider appending all the positives to the score instead of returning immediately
           if (
-            foundCity && this.#shouldBuildCity(tile) ||
-            buildMine && this.#shouldMine(tile) ||
-            buildIrrigation && this.#shouldIrrigate(tile) ||
-            buildRoad && this.#shouldRoad(tile)
+            (foundCity && this.#shouldBuildCity(tile)) ||
+            (buildMine && this.#shouldMine(tile)) ||
+            (buildIrrigation && this.#shouldIrrigate(tile)) ||
+            (buildRoad && this.#shouldRoad(tile))
           ) {
             score += 24;
           }
@@ -437,10 +438,11 @@ export class SimpleAIPlayer extends AIPlayer {
             }
             else {
               // TODO: check for defense values and activate weaker for disband/upgrade/scouting
-              const [cityUnitWithLowerDefence] = tileUnits.filter((tileUnit) =>
-                  tileUnit.improvements.some((improvement) => improvement instanceof Fortified) &&
-                unit.defence > tileUnit.defence
-                ),
+              const [cityUnitWithLowerDefence] = tileUnits
+                  .filter((tileUnit) => UnitImprovementRegistry.getBy('unit', tileUnit)
+                    .some((improvement) => improvement instanceof Fortified) &&
+                  unit.defence > tileUnit.defence
+                  ),
                 [city] = CityRegistry.getBy('tile', tile)
               ;
 

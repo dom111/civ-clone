@@ -6,6 +6,7 @@ import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Time from '../../../core-turn-based-game/Time.js';
+import UnitImprovementRegistry from '../../../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 engine.on('turn:end', () => {
@@ -76,7 +77,7 @@ Yields (after costs): ${
 Units: (${units.length})
 ${
   units
-    .map((unit) => `${unit.constructor.name} (${unit.improvements.map((improvement) => improvement.constructor.name).join(', ')})`)
+    .map((unit) => `${unit.constructor.name} (${UnitImprovementRegistry.getBy('unit', unit).map((improvement) => improvement.constructor.name).join(', ')})`)
     .join('\n')
 }
 `);

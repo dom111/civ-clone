@@ -131,10 +131,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Player/added.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Game/start.js"
     },
     {
@@ -148,6 +144,18 @@
     {
       "type": "script",
       "file": "Rules/City/process-yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/BridgeBuilding.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/TheRepublic.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
     }
   ]
 }

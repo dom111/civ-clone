@@ -1,6 +1,7 @@
 import {
   Alphabet,
   Astronomy,
+  BridgeBuilding,
   BronzeWorking,
   CeremonialBurial,
   Chivalry,
@@ -30,6 +31,7 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
 [
   [Astronomy, Mathematics, Mysticism],
+  [BridgeBuilding, Construction, IronWorking],
   [Chivalry, Feudalism, HorsebackRiding],
   [CodeOfLaws, Alphabet],
   [Construction, Currency, Masonry],
