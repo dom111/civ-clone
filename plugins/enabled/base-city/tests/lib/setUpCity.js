@@ -1,3 +1,4 @@
+import '../../../base-city/Rules/City/created.js';
 import {Irrigation, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import City from '../../../core-city/City.js';
 import FillGenerator from '../../../base-world-generator/FillGenerator.js';

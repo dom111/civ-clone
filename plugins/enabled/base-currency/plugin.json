@@ -5,7 +5,11 @@
   "dependencies": [
     "core-registry",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "base-city",
+    "base-terrain-yields",
+    "core-city-improvement",
+    "core-unit"
   ],
   "components": [
     {
@@ -39,6 +43,10 @@
     {
       "type": "script",
       "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/spend.js"
     }
   ]
 }

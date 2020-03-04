@@ -43,6 +43,10 @@
 - [X] Convert terrain improvements `availableOn` into `Rule`s.
 - [X] Write more tests.
 - [X] Replace `Tile#improvements` with `Registry`.
+- [X] Move `buildProgress` and the entire `build` mechanism into a value object instead of a property.
+- [X] Replace the rest of the `.improvements` with `Registry` pattern
+- [X] Add ability to spend gold on city build items.
+- [X] Move `foodStorage` into a value object instead of a property.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -65,7 +69,6 @@
 - [ ] Add wealth.
 - [ ] Add build-queue.
 - [ ] Add Barbarians.
-- [ ] Replace the rest of the `.improvements`, `.features` with `Registry` pattern
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
 - [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
@@ -75,7 +78,10 @@
 - [ ] Add diplomacy
 - [ ] Add leader traits
 - [ ] Modify AI to adjust trade rates
-- [ ] Move `buildProgress` and the entire `build` mechanism into a value object instead of a property.
-- [ ] Move `foodStorage` into a value object instead of a property.
 - [ ] Add `load` and `save` methods to `World`.
-- [ ] Add ability to spend gold on city build items.
+- [ ] Replace `Tile#features` with `Registry` pattern - not sure on how useful this is, since it'll necessitate a refactor in `World#build`/`Generator`.
+- [ ] Add ability to sell `CityImprovement`s.
+- [ ] Add `Caravan` and `Diplomat` and correctly exclude these from `city:cost`s.
+- [ ] (Eventually) Convert all plugins to individual packages on npm so that plugin packs can be provided that combine a bunch of plugins to match the functionality of a desired Civ game.
+- [ ] Add AI routine to avoid civil disorder.
+- [ ] Add benefits to 'we love the leader' day.

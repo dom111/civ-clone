@@ -16,10 +16,7 @@ export class CityBuild {
 
   add(production) {
     if (! (production instanceof Production)) {
-      throw new TypeError(`CityBuild#add: Cannot add '${production.constructor ?
-        production.constructor.name :
-        typeof production}' to buildProgress.`
-      );
+      throw new TypeError(`CityBuild#add: Cannot add '${production.constructor ? production.constructor.name : typeof production}' to progress.`);
     }
 
     this.#progress.add(production);
@@ -63,6 +60,12 @@ export class CityBuild {
   }
 
   build(BuildItem) {
+    if (! this.available()
+      .some((Entity) => Entity === BuildItem)
+    ) {
+      throw new TypeError(`Cannot build ${BuildItem.name}, it's not available.`);
+    }
+
     this.#building = BuildItem;
     [this.#cost] = RulesRegistry.get('city:build-cost')
       .filter((rule) => rule.validate(BuildItem, this.#city))
@@ -102,6 +105,14 @@ export class CityBuild {
 
   get cost() {
     return this.#cost;
+  }
+
+  get progress() {
+    return this.#progress;
+  }
+
+  remaining() {
+    return this.#cost - this.#progress.value();
   }
 }
 

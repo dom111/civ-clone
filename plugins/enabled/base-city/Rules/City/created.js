@@ -1,6 +1,8 @@
 import {Irrigation, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import CityBuild from '../../CityBuild.js';
 import CityBuildRegistry from '../../CityBuildRegistry.js';
+import CityGrowth from '../../CityGrowth.js';
+import CityGrowthRegistry from '../../CityGrowthRegistry.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
@@ -20,13 +22,18 @@ RulesRegistry.register(new Rule(
 ));
 
 RulesRegistry.register(new Rule(
-  'city:created:register',
-  new Effect((city) => CityRegistry.register(city))
+  'city:created:build',
+  new Effect((city) => CityBuildRegistry.register(new CityBuild(city)))
 ));
 
 RulesRegistry.register(new Rule(
-  'city:created:build',
-  new Effect((city) => CityBuildRegistry.register(new CityBuild(city)))
+  'city:created:growth',
+  new Effect((city) => CityGrowthRegistry.register(new CityGrowth(city)))
+));
+
+RulesRegistry.register(new Rule(
+  'city:created:register',
+  new Effect((city) => CityRegistry.register(city))
 ));
 
 RulesRegistry.register(new Rule(

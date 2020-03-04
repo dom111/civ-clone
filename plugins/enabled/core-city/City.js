@@ -10,9 +10,6 @@ export class City {
   #tiles;
   #tilesWorked = new Tileset();
 
-  // TODO: break this into a Registry as a Yield
-  foodStorage = 0;
-
   constructor({
     player,
     tile,

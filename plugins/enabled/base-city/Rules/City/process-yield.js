@@ -1,5 +1,6 @@
 import {Food, Production} from '../../../base-terrain-yields/Yields.js';
 import CityBuildRegistry from '../../CityBuildRegistry.js';
+import CityGrowthRegistry from '../../CityGrowthRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
@@ -9,14 +10,12 @@ import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 RulesRegistry.register(new Rule(
   'city:process-yield:food',
   new Criterion((cityYield) => cityYield instanceof Food),
-  new Effect((cityYield, city) => {
-    city.foodStorage += cityYield.value();
-
-    RulesRegistry.get('city:growth')
-      .filter((rule) => rule.validate(city))
-      .forEach((rule) => rule.process(city))
-    ;
-  })
+  new Effect((cityYield, city) => CityGrowthRegistry.getBy('city', city)
+    .forEach((cityGrowth) => {
+      cityGrowth.add(cityYield);
+      cityGrowth.check();
+    })
+  )
 ));
 
 RulesRegistry.register(new Rule(
