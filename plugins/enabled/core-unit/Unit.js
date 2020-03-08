@@ -27,10 +27,10 @@ export class Unit {
     action.perform();
   }
 
-  actions(to = this.tile) {
+  actions(to = this.tile, from = this.tile) {
     return RulesRegistry.get('unit:action')
-      .filter((rule) => rule.validate(this, to, this.tile))
-      .map((rule) => rule.process(this, to, this.tile))
+      .filter((rule) => rule.validate(this, to, from))
+      .map((rule) => rule.process(this, to, from))
     ;
   }
 

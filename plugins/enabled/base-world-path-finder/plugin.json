@@ -1,0 +1,14 @@
+{
+  "name": "base-world-path-finder",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "BasePathFinder.js"
+    }
+  ],
+  "dependencies": [
+    "base-unit-actions",
+    "core-world"
+  ]
+}

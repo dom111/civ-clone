@@ -1,18 +1,31 @@
+import PathFinderRegistry from './PathFinderRegistry.js';
 import Tile from './Tile.js';
+import Tileset from './Tileset.js';
 
-export class Path {
-  #tiles = [];
+export class Path extends Tileset {
+  #movementCost;
 
-  constructor(...tiles) {
-    this.push(...tiles);
+  end() {
+    return this.get(this.length - 1);
   }
 
-  start() {
-    return this.#tiles[0];
+  static for(unit, start, end) {
+    // If there are lots of `PathFinder`s here, this could take aaages, so probably best to only have one registered at
+    // a time, but this mechanism avoids and hard-coding
+    const [path] = PathFinderRegistry.entries()
+      .map((PathFinder) => new PathFinder(unit, start, end))
+      .sort((a, b) => a.totalCost - b.totalCost)
+    ;
+
+    return path;
   }
 
-  get length() {
-    return this.#tiles.length;
+  get movementCost() {
+    return this.#movementCost;
+  }
+
+  set movementCost(movementCost) {
+    return this.#movementCost = movementCost;
   }
 
   push(...tiles) {
@@ -21,18 +34,18 @@ export class Path {
         throw new TypeError(`Tile#push: Invalid element passed, expected 'Tile' got '${tile && tile.constructor.name}'.`);
       }
 
-      if (this.#tiles.length === 0 || this.top().isNeighbourOf(tile)) {
-        this.#tiles.push(tile);
+      const top = this.end();
+
+      if (this.length > 0 && ! tile.isNeighbourOf(top)) {
+        throw new TypeError(`Tile#push: Invalid element passed, ${tile.x},${tile.y} is not a neighbour of ${top.x},${top.y}.`);
       }
+
+      super.push(tile);
     });
   }
 
-  shift() {
-    return this.#tiles.shift();
-  }
-
-  end() {
-    return this.#tiles[this.#tiles.length - 1];
+  start() {
+    return this.get(0);
   }
 }
 

@@ -185,8 +185,8 @@ RulesRegistry.register(new Rule(
   'unit:action:foundCity',
   hasEnoughMovesLeft,
   new Criterion((unit) => unit instanceof Settlers),
-  new Criterion((unit, to, from) => from.isLand()),
-  new Criterion((unit, to, from) => ! CityRegistry.getBy('tile', from)
+  new Criterion((unit, to, from = unit.tile) => from.isLand()),
+  new Criterion((unit, to, from = unit.tile) => ! CityRegistry.getBy('tile', from)
     .length
   ),
   new Criterion((unit, to, from = unit.tile) => from === to),

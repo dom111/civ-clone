@@ -95,6 +95,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #lastUnitMoves = new Map();
+  #unitPathData = new Map();
   #unitTargetData = new Map();
 
   #citiesToLiberate = [];
@@ -240,15 +241,34 @@ export class SimpleAIPlayer extends AIPlayer {
 
           return score;
         },
-        [target] = currentTile.getNeighbours()
-          .filter((tile) => scoreMove(tile) > -1)
-          .sort((a, b) => (
-            (
-              scoreMove(b) - scoreMove(a)
-              // if there's no difference, sort randomly
-            ) ||
-            Math.floor(Math.random() * 3) - 1
-          ))
+        path = this.#unitPathData
+          .get(unit)
+      ;
+
+      if (path) {
+        const target = path.shift(),
+          [move] = unit.actions(unit.tile, target)
+            .filter((action) => action instanceof Move)
+        ;
+
+        if (move) {
+          unit.action(move);
+
+          return;
+        }
+
+        this.#unitPathData.delete(unit);
+      }
+
+      const [target] = currentTile.getNeighbours()
+        .filter((tile) => scoreMove(tile) > -1)
+        .sort((a, b) => (
+          (
+            scoreMove(b) - scoreMove(a)
+            // if there's no difference, sort randomly
+          ) ||
+          Math.floor(Math.random() * 3) - 1
+        ))
       ;
 
       if (! target) {

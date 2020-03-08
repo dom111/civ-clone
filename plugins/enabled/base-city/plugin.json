@@ -45,10 +45,6 @@
     },
     {
       "type": "script",
-      "file": "Rules/City/growth.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/City/process-yield.js"
     },
     {
@@ -70,6 +66,14 @@
     {
       "type": "script",
       "file": "Rules/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "CityGrowthRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "CityGrowth.js"
     }
   ]
 }

@@ -9,7 +9,9 @@
     "core-rules",
     "base-currency",
     "base-science",
-    "base-city-happiness"
+    "base-city-happiness",
+    "base-city",
+    "base-terrain-yields"
   ],
   "components": [
     {

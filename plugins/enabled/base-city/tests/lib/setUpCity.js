@@ -7,6 +7,7 @@ import Player from '../../../core-player/Player.js';
 import {Shield} from '../../../base-terrain-features/TerrainFeatures.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Tileset from '../../../core-world/Tileset.js';
+import {Water} from '../../../core-terrain/Types.js';
 import World from '../../../core-world/World.js';
 
 export const setUpCity = (size = 1, tile, world) => {
@@ -19,6 +20,13 @@ export const setUpCity = (size = 1, tile, world) => {
     world = new World(generator);
 
     world.build();
+
+    Tileset.fromSurrounding(world.get(2, 2))
+      .forEach((tile) => {
+        tile.terrain = new Grassland();
+        tile.terrain.features.push(new Shield());
+      })
+    ;
   }
 
   const player = new Player(),
@@ -31,8 +39,9 @@ export const setUpCity = (size = 1, tile, world) => {
 
   Tileset.fromSurrounding(city.tile)
     .forEach((tile) => {
-      tile.terrain = new Grassland();
-      tile.terrain.features.push(new Shield());
+      if (tile.terrain instanceof Water) {
+        return;
+      }
 
       [
         new Irrigation(tile),

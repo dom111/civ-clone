@@ -20,6 +20,7 @@ export class City {
     this.#player = player;
     this.#tile = tile;
     this.#tiles = this.#tile.getSurroundingArea();
+    this.#tilesWorked.push(tile);
 
     RulesRegistry.get('city:created')
       .filter((rule) => rule.validate(this))

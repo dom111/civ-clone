@@ -1,5 +1,5 @@
 export class Tileset {
-  #tiles;
+  #tiles = [];
 
   static from(...tiles) {
     return new this(...tiles);
@@ -29,7 +29,7 @@ export class Tileset {
   }
 
   constructor(...tiles) {
-    this.#tiles = tiles;
+    this.push(...tiles);
   }
 
   cities() {
@@ -49,6 +49,10 @@ export class Tileset {
 
   forEach(iterator) {
     return this.#tiles.forEach(iterator);
+  }
+
+  get(i) {
+    return this.#tiles[i];
   }
 
   includes(tile) {

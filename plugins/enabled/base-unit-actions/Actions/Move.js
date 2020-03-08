@@ -3,10 +3,7 @@ import RulesRegistry from '../../core-rules/RulesRegistry.js';
 
 export class Move extends Action {
   perform() {
-    const [movementCost] = RulesRegistry.get('unit:movementCost')
-        .filter((rule) => rule.validate(this.unit, this.to, this.from))
-        .map((rule) => rule.process(this.unit, this.to, this.from))
-        .sort((a, b) => a - b),
+    const movementCost = this.movementCost(),
       [valid] = RulesRegistry.get('unit:validateMove')
         .filter((rule) => rule.validate(this.unit, movementCost))
         .map((rule) => rule.process(this.unit, movementCost))
@@ -24,6 +21,16 @@ export class Move extends Action {
     ;
 
     return true;
+  }
+
+  movementCost() {
+    const [movementCost] = RulesRegistry.get('unit:movementCost')
+      .filter((rule) => rule.validate(this.unit, this.to, this.from))
+      .map((rule) => rule.process(this.unit, this.to, this.from))
+      .sort((a, b) => a - b)
+    ;
+
+    return movementCost;
   }
 }
 

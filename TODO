@@ -85,3 +85,4 @@
 - [ ] (Eventually) Convert all plugins to individual packages on npm so that plugin packs can be provided that combine a bunch of plugins to match the functionality of a desired Civ game.
 - [ ] Add AI routine to avoid civil disorder.
 - [ ] Add benefits to 'we love the leader' day.
+- [ ] Fix bug when AI is using `NavalTransport` - unit testing the AI might be a good way to do this... (Game hangs)
