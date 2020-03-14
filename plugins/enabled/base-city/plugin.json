@@ -33,10 +33,6 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "CityBuildRegistry.js"
     },
     {
@@ -74,6 +70,14 @@
     {
       "type": "script",
       "file": "CityGrowth.js"
+    },
+    {
+      "type": "script",
+      "file": "registerActions.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

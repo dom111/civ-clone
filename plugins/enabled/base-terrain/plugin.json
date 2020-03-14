@@ -8,10 +8,6 @@
   "components": [
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Terrains.js"
     },
     {
@@ -61,6 +57,10 @@
     {
       "type": "script",
       "file": "Terrains/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "registerTerrains.js"
     }
   ]
 }

@@ -1,6 +1,10 @@
 import Registry from '../core-registry/Registry.js';
 import UnitImprovement from './UnitImprovement.js';
 
-export const UnitImprovementRegistry = new Registry(UnitImprovement);
+export class UnitImprovementRegistry extends Registry {
+  constructor() {
+    super(UnitImprovement);
+  }
+}
 
 export default UnitImprovementRegistry;

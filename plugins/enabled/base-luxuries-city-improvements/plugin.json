@@ -9,6 +9,10 @@
     {
       "type": "script",
       "file": "Rules/city/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ],
   "depdendencies": [],

@@ -6,7 +6,7 @@ process.on('unhandledRejection', (error) => {
   console.error(error.stack);
 });
 
-(async () => {
+(() => {
   const engine = new Engine();
 
   process.argv.slice(process.argv.indexOf('--') + 1)
@@ -19,7 +19,7 @@ process.on('unhandledRejection', (error) => {
     })
   ;
 
-  await engine.start();
-
   engine.on('game:exit', () => process.exit());
+
+  engine.start();
 })();

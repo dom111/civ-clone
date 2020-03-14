@@ -2,8 +2,7 @@ import {Food, Production} from '../../../base-terrain-yields/Yields.js';
 import AIPlayer from '../../../core-player/AIPlayer.js';
 import CivilizationRegistry from '../../../core-civilization/CivilizationRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
-import PlayerRegistry from '../../PlayerRegistry.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
 import {Settlers} from '../../../base-unit/Units.js';
 
 const cache = new Map(),
@@ -34,15 +33,12 @@ engine.on('world:built', (map) => {
 
   engine.emit('world:start-tiles', startingSquares);
 
-  let availableCivilizations = CivilizationRegistry.entries();
+  let availableCivilizations = CivilizationRegistry.getInstance()
+    .entries()
+  ;
 
   for (let i = 0; i < numberOfPlayers; i++) {
     const player = AIPlayer.get();
-
-    RulesRegistry.get('player:added')
-      .filter((rule) => rule.validate(player))
-      .forEach((rule) => rule.process(player))
-    ;
 
     player.chooseCivilization(availableCivilizations);
     availableCivilizations = availableCivilizations.filter((Civilization) => ! (player.civilization instanceof Civilization));
@@ -60,7 +56,9 @@ engine.on('world:built', (map) => {
 
     usedStartSquares.push(startingSquare);
 
-    PlayerRegistry.register(player);
+    PlayerRegistry.getInstance()
+      .register(player)
+    ;
 
     new Settlers({
       player,

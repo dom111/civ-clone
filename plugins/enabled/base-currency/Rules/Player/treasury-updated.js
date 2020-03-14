@@ -1,13 +1,16 @@
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-RulesRegistry.register(new Rule(
-  'player:treasury:updated:negative',
-  new Criterion((playerTreasury) => playerTreasury.value() < 0),
-  new Effect((playerTreasury/*, city*/) => {
+export const getRules = () => [
+  new Rule(
+    'player:treasury:updated:negative',
+    new Criterion((playerTreasury) => playerTreasury.value() < 0),
     // TODO: sell city improvements
-    engine.emit('player:treasury-exhausted', playerTreasury.player, playerTreasury);
-  })
-));
+    new Effect((playerTreasury/*, city*/) => {
+      engine.emit('player:treasury-exhausted', playerTreasury.player, playerTreasury);
+    })
+  ),
+];
+
+export default getRules;

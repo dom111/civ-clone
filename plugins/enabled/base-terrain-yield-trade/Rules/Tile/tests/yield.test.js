@@ -1,19 +1,27 @@
-import '../yield.js';
-import '../../../../base-terrain-yields/Rules/Tile/yield.js';
-import '../../../../base-terrain-features/Rules/Tile/yield.js';
-import '../../../../base-terrain-yields/register.js';
-import '../../../register.js';
-
 import {Food, Production} from '../../../../base-terrain-yields/Yields.js';
+import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import StaticWorldGenerator from '../../../../base-world-generator/StaticWorldGenerator.js';
 import {Trade} from '../../../Yields.js';
 import World from '../../../../core-world/World.js';
 import assert from 'assert';
+import tileFeatureYield from '../../../../base-terrain-features/Rules/Tile/yield.js';
+import tileTradeYield from '../yield.js';
+import tileYield from '../../../../base-terrain-yields/Rules/Tile/yield.js';
 
-describe('tile:yields', () => {
-  const world = new World(new StaticWorldGenerator());
+describe('tile:yield', () => {
+  const rulesRegistry = new RulesRegistry(),
+    world = new World(new StaticWorldGenerator())
+  ;
 
-  world.build();
+  rulesRegistry.register(
+    ...tileYield(),
+    ...tileTradeYield(),
+    ...tileFeatureYield()
+  );
+
+  world.build({
+    rulesRegistry,
+  });
 
   const tests = [],
     expectedData = [
@@ -76,15 +84,12 @@ describe('tile:yields', () => {
 
   for (let i = 0; i < 24; i++) {
     const tile = world.get(i, 0),
-      yields = tile.yields(),
-      yieldsToTest = [Food, Production, Trade]
+      yields = tile.yields({
+        yields: [Food, Production, Trade],
+      })
     ;
 
     yields.forEach((tileYield) => {
-      if (! yieldsToTest.some((Yield) => tileYield instanceof Yield)) {
-        return;
-      }
-
       const [value] = expectedData[i]
         .filter(([Yield]) => tileYield instanceof Yield)
         .map(([, value]) => value)

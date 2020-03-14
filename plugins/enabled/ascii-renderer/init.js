@@ -6,16 +6,18 @@ const observingPlayers = [];
 
 let map;
 
-const renderMap = () => {
-  if (! map) {
+export const renderMap = ({
+  mapToRender = map,
+  showMap = engine.option('showMap'),
+  everyXTurns = parseInt(engine.option('renderTurns', 1), 10),
+  unitRegistry = UnitRegistry.getInstance(),
+  cityRegistry = CityRegistry.getInstance(),
+} = {}) => {
+  if (! mapToRender) {
     return;
   }
 
-  const showMap = true,
-    everyXTurns = parseInt(engine.option('renderTurns', 1), 10)
-  ;
-
-  if (showMap && (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1))) {
+  if (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1)) {
     const lookup = {
       American: '\u001b[38;5;17;48;5;231m',
       Aztec: '\u001b[38;5;227;48;5;70m',
@@ -55,10 +57,10 @@ const renderMap = () => {
     };
 
     console.log(`\x1b[1;1H${
-      map.getBy(() => true)
+      mapToRender.getBy(() => true)
         .map((tile) => {
-          const tileUnits = UnitRegistry.getBy('tile', tile),
-            [city] = CityRegistry.getBy('tile', tile)
+          const tileUnits = unitRegistry.getBy('tile', tile),
+            [city] = cityRegistry.getBy('tile', tile)
           ;
 
           return {
@@ -74,7 +76,7 @@ const renderMap = () => {
               player: city.player.civilization.people,
               name: city.name,
             },
-            visible: engine.option('showMap') || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
+            visible: showMap || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
           };
         })
         .map(
@@ -103,13 +105,13 @@ const renderMap = () => {
         player.civilization
           .nation
       }: C:${
-        CityRegistry.getBy('player', player)
+        cityRegistry.getBy('player', player)
           .length
       } [${
-        CityRegistry.getBy('player', player)
+        cityRegistry.getBy('player', player)
           .reduce((total, city) => total + city.size, 0)
       }] U:${
-        UnitRegistry.getBy('player', player)
+        unitRegistry.getBy('player', player)
           .length
       }`)
         .join(' / ')

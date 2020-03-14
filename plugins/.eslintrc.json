@@ -3,8 +3,7 @@
     {
       "files": ["*.js"],
       "globals": {
-        "engine": false,
-        "promiseFactory": false
+        "engine": false
       }
     },
     {

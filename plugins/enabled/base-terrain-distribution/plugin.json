@@ -9,55 +9,15 @@
   "components": [
     {
       "type": "script",
-      "file": "Rules/Forest.js"
+      "file": "Rules/Terrain/distributionGroups.js"
     },
     {
       "type": "script",
-      "file": "Rules/Arctic.js"
+      "file": "Rules/Terrain/distribution.js"
     },
     {
       "type": "script",
-      "file": "Rules/Desert.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Grassland.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Hills.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Jungle.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Mountains.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Ocean.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Plains.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/River.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Swamp.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/Tundra.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/groups.js"
+      "file": "registerRules.js"
     }
   ]
 }

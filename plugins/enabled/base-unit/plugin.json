@@ -3,12 +3,16 @@
   "title": "Base Unit",
   "version": "0.1.0",
   "dependencies": [
-    "base-city-improvements",
     "core-rules",
     "core-unit",
     "base-tile-improvements",
     "core-tile-improvements",
-    "base-terrain"
+    "base-terrain",
+    "base-terrain-features",
+    "base-unit-improvements",
+    "core-city",
+    "core-player",
+    "core-terrain"
   ],
   "components": [
     {
@@ -93,10 +97,6 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Units/Sail.js"
     },
     {
@@ -106,6 +106,106 @@
     {
       "type": "script",
       "file": "Rules/Unit/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/validateMove.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildIrrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildRoad.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/CaptureCity.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildMine.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/PlantForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Attack.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Move.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearJungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Unload.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Disembark.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Embark.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearSwamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/DelayedAction.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/NoOrders.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Fortify.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/FoundCity.js"
+    },
+    {
+      "type": "script",
+      "file": "registerPlayerActions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/created.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableUnits.js"
     }
   ]
 }

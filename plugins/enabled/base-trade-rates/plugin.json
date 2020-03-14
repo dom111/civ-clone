@@ -36,19 +36,23 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/City/yield.js"
-    },
-    {
-      "type": "script",
       "file": "TradeRate/Research.js"
     },
     {
       "type": "script",
       "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableTradeRates.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

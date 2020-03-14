@@ -1,5 +1,7 @@
-import PlayerRegistry from '../../PlayerRegistry.js';
+import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
 
 engine.on('player:defeated', (player) => {
-  PlayerRegistry.unregister(player);
+  PlayerRegistry.getInstance()
+    .unregister(player)
+  ;
 });

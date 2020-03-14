@@ -16,15 +16,15 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "TradeRate/Luxuries.js"
     },
     {
       "type": "script",
       "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "registerTradeRates.js"
     }
   ]
 }

@@ -7,10 +7,6 @@
   "components": [
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Civilizations.js"
     },
     {
@@ -64,6 +60,10 @@
     {
       "type": "script",
       "file": "Civilizations/Polish.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilizations.js"
     }
   ]
 }

@@ -11,6 +11,7 @@ export class BaseGenerator extends Generator {
   #landMassReductionScale;
   #map;
   #maxIterations;
+  #rulesRegistry;
 
   constructor({
     height = 100,
@@ -22,7 +23,7 @@ export class BaseGenerator extends Generator {
     clusterChance = .05,
     pathChance = .05,
     maxIterations = 1,
-  } = {}) {
+  } = {}, rulesRegistry = RulesRegistry.getInstance()) {
     super({height, width});
 
     this.#landCoverage = landCoverage; // total coverage required
@@ -32,6 +33,8 @@ export class BaseGenerator extends Generator {
     this.#pathChance = pathChance; // chance for directly adjacent tiles to be part of the path
     this.#maxIterations = maxIterations; // number of times a tile can be tested to change to land
     this.#landMassReductionScale = landMassReductionScale;
+
+    this.#rulesRegistry = rulesRegistry;
 
     this.#map = new Array(this.height * this.width)
       .fill(0)
@@ -118,10 +121,12 @@ export class BaseGenerator extends Generator {
   }
 
   populateTerrain() {
-    RulesRegistry.get('terrain:distributionGroups')
+    const rules = this.#rulesRegistry.get('terrain:distribution');
+
+    this.#rulesRegistry.get('terrain:distributionGroups')
       .filter((rule) => rule.validate())
       .map((rule) => rule.process())
-      .forEach((group) => group.forEach((TerrainType) => RulesRegistry.get('terrain:distribution')
+      .forEach((group) => group.forEach((TerrainType) => rules
         .filter((rule) => rule.validate(TerrainType, this.#map))
         .map((rule) => rule.process(TerrainType, this.#map))
         .forEach((distribution) => distribution.forEach(

@@ -5,19 +5,22 @@ import {Library} from '../../../base-city-improvements/CityImprovements.js';
 import {Library as LibraryModifier} from '../../YieldModifier/Library.js';
 import {Research} from '../../../base-science/Yields.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-[
-  [Library, Research, LibraryModifier],
-]
-  .forEach(([Improvment, Yield, YieldModifier]) => {
-    RulesRegistry.register(new Rule(
+export const getRules = ({
+  cityImprovementRegistry = CityImprovementRegistry.getInstance(),
+} = {}) => [
+  ...[
+    [Library, Research, LibraryModifier],
+  ]
+    .map(([Improvment, Yield, YieldModifier]) => new Rule(
       `city:yield:${[Yield, Improvment].map((Entity) => Entity.name).join(':')}`,
       new Criterion((cityYield) => cityYield instanceof Yield),
-      new Criterion((cityYield, city) => CityImprovementRegistry.getBy('city', city)
+      new Criterion((cityYield, city) => cityImprovementRegistry.getBy('city', city)
         .some((improvement) => improvement instanceof Improvment)
       ),
       new Effect((cityYield) => cityYield.addModifier(new YieldModifier()))
-    ));
-  })
-;
+    ))
+  ,
+];
+
+export default getRules;

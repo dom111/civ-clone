@@ -39,6 +39,10 @@
     {
       "type": "script",
       "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

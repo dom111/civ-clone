@@ -11,10 +11,6 @@
   "components": [
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Advances/Alphabet.js"
     },
     {
@@ -131,10 +127,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Game/start.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/Research/cost.js"
     },
     {
@@ -156,6 +148,26 @@
     {
       "type": "script",
       "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerActions.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAdvances.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/research.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/research-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

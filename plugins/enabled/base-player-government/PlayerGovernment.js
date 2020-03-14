@@ -1,12 +1,15 @@
 import {Despotism} from '../base-governments/Governments.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class PlayerGovernment {
   #government;
   #player;
+  #rulesRegistry;
 
-  constructor(player) {
+  constructor({player, rulesRegistry = RulesRegistry.getInstance()}) {
     this.#government = new Despotism();
     this.#player = player;
+    this.#rulesRegistry = rulesRegistry;
   }
 
   get() {
@@ -24,7 +27,7 @@ export class PlayerGovernment {
   set(government) {
     this.#government = government;
 
-    engine.emit('player:government:changed', this.#player, government);
+    this.#rulesRegistry.process('player:government-changed', this.#player, government);
   }
 }
 

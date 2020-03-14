@@ -10,18 +10,17 @@
     "base-terrain-yield-trade",
     "base-terrain-yields",
     "base-unit",
-    "base-unit-actions",
     "base-unit-improvements",
     "core-city",
     "core-player",
-    "core-rules",
     "core-terrain",
     "core-unit",
     "base-city-improvements",
     "base-terrain-features",
     "base-tile-improvements",
     "core-tile-improvements",
-    "base-city"
+    "base-city",
+    "core-world"
   ],
   "components": [
     {
@@ -30,7 +29,7 @@
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "registerAIPlayers.js"
     }
   ]
 }

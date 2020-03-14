@@ -1,9 +1,12 @@
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 
 engine.on('tile:improvement-pillaged', (tile, improvement) => {
-  if (TileImprovementRegistry.getBy('tile', tile)
+  if (TileImprovementRegistry.getInstance()
+    .getBy('tile', tile)
     .includes(improvement)
   ) {
-    TileImprovementRegistry.unregister(improvement);
+    TileImprovementRegistry.getInstance()
+      .unregister(improvement)
+    ;
   }
 });

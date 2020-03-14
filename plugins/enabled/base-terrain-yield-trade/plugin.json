@@ -20,11 +20,15 @@
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "Rules/Tile/yield.js"
     },
     {
       "type": "script",
-      "file": "Rules/Tile/yield.js"
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerYields.js"
     }
   ]
 }

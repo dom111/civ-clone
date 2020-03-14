@@ -1,6 +1,10 @@
 import Registry from '../core-registry/Registry.js';
 import TerrainFeature from './TerrainFeature.js';
 
-export const AvailableTerrainFeatureRegistry = new Registry(TerrainFeature);
+export class AvailableTerrainFeatureRegistry extends Registry {
+  constructor() {
+    super(TerrainFeature);
+  }
+}
 
 export default AvailableTerrainFeatureRegistry;

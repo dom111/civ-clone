@@ -1,5 +1,4 @@
-import '../cost.js';
-import '../../../../base-currency/register.js';
+import '../../../../base-currency/registerYields.js';
 import {
   Aqueduct,
   Barracks,
@@ -13,24 +12,40 @@ import {
 } from '../../../../base-city-improvements/CityImprovements.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
 import {Gold} from '../../../../base-currency/Yields.js';
+import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import assert from 'assert';
+import cost from '../cost.js';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 
 describe('city:cost', () => {
+  const rulesRegistry = new RulesRegistry(),
+    cityImprovementRegistry = new CityImprovementRegistry()
+  ;
+
+  rulesRegistry.register(
+    ...cost({
+      cityImprovementRegistry,
+    })
+  );
+
   [
     [Barracks, Gold],
     [Palace, Gold],
   ]
     .forEach(([Improvement, Yield]) => {
       it(`should not cost ${Yield.name} to maintain ${Improvement.name}`, () => {
-        const city = setUpCity();
+        const city = setUpCity({
+          rulesRegistry,
+        });
 
-        CityImprovementRegistry.register(new Improvement({
+        cityImprovementRegistry.register(new Improvement({
           city,
+          rulesRegistry,
         }));
 
-        const [cityYield] = city.yields()
-          .filter((cityYield) => cityYield instanceof Yield)
+        const [cityYield] = city.yields({
+          yields: [Gold],
+        })
         ;
 
         assert.strictEqual(cityYield.value(), 0);
@@ -49,14 +64,19 @@ describe('city:cost', () => {
   ]
     .forEach(([Improvement, cost, Yield]) => {
       it(`should cost ${cost} ${Yield.name} to maintain ${Improvement.name}`, () => {
-        const city = setUpCity();
+        const city = setUpCity({
+          cityImprovementRegistry,
+          rulesRegistry,
+        });
 
-        CityImprovementRegistry.register(new Improvement({
+        cityImprovementRegistry.register(new Improvement({
           city,
+          rulesRegistry,
         }));
 
-        const [cityYield] = city.yields()
-          .filter((cityYield) => cityYield instanceof Yield)
+        const [cityYield] = city.yields({
+          yields: [Gold],
+        })
         ;
 
         assert.strictEqual(cityYield.value(), -cost);

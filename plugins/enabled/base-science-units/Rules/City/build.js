@@ -27,40 +27,43 @@ import Effect from '../../../core-rules/Effect.js';
 import OneCriteria from '../../../core-rules/OneCriteria.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-[
-  [Catapult, Mathematics],
-  [Cavalry, HorsebackRiding, Gunpowder],
-  [Chariot, TheWheel, Chivalry],
-  [Knights, Chivalry],
-  [Militia, false, Gunpowder],
-  [Musketman, Gunpowder],
-  [Sail, Navigation],
-  [Spearman, BronzeWorking, Gunpowder],
-  [Swordman, IronWorking],
-  [Trireme, MapMaking, Navigation],
-]
-  .forEach(([Unit, RequiredAdvance, ObseletionAdvance]) => {
-    RulesRegistry.register(new Rule(
+export const getRules = ({
+  playerResearchRegistry = PlayerResearchRegistry.getInstance(),
+} = {}) => [
+  ...[
+    [Catapult, Mathematics],
+    [Cavalry, HorsebackRiding, Gunpowder],
+    [Chariot, TheWheel, Chivalry],
+    [Knights, Chivalry],
+    [Militia, null, Gunpowder],
+    [Musketman, Gunpowder],
+    [Sail, Navigation],
+    [Spearman, BronzeWorking, Gunpowder],
+    [Swordman, IronWorking],
+    [Trireme, MapMaking, Navigation],
+  ]
+    .map(([Unit, RequiredAdvance, ObseletionAdvance]) => new Rule(
       `city:build:unit:${[Unit, RequiredAdvance, ObseletionAdvance].map((entity) => entity ? entity.name.toLowerCase() : 'none').join(':')}`,
       new Criterion((city, buildItem) => buildItem === Unit),
       new Effect((city) => new Criteria(
         new OneCriteria(
           new Criterion(() => ! RequiredAdvance),
-          new Criterion(() => PlayerResearchRegistry
+          new Criterion(() => playerResearchRegistry
             .getBy('player', city.player)
             .every((playerResearch) => playerResearch.completed(RequiredAdvance))
           )
         ),
         new OneCriteria(
           new Criterion(() => ! ObseletionAdvance),
-          new Criterion(() => ! PlayerResearchRegistry
+          new Criterion(() => ! playerResearchRegistry
             .getBy('player', city.player)
             .every((playerResearch) => playerResearch.completed(ObseletionAdvance))
           )
         )
       ))
-    ));
-  })
-;
+    ))
+  ,
+];
+
+export default getRules;

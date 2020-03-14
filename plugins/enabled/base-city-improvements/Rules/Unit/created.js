@@ -3,14 +3,20 @@ import CityImprovementRegistry from '../../../core-city-improvement/CityImprovem
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import UnitImprovementRegistry from '../../../base-unit-improvements/UnitImprovementRegistry.js';
 import {Veteran} from '../../../base-unit-improvements/UnitImprovements.js';
 
-RulesRegistry.register(new Rule(
-  'unit:created:veteran',
-  new Criterion((unit) => unit.city && CityImprovementRegistry.getBy('city', unit.city)
-    .some((improvement) => improvement instanceof Barracks)
+export const getRules = ({
+  cityImprovementRegistry = CityImprovementRegistry.getInstance(),
+  unitImprovementRegistry = UnitImprovementRegistry.getInstance(),
+} = {}) => [
+  new Rule(
+    'unit:created:veteran',
+    new Criterion((unit) => unit.city && cityImprovementRegistry.getBy('city', unit.city)
+      .some((improvement) => improvement instanceof Barracks)
+    ),
+    new Effect((unit) => unitImprovementRegistry.register(new Veteran(unit)))
   ),
-  new Effect((unit) => UnitImprovementRegistry.register(new Veteran(unit)))
-));
+];
+
+export default getRules;

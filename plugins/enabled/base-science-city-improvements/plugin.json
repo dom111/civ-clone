@@ -20,6 +20,10 @@
     {
       "type": "script",
       "file": "YieldModifier/Library.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

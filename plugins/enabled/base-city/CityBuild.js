@@ -5,13 +5,24 @@ import {Production} from '../base-terrain-yields/Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class CityBuild {
+  #availableCityImprovementRegistry;
+  #availableUnitRegistry;
   #building;
   #city;
   #cost;
   #progress;
+  #rulesRegistry;
 
-  constructor(city) {
+  constructor({
+    availableCityImprovementRegistry = AvailableCityImprovementRegistry.getInstance(),
+    availableUnitRegistry = AvailableUnitRegistry.getInstance(),
+    city,
+    rulesRegistry = RulesRegistry.getInstance(),
+  }) {
+    this.#availableCityImprovementRegistry = availableCityImprovementRegistry;
+    this.#availableUnitRegistry = availableUnitRegistry;
     this.#city = city;
+    this.#rulesRegistry = rulesRegistry;
   }
 
   add(production) {
@@ -30,13 +41,14 @@ export class CityBuild {
   }
 
   availableBuildImprovements() {
-    const buildRulesRegistry = RulesRegistry.get('city:build:improvement');
+    const buildImprovementRules = this.#rulesRegistry.get('city:build:improvement');
 
     // TODO: this still feels awkward... It's either this, or every rule has to be 'either it isn't this thing we're
     //  checking or it is and it meets the condition' or it's this. It'd be nice to be able to just filter the list in a
     //  more straightforward way...
-    return AvailableCityImprovementRegistry
-      .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this.city, buildItem))
+    return this.#availableCityImprovementRegistry
+      .filter((buildItem) => buildImprovementRules
+        .filter((rule) => rule.validate(this.city, buildItem))
         .every((rule) => rule.process(this.city, buildItem)
           .validate()
         )
@@ -45,13 +57,14 @@ export class CityBuild {
   }
 
   availableBuildUnits() {
-    const buildRulesRegistry = RulesRegistry.get('city:build:unit');
+    const buildUnitRules = this.#rulesRegistry.get('city:build:unit');
 
     // TODO: this still feels awkward... It's either this, or every rule has to be 'either it isn't this thing we're
     //  checking or it is and it meets the condition'. It'd be nice to be able to just filter the list in a more
     //  straightforward way...
-    return AvailableUnitRegistry
-      .filter((buildItem) => buildRulesRegistry.filter((rule) => rule.validate(this.city, buildItem))
+    return this.#availableUnitRegistry
+      .filter((buildItem) => buildUnitRules
+        .filter((rule) => rule.validate(this.city, buildItem))
         .every((rule) => rule.process(this.city, buildItem)
           .validate()
         )
@@ -67,10 +80,7 @@ export class CityBuild {
     }
 
     this.#building = BuildItem;
-    [this.#cost] = RulesRegistry.get('city:build-cost')
-      .filter((rule) => rule.validate(BuildItem, this.#city))
-      .map((rule) => rule.process(BuildItem, this.#city))
-    ;
+    [this.#cost] = this.#rulesRegistry.process('city:build-cost', BuildItem, this.#city);
     this.#progress = new BuildProgress();
   }
 
@@ -86,10 +96,7 @@ export class CityBuild {
         tile: this.#city.tile,
       });
 
-      RulesRegistry.get('city:building-complete')
-        .filter((rule) => rule.validate(this.#city, built))
-        .forEach((rule) => rule.process(this.#city, built))
-      ;
+      this.#rulesRegistry.process('city:building-complete', this.#city, built);
 
       this.#progress = null;
       this.#building = null;

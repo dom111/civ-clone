@@ -1,16 +1,30 @@
-import '../grow.js';
-import '../process-yield.js';
-import '../shrink.js';
 import CityGrowthRegistry from '../../../CityGrowthRegistry.js';
 import {Food} from '../../../../base-terrain-yields/Yields.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import assert from 'assert';
+import created from '../created.js';
+import grow from '../grow.js';
 import setUpCity from '../../../tests/lib/setUpCity.js';
 
 describe('city:grow', () => {
+  const rulesRegistry = new RulesRegistry(),
+    cityGrowthRegistry = new CityGrowthRegistry()
+  ;
+
+  rulesRegistry.register(
+    ...created({
+      cityGrowthRegistry,
+    }),
+    ...grow({
+      cityGrowthRegistry,
+    })
+  );
+
   it('should cause a city to grow when the food cost is met', () => {
-    const city = setUpCity(),
-      [cityGrowth] = CityGrowthRegistry.getBy('city', city)
+    const city = setUpCity({
+        rulesRegistry,
+      }),
+      [cityGrowth] = cityGrowthRegistry.getBy('city', city)
     ;
 
     assert.strictEqual(cityGrowth.progress.value(), 0);
@@ -27,12 +41,9 @@ describe('city:grow', () => {
       [2, 0, 40],
     ]
       .forEach(([yieldValue, expectedProgress, expectedCost]) => {
-        const cityYield = new Food(yieldValue);
+        cityGrowth.add(new Food(yieldValue));
 
-        RulesRegistry.get('city:process-yield')
-          .filter((rule) => rule.validate(cityYield, city))
-          .forEach((rule) => rule.process(cityYield, city))
-        ;
+        cityGrowth.check();
 
         assert.strictEqual(cityGrowth.progress.value(), expectedProgress);
         assert.strictEqual(cityGrowth.cost.value(), expectedCost);

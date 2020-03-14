@@ -6,15 +6,23 @@ import Yield from '../core-yields/Yield.js';
 
 export class PlayerTreasury extends Yield {
   #player;
+  #rulesRegistry;
+  #cityBuildRegistry;
 
-  constructor(player) {
+  constructor({
+    player,
+    rulesRegistry = RulesRegistry.getInstance(),
+    cityBuildRegistry = CityBuildRegistry.getInstance(),
+  }) {
     super();
 
     this.#player = player;
+    this.#rulesRegistry = rulesRegistry;
+    this.#cityBuildRegistry = cityBuildRegistry;
   }
 
   buy(city) {
-    const [cityBuild] = CityBuildRegistry.getBy('city', city),
+    const [cityBuild] = this.#cityBuildRegistry.getBy('city', city),
       cost = this.cost(city)
     ;
 
@@ -32,14 +40,11 @@ export class PlayerTreasury extends Yield {
   }
 
   cost(city) {
-    const [cityBuild] = CityBuildRegistry.getBy('city', city),
+    const [cityBuild] = this.#cityBuildRegistry.getBy('city', city),
       cost = new Gold()
     ;
 
-    RulesRegistry.get('city:spend')
-      .filter((rule) => rule.validate(cityBuild, cost))
-      .forEach((rule) => rule.process(cityBuild, cost))
-    ;
+    this.#rulesRegistry.process('city:spend', cityBuild, cost);
 
     return cost;
   }

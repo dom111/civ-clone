@@ -1,6 +1,5 @@
 import {Data, File, Script} from './Components.js';
 import path from 'path';
-import promiseFactory from '../lib/promiseFactory.js';
 
 export class Component {
   #data;
@@ -29,16 +28,7 @@ export class Component {
   }
 
   run(context = {}, resolver) {
-    return this.#result = promiseFactory(async (resolve, reject) => {
-      try {
-        const module = await this.process(this.fullPath, context, resolver);
-
-        resolve(module);
-      }
-      catch (e) {
-        reject(e);
-      }
-    });
+    return this.#result = this.process(this.fullPath, context, resolver);
   }
 
   get data() {

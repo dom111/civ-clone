@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "dependencies": [
     "core-registry",
-    "core-unit",
-    "core-world"
+    "core-world",
+    "core-rules"
   ],
   "components": [
     {
@@ -30,7 +30,11 @@
     },
     {
       "type": "script",
-      "file": "registerActions.js"
+      "file": "CurrentPlayerRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerRegistry.js"
     }
   ]
 }

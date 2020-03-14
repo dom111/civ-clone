@@ -81,12 +81,15 @@ export class Tileset {
     return this.#tiles.some(iterator);
   }
 
-  yields(player) {
-    return this.#tiles
-      .reduce((yields, tile) => {
-        tile.yields(player)
+  yields({player, yields}) {
+    const finalYields =  this.#tiles
+      .reduce((tilesetYields, tile) => {
+        tile.yields({
+          player,
+          yields,
+        })
           .forEach((tileYield) => {
-            const [existingYield] = yields.filter((existingYield) => existingYield instanceof (tileYield.constructor));
+            const [existingYield] = tilesetYields.filter((existingYield) => existingYield instanceof (tileYield.constructor));
 
             if (existingYield) {
               existingYield.add(tileYield);
@@ -96,13 +99,15 @@ export class Tileset {
 
             const newYield = new (tileYield.constructor)(tileYield);
 
-            yields.push(newYield);
+            tilesetYields.push(newYield);
           })
         ;
 
-        return yields;
-      }, [])
+        return tilesetYields;
+      }, yields.map((Yield) => new Yield()))
     ;
+
+    return finalYields;
   }
 }
 

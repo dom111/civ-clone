@@ -2,7 +2,6 @@
   "name": "game-report",
   "version": "0.1.0",
   "dependencies": [
-    "base-player",
     "core-city",
     "core-turn-based-game",
     "core-unit",
@@ -11,7 +10,8 @@
     "base-currency",
     "core-tile-improvements",
     "base-science",
-    "base-unit-improvements"
+    "base-unit-improvements",
+    "core-player"
   ],
   "components": [
     {

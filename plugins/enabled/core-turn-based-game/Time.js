@@ -1,4 +1,5 @@
 export class Time {
+  // TODO: rules
   static #ranges = [
     // 4000 BC - 1 AD
     {

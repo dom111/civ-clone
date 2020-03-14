@@ -2,16 +2,15 @@ import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class CityImprovement {
   #city;
+  #rulesRegistry;
   #player;
 
-  constructor({player, city}) {
-    this.#player = player;
+  constructor({city, player = city.player, rulesRegistry = RulesRegistry.getInstance()}) {
     this.#city   = city;
+    this.#player = player;
+    this.#rulesRegistry = rulesRegistry;
 
-    RulesRegistry.get('city:improvement:created')
-      .filter((rule) => rule.validate(this, city))
-      .forEach((rule) => rule.process(this, city))
-    ;
+    this.#rulesRegistry.process('city:improvement:created', this, city);
   }
 
   get city() {

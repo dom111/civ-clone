@@ -24,14 +24,6 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/Player/turn-start.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/City/cost.js"
     },
     {
@@ -41,6 +33,18 @@
     {
       "type": "script",
       "file": "Rules/City/civil-disorder.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerYields.js"
     }
   ]
 }

@@ -11,10 +11,6 @@
   "components": [
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Tile/improvement-pillaged.js"
     },
     {
@@ -52,6 +48,14 @@
     {
       "type": "script",
       "file": "TileImprovements.js"
+    },
+    {
+      "type": "script",
+      "file": "registerTileImprovements.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

@@ -32,16 +32,26 @@ export class Engine extends EventEmitter {
     ;
   }
 
+  debug(callback) {
+    if (! this.option('debug')) {
+      return;
+    }
+
+    return callback();
+  }
+
   emit(event, ...args) {
-    this.option('debug') && console.log(`Engine#emit: ${event}: ${args}`);
+    this.debug(() => console.log(`Engine#emit: ${event}: ${args}`));
 
     super.emit(event, ...args);
   }
 
-  async loadPlugins() {
+  loadPlugins() {
     this.emit('engine:plugins:load');
-    await this.#pluginManager.load();
-    this.emit('engine:plugins-loaded');
+
+    return this.#pluginManager.load()
+      .then(() => this.emit('engine:plugins-loaded'))
+    ;
   }
 
   path(key, ...parts) {
@@ -66,7 +76,7 @@ export class Engine extends EventEmitter {
     }
   }
 
-  async start() {
+  start() {
     if (this.started) {
       return;
     }
@@ -75,9 +85,9 @@ export class Engine extends EventEmitter {
 
     this.emit('engine:initialise');
 
-    await this.loadPlugins();
-
-    this.emit('engine:start');
+    return this.loadPlugins()
+      .then(() => this.emit('engine:start'))
+    ;
   }
 
   loadJSON(...parts) {

@@ -1,9 +1,11 @@
-import CurrentPlayerRegistry from '../../CurrentPlayerRegistry.js';
+import CurrentPlayerRegistry from '../../../core-player/CurrentPlayerRegistry.js';
 
 engine.on('player:turn-end', (player) => {
-  CurrentPlayerRegistry.unregister(player);
+  const currentPlayerRegistry = CurrentPlayerRegistry.getInstance();
 
-  const [nextPlayer] = CurrentPlayerRegistry.entries();
+  currentPlayerRegistry.unregister(player);
+
+  const [nextPlayer] = currentPlayerRegistry.entries();
 
   if (nextPlayer) {
     engine.emit('player:turn-start', nextPlayer);

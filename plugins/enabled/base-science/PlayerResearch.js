@@ -3,54 +3,65 @@ import {Research} from './Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class PlayerResearch {
+  #advanceRegistry;
   #complete = [];
   #researching;
   #player;
-  #cost = 0;
-  #progress = 0;
+  #cost = new Research(Infinity);
+  #progress = new Research(0);
+  #rulesRegistry;
 
-  constructor(player) {
+  constructor({
+    advanceRegistry = AdvanceRegistry.getInstance(),
+    player,
+    rulesRegistry = RulesRegistry.getInstance(),
+  }) {
+    this.#advanceRegistry = advanceRegistry;
     this.#player = player;
+    this.#rulesRegistry = rulesRegistry;
   }
 
   add(researchYield) {
-    if (researchYield instanceof Research) {
-      this.#progress += researchYield.value();
+    if (! (researchYield instanceof Research)) {
+      throw new TypeError(`PlayerResearch#add: Expected instance of 'Research', got '${researchYield && researchYield.constructor.name}'`);
     }
+
+    this.#progress.add(researchYield);
 
     this.check();
   }
 
   available() {
-    return AdvanceRegistry
-      .filter((Advance) => RulesRegistry.get('research:requirements')
-        .filter((rule) => rule.validate(Advance, this.#complete))
-        .every((rule) => rule.process(Advance, this.#complete) === true)
-      )
+    const rules = this.#rulesRegistry.get('research:requirements');
+
+    return this.#advanceRegistry.filter((Advance) => rules
+      .filter((rule) => rule.validate(Advance, this.#complete))
+      .every((rule) => rule.process(Advance, this.#complete) === true)
+    )
       .filter((Advance) => ! this.#complete.some((advance) => advance instanceof Advance))
     ;
   }
 
   check() {
-    if (this.researching() && (this.#progress >= this.#cost)) {
+    if (this.researching() && (this.#progress.value() >= this.#cost.value())) {
       const completedResearch = new (this.#researching)();
 
-      engine.emit('player:research-complete', this.#player, completedResearch);
+      this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
 
       this.#complete.push(completedResearch);
       this.#researching = null;
-      this.#progress -= this.#cost;
+      this.#progress.subtract(this.#cost);
 
-      if (this.#progress < 0) {
-        this.#progress = 0;
+      if (this.#progress.value() < 0) {
+        this.#progress.set(0);
       }
 
-      this.#cost = 0;
+      this.#cost.set(Infinity);
     }
   }
 
   complete() {
-    return [...this.#complete];
+    return this.#complete;
   }
 
   completed(Advance) {
@@ -59,19 +70,25 @@ export class PlayerResearch {
     ;
   }
 
+  get cost() {
+    return this.#cost;
+  }
+
   get player() {
     return this.#player;
   }
 
-  research(Advance) {
-    [this.#cost] = RulesRegistry.get('research:cost')
-      .filter((rule) => rule.validate(Advance, this.#player))
-      .map((rule) => rule.process(Advance, this.#player))
-    ;
+  get progress() {
+    return this.#progress;
+  }
 
+  research(Advance) {
+    const [cost] = this.#rulesRegistry.process('research:cost', Advance, this.#player);
+
+    this.#cost.set(cost);
     this.#researching = Advance;
 
-    engine.emit('player:research', this.#player, Advance);
+    this.#rulesRegistry.process('player:research', this.#player, Advance);
   }
 
   researching() {

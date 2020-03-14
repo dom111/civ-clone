@@ -1,6 +1,10 @@
 import Registry from '../core-registry/Registry.js';
 import TileImprovement from './TileImprovement.js';
 
-export const TileImprovementRegistry = new Registry(TileImprovement);
+export class TileImprovementRegistry extends Registry {
+  constructor() {
+    super(TileImprovement);
+  }
+}
 
 export default TileImprovementRegistry;

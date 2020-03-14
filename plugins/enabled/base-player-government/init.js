@@ -10,14 +10,16 @@
 // });
 
 // TODO: Perhaps an optional action type needs to be created?
-// PlayerActionRegistry.register(new Effect((player) => {
-//   const [research] = PlayerGovernmentRegistry.entries()
-//     .filter((playerResearch) => playerResearch.player === player)
-//   ;
+// PlayerActionRegistry.getInstance()
+//   .register(new Effect((player) => {
+//     const [research] = PlayerGovernmentRegistry.entries()
+//       .filter((playerResearch) => playerResearch.player === player)
+//     ;
 //
-//   if (! research.researching()) {
-//     return [research];
-//   }
+//     if (! research.researching()) {
+//       return [research];
+//     }
 //
-//   return [];
-// }));
+//     return [];
+//   }))
+// ;

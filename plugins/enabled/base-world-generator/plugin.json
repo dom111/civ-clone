@@ -14,15 +14,15 @@
     },
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "StaticWorldGenerator.js"
     },
     {
       "type": "script",
       "file": "FillGenerator.js"
+    },
+    {
+      "type": "script",
+      "file": "registerWorldGenerator.js"
     }
   ]
 }

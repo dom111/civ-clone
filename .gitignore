@@ -1,4 +1,5 @@
 .idea
+isolate-0x*-v8.log
 node_modules/*
 settings.json
 yarn-error.log

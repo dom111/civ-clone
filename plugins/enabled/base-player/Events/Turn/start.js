@@ -1,51 +1,25 @@
-import CityRegistry from '../../../core-city/CityRegistry.js';
-import CurrentPlayerRegistry from '../../CurrentPlayerRegistry.js';
-import {Moves} from '../../../core-unit/Yields.js';
-import PlayerRegistry from '../../PlayerRegistry.js';
+import CurrentPlayerRegistry from '../../../core-player/CurrentPlayerRegistry.js';
+import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
-import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 engine.on('turn:start', () => {
-  PlayerRegistry.entries()
-    .forEach((player) => {
-      // process cities first in case units are created
-      CityRegistry.getBy('player', player)
-        .forEach((city) => city.yields(player)
-          .forEach((cityYield) => RulesRegistry.get('city:process-yield')
-            .filter((rule) => rule.validate(cityYield, city))
-            .forEach((rule) => rule.process(cityYield, city))
-          )
-        )
-      ;
-
-      UnitRegistry.getBy('player', player)
-        .sort((a, b) => a.waiting - b.waiting)
-        .forEach((unit) => {
-          if (unit.busy > 0) {
-            unit.busy--;
-
-            if (unit.busy === 0) {
-              // TODO: This feels crude - should maybe just have a promise to resolve.
-              if (unit.actionOnComplete) {
-                unit.actionOnComplete();
-              }
-            }
-          }
-
-          unit.moves = new Moves(unit.movement);
-
-          if (! unit.busy) {
-            unit.busy = false;
-            unit.active = true;
-          }
-        })
-      ;
-
-      CurrentPlayerRegistry.register(player);
-    })
+  const rules = RulesRegistry.getInstance()
+      .get('turn:start')
+    ,
+    currentPlayerRegistry = CurrentPlayerRegistry.getInstance(),
+    playerRegistry = PlayerRegistry.getInstance()
   ;
 
-  const [currentPlayer] = CurrentPlayerRegistry.entries();
+  currentPlayerRegistry.register(...playerRegistry.entries());
+
+  playerRegistry.entries()
+    .forEach((player) => rules
+      .filter((rule) => rule.validate(player))
+      .forEach((rule) => rule.process(player))
+    )
+  ;
+
+  const [currentPlayer] = currentPlayerRegistry.entries();
 
   engine.emit('player:turn-start', currentPlayer);
 });

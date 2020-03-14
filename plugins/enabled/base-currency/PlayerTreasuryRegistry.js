@@ -1,6 +1,10 @@
 import PlayerTreasury from './PlayerTreasury.js';
 import Registry from '../core-registry/Registry.js';
 
-export const PlayerTreasuryRegistry = new Registry(PlayerTreasury);
+export class PlayerTreasuryRegistry extends Registry {
+  constructor() {
+    super(PlayerTreasury);
+  }
+}
 
 export default PlayerTreasuryRegistry;

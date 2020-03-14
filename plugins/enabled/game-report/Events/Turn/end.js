@@ -1,7 +1,7 @@
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import PlayerGovernmentRegistry from '../../../base-player-government/PlayerGovernmentRegistry.js';
-import PlayerRegistry from '../../../base-player/PlayerRegistry.js';
+import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
@@ -17,19 +17,23 @@ engine.on('turn:end', () => {
   }
 
   if (((Time.turn % reportTurns) === 1) || reportTurns === 1) {
-    PlayerRegistry.entries()
+    PlayerRegistry.getInstance()
+      .entries()
       .forEach((player) => {
-        const cities = CityRegistry.getBy('player', player),
-          units = UnitRegistry.getBy('player', player)
+        const cities = CityRegistry.getInstance()
+            .getBy('player', player),
+          units = UnitRegistry.getInstance()
+            .getBy('player', player)
         ;
 
         console.log(`${player.leader.name} of ${player.civilization.nation}
-Government: ${PlayerGovernmentRegistry.getBy('player', player)
+Government: ${PlayerGovernmentRegistry.getInstance()
+    .getBy('player', player)
     .map((playerGovernment) => playerGovernment.get().name)}
 Treasury: ${PlayerTreasuryRegistry.getBy('player', player)
     .map((playerTreasury) => playerTreasury.value())}
 Completed research:
-${PlayerResearchRegistry.getBy('player', player)
+${PlayerResearchRegistry.getInstance().getBy('player', player)
     .map((playerResearch) => playerResearch.complete()
       .map((advance) => advance.constructor.name)
       .join(', ')
@@ -49,19 +53,23 @@ ${
         ` (${tile.terrain.features.map((feature) => feature.constructor.name).join(', ')})` :
         ''
     }${
-      TileImprovementRegistry.getBy('tile', tile).length ?
-        ` (${TileImprovementRegistry.getBy('tile', tile).map((improvement) => improvement.constructor.name).join(', ')})` :
+      TileImprovementRegistry.getInstance()
+        .getBy('tile', tile).length ?
+        ` (${TileImprovementRegistry.getInstance()
+          .getBy('tile', tile).map((improvement) => improvement.constructor.name).join(', ')})` :
         ''
     } - ${
-      tile.yields(player)
+      tile.yields({player})
         .map((tileYield) => `${tileYield.value()} ${tileYield.constructor.name}`)
         .join(', ')
     }`)
     .join('\n')
 }
-Supported Units: ${UnitRegistry.getBy('city', city).length} (${UnitRegistry.getBy('city', city).filter((unit) => unit.constructor.name === 'Settlers').length} settlers)
+Supported Units: ${UnitRegistry.getInstance()
+    .getBy('city', city).length} (${UnitRegistry.getInstance()
+  .getBy('city', city).filter((unit) => unit.constructor.name === 'Settlers').length} settlers)
 Improvements: ${
-  CityImprovementRegistry.getBy('city', city)
+  CityImprovementRegistry.getInstance().getBy('city', city)
     .map((improvement) => improvement.constructor.name)
     .join(', ')
 }
@@ -77,7 +85,7 @@ Yields (after costs): ${
 Units: (${units.length})
 ${
   units
-    .map((unit) => `${unit.constructor.name} (${UnitImprovementRegistry.getBy('unit', unit).map((improvement) => improvement.constructor.name).join(', ')})`)
+    .map((unit) => `${unit.constructor.name} (${UnitImprovementRegistry.getInstance().getBy('unit', unit).map((improvement) => improvement.constructor.name).join(', ')})`)
     .join('\n')
 }
 `);

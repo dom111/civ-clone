@@ -1,33 +1,47 @@
-import '../../../../base-terrain-features/Rules/Tile/yield.js';
-import '../../../../base-terrain-yield-trade/Rules/Tile/yield.js';
-import '../../../../base-terrain-yield-trade/register.js';
-import '../../../../base-terrain-yields/Rules/Tile/yield.js';
-import '../../../../base-terrain-yields/register.js';
-import '../yield.js';
-
+// import '../../../../base-terrain-yield-trade/registerYields.js';
+// import '../../../../base-terrain-yields/registerYields.js';
 import {Food, Production} from '../../../../base-terrain-yields/Yields.js';
 import {Monarchy} from '../../../../base-governments/Governments.js';
 import {Player} from '../../../../core-player/Player.js';
 import PlayerGovernment from '../../../PlayerGovernment.js';
 import PlayerGovernmentRegistry from '../../../PlayerGovernmentRegistry.js';
+import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import StaticWorldGenerator from '../../../../base-world-generator/StaticWorldGenerator.js';
 import {Trade} from '../../../../base-terrain-yield-trade/Yields.js';
 import World from '../../../../core-world/World.js';
 import assert from 'assert';
+import baseTileYield from '../../../../base-terrain-yields/Rules/Tile/yield.js';
+import featureTileYield from '../../../../base-terrain-features/Rules/Tile/yield.js';
+import governmentTileYield from '../yield.js';
+import tradeTileYield from '../../../../base-terrain-yield-trade/Rules/Tile/yield.js';
 
-describe('tile:yields:monarchy', () => {
-  const world = new World(new StaticWorldGenerator());
+describe('tile:yield:monarchy', () => {
+  const rulesRegistry = new RulesRegistry(),
+    playerGovernmentRegistry = new PlayerGovernmentRegistry(),
+    world = new World(new StaticWorldGenerator())
+  ;
 
-  world.build();
+  world.build({
+    rulesRegistry,
+  });
+
+  rulesRegistry.register(
+    ...baseTileYield(),
+    ...featureTileYield(),
+    ...governmentTileYield({
+      playerGovernmentRegistry,
+    }),
+    ...tradeTileYield()
+  );
 
   const player = new Player(),
-    playerGovernment = new PlayerGovernment(player)
+    playerGovernment = new PlayerGovernment({player})
   ;
 
   playerGovernment.set(new Monarchy());
-  PlayerGovernmentRegistry.register(playerGovernment);
+  playerGovernmentRegistry.register(playerGovernment);
 
-  const expectedData = [
+  [
     // Food, Production, Trade
     // [Arctic],
     [0, 0, 0],
@@ -78,34 +92,27 @@ describe('tile:yields:monarchy', () => {
     // [Tundra, Game],
     [3, 0, 0],
   ]
-    .map(([food, production, trade]) => [
-      [Food, food],
-      [Production, production],
-      [Trade, trade],
-    ])
-  ;
+    .map(([food, production, trade], i) => {
+      const tile = world.get(i, 0);
 
-  for (let i = 0; i < 24; i++) {
-    const tile = world.get(i, 0),
-      yields = tile.yields(player),
-      yieldsToTest = [Food, Production, Trade]
-    ;
+      [
+        [Food, food],
+        [Production, production],
+        [Trade, trade],
+      ]
+        .forEach(([Yield, expectedValue]) => {
+          const tileYield = new Yield();
 
-    yields.forEach((tileYield) => {
-      if (! yieldsToTest.some((Yield) => tileYield instanceof Yield)) {
-        return;
-      }
+          rulesRegistry.process('tile:yield', tileYield, tile, player);
 
-      const [value] = expectedData[i].filter(([Yield]) => tileYield instanceof Yield)
-        .map(([, value]) => value)
+          it(`${tile.terrain.constructor.name}${tile.terrain.features.length ? ` (${tile.terrain.features.map((feature) => feature.constructor.name).join('')})` : ''} under a Monarchy should have ${expectedValue} ${Yield.name}.`, () => {
+            assert.strictEqual(
+              tileYield.value(),
+              expectedValue
+            );
+          });
+        })
       ;
-
-      it(`${tile.terrain.constructor.name}${tile.terrain.features.length ? ` (${tile.terrain.features.map((feature) => feature.constructor.name).join('')})` : ''} under a Monarchy should have ${value} ${tileYield.constructor.name}.`, () => {
-        assert.strictEqual(
-          tileYield.value(),
-          value
-        );
-      });
-    });
-  }
+    })
+  ;
 });

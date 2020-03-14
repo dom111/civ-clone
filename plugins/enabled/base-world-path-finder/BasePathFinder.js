@@ -1,4 +1,4 @@
-import {Move} from '../base-unit-actions/Actions/Move.js';
+import {Move} from '../base-unit/Actions/Move.js';
 import Path from '../core-world/Path.js';
 import PathFinder from '../core-world/PathFinder.js';
 

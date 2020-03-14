@@ -1,6 +1,10 @@
 import PlayerResearch from './PlayerResearch.js';
 import Registry from '../core-registry/Registry.js';
 
-export const PlayerResearchRegistry = new Registry(PlayerResearch);
+export class PlayerResearchRegistry extends Registry {
+  constructor() {
+    super(PlayerResearch);
+  }
+}
 
 export default PlayerResearchRegistry;

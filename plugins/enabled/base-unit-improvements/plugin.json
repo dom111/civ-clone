@@ -47,6 +47,10 @@
     {
       "type": "script",
       "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

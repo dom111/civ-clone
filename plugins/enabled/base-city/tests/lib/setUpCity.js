@@ -1,16 +1,24 @@
-import '../../../base-city/Rules/City/created.js';
 import {Irrigation, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import City from '../../../core-city/City.js';
+import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import FillGenerator from '../../../base-world-generator/FillGenerator.js';
 import {Grassland} from '../../../base-terrain/Terrains.js';
 import Player from '../../../core-player/Player.js';
+import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import {Shield} from '../../../base-terrain-features/TerrainFeatures.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Tileset from '../../../core-world/Tileset.js';
 import {Water} from '../../../core-terrain/Types.js';
 import World from '../../../core-world/World.js';
 
-export const setUpCity = (size = 1, tile, world) => {
+export const setUpCity = ({
+  size = 1,
+  tile,
+  world,
+  rulesRegistry = RulesRegistry.getInstance(),
+  cityImprovementRegistry = CityImprovementRegistry.getInstance(),
+  tileImprovementRegistry = TileImprovementRegistry.getInstance(),
+} = {}) => {
   if (! world) {
     const generator = new FillGenerator({
       height: 5,
@@ -19,7 +27,9 @@ export const setUpCity = (size = 1, tile, world) => {
 
     world = new World(generator);
 
-    world.build();
+    world.build({
+      rulesRegistry,
+    });
 
     Tileset.fromSurrounding(world.get(2, 2))
       .forEach((tile) => {
@@ -34,7 +44,11 @@ export const setUpCity = (size = 1, tile, world) => {
       name: 'City',
       player,
       tile: tile || world.get(2, 2),
-    })
+    }, rulesRegistry)
+  ;
+
+  cityImprovementRegistry.getBy('city', city)
+    .forEach((improvement) => cityImprovementRegistry.unregister(improvement))
   ;
 
   Tileset.fromSurrounding(city.tile)
@@ -47,7 +61,7 @@ export const setUpCity = (size = 1, tile, world) => {
         new Irrigation(tile),
         new Road(tile),
       ]
-        .forEach((improvement) => TileImprovementRegistry.register(improvement))
+        .forEach((improvement) => tileImprovementRegistry.register(improvement))
       ;
 
       player.seenTiles.push(tile);

@@ -2,7 +2,9 @@
 
 export class TerrainFeature {
   // static load(data) {
-  //   const Entity = AvailableTerrainFeatureRegistry.getBy('name', data.Type);
+  //   const Entity = AvailableTerrainFeatureRegistry.getInstance()
+  //     .getBy('name', data.Type)
+  //   ;
   //
   //   return new Entity();
   // }

@@ -26,7 +26,8 @@ describe('Rules', () => {
     evenAndSquareRule = new Rule('number:even-and-square', evenAndSquare),
     evenOrSquareRule = new Rule('number:even-or-square', evenOrSquare),
     ruleWithJustEffect = new Rule('effect', new Effect(() => 42)),
-    ruleThatSquares = new Rule('effect', new Effect((n) => n ** 2))
+    ruleThatSquares = new Rule('effect', new Effect((n) => n ** 2)),
+    rulesRegistry = new RulesRegistry()
   ;
 
   [
@@ -36,13 +37,13 @@ describe('Rules', () => {
     evenAndSquareRule,
     evenOrSquareRule,
   ]
-    .forEach((rule) => RulesRegistry.register(rule))
+    .forEach((rule) => rulesRegistry.register(rule))
   ;
 
   describe('RulesRegistry', () => {
     it('should return the expected number of rules', () => {
-      assert.strictEqual(RulesRegistry.get('empty').length, 1);
-      assert.strictEqual(RulesRegistry.get('number').length, 4);
+      assert.strictEqual(rulesRegistry.get('empty').length, 1);
+      assert.strictEqual(rulesRegistry.get('number').length, 4);
     });
   });
 

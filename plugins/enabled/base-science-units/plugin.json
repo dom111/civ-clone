@@ -10,6 +10,10 @@
     {
       "type": "script",
       "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

@@ -1,20 +1,8 @@
 import executeScript from './executeScript.js';
 import loadFile from './loadFile.js';
-import promiseFactory from './promiseFactory.js';
 
-export const executeFile = (script, context, resolver) => {
-  return promiseFactory(async (resolve, reject) => {
-    try {
-      const code = await loadFile(script),
-        module = await executeScript(code, context, resolver, script)
-      ;
-
-      resolve(module);
-    }
-    catch (e) {
-      reject(e);
-    }
-  });
-};
+export const executeFile = (script, context, resolver) => loadFile(script)
+  .then((code) => executeScript(code, context, resolver, script))
+;
 
 export default executeFile;

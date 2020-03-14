@@ -1,5 +1,11 @@
-engine.on('player:turn-start', async (player) => {
-  await player.takeTurn();
+import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-  engine.emit('player:turn-end', player);
+engine.on('player:turn-start', (player) => {
+  RulesRegistry.getInstance()
+    .process('player:turn-start', player)
+  ;
+
+  player.takeTurn()
+    .then(() => engine.emit('player:turn-end', player))
+  ;
 });

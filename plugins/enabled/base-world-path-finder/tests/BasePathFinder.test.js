@@ -1,122 +1,50 @@
-import '../../base-unit/Rules/Unit/movementCost.js';
-import '../../base-unit-actions/Rules/Unit/action.js';
-import '../../base-unit-actions/Rules/Unit/moved.js';
-import '../../base-unit-actions/Rules/Unit/validateMove.js';
-import '../../base-unit-yields/Rules/Unit/created.js';
-import '../../base-unit-yields/Rules/Unit/yield.js';
-import '../../base-terrain/register.js';
-import '../../base-terrain-features/register.js';
-import AvailableTerrainFeatureRegistry from '../../core-terrain-features/AvailableTerrainFeatureRegistry.js';
+import '../../base-terrain/registerTerrains.js';
+import '../../base-terrain-features/registerAvailableTerrainFeatures.js';
+import {simpleRLEDecoder, simpleWorldLoader} from '../../base-world/tests/lib/simpleLoadWorld.js';
 import BasePathFinder from '../BasePathFinder.js';
 import City from '../../core-city/City.js';
-import Generator from '../../core-world-generator/Generator.js';
+import CityRegistry from '../../core-city/CityRegistry.js';
 import {Militia} from '../../base-unit/Units.js';
-import Player from '../../core-player/Player.js';
-import TerrainRegistry from '../../core-terrain/TerrainRegistry.js';
-import World from '../../core-world/World.js';
+import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import UnitRegistry from '../../core-unit/UnitRegistry.js';
+import action from '../../base-unit/Rules/Unit/action.js';
 import assert from 'assert';
+import created from '../../base-unit-yields/Rules/Unit/created.js';
+import getPlayers from '../../base-player/tests/lib/getPlayers.js';
+import moved from '../../base-unit/Rules/Unit/moved.js';
+import movementCost from '../../base-unit/Rules/Unit/movementCost.js';
+import unitYield from '../../base-unit-yields/Rules/Unit/yield.js';
+import validateMove from '../../base-unit/Rules/Unit/validateMove.js';
 
 describe('BasePathFinder', () => {
-  const ghettoWorldLoader = (schema) => {
-      const Loader = class extends Generator {
-        #schema;
-
-        constructor(schema) {
-          super({
-            height: schema.height,
-            width: schema.width,
-          });
-
-          this.#schema = schema;
-        }
-
-        generate() {
-          const map = [];
-
-          this.#schema.map.forEach(({name, features}) => {
-            const [Terrain] = TerrainRegistry.getBy('name', name),
-              terrain = new Terrain()
-            ;
-
-            terrain.features.push(features.map((feature) => {
-              const [Feature] = AvailableTerrainFeatureRegistry.getBy('name', feature);
-
-              return new Feature();
-            }));
-
-            map.push(terrain);
-          });
-
-          return map;
-        }
-      };
-
-      const world = new World(new Loader(schema));
-
-      world.build();
-
-      return world;
-    },
-    ghettoRLELoader = (mapString) => {
-      const terrainLookup = {
-          A: 'Arctic',
-          D: 'Desert',
-          F: 'Forest',
-          G: 'Grassland',
-          H: 'Hills',
-          J: 'Jungle',
-          M: 'Mountains',
-          O: 'Ocean',
-          P: 'Plains',
-          R: 'River',
-          S: 'Swamp',
-          T: 'Tundra',
-        },
-        featureLookup = {
-          c: 'Coal',
-          f: 'Fish',
-          a: 'Game',
-          e: 'Gems',
-          g: 'Gold',
-          h: 'Horse',
-          i: 'Oasis',
-          o: 'Oil',
-          s: 'Seal',
-          d: 'Shield',
-        }
-      ;
-
-      return mapString
-        .replace(/^\s+|\s+$/g, '')
-        .match(/(\d+|)([A-Z])([a-z]+|)/g)
-        // .split(/\W+/)
-        .flatMap((definition) => {
-          const [, n, terrain, features] = definition.match(/(\d+|)([A-Z])([a-z]+|)?/);
-
-          return new Array(parseInt(n) || 1)
-            .fill({
-              name: terrainLookup[terrain],
-              features: (features || '')
-                .split('')
-                .map((char) => featureLookup[char]),
-            })
-          ;
-        })
-      ;
-    }
+  const rulesRegistry = new RulesRegistry(),
+    cityRegistry = new CityRegistry(),
+    unitRegistry = new UnitRegistry()
   ;
 
+  rulesRegistry.register(
+    ...movementCost(),
+    ...action({
+      cityRegistry,
+      rulesRegistry,
+      unitRegistry,
+    }),
+    ...moved(),
+    ...validateMove(),
+    ...created(),
+    ...unitYield()
+  );
+
   it('should return the shortest path length for neighbouring tiles', () => {
-    const world = ghettoWorldLoader({
-        height: 10,
-        width: 10,
-        map: ghettoRLELoader('100Gd'),
+    const world = simpleWorldLoader('100Gd'),
+      player = getPlayers({
+        rulesRegistry,
       }),
-      player = new Player(),
       startTile = world.get(3, 3),
       targetTile = world.get(4, 4),
       unit = new Militia({
         player,
+        rulesRegistry,
         tile: startTile,
       })
     ;
@@ -129,16 +57,19 @@ describe('BasePathFinder', () => {
   });
 
   it('should find a valid path avoiding water', () => {
-    const world = ghettoWorldLoader({
+    const world = simpleWorldLoader({
         height: 11,
         width: 10,
-        map: ghettoRLELoader('11O8G10OG2O5G2OGOG5OGOGOG2OG2OGOGOGOGOGOGOGOGOG3OGOGOG2O3G2OGOG7OG2O7GO'),
+        map: simpleRLEDecoder('11O8G10OG2O5G2OGOG5OGOGOG2OG2OGOGOGOGOGOGOGOGOG3OGOGOG2O3G2OGOG7OG2O7GO'),
       }),
-      player = new Player(),
+      player = getPlayers({
+        rulesRegistry,
+      }),
       startTile = world.get(1, 1),
       targetTile = world.get(5, 6),
       unit = new Militia({
         player,
+        rulesRegistry,
         tile: startTile,
       })
     ;
@@ -151,54 +82,53 @@ describe('BasePathFinder', () => {
   });
 
   it('should correctly avoid enemy tiles and respect adjacency rules', () => {
-    const world = ghettoWorldLoader({
-        height: 6,
-        width: 6,
-        map: ghettoRLELoader('7O5GO5GO5GO5GO5G'),
+    const world = simpleWorldLoader('7O5GO5GO5GO5GO5G'),
+      [player, enemy] = getPlayers({
+        n: 2,
+        rulesRegistry,
       }),
-      player = new Player(),
-      enemy = new Player(),
       startTile = world.get(1, 1),
       targetTile = world.get(4, 4),
       unit = new Militia({
         player,
+        rulesRegistry,
         tile: startTile,
+      }),
+      enemyUnit = new Militia({
+        player: enemy,
+        rulesRegistry,
+        tile: world.get(3, 3),
+      }),
+      city = new City({
+        player: enemy,
+        rulesRegistry,
+        tile: world.get(3, 3),
       })
     ;
 
-    new City({
-      player: enemy,
-      tile: world.get(3, 3),
-    });
-
-    new Militia({
-      player: enemy,
-      tile: world.get(3, 3),
-    });
+    unitRegistry.register(unit, enemyUnit);
+    cityRegistry.register(city);
 
     const pathFinder = new BasePathFinder(unit, startTile, targetTile),
       path = pathFinder.generate()
     ;
 
     assert.strictEqual(path.length, 6);
+
+    unitRegistry.unregister(unit, enemyUnit);
+    cityRegistry.unregister(city);
   });
 
   it('should correctly yield no path when applicable', () => {
-    const world = ghettoWorldLoader({
-        height: 6,
-        width: 6,
-        map: ghettoRLELoader(`
-          O O O O
-          O G O O
-          O O O O
-          O O O G
-        `),
+    const world = simpleWorldLoader('5OG9OG'),
+      player = getPlayers({
+        rulesRegistry,
       }),
-      player = new Player(),
       startTile = world.get(1, 1),
       targetTile = world.get(3, 3),
       unit = new Militia({
         player,
+        rulesRegistry,
         tile: startTile,
       })
     ;
@@ -211,25 +141,15 @@ describe('BasePathFinder', () => {
   });
 
   it('should prefer routes with a lower movement cost', () => {
-    const world = ghettoWorldLoader({
-        height: 8,
-        width: 8,
-        map: ghettoRLELoader(`
-          O O O O O O O O
-          O G G G G G G O
-          O M O O O O O G 
-          O M O O O O O G 
-          O M O O O O O G 
-          O M O O O O O G 
-          O M O O O O O G 
-          O O M G G G G O 
-        `),
+    const world = simpleWorldLoader('9O6G2OM5OGOM5OGOM5OGOM5OGOM5OG2OM4GO'),
+      player = getPlayers({
+        rulesRegistry,
       }),
-      player = new Player(),
       startTile = world.get(1, 1),
       targetTile = world.get(2, 7),
       unit = new Militia({
         player,
+        rulesRegistry,
         tile: startTile,
       })
     ;

@@ -2,7 +2,8 @@
   "name": "base-world",
   "dependencies": [
     "core-world",
-    "core-world-generator"
+    "core-world-generator",
+    "core-rules"
   ],
   "components": [
     {
@@ -19,7 +20,11 @@
     },
     {
       "type": "script",
-      "file": "Events/Tile/seen.js"
+      "file": "Rules/Tile/seen.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

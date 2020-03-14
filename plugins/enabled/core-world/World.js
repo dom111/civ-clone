@@ -1,3 +1,4 @@
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tile from './Tile.js';
 
 export class World {
@@ -16,8 +17,10 @@ export class World {
     // this.seed = 615489;
   }
 
-  build(options) {
-    const rawMap = this.#generator.generate(options);
+  build({
+    rulesRegistry = RulesRegistry.getInstance(),
+  } = {}) {
+    const rawMap = this.#generator.generate();
 
     this.#map = rawMap
       .map((terrain, i) => new Tile({
@@ -25,6 +28,7 @@ export class World {
         y: Math.floor(i / this.#width),
         terrain,
         map: this,
+        rulesRegistry,
       }))
     ;
   }

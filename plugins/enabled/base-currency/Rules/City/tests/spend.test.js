@@ -1,17 +1,34 @@
-import '../../../../base-city-improvements/Rules/City/build-cost.js';
-import '../../../../base-city-improvements/register.js';
-import '../../../../base-unit/Rules/City/build-cost.js';
-import '../../../../base-unit/register.js';
-import '../spend.js';
+import AvailableCityImprovementRegistry from '../../../../core-city-improvement/AvailableCityImprovementRegistry.js';
+import AvailableUnitRegistry from '../../../../core-unit/AvailableUnitRegistry.js';
+import CityBuild from '../../../../base-city/CityBuild.js';
 import CityBuildRegistry from '../../../../base-city/CityBuildRegistry.js';
 import {Militia} from '../../../../base-unit/Units.js';
 import PlayerTreasury from '../../../PlayerTreasury.js';
 import {Production} from '../../../../base-terrain-yields/Yields.js';
+import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import {Temple} from '../../../../base-city-improvements/CityImprovements.js';
 import assert from 'assert';
+import cityImprovementBuildCost from '../../../../base-city-improvements/Rules/City/build-cost.js';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
+import spend from '../spend.js';
+import unitBuildCost from '../../../../base-unit/Rules/City/build-cost.js';
 
 describe('city:spend', () => {
+  const rulesRegistry = new RulesRegistry(),
+    availableCityImprovementRegistry = new AvailableCityImprovementRegistry(),
+    availableUnitRegistry = new AvailableUnitRegistry(),
+    cityBuildRegistry = new CityBuildRegistry()
+  ;
+
+  rulesRegistry.register(
+    ...cityImprovementBuildCost(),
+    ...spend(),
+    ...unitBuildCost()
+  );
+
+  availableCityImprovementRegistry.register(Temple);
+  availableUnitRegistry.register(Militia);
+
   [
     [Temple, 0, 160],
     [Temple, 1, 78],
@@ -22,10 +39,24 @@ describe('city:spend', () => {
   ]
     .forEach(([BuildItem, progress, expectedCost]) => {
       it(`should cost ${expectedCost} Gold to buy a ${BuildItem.name} with ${progress} progress`, () => {
-        const city = setUpCity(),
-          playerTreasury = new PlayerTreasury(city.player),
-          [cityBuild] = CityBuildRegistry.getBy('city', city)
+        const city = setUpCity({
+            rulesRegistry,
+          }),
+          cityBuild = new CityBuild({
+            availableCityImprovementRegistry,
+            availableUnitRegistry,
+            city,
+            rulesRegistry,
+          })
         ;
+
+        cityBuildRegistry.register(cityBuild);
+
+        const playerTreasury = new PlayerTreasury({
+          player: city.player,
+          rulesRegistry,
+          cityBuildRegistry,
+        });
 
         playerTreasury.add(expectedCost);
 

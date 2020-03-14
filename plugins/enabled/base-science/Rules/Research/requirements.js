@@ -27,30 +27,29 @@ import {
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-[
-  [Astronomy, Mathematics, Mysticism],
-  [BridgeBuilding, Construction, IronWorking],
-  [Chivalry, Feudalism, HorsebackRiding],
-  [CodeOfLaws, Alphabet],
-  [Construction, Currency, Masonry],
-  [Currency, BronzeWorking],
-  [Engineering, Construction, TheWheel],
-  [Feudalism, Masonry, Monarchy],
-  [Gunpowder, Invention, IronWorking],
-  [Invention, Engineering, Literacy],
-  [IronWorking, BronzeWorking],
-  [Literacy, CodeOfLaws, Writing],
-  [MapMaking, Alphabet],
-  [Mathematics, Alphabet, Masonry],
-  [Monarchy, CodeOfLaws, Mysticism],
-  [Mysticism, CeremonialBurial],
-  [Navigation, Astronomy, MapMaking],
-  [Writing, Alphabet],
-]
-  .forEach(([Advance, ...requiredAdvances]) => {
-    RulesRegistry.register(new Rule(
+export const getRules = () => [
+  ...[
+    [Astronomy, Mathematics, Mysticism],
+    [BridgeBuilding, Construction, IronWorking],
+    [Chivalry, Feudalism, HorsebackRiding],
+    [CodeOfLaws, Alphabet],
+    [Construction, Currency, Masonry],
+    [Currency, BronzeWorking],
+    [Engineering, Construction, TheWheel],
+    [Feudalism, Masonry, Monarchy],
+    [Gunpowder, Invention, IronWorking],
+    [Invention, Engineering, Literacy],
+    [IronWorking, BronzeWorking],
+    [Literacy, CodeOfLaws, Writing],
+    [MapMaking, Alphabet],
+    [Mathematics, Alphabet, Masonry],
+    [Monarchy, CodeOfLaws, Mysticism],
+    [Mysticism, CeremonialBurial],
+    [Navigation, Astronomy, MapMaking],
+    [Writing, Alphabet],
+  ]
+    .map(([Advance, ...requiredAdvances]) => new Rule(
       `research:requirements:${Advance.name.toLowerCase()}`,
       new Criterion((CheckAdvance) => CheckAdvance === Advance),
       new Effect((Advance, discoveredAdvances) =>
@@ -58,6 +57,8 @@ import RulesRegistry from '../../../core-rules/RulesRegistry.js';
           discoveredAdvances.some((advance) => advance instanceof RequiredAdvance)
         )
       )
-    ));
-  })
-;
+    ))
+  ,
+];
+
+export default getRules;

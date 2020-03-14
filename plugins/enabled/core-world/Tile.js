@@ -6,13 +6,16 @@ import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class Tile {
   #neighbours;
+  #rulesRegistry;
   #yieldCache = new Map();
 
-  constructor({x, y, terrain, map}) {
+  constructor({x, y, terrain, map, rulesRegistry = RulesRegistry.getInstance()}) {
     this.x = x;
     this.y = y;
     this.terrain = terrain;
     this.map = map;
+
+    this.#rulesRegistry = rulesRegistry;
 
     this.features = [];
 
@@ -53,7 +56,7 @@ export class Tile {
   }
 
   getAdjacent() {
-    return ['n', 'w', 's', 'w']
+    return ['n', 'e', 's', 'w']
       .map((direction) => this.getNeighbour(direction))
     ;
   }
@@ -181,10 +184,7 @@ export class Tile {
       return type;
     }
 
-    RulesRegistry.get('tile:yield')
-      .filter((rule) => rule.validate(type, this, player))
-      .forEach((rule) => rule.process(type, this, player))
-    ;
+    this.#rulesRegistry.process('tile:yield', type, this, player);
 
     yieldCache.set(type.constructor, type.value());
 
@@ -201,7 +201,7 @@ export class Tile {
   // }
 
   score({player, values = [[Yield, 3]]}) {
-    const yields = this.yields(player);
+    const yields = this.yields({player});
 
     return yields.map((tileYield) => {
       const [value] = values.filter(([YieldType]) => tileYield instanceof YieldType),
@@ -213,18 +213,21 @@ export class Tile {
       .reduce((total, value) => total + value, 0) *
       // Ensure we have some of each scored yield
       (values.every(([YieldType, value]) => (value < 1) ||
-          yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0
+        yields.some((tileYield) => tileYield instanceof YieldType)) ? 1 : 0
       )
     ;
   }
 
-  yields(
+  yields({
     player,
-    yields
-  ) {
-    return (yields || YieldRegistry.entries())
-      .map((YieldType) => this.resource(new YieldType(), player))
-    ;
+    yieldRegistry = YieldRegistry.getInstance(),
+    yields = yieldRegistry.entries(),
+  }) {
+    if (yields.some((y) => typeof y !==  'function')) {
+      throw new Error('blah');
+    }
+
+    return yields.map((YieldType) => this.resource(new YieldType(), player));
   }
 }
 

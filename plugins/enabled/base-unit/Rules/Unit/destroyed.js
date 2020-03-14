@@ -1,8 +1,27 @@
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
-RulesRegistry.register(new Rule(
-  'unit:destroyed:event',
-  new Effect((unit, player) => engine.emit('unit:destroyed', this, player))
-));
+export const getRules = ({
+  unitRegistry = UnitRegistry.getInstance(),
+} = {}) => [
+  new Rule(
+    'unit:destroyed:event',
+    new Effect((unit, player) => engine.emit('unit:destroyed', this, player))
+  ),
+
+  new Rule(
+    'unit:destroyed:unregister',
+    new Effect((unit) => unitRegistry.unregister(unit))
+  ),
+
+  new Rule(
+    'unit:destroyed:flags',
+    new Effect((unit) => {
+      unit.active = false;
+      unit.destroyed = true;
+    })
+  ),
+];
+
+export default getRules;

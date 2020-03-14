@@ -2,7 +2,9 @@ import World from '../../../core-world/World.js';
 import WorldGeneratorRegistry from '../../../core-world-generator/WorldGeneratorRegistry.js';
 
 engine.on('engine:start', () => {
-  const availableGenerators = WorldGeneratorRegistry.entries(),
+  const availableGenerators = WorldGeneratorRegistry.getInstance()
+      .entries()
+    ,
     Generator = availableGenerators[Math.floor(availableGenerators.length * Math.random())],
     generatorOptions = {
       landCoverage: parseFloat(engine.option('landCoverage', .3 + (Math.random() * .4)), 10),

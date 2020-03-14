@@ -8,20 +8,11 @@
     "core-city",
     "core-civilization",
     "core-player",
-    "core-registry",
     "core-rules",
     "core-terrain",
     "core-unit"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "PlayerRegistry.js"
-    },
-    {
-      "type": "script",
-      "file": "CurrentPlayerRegistry.js"
-    },
     {
       "type": "script",
       "file": "Events/World/built.js"
@@ -56,11 +47,15 @@
     },
     {
       "type": "script",
-      "file": "Rules/Unit/destroyed.js"
+      "file": "Rules/Player/added.js"
     },
     {
       "type": "script",
-      "file": "Rules/Player/added.js"
+      "file": "Rules/Turn/start.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

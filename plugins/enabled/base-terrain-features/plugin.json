@@ -63,11 +63,15 @@
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "Rules/Terrain/created.js"
     },
     {
       "type": "script",
-      "file": "Rules/Terrain/created.js"
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableTerrainFeatures.js"
     }
   ]
 }

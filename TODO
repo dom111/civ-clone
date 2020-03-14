@@ -47,10 +47,14 @@
 - [X] Replace the rest of the `.improvements` with `Registry` pattern
 - [X] Add ability to spend gold on city build items.
 - [X] Move `foodStorage` into a value object instead of a property.
+- [X] Add pathing mechanisms (A*?)
+- [-] Add version checking to plugin system. - negated when moving to using npm modules.
+- [X] Fix bug where AI wasn't attacking other units
+- [X] Change the way events and rules are triggered to make testing feasible. This could be main script in package.json.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
-- [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency. - Look at NodeGUI.
+- [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency. - Look at NodeGUI - need a canvas or something similar to be implemented. Or wait for Electron to adopt Node 14...
 - [ ] Break the engine into it's own `core-engine` repo.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
 - [ ] i18n/l10n.
@@ -62,7 +66,6 @@
 - [ ] Human players - this is likely dependent on a renderer, although perhaps make it playable within a TTY?
 - [ ] Write more tests.
 - [ ] Feature parity with Civilization.
-- [ ] Add pathing mechanisms (A*?)
 - [ ] Add more units.
 - [ ] Add more city improvements.
 - [ ] Add wonders.
@@ -74,7 +77,6 @@
 - [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
 - [ ] Add goody huts
 - [ ] Consider building a 'compiler' that can build a static version of the game including all rules that would run better and consider the current state as 'dev' mode.
-- [ ] Add version checking to plugin system.
 - [ ] Add diplomacy
 - [ ] Add leader traits
 - [ ] Modify AI to adjust trade rates
@@ -86,3 +88,5 @@
 - [ ] Add AI routine to avoid civil disorder.
 - [ ] Add benefits to 'we love the leader' day.
 - [ ] Fix bug when AI is using `NavalTransport` - unit testing the AI might be a good way to do this... (Game hangs)
+- [ ] Fix bug where units will continually fire `NoOrders` when on the coast.
+- [ ] Set pathing data for target in SimpleAIPlayer.

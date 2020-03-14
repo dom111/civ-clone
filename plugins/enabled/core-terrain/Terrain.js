@@ -1,27 +1,27 @@
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 // import TerrainRegistry from './TerrainRegistry.js';
 // import TerrainFeature from '../core-terrain-features/TerrainFeature.js';
 
-import RulesRegistry from '../core-rules/RulesRegistry.js';
-
 export class Terrain {
+  #rulesRegistry;
+
   movementCost = 1;
-  features = [];
+  #features = [];
 
-  constructor(...features) {
-    if (features.length) {
-      this.features = features;
+  constructor(rulesRegistry = RulesRegistry.getInstance()) {
+    this.#rulesRegistry = rulesRegistry;
 
-      return;
-    }
-
-    RulesRegistry.get('terrain:created')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => rule.process(this))
-    ;
+    this.#rulesRegistry.process('terrain:created', this);
   }
-  //
+
+  get features() {
+    return this.#features;
+  }
+
   // static load(data) {
-  //   const [Entity] = TerrainRegistry.getBy('name', data.Type);
+  //   const [Entity] = TerrainRegistry.getInstance()
+  //     .getBy('name', data.Type)
+  //   ;
   //
   //   return new Entity(data.features.map((feature) => TerrainFeature.load(feature)));
   // }

@@ -5,7 +5,7 @@ import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit
 import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
 import {Irrigation, Mine, Road} from '../base-tile-improvements/TileImprovements.js';
 import {Land, Water} from '../core-terrain/Types.js';
-import {Move, NoOrders} from '../base-unit-actions/Actions.js';
+import {Move, NoOrders} from '../base-unit/Actions.js';
 import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import CityBuild from '../base-city/CityBuild.js';
@@ -14,10 +14,10 @@ import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
 import {Palace} from '../base-city-improvements/CityImprovements.js';
+import Path from '../core-world/Path.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-science/PlayerResearchRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
 import TileImprovementRegistry from '../core-tile-improvements/TileImprovementRegistry.js';
 import {Trade} from '../base-terrain-yield-trade/Yields.js';
 import Unit from '../core-unit/Unit.js';
@@ -44,7 +44,8 @@ export class SimpleAIPlayer extends AIPlayer {
           ],
         }) >= 180) &&
       ! tile.getSurroundingArea(4)
-        .filter((tile) => CityRegistry.getBy('tile', tile)
+        .filter((tile) => CityRegistry.getInstance()
+          .getBy('tile', tile)
           .length
         )
         .length
@@ -54,19 +55,23 @@ export class SimpleAIPlayer extends AIPlayer {
   #shouldIrrigate = (tile) => {
     return [Desert, Plains, Grassland, River].some((TerrainType) => tile.terrain instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
-      ! TileImprovementRegistry.getBy('tile', tile)
+      ! TileImprovementRegistry.getInstance()
+        .getBy('tile', tile)
         .some((improvement) => improvement instanceof Irrigation) &&
       tile.getSurroundingArea()
-        .some((tile) => CityRegistry.getBy('tile', tile)
+        .some((tile) => CityRegistry.getInstance()
+          .getBy('tile', tile)
           .some((city) => city.player === this)
         ) &&
       [...tile.getAdjacent(), tile]
         .some((tile) => tile.terrain instanceof River ||
           tile.isCoast() ||
           (
-            TileImprovementRegistry.getBy('tile', tile)
+            TileImprovementRegistry.getInstance()
+              .getBy('tile', tile)
               .some((improvement) => improvement instanceof Irrigation) &&
-            ! CityRegistry.getBy('tile', tile)
+            ! CityRegistry.getInstance()
+              .getBy('tile', tile)
               .length
           )
         )
@@ -75,20 +80,24 @@ export class SimpleAIPlayer extends AIPlayer {
 
   #shouldMine = (tile) => {
     return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
-      ! TileImprovementRegistry.getBy('tile', tile)
+      ! TileImprovementRegistry.getInstance()
+        .getBy('tile', tile)
         .some((improvement) => improvement instanceof Mine) &&
       tile.getSurroundingArea()
-        .some((tile) => CityRegistry.getBy('tile', tile)
+        .some((tile) => CityRegistry.getInstance()
+          .getBy('tile', tile)
           .some((city) => city.player === this)
         )
     ;
   };
 
   #shouldRoad = (tile) => {
-    return ! TileImprovementRegistry.getBy('tile', tile)
+    return ! TileImprovementRegistry.getInstance()
+      .getBy('tile', tile)
       .some((improvement) => improvement instanceof Road) &&
       tile.getSurroundingArea()
-        .some((tile) => CityRegistry.getBy('tile', tile)
+        .some((tile) => CityRegistry.getInstance()
+          .getBy('tile', tile)
           .some((city) => city.player === this)
         )
     ;
@@ -106,143 +115,144 @@ export class SimpleAIPlayer extends AIPlayer {
   #seaTilesToExplore = [];
   #undefendedCities = [];
 
+  scoreUnitMove(unit, tile) {
+    const actions = unit.actions(tile),
+      {
+        attack,
+        boardTransport,
+        buildIrrigation,
+        buildMine,
+        buildRoad,
+        captureCity,
+        fortify,
+        foundCity,
+        noOrders,
+      } = actions.reduce((object, entity) => ({
+        ...object,
+        [
+        entity.constructor
+          .name
+          .replace(/^./, (char) => char.toLowerCase())
+        ]: entity,
+      }), {})
+    ;
+
+    if (
+      (actions.length === 1 && noOrders) ||
+      (unit instanceof FortifiableUnit && actions.length === 2 && fortify && noOrders)
+    ) {
+      return -1;
+    }
+
+    let score = 0;
+
+    // TODO: consider appending all the positives to the score instead of returning immediately
+    if (
+      (foundCity && this.#shouldBuildCity(tile)) ||
+      (buildMine && this.#shouldMine(tile)) ||
+      (buildIrrigation && this.#shouldIrrigate(tile)) ||
+      (buildRoad && this.#shouldRoad(tile))
+    ) {
+      score += 24;
+    }
+
+    const tileUnits = UnitRegistry.getInstance()
+        .getBy('tile', tile)
+        .sort((a, b) => b.defence - a.defence)
+      ,
+      [defender] = tileUnits,
+      ourUnitsOnTile = tileUnits.some((unit) => unit.player === this)
+    ;
+
+    if (
+      unit instanceof NavalTransport &&
+      unit.hasCapacity() &&
+      tileUnits.length &&
+      ourUnitsOnTile
+    ) {
+      score += 10;
+    }
+
+    if (
+      unit instanceof NavalTransport &&
+      unit.hasCargo() &&
+      tile.isCoast() &&
+      tile.terrain instanceof Water
+    ) {
+      score += 10;
+    }
+
+    if (boardTransport) {
+      score += 10;
+    }
+
+    if (captureCity) {
+      score += 100;
+    }
+
+    // TODO: weight attacking dependent on leader's personality
+    if (
+      attack &&
+      unit.attack > defender.defence
+    ) {
+      score += 24 * (unit.attack - defender.defence);
+    }
+
+    if (
+      attack &&
+      unit.attack >= defender.defence
+    ) {
+      score += 16;
+    }
+
+    // add some jeopardy
+    if (
+      attack &&
+      unit.attack >= (defender.defence * (2 / 3))
+    ) {
+      score += 8;
+    }
+
+    const discoverableTiles = tile.getNeighbours()
+      .filter(
+        (neighbouringTile) => ! neighbouringTile.isVisible(this)
+      )
+      .length
+    ;
+
+    if (discoverableTiles) {
+      score += discoverableTiles * 3;
+    }
+
+    const target = this.#unitTargetData
+      .get(unit)
+    ;
+
+    if (target && tile.distanceFrom(target) < unit.tile.distanceFrom(target)) {
+      score += 14;
+    }
+
+    const lastMoves = this.#lastUnitMoves.get(unit) || [];
+
+    if (! lastMoves.includes(tile)) {
+      score *= 4;
+    }
+
+    return score;
+  }
+
   moveUnit(unit) {
     let loopCheck = 0;
 
     while (unit.active && unit.moves.value() >= .1) {
       if (loopCheck++ > 1e3) {
+        console.log('SimpleAIPlayer#moveUnit: loopCheck: aborting');
+
         return;
       }
 
-      const currentTile = unit.tile,
-        scoreMove = (tile) => {
-          const actions = unit.actions(tile),
-            {
-              attack,
-              boardTransport,
-              buildIrrigation,
-              buildMine,
-              buildRoad,
-              captureCity,
-              foundCity,
-              noOrders,
-            } = actions.reduce((object, entity) => ({
-              ...object,
-              [
-              entity.constructor
-                .name
-                .replace(/^./, (char) => char.toLowerCase())
-              ]: entity,
-            }), {})
-          ;
-
-          if (
-            ! actions.some((action) => action instanceof Move) ||
-            (actions.length === 1 && noOrders)
-          ) {
-            return -1;
-          }
-
-          let score = 0;
-
-          // TODO: consider appending all the positives to the score instead of returning immediately
-          if (
-            (foundCity && this.#shouldBuildCity(tile)) ||
-            (buildMine && this.#shouldMine(tile)) ||
-            (buildIrrigation && this.#shouldIrrigate(tile)) ||
-            (buildRoad && this.#shouldRoad(tile))
-          ) {
-            score += 24;
-          }
-
-          const tileUnits = UnitRegistry.getBy('tile', tile)
-              .sort((a, b) => b.defence - a.defence)
-            ,
-            [defender] = tileUnits,
-            ourUnitsOnTile = tileUnits.some((unit) => unit.player === this)
-          ;
-
-          if (
-            unit instanceof NavalTransport &&
-            unit.hasCapacity() &&
-            tileUnits.length &&
-            ourUnitsOnTile
-          ) {
-            score += 10;
-          }
-
-          if (
-            unit instanceof NavalTransport &&
-            unit.hasCargo() &&
-            tile.isCoast() &&
-            tile.terrain instanceof Water
-          ) {
-            score += 10;
-          }
-
-          if (boardTransport) {
-            score += 10;
-          }
-
-          if (captureCity) {
-            score += 100;
-          }
-
-          // TODO: weight attacking dependent on leader's personality
-          if (
-            attack &&
-            unit.attack > defender.defence
-          ) {
-            score += 24;
-          }
-
-          if (
-            attack &&
-            unit.attack >= defender.defence
-          ) {
-            score += 16;
-          }
-
-          // add some jeopardy
-          if (
-            attack &&
-            unit.attack >= (defender.defence * .66)
-          ) {
-            score += 8;
-          }
-
-          const discoverableTiles = tile.getNeighbours()
-            .filter(
-              (neighbouringTile) => ! neighbouringTile.isVisible(this)
-            )
-            .length
-          ;
-
-          if (discoverableTiles) {
-            score += discoverableTiles * 3;
-          }
-
-          const target = this.#unitTargetData
-            .get(unit)
-          ;
-
-          if (target && tile.distanceFrom(target) < currentTile.distanceFrom(target)) {
-            score += 14;
-          }
-
-          const lastMoves = this.#lastUnitMoves.get(unit) || [];
-
-          if (
-            ! lastMoves.slice(-50)
-              .includes(tile)
-          ) {
-            return score * 4;
-          }
-
-          return score;
-        },
-        path = this.#unitPathData
-          .get(unit)
+      const path = this.#unitPathData
+        .get(unit)
       ;
 
       if (path) {
@@ -254,21 +264,38 @@ export class SimpleAIPlayer extends AIPlayer {
         if (move) {
           unit.action(move);
 
+          if (path.length === 0) {
+            this.#unitPathData.delete(unit);
+          }
+
           return;
+        }
+
+        if (path.length > 0) {
+          const newPath = Path.for(unit, unit.tile, path.end);
+
+          if (newPath) {
+            this.#unitPathData.set(unit, newPath);
+
+            // restart the loop
+            continue;
+          }
         }
 
         this.#unitPathData.delete(unit);
       }
 
-      const [target] = currentTile.getNeighbours()
-        .filter((tile) => scoreMove(tile) > -1)
-        .sort((a, b) => (
+      const [target] = unit.tile.getNeighbours()
+        .map((tile) => [tile, this.scoreUnitMove(unit, tile)])
+        .filter(([, score]) => score > -1)
+        .sort(([, a], [, b]) => (
           (
-            scoreMove(b) - scoreMove(a)
+            b - a
             // if there's no difference, sort randomly
           ) ||
           Math.floor(Math.random() * 3) - 1
         ))
+        .map(([tile]) => tile)
       ;
 
       if (! target) {
@@ -277,12 +304,13 @@ export class SimpleAIPlayer extends AIPlayer {
         //
         // console.log(actions);
 
-        unit.action(new NoOrders(unit));
+        unit.action(new NoOrders({unit}));
 
         return;
       }
 
-      const [action] = unit.actions(target),
+      const actions = unit.actions(target),
+        [action] = actions,
         lastMoves = this.#lastUnitMoves
           .get(unit) || [],
         currentTarget = this.#unitTargetData
@@ -290,7 +318,7 @@ export class SimpleAIPlayer extends AIPlayer {
       ;
 
       if (! action) {
-        unit.action(new NoOrders(unit));
+        unit.action(new NoOrders({unit}));
 
         return;
       }
@@ -301,7 +329,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
       lastMoves.push(target);
 
-      this.#lastUnitMoves.set(unit, lastMoves);
+      this.#lastUnitMoves.set(unit, lastMoves.slice(-50));
 
       unit.action(action);
     }
@@ -319,8 +347,10 @@ export class SimpleAIPlayer extends AIPlayer {
     this.seenTiles
       .filter((tile) => ! [...this.#unitTargetData.values()].includes(tile))
       .forEach((tile) => {
-        const [tileCity] = CityRegistry.getBy('tile', tile),
-          tileUnits = UnitRegistry.getBy('tile', tile)
+        const [tileCity] = CityRegistry.getInstance()
+            .getBy('tile', tile),
+          tileUnits = UnitRegistry.getInstance()
+            .getBy('tile', tile)
         ;
 
         if (
@@ -357,9 +387,11 @@ export class SimpleAIPlayer extends AIPlayer {
       })
     ;
 
-    CityRegistry.getBy('player', this)
+    CityRegistry.getInstance()
+      .getBy('player', this)
       .forEach((city) => {
-        const tileUnits = UnitRegistry.getBy('tile', city.tile);
+        const tileUnits = UnitRegistry.getInstance()
+          .getBy('tile', city.tile);
 
         city.autoAssignWorkers();
 
@@ -371,14 +403,16 @@ export class SimpleAIPlayer extends AIPlayer {
   }
 
   takeTurn() {
-    return promiseFactory((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         let loopCheck = 0;
 
         this.preProcessTurn();
 
-        const [playerGovernment] = PlayerGovernmentRegistry.filter((playerGovernment) => playerGovernment.player === this),
-          [playerResearch] = PlayerResearchRegistry.filter((playerScience) => playerScience.player === this)
+        const [playerGovernment] = PlayerGovernmentRegistry.getInstance()
+            .filter((playerGovernment) => playerGovernment.player === this),
+          [playerResearch] = PlayerResearchRegistry.getInstance()
+            .filter((playerScience) => playerScience.player === this)
         ;
 
         if (playerResearch.completed(MonarchyAdvance) && ! playerGovernment.is(MonarchyGovernment)) {
@@ -392,7 +426,6 @@ export class SimpleAIPlayer extends AIPlayer {
             console.log('');
             console.log(this.getAction());
             reject(new Error('SimpleAIPlayer: Couldn\'t pick an action to do.'));
-            // resolve();
 
             break;
           }
@@ -417,7 +450,8 @@ export class SimpleAIPlayer extends AIPlayer {
                 entity.constructor.name.replace(/^./, (char) => char.toLowerCase())
                 ]: entity,
               }), {}),
-              tileUnits = UnitRegistry.getBy('tile', tile)
+              tileUnits = UnitRegistry.getInstance()
+                .getBy('tile', tile)
             ;
 
             if (
@@ -448,22 +482,22 @@ export class SimpleAIPlayer extends AIPlayer {
               else if (buildRoad && this.#shouldRoad(tile)) {
                 unit.action(buildRoad);
               }
-              else {
-                if (! target && this.#goodSitesForCities.length) {
-                  this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
-                }
-
-                this.moveUnit(unit);
+              else if (! target && this.#goodSitesForCities.length) {
+                this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
               }
+
+              this.moveUnit(unit);
             }
             else {
               // TODO: check for defense values and activate weaker for disband/upgrade/scouting
               const [cityUnitWithLowerDefence] = tileUnits
-                  .filter((tileUnit) => UnitImprovementRegistry.getBy('unit', tileUnit)
+                  .filter((tileUnit) => UnitImprovementRegistry.getInstance()
+                    .getBy('unit', tileUnit)
                     .some((improvement) => improvement instanceof Fortified) &&
                   unit.defence > tileUnit.defence
                   ),
-                [city] = CityRegistry.getBy('tile', tile)
+                [city] = CityRegistry.getInstance()
+                  .getBy('tile', tile)
               ;
 
               if (
@@ -556,45 +590,26 @@ export class SimpleAIPlayer extends AIPlayer {
               availableFiltered = available.filter((entity) => ! restrictions.includes(entity)),
               availableUnits = availableFiltered.filter((entity) => Object.prototype.isPrototypeOf.call(Unit, entity)),
               randomSelection = availableFiltered[Math.floor(available.length * Math.random())],
-              // TODO: this should maybe be hidden behind a function call to save wasting cycles
-              getDefensiveUnit = () => availableUnits.sort((a, b) => {
-                const aDefence = new Defence(),
-                  bDefence = new Defence()
+              getUnitByYield = (Yield) => {
+                const [[Unit]] = availableUnits.map((Unit) => {
+                  const unitYield = new Yield();
+
+                  this.rulesRegistry.process('unit:yield', Unit, unitYield);
+
+                  return [Unit, unitYield];
+                })
+                  .sort(([, unitYieldA], [, unitYieldB]) => unitYieldB.value() - unitYieldA.value())
                 ;
 
-                [
-                  [a, aDefence],
-                  [b, bDefence],
-                ]
-                  .forEach(([unit, unitYield]) => RulesRegistry.get('unit:yield')
-                    .filter((rule) => rule.validate(unit, unitYield))
-                    .forEach((rule) => rule.process(unit, unitYield))
-                  )
-                ;
-
-                return bDefence - aDefence;
-              })[0],
-              getOffensiveUnit = () => availableUnits.sort((a, b) => {
-                const aAttack = new Attack(),
-                  bAttack = new Attack()
-                ;
-
-                [
-                  [a, aAttack],
-                  [b, bAttack],
-                ]
-                  .forEach(([unit, unitYield]) => RulesRegistry.get('unit:yield')
-                    .filter((rule) => rule.validate(unit, unitYield))
-                    .forEach((rule) => rule.process(unit, unitYield))
-                  )
-                ;
-
-                return bAttack - aAttack;
-              })[0]
+                return Unit;
+              },
+              getDefensiveUnit = ((unit) => () => unit || (unit = getUnitByYield(Defence)))(),
+              getOffensiveUnit = ((unit) => () => unit || (unit = getUnitByYield(Attack)))()
             ;
 
             if (
-              ! UnitRegistry.getBy('tile', tile)
+              ! UnitRegistry.getInstance()
+                .getBy('tile', tile)
                 .length &&
               getDefensiveUnit()
             ) {
@@ -605,9 +620,11 @@ export class SimpleAIPlayer extends AIPlayer {
 
             // Always Build Cities
             if (available.includes(Settlers) &&
-              ! UnitRegistry.getBy('city', cityBuild.city)
+              ! UnitRegistry.getInstance()
+                .getBy('city', cityBuild.city)
                 .some((unit) => unit instanceof Settlers) &&
-              UnitRegistry.getBy('player', this)
+              UnitRegistry.getInstance()
+                .getBy('player', this)
                 .filter((unit) => unit instanceof Settlers)
                 // TODO: use expansionist leader trait
                 .length < 3

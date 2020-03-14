@@ -5,16 +5,20 @@ import PlayerTreasuryRegistry from '../../PlayerTreasuryRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 
-RulesRegistry.register(new Rule(
-  'city:process-yield:gold',
-  new Criterion((cityYield) => cityYield instanceof Gold),
-  new Effect((cityYield, city) => {
-    const [playerTreasury] = PlayerTreasuryRegistry.getBy('player', city.player);
+export const getRules = ({
+  playerTreasuryRegistry = PlayerTreasuryRegistry.getInstance(),
+  rulesRegistry = RulesRegistry.getInstance(),
+} = {}) => [
+  new Rule(
+    'city:process-yield:gold',
+    new Criterion((cityYield) => cityYield instanceof Gold),
+    new Effect((cityYield, city) => {
+      const [playerTreasury] = playerTreasuryRegistry.getBy('player', city.player);
 
-    playerTreasury.add(cityYield);
-    RulesRegistry.get('player:treasury:updated')
-      .filter((rule) => rule.validate(playerTreasury, city))
-      .forEach((rule) => rule.process(playerTreasury, city))
-    ;
-  })
-));
+      playerTreasury.add(cityYield);
+      rulesRegistry.process('player:treasury:updated', playerTreasury, city);
+    })
+  ),
+];
+
+export default getRules;

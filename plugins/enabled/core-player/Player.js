@@ -1,15 +1,20 @@
 import PlayerActionRegistry from './PlayerActionRegistry.js';
+import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 
 export class Player {
   static id = 0;
 
+  #rulesRegistry;
   #seenTiles = new Tileset();
 
   civilization;
 
-  constructor() {
+  constructor({rulesRegistry = RulesRegistry.getInstance()} = {}) {
     this.id = Player.id++;
+    this.#rulesRegistry = rulesRegistry;
+
+    this.#rulesRegistry.process('player:added', this);
   }
 
   getAction() {
@@ -19,7 +24,8 @@ export class Player {
   }
 
   getActions() {
-    return PlayerActionRegistry.entries()
+    return PlayerActionRegistry.getInstance()
+      .entries()
       .flatMap((actionsProvider) => actionsProvider.provide(this))
     ;
   }
@@ -30,12 +36,16 @@ export class Player {
     return actions.length;
   }
 
+  get rulesRegistry() {
+    return this.#rulesRegistry;
+  }
+
   get seenTiles() {
     return this.#seenTiles;
   }
 
   takeTurn() {
-    return promiseFactory((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       reject(new Error('Not implemented.'));
     });
   }

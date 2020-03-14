@@ -1,23 +1,24 @@
-import '../../../register.js';
-import '../requirements.js';
 import {
-  Alphabet,
+  Alphabet, Astronomy,
   BronzeWorking,
-  CeremonialBurial,
-  HorsebackRiding,
-  Masonry,
+  CeremonialBurial, Chivalry, CodeOfLaws, Construction, Currency, Engineering, Feudalism, Gunpowder,
+  HorsebackRiding, Invention, IronWorking, Literacy, MapMaking,
+  Masonry, Mathematics, Monarchy, Mysticism, Navigation,
   Pottery,
-  TheWheel,
+  TheWheel, Writing,
 } from '../../../Advances.js';
 import AdvanceRegistry from '../../../../core-science/AdvanceRegistry.js';
 import Player from '../../../../core-player/Player.js';
 import PlayerResearch from '../../../PlayerResearch.js';
-import PlayerResearchRegistry from '../../../PlayerResearchRegistry.js';
+import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import assert from 'assert';
+import requirements from '../requirements.js';
 
 describe('Advance', () => {
-  const player = new Player(),
-    playerResearch = new PlayerResearch(player),
+  const rulesRegistry = new RulesRegistry(),
+    player = new Player({rulesRegistry}),
+    advanceRegistry = new AdvanceRegistry(),
+    playerResearch = new PlayerResearch({player, rulesRegistry, advanceRegistry}),
     noPrerequisites = [
       Alphabet,
       BronzeWorking,
@@ -29,7 +30,38 @@ describe('Advance', () => {
     ]
   ;
 
-  PlayerResearchRegistry.register(playerResearch);
+  rulesRegistry.register(
+    ...requirements()
+  );
+
+  advanceRegistry.register(
+    ...[
+      Alphabet,
+      Astronomy,
+      BronzeWorking,
+      CeremonialBurial,
+      Chivalry,
+      CodeOfLaws,
+      Construction,
+      Currency,
+      Engineering,
+      Feudalism,
+      Gunpowder,
+      HorsebackRiding,
+      Invention,
+      IronWorking,
+      Literacy,
+      MapMaking,
+      Masonry,
+      Mathematics,
+      Monarchy,
+      Mysticism,
+      Navigation,
+      Pottery,
+      TheWheel,
+      Writing,
+    ]
+  );
 
   noPrerequisites.forEach((Advance) => {
     it(`should be possible to discover ${Advance.name} without any prerequisites being discovered`, () => {
@@ -39,7 +71,7 @@ describe('Advance', () => {
     });
   });
 
-  AdvanceRegistry.entries()
+  advanceRegistry.entries()
     .filter((Advance) => ! noPrerequisites.includes(Advance))
     .forEach((Advance) => {
       it(`should not be possible to discover ${Advance.name} without any prerequisites being discovered`, () => {

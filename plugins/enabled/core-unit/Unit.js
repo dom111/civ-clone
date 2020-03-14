@@ -4,6 +4,7 @@ import RulesRegistry from '../core-rules/RulesRegistry.js';
 export class Unit {
   #city;
   #player;
+  #rulesRegistry;
   #tile;
 
   active = true;
@@ -12,15 +13,13 @@ export class Unit {
   status = null;
   waiting = false;
 
-  constructor({player, city, tile}) {
+  constructor({player, city, tile, rulesRegistry = RulesRegistry.getInstance()}) {
     this.#city   = city;
     this.#player = player;
     this.#tile   = tile;
+    this.#rulesRegistry = rulesRegistry;
 
-    RulesRegistry.get('unit:created')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => rule.process(this))
-    ;
+    this.#rulesRegistry.process('unit:created', this);
   }
 
   action(action) {
@@ -28,22 +27,21 @@ export class Unit {
   }
 
   actions(to = this.tile, from = this.tile) {
-    return RulesRegistry.get('unit:action')
-      .filter((rule) => rule.validate(this, to, from))
-      .map((rule) => rule.process(this, to, from))
-    ;
+    return this.#rulesRegistry.process('unit:action', this, to, from);
   }
 
   activate() {
-    return RulesRegistry.get('unit:activate')
-      .filter((rule) => rule.validate(this))
-      .map((rule) => rule.process(this))
-    ;
+    return this.#rulesRegistry.process('unit:activate', this);
   }
 
   applyVisibility() {
+    const rules = this.#rulesRegistry.get('tile:seen');
+
     this.#tile.getSurroundingArea(this.visibility)
-      .forEach((tile) => engine.emit('tile:seen', tile, this.#player))
+      .forEach((tile) => rules
+        .filter((rule) => rule.validate(tile, this.#player))
+        .forEach((rule) => rule.process(tile, this.#player))
+      )
     ;
   }
 
@@ -64,10 +62,7 @@ export class Unit {
   }
 
   destroy(player = null) {
-    RulesRegistry.get('unit:destroyed')
-      .filter((rule) => rule.validate(this, player))
-      .forEach((rule) => rule.process(this, player))
-    ;
+    this.#rulesRegistry.process('unit:destroyed', this, player);
   }
 
   get movement() {
@@ -99,7 +94,9 @@ export class Unit {
   }
 
   yield(...yields) {
-    yields.forEach((unitYield) => RulesRegistry.get('unit:yield')
+    const rules = this.#rulesRegistry.get('unit:yield');
+
+    yields.forEach((unitYield) => rules
       .filter((rule) => rule.validate(this, unitYield))
       .forEach((rule) => rule.process(this, unitYield))
     );

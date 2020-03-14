@@ -5,7 +5,8 @@
   "dependencies": [
     "core-registry",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "core-city"
   ],
   "components": [
     {
@@ -43,6 +44,10 @@
     {
       "type": "script",
       "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Action.js"
     }
   ]
 }

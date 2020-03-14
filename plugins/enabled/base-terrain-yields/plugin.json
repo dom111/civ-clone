@@ -25,7 +25,11 @@
     },
     {
       "type": "script",
-      "file": "register.js"
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerYields.js"
     }
   ]
 }

@@ -8,7 +8,7 @@
     }
   ],
   "dependencies": [
-    "base-unit-actions",
-    "core-world"
+    "core-world",
+    "base-unit"
   ]
 }

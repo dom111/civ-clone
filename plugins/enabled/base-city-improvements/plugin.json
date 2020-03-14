@@ -16,10 +16,6 @@
   "components": [
     {
       "type": "script",
-      "file": "register.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/Unit/created.js"
     },
     {
@@ -89,6 +85,14 @@
     {
       "type": "script",
       "file": "CityImprovements/Colosseum.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCityImprovements.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
     }
   ]
 }

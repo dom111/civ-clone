@@ -12,7 +12,8 @@ export class Path extends Tileset {
   static for(unit, start, end) {
     // If there are lots of `PathFinder`s here, this could take aaages, so probably best to only have one registered at
     // a time, but this mechanism avoids and hard-coding
-    const [path] = PathFinderRegistry.entries()
+    const [path] = PathFinderRegistry.getInstance()
+      .entries()
       .map((PathFinder) => new PathFinder(unit, start, end))
       .sort((a, b) => a.totalCost - b.totalCost)
     ;

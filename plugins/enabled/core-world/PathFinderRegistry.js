@@ -1,5 +1,10 @@
+import PathFinder from './PathFinder.js';
 import Registry from '../core-registry/Registry.js';
 
-export const PathFinderRegistry = new Registry();
+export class PathFinderRegistry extends Registry {
+  constructor() {
+    super(PathFinder);
+  }
+}
 
 export default PathFinderRegistry;

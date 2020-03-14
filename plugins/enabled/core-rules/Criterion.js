@@ -13,6 +13,7 @@ export class Criterion {
 
   validate(...args) {
     if (this.#criterion) {
+      // console.log(`${this.#criterion} ${this.#criterion(...args)}`);
       return !! this.#criterion(...args);
     }
 

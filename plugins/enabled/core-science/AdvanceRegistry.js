@@ -1,6 +1,10 @@
 import Advance from './Advance.js';
 import Registry from '../core-registry/Registry.js';
 
-export const AdvanceRegistry = new Registry(Advance);
+export class AdvanceRegistry extends Registry {
+  constructor() {
+    super(Advance);
+  }
+}
 
 export default AdvanceRegistry;

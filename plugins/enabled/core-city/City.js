@@ -1,10 +1,12 @@
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
+import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class City {
   #name;
   #originalPlayer;
   #player;
+  #rulesRegistry;
   #size = 1;
   #tile;
   #tiles;
@@ -14,18 +16,16 @@ export class City {
     player,
     tile,
     name,
-  }) {
+  }, rulesRegistry = RulesRegistry.getInstance()) {
     this.#name = name;
     this.#originalPlayer = player;
     this.#player = player;
     this.#tile = tile;
     this.#tiles = this.#tile.getSurroundingArea();
     this.#tilesWorked.push(tile);
+    this.#rulesRegistry = rulesRegistry;
 
-    RulesRegistry.get('city:created')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => rule.process(this))
-    ;
+    this.#rulesRegistry.process('city:created', this);
 
     this.assignUnassignedWorkers();
   }
@@ -64,25 +64,17 @@ export class City {
   capture(player) {
     this.#player = player;
 
-    RulesRegistry.get('city:captured')
-      .filter((rule) => rule.validate(this, player))
-      .forEach((rule) => rule.process(this, player))
-    ;
+    this.#rulesRegistry.process('city:captured', this, player);
   }
 
   destroy(player = null) {
-    RulesRegistry.get('city:destroyed')
-      .filter((rule) => rule.validate(this, player))
-      .forEach((rule) => rule.process(this, player))
-    ;
+    this.#rulesRegistry.process('city:destroyed', this, player);
   }
 
   grow() {
     this.#size++;
 
-    RulesRegistry.get('city:grow')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => rule.process(this));
+    this.#rulesRegistry.process('city:grow', this);
   }
 
   get name() {
@@ -100,10 +92,7 @@ export class City {
   shrink() {
     this.#size--;
 
-    RulesRegistry.get('city:shrink')
-      .filter((rule) => rule.validate(this))
-      .forEach((rule) => rule.process(this))
-    ;
+    this.#rulesRegistry.process('city:shrink', this);
   }
 
   get size() {
@@ -118,25 +107,24 @@ export class City {
     return this.#tilesWorked;
   }
 
-  yields() {
-    const yields = this.#tilesWorked
-      .yields(this.player)
+  yields({
+    yieldRegistry = YieldRegistry.getInstance(),
+    yields = yieldRegistry.entries(),
+  } = {}) {
+    const tilesetTields = this.#tilesWorked
+      .yields({
+        yields,
+        player: this.player,
+      })
     ;
 
     // Do for...of so that as yields are added, they too are processed.
-    for (const cityYield of yields) {
-      RulesRegistry.get('city:yield')
-        .filter((rule) => rule.validate(cityYield, this, yields))
-        .forEach((rule) => rule.process(cityYield, this, yields))
-      ;
-
-      RulesRegistry.get('city:cost')
-        .filter((rule) => rule.validate(cityYield, this, yields))
-        .forEach((rule) => rule.process(cityYield, this, yields))
-      ;
+    for (const cityYield of tilesetTields) {
+      this.#rulesRegistry.process('city:yield', cityYield, this, tilesetTields);
+      this.#rulesRegistry.process('city:cost', cityYield, this, tilesetTields);
     }
 
-    return yields;
+    return tilesetTields;
   }
 }
 
