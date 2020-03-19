@@ -83,7 +83,7 @@ export class PlayerResearch {
   }
 
   research(Advance) {
-    const [cost] = this.#rulesRegistry.process('research:cost', Advance, this.#player);
+    const [cost] = this.#rulesRegistry.process('research:cost', Advance, this);
 
     this.#cost.set(cost);
     this.#researching = Advance;

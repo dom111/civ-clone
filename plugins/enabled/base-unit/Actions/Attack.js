@@ -33,8 +33,6 @@ export class Attack extends Action {
     else {
       tileUnits.forEach((tileUnit) => tileUnit.destroy(this.unit.player));
     }
-
-    this.rulesRegistry.process('unit:moved', this.unit, this);
   }
 }
 
