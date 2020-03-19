@@ -20,7 +20,8 @@
     "base-tile-improvements",
     "core-tile-improvements",
     "base-city",
-    "core-world"
+    "core-world",
+    "core-rules"
   ],
   "components": [
     {

@@ -42,11 +42,11 @@ describe('unit:activate', () => {
             rulesRegistry,
             tile: world.get(1, 1),
           }),
-          [fortify] = unit.actions()
+          [action] = unit.actions()
             .filter((action) => action instanceof Action)
         ;
 
-        assert(fortify instanceof Fortify);
+        assert(action instanceof Action);
 
         unitRegistry.register(unit);
 
@@ -54,9 +54,7 @@ describe('unit:activate', () => {
           .some((improvement) => improvement instanceof UnitImprovement)
         );
 
-        unit.action(fortify);
-
-        assert.strictEqual(unit.status, 'fortify');
+        unit.action(action);
 
         unit.actionOnComplete({
           unitImprovementRegistry,

@@ -1,8 +1,9 @@
-import {Attack, Defence, Movement, Visibility} from './Yields.js';
+import {Attack, Defence, Movement, Moves, Visibility} from './Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class Unit {
   #city;
+  #moves = new Moves();
   #player;
   #rulesRegistry;
   #tile;
@@ -22,8 +23,11 @@ export class Unit {
     this.#rulesRegistry.process('unit:created', this);
   }
 
-  action(action) {
-    action.perform();
+  action(action, {...args} = {}) {
+    action.perform({
+      ...args,
+      rulesRegistry: this.#rulesRegistry,
+    });
   }
 
   actions(to = this.tile, from = this.tile) {
@@ -69,6 +73,10 @@ export class Unit {
     const [unitYield] = this.yield(new Movement());
 
     return unitYield;
+  }
+
+  get moves() {
+    return this.#moves;
   }
 
   get player() {

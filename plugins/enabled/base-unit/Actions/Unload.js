@@ -6,8 +6,6 @@ export class Unload extends Action {
     this.unit.cargo
       .forEach((unit) => unit.activate())
     ;
-
-    this.rulesRegistry.process('unit:moved', this.unit, this);
   }
 }
 

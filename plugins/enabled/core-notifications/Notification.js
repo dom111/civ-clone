@@ -29,6 +29,7 @@ export class Notification {
   }
 
   get when() {
+    // TODO: Rule/Criterion?
     return this.#when;
   }
 }

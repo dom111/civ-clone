@@ -77,6 +77,10 @@ export class Tileset {
     ;
   }
 
+  shift() {
+    return this.#tiles.shift();
+  }
+
   some(iterator) {
     return this.#tiles.some(iterator);
   }

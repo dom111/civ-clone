@@ -7,7 +7,7 @@ engine.on('engine:start', () => {
     ,
     Generator = availableGenerators[Math.floor(availableGenerators.length * Math.random())],
     generatorOptions = {
-      landCoverage: parseFloat(engine.option('landCoverage', .3 + (Math.random() * .4)), 10),
+      landCoverage: parseFloat(engine.option('landCoverage', .2 + (Math.random() * .2)), 10),
       landMassReductionScale: parseFloat(engine.option('landMassReductionScale', Math.random() * 5), 10),
       // chanceToBecomeLand: parseInt(engine.option('chanceToBecomeLand', Math.random() / 15), 10),
       // smoothness

@@ -6,34 +6,34 @@ export class BaseGenerator extends Generator {
   #chanceToBecomeLand;
   #clusterChance;
   #coverage;
-  #pathChance;
   #landCoverage;
   #landMassReductionScale;
   #map;
   #maxIterations;
+  #pathChance;
   #rulesRegistry;
 
   constructor({
-    height = 100,
-    width = 160,
-    landCoverage = .66,
     coverage = .1,
-    landMassReductionScale = 3,
     chanceToBecomeLand = 5,
     clusterChance = .05,
-    pathChance = .05,
+    height = 100,
+    landCoverage = .66,
+    landMassReductionScale = 3,
     maxIterations = 1,
-  } = {}, rulesRegistry = RulesRegistry.getInstance()) {
+    pathChance = .05,
+    rulesRegistry = RulesRegistry.getInstance(),
+    width = 160,
+  } = {}) {
     super({height, width});
 
-    this.#landCoverage = landCoverage; // total coverage required
     this.#chanceToBecomeLand = chanceToBecomeLand; // chance to become land
     this.#clusterChance = clusterChance; // chance for adjacent tiles to cluster
     this.#coverage = coverage; // total coverage of terrain type
-    this.#pathChance = pathChance; // chance for directly adjacent tiles to be part of the path
-    this.#maxIterations = maxIterations; // number of times a tile can be tested to change to land
+    this.#landCoverage = landCoverage; // total coverage required
     this.#landMassReductionScale = landMassReductionScale;
-
+    this.#maxIterations = maxIterations; // number of times a tile can be tested to change to land
+    this.#pathChance = pathChance; // chance for directly adjacent tiles to be part of the path
     this.#rulesRegistry = rulesRegistry;
 
     this.#map = new Array(this.height * this.width)

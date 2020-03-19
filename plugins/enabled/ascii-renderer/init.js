@@ -1,23 +1,28 @@
 import CityRegistry from '../core-city/CityRegistry.js';
-import Time from '../core-turn-based-game/Time.js';
+import PlayerRegistry from '../core-player/PlayerRegistry.js';
+import Turn from '../core-turn-based-game/Turn.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
-
-const observingPlayers = [];
+import Year from '../core-game-year/Year.js';
 
 let map;
 
 export const renderMap = ({
-  mapToRender = map,
-  showMap = engine.option('showMap'),
-  everyXTurns = parseInt(engine.option('renderTurns', 1), 10),
-  unitRegistry = UnitRegistry.getInstance(),
   cityRegistry = CityRegistry.getInstance(),
+  everyXTurns = parseInt(engine.option('renderTurns', 1), 10),
+  mapToRender = map,
+  playerRegistry = PlayerRegistry.getInstance(),
+  observingPlayers = playerRegistry.entries(),
+  showMap = engine.option('showMap'),
+  topCorner = true,
+  turn = Turn.getInstance(),
+  unitRegistry = UnitRegistry.getInstance(),
+  year = Year.getInstance(),
 } = {}) => {
   if (! mapToRender) {
     return;
   }
 
-  if (everyXTurns > 0 && (everyXTurns === 1 || (Time.turn % everyXTurns) === 1)) {
+  if (everyXTurns > 0 && (everyXTurns === 1 || (turn.value() % everyXTurns) === 1)) {
     const lookup = {
       American: '\u001b[38;5;17;48;5;231m',
       Aztec: '\u001b[38;5;227;48;5;70m',
@@ -56,7 +61,7 @@ export const renderMap = ({
       Swordman: 'L',
     };
 
-    console.log(`\x1b[1;1H${
+    console.log(`${topCorner ? '\x1b[1;1H' : ''}${
       mapToRender.getBy(() => true)
         .map((tile) => {
           const tileUnits = unitRegistry.getBy('tile', tile),
@@ -89,17 +94,17 @@ export const renderMap = ({
                   `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
               ' '
           ) + (
-            (i % map.width) === (map.width - 1) ?
+            (i % mapToRender.width) === (mapToRender.width - 1) ?
               '\n' :
               ''
           )
         )
         .join('')}${
-      Math.abs(Time.year)
+      Math.abs(year.value())
     } ${
-      Time.year < 0 ? 'BC' : 'AD'
+      year.value() < 0 ? 'BC' : 'AD'
     } (${
-      Time.turn
+      turn.value()
     }) [${
       observingPlayers.map((player) => `${
         player.civilization
@@ -130,9 +135,3 @@ engine.on('world:built', (world) => map = world);
 // engine.on('unit:moved', renderMap);
 // engine.on('city:created', renderMap);
 engine.on('turn:end', renderMap);
-
-engine.on('player:turn-start', (player) => {
-  if (! observingPlayers.includes(player)) {
-    observingPlayers.push(player);
-  }
-});

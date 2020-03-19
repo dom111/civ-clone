@@ -1,7 +1,5 @@
 import {Land} from '../../core-terrain/Types.js';
 
-export class Plains extends Land {
-  movementCost = 1;
-}
+export class Plains extends Land {}
 
 export default Plains;

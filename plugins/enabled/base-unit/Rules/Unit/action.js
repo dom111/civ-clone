@@ -50,6 +50,8 @@ export const getRules = ({
         new Criteria(
           new Criterion((unit) => unit instanceof LandUnit),
           new Criterion((unit, to) => to.terrain instanceof Land),
+          // if the unit is being transported, it needs to Disembark, not Move...
+          new Criterion((unit) => ! unit.transport),
           new Criterion((unit, to) => unitRegistry.getBy('tile', to)
             .every((tileUnit) => tileUnit.player === unit.player)
           )
@@ -88,8 +90,7 @@ export const getRules = ({
               .some((tile) => unitRegistry.getBy('tile', tile)
                 .some((tileUnit) => tileUnit.player !== unit.player)
               )
-        )
-        )
+        ))
       ),
       new Criterion((unit, to) => unitRegistry.getBy('tile', to)
         .every((tileUnit) => tileUnit.player === unit.player)
@@ -190,6 +191,14 @@ export const getRules = ({
     ),
 
     new Rule(
+      'unit:action:disembark',
+      isNeighbouringTile,
+      new Criterion((unit) => unit.transport),
+      new Criterion((unit, to, from = unit.tile) => unit.transport.tile === from),
+      new Effect((unit, to, from = unit.tile) => new Disembark({unit, to, from, rulesRegistry}))
+    ),
+
+    new Rule(
       'unit:action:fortify',
       hasEnoughMovesLeft,
       new Criterion((unit) => unit instanceof FortifiableUnit),
@@ -223,14 +232,6 @@ export const getRules = ({
       new Criterion((unit) => unit.hasCargo()),
       new Criterion((unit, to, from = unit.tile) => from === to),
       new Effect((unit, to, from = unit.tile) => new Unload({unit, to, from, rulesRegistry}))
-    ),
-
-    new Rule(
-      'unit:action:disembark',
-      isNeighbouringTile,
-      new Criterion((unit) => unit.transport),
-      new Criterion((unit, to, from = unit.tile) => unit.transport.tile === from),
-      new Effect((unit, to, from = unit.tile) => new Disembark({unit, to, from, rulesRegistry}))
     ),
 
     ...[

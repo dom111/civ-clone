@@ -3,10 +3,8 @@ import RulesRegistry from '../core-rules/RulesRegistry.js';
 // import TerrainFeature from '../core-terrain-features/TerrainFeature.js';
 
 export class Terrain {
-  #rulesRegistry;
-
-  movementCost = 1;
   #features = [];
+  #rulesRegistry;
 
   constructor(rulesRegistry = RulesRegistry.getInstance()) {
     this.#rulesRegistry = rulesRegistry;

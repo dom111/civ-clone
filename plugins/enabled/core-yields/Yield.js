@@ -37,6 +37,14 @@ export class Yield {
   }
 
   set(value) {
+    this.#cachedTotal = false;
+
+    if (value instanceof Yield) {
+      this.#value = value.value();
+
+      return;
+    }
+
     this.#value = value;
   }
 

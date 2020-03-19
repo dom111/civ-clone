@@ -40,8 +40,6 @@ describe('city:cost', () => {
       .filter((cityYield) => cityYield instanceof Happiness)
     ;
 
-    console.log(happiness);
-
     assert.strictEqual(happiness.value(), 0);
   });
 

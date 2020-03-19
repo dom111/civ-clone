@@ -51,6 +51,8 @@
 - [-] Add version checking to plugin system. - negated when moving to using npm modules.
 - [X] Fix bug where AI wasn't attacking other units
 - [X] Change the way events and rules are triggered to make testing feasible. This could be main script in package.json.
+- [X] Fix bug when AI is using `NavalTransport` - unit testing the AI might be a good way to do this... (Game hangs)
+- [X] Set pathing data for target in SimpleAIPlayer.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -87,6 +89,8 @@
 - [ ] (Eventually) Convert all plugins to individual packages on npm so that plugin packs can be provided that combine a bunch of plugins to match the functionality of a desired Civ game.
 - [ ] Add AI routine to avoid civil disorder.
 - [ ] Add benefits to 'we love the leader' day.
-- [ ] Fix bug when AI is using `NavalTransport` - unit testing the AI might be a good way to do this... (Game hangs)
 - [ ] Fix bug where units will continually fire `NoOrders` when on the coast.
-- [ ] Set pathing data for target in SimpleAIPlayer.
+- [ ] Convert `DelayedAction` to use `Rule`s.
+- [ ] Convert `Notificaiton#when` to use `Rule`s.
+- [ ] Break `SimpleAIPlayer` down into smaller routines.
+- [ ] Investigate why units always trend north-east.

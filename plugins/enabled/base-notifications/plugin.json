@@ -1,22 +1,23 @@
 {
   "name": "base-notifications",
-  "title": "Base Notifications",
   "version": "0.1.0",
   "components": [
     {
       "type": "script",
-      "file": "Notifications.js"
+      "file": "registerNotifications.js"
     },
     {
       "type": "script",
-      "file": "Notification.js"
+      "file": "Rules/Turn/start.js"
     },
     {
       "type": "script",
-      "file": "Events/Engine/start.js"
+      "file": "registerRules.js"
     }
   ],
   "dependencies": [
-    "core-rules"
+    "core-rules",
+    "core-game-year",
+    "core-notifications"
   ]
 }

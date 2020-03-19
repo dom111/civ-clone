@@ -41,10 +41,10 @@ export const setUpCity = ({
 
   const player = new Player(),
     city = new City({
-      name: 'City',
       player,
+      rulesRegistry,
       tile: tile || world.get(2, 2),
-    }, rulesRegistry)
+    })
   ;
 
   cityImprovementRegistry.getBy('city', city)

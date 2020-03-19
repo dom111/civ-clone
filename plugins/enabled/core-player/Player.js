@@ -5,14 +5,19 @@ import Tileset from '../core-world/Tileset.js';
 export class Player {
   static id = 0;
 
+  #playerActionRegistry;
   #rulesRegistry;
   #seenTiles = new Tileset();
 
   civilization;
 
-  constructor({rulesRegistry = RulesRegistry.getInstance()} = {}) {
+  constructor({
+    playerActionRegistry = PlayerActionRegistry.getInstance(),
+    rulesRegistry = RulesRegistry.getInstance(),
+  } = {}) {
     this.id = Player.id++;
     this.#rulesRegistry = rulesRegistry;
+    this.#playerActionRegistry = playerActionRegistry;
 
     this.#rulesRegistry.process('player:added', this);
   }
@@ -24,8 +29,7 @@ export class Player {
   }
 
   getActions() {
-    return PlayerActionRegistry.getInstance()
-      .entries()
+    return this.#playerActionRegistry.entries()
       .flatMap((actionsProvider) => actionsProvider.provide(this))
     ;
   }
@@ -34,10 +38,6 @@ export class Player {
     const actions = this.getActions();
 
     return actions.length;
-  }
-
-  get rulesRegistry() {
-    return this.#rulesRegistry;
   }
 
   get seenTiles() {

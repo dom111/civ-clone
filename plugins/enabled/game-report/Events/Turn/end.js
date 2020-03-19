@@ -5,18 +5,20 @@ import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import PlayerTreasuryRegistry from '../../../base-currency/PlayerTreasuryRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
-import Time from '../../../core-turn-based-game/Time.js';
+import Turn from '../../../core-turn-based-game/Turn.js';
 import UnitImprovementRegistry from '../../../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 engine.on('turn:end', () => {
-  const reportTurns = parseInt(engine.option('reportTurns', 0), 10);
+  const reportTurns = parseInt(engine.option('reportTurns', 0), 10),
+    turn = Turn.getInstance()
+  ;
 
   if (! reportTurns) {
     return;
   }
 
-  if (((Time.turn % reportTurns) === 1) || reportTurns === 1) {
+  if (((turn.value() % reportTurns) === 1) || reportTurns === 1) {
     PlayerRegistry.getInstance()
       .entries()
       .forEach((player) => {

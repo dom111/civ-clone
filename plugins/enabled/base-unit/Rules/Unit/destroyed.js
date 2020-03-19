@@ -7,7 +7,7 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'unit:destroyed:event',
-    new Effect((unit, player) => engine.emit('unit:destroyed', this, player))
+    new Effect((unit, player) => engine.emit('unit:destroyed', unit, player))
   ),
 
   new Rule(

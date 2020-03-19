@@ -5,8 +5,7 @@
   "dependencies": [
     "core-registry",
     "core-rules",
-    "core-yields",
-    "core-city"
+    "core-yields"
   ],
   "components": [
     {

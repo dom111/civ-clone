@@ -206,6 +206,10 @@
     {
       "type": "script",
       "file": "registerAvailableUnits.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/unitsToMove.js"
     }
   ]
 }

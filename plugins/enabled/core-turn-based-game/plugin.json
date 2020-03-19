@@ -5,11 +5,14 @@
   "components": [
     {
       "type": "script",
-      "file": "Time.js"
+      "file": "Events/Engine/start.js"
     },
     {
       "type": "script",
-      "file": "Events/Engine/start.js"
+      "file": "Turn.js"
     }
+  ],
+  "dependencies": [
+    "core-yields"
   ]
 }

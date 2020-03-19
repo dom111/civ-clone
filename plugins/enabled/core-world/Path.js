@@ -9,14 +9,21 @@ export class Path extends Tileset {
     return this.get(this.length - 1);
   }
 
-  static for(unit, start, end) {
+  static for(unit, start, end, pathFinderRegistry = PathFinderRegistry.getInstance()) {
     // If there are lots of `PathFinder`s here, this could take aaages, so probably best to only have one registered at
     // a time, but this mechanism avoids and hard-coding
-    const [path] = PathFinderRegistry.getInstance()
-      .entries()
+    const [path] = pathFinderRegistry.entries()
       .map((PathFinder) => new PathFinder(unit, start, end))
+      .map((path) => path.generate())
       .sort((a, b) => a.totalCost - b.totalCost)
     ;
+
+    if (! path) {
+      return path;
+    }
+
+    // the first tile is the source tile, so we can remove it.
+    path.shift();
 
     return path;
   }

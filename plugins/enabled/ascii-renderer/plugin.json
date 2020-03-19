@@ -3,7 +3,9 @@
   "dependencies": [
     "core-city",
     "core-turn-based-game",
-    "core-unit"
+    "core-unit",
+    "core-game-year",
+    "core-player"
   ],
   "components": [
     {

@@ -1,0 +1,17 @@
+{
+  "name": "core-notifications",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "Notification.js"
+    },
+    {
+      "type": "script",
+      "file": "NotificationRegistry.js"
+    }
+  ],
+  "dependencies": [
+    "core-registry"
+  ]
+}

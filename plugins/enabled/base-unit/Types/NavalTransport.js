@@ -6,7 +6,9 @@ export class NavalTransport extends NavalUnit {
   cargo = [];
 
   canStow(unit) {
-    return unit instanceof Unit;
+    return unit instanceof Unit &&
+      ! this.cargo.includes(unit)
+    ;
   }
 
   hasCapacity() {
@@ -27,17 +29,6 @@ export class NavalTransport extends NavalUnit {
     this.cargo.push(unit);
 
     return true;
-  }
-
-  unload() {
-    this.wait();
-
-    this.cargo.forEach((unit) => {
-      this.cargo.splice(this.cargo.indexOf(unit), 1);
-
-      unit.activate();
-      unit.transport = null;
-    });
   }
 }
 

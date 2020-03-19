@@ -1,6 +1,5 @@
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import Effect from '../../../core-rules/Effect.js';
-import {Moves} from '../../../core-unit/Yields.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
@@ -31,7 +30,7 @@ export const getRules = ({
     'turn:start:player:units',
     new Effect((player) => {
       unitRegistry.getBy('player', player)
-        .sort((a, b) => a.waiting - b.waiting)
+        .sort((a, b) => b.waiting - a.waiting)
         .forEach((unit) => {
           if (unit.busy > 0) {
             unit.busy--;
@@ -44,7 +43,7 @@ export const getRules = ({
             }
           }
 
-          unit.moves = new Moves(unit.movement);
+          unit.moves.set(unit.movement);
 
           if (! unit.busy) {
             unit.busy = false;

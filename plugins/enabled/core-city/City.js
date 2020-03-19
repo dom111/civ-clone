@@ -16,7 +16,8 @@ export class City {
     player,
     tile,
     name,
-  }, rulesRegistry = RulesRegistry.getInstance()) {
+    rulesRegistry = RulesRegistry.getInstance(),
+  }) {
     this.#name = name;
     this.#originalPlayer = player;
     this.#player = player;

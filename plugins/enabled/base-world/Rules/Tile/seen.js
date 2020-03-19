@@ -14,7 +14,7 @@ export const getRules = () => [
   ),
 
   new Rule(
-    'tile:seen:player-tiles',
+    'tile:seen:event',
     new Effect((tile, player) => engine.emit('tile:seen', tile, player))
   ),
 ];

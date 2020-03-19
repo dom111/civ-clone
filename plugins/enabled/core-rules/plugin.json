@@ -24,10 +24,6 @@
     },
     {
       "type": "script",
-      "file": "Registry.js"
-    },
-    {
-      "type": "script",
       "file": "RulesRegistry.js"
     },
     {
