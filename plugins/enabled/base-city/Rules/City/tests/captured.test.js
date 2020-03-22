@@ -37,12 +37,12 @@ describe('city:captured', () => {
       enemy = new Player()
     ;
 
-    assert.strictEqual(city.size, 2);
+    assert.strictEqual(city.size(), 2);
 
     city.capture(enemy);
 
-    assert.strictEqual(city.size, 1);
-    assert.strictEqual(city.player, enemy);
+    assert.strictEqual(city.size(), 1);
+    assert.strictEqual(city.player(), enemy);
   });
 
   it('should destroy all of the cities units when captured', () => {
@@ -61,7 +61,7 @@ describe('city:captured', () => {
 
     city.capture(enemy);
 
-    assert(unit.destroyed);
+    assert(unit.destroyed());
     assert(! unitRegistry.entries()
       .includes(unit)
     );

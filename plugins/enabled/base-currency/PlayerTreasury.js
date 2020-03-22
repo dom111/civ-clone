@@ -26,7 +26,7 @@ export class PlayerTreasury extends Yield {
       cost = this.cost(city)
     ;
 
-    if (city.player !== this.#player) {
+    if (city.player() !== this.#player) {
       return;
     }
 
@@ -49,7 +49,7 @@ export class PlayerTreasury extends Yield {
     return cost;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 }

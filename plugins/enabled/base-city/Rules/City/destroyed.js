@@ -11,7 +11,7 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'city:destroyed:tile-improvements-removal',
-    new Effect((city) => tileImprovementRegistry.getBy('tile', city.tile)
+    new Effect((city) => tileImprovementRegistry.getBy('tile', city.tile())
       .filter((improvement) => improvement instanceof Irrigation)
       .forEach((irrigation) => tileImprovementRegistry.unregister(irrigation))
     )

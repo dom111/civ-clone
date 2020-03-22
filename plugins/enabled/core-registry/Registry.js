@@ -30,7 +30,19 @@ export class Registry {
   }
 
   getBy(key, value) {
-    return this.filter((entity) => entity[key] === value);
+    return this.filter((entity) => {
+      const check = entity[key];
+
+      if (typeof check === 'function') {
+        return check.bind(entity)() === value;
+      }
+
+      return entity[key] === value;
+    });
+  }
+
+  get length() {
+    return this.#entries.length;
   }
 
   register(...entities) {

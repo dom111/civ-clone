@@ -1,11 +1,11 @@
-import {Move} from '../base-unit/Actions/Move.js';
+import {Move} from '../base-unit/Actions.js';
 import Path from '../core-world/Path.js';
 import PathFinder from '../core-world/PathFinder.js';
 
 export class BasePathFinder extends PathFinder {
   #candidates = [];
-  #heap = [this.createNode(this.start)];
-  #seen = [this.start];
+  #heap = [this.createNode(this.start())];
+  #seen = [this.start()];
 
   createNode(tile, parent = null, cost = 0) {
     return {
@@ -31,7 +31,7 @@ export class BasePathFinder extends PathFinder {
 
     const path = new Path(...tiles);
 
-    path.movementCost = movementCost;
+    path.setMovementCost(movementCost);
 
     return path;
   }
@@ -44,16 +44,16 @@ export class BasePathFinder extends PathFinder {
 
       tile.getNeighbours()
         // TODO: is this needed to make it fair?
-        // .filter((tile) => tile.isVisible(this.unit.player))
+        // .filter((tile) => tile.isVisible(this.unit().player()))
         .forEach((target) => {
-          const [move] = this.unit.actions(target, tile)
+          const [move] = this.unit().actions(target, tile)
             .filter((action) => action instanceof Move)
           ;
 
           if (move) {
             const targetNode = this.createNode(target, currentNode, move.movementCost());
 
-            if (target === this.end) {
+            if (target === this.end()) {
               this.#candidates.push(this.createPath(targetNode));
 
               return;
@@ -72,7 +72,7 @@ export class BasePathFinder extends PathFinder {
     }
 
     // TODO: This might get REALLY expensive...
-    const [cheapest] = this.#candidates.sort((a, b) => a.movementCost - b.movementCost);
+    const [cheapest] = this.#candidates.sort((a, b) => a.movementCost() - b.movementCost());
 
     return cheapest;
   }

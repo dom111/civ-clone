@@ -58,14 +58,14 @@ describe('SimpleAIPlayer', () => {
         rulesRegistry.process('player:turn-start', player);
 
         player.takeTurn({
-          rulesRegistry,
-          unitRegistry,
           cityRegistry,
+          pathFinderRegistry,
           playerGovernmentRegistry,
           playerResearchRegistry,
-          unitImprovementRegistry,
+          rulesRegistry,
           tileImprovementRegistry,
-          pathFinderRegistry,
+          unitImprovementRegistry,
+          unitRegistry,
         });
       }
     },
@@ -150,7 +150,7 @@ describe('SimpleAIPlayer', () => {
       })
     ;
 
-    assert.strictEqual(player.seenTiles.length, 9);
+    assert.strictEqual(player.seenTiles().length, 9);
 
     unitRegistry.register(unit);
 
@@ -160,7 +160,7 @@ describe('SimpleAIPlayer', () => {
       world,
     });
 
-    assert.strictEqual(player.seenTiles.length, 16);
+    assert.strictEqual(player.seenTiles().length, 16);
 
     unitRegistry.unregister(unit);
   });
@@ -175,7 +175,7 @@ describe('SimpleAIPlayer', () => {
       })
     ;
 
-    assert.strictEqual(player.seenTiles.length, 9);
+    assert.strictEqual(player.seenTiles().length, 9);
 
     unitRegistry.register(unit);
 
@@ -184,7 +184,7 @@ describe('SimpleAIPlayer', () => {
       world,
     });
 
-    assert.strictEqual(player.seenTiles.length, 16);
+    assert.strictEqual(player.seenTiles().length, 16);
 
     unitRegistry.unregister(unit);
   });
@@ -211,8 +211,8 @@ describe('SimpleAIPlayer', () => {
       world,
     });
 
-    assert.notStrictEqual(unit.tile, world.get(1, 1));
-    assert.notStrictEqual(transport.tile, world.get(2, 2));
+    assert.notStrictEqual(unit.tile(), world.get(1, 1));
+    assert.notStrictEqual(transport.tile(), world.get(2, 2));
 
     unitRegistry.unregister(unit, transport);
   });
@@ -233,10 +233,6 @@ describe('SimpleAIPlayer', () => {
     ;
 
     transport.stow(unit);
-
-    unit.busy = Infinity;
-    unit.active = false;
-
     unitRegistry.register(transport, unit);
 
     takeTurns({
@@ -244,8 +240,8 @@ describe('SimpleAIPlayer', () => {
       world,
     });
 
-    assert.strictEqual(unit.tile, world.get(1, 1));
-    assert.strictEqual(player.seenTiles.length, 16);
+    assert.strictEqual(unit.tile(), world.get(1, 1));
+    assert.strictEqual(player.seenTiles().length, 16);
 
     unitRegistry.unregister(unit, transport);
   });
@@ -279,7 +275,7 @@ describe('SimpleAIPlayer', () => {
       })
     ;
 
-    player.seenTiles.push(...world.getBy(() => true));
+    player.seenTiles().push(...world.getBy(() => true));
 
     unitRegistry.register(unit);
     cityRegistry.register(city);
@@ -290,8 +286,8 @@ describe('SimpleAIPlayer', () => {
       world,
     });
 
-    assert.strictEqual(unit.tile, city.tile);
-    assert.strictEqual(city.player, player);
+    assert.strictEqual(unit.tile(), city.tile());
+    assert.strictEqual(city.player(), player);
 
     unitRegistry.unregister(unit);
     cityRegistry.unregister(city);

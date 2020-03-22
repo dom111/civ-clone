@@ -5,7 +5,7 @@ export class TileImprovement {
     this.#tile = tile;
   }
 
-  get tile() {
+  tile() {
     return this.#tile;
   }
 }

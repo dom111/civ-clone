@@ -16,7 +16,7 @@ export const getRules = ({
     'city:cost:unhappiness:martial-law',
     new Criterion((cityYield) => cityYield instanceof Unhappiness),
     new Criterion((cityYield, city) => {
-      const [playerGovernment] = playerGovernmentRegistry.getBy('player', city.player);
+      const [playerGovernment] = playerGovernmentRegistry.getBy('player', city.player());
 
       // TODO: add Communism
       if (playerGovernment) {
@@ -29,7 +29,7 @@ export const getRules = ({
       4,
       Math.min(
         cityYield.value(),
-        unitRegistry.getBy('tile', city.tile).length
+        unitRegistry.getBy('tile', city.tile()).length
       )
     )))
   ),
@@ -37,14 +37,14 @@ export const getRules = ({
   ...[
     [Food, 'settlers', (tileYield, city) => {
       tileYield.subtract(unitRegistry.getBy('city', city)
-        .filter((unit) => unit instanceof Settlers && ! unit.destroyed)
+        .filter((unit) => unit instanceof Settlers && ! unit.destroyed())
         .length
       );
     }, Anarchy, Despotism],
     [Food, 'settlers', (tileYield, city) => {
       // For units like Caravan/Diplomat, they could extend a FreeUnit class or something and these could be filtered out
       const supportedUnits = unitRegistry.getBy('city', city)
-        .filter((unit) => unit instanceof Settlers && ! unit.destroyed)
+        .filter((unit) => unit instanceof Settlers && ! unit.destroyed())
         .length
       ;
 
@@ -56,8 +56,8 @@ export const getRules = ({
         .length
       ;
 
-      if (supportedUnits > city.size) {
-        tileYield.subtract(supportedUnits - city.size);
+      if (supportedUnits > city.size()) {
+        tileYield.subtract(supportedUnits - city.size());
       }
     }, Anarchy, Despotism],
     [Production, 'unit', (tileYield, city) => {
@@ -69,7 +69,7 @@ export const getRules = ({
     [Unhappiness, 'unit', (tileYield, city) => {
       // For units like Caravan/Diplomat, they could extend a FreeUnit class or something and these could be filtered out
       tileYield.add(unitRegistry.getBy('city', city)
-        .filter((unit) => unit.tile !== city.tile)
+        .filter((unit) => unit.tile() !== city.tile())
         .length
       );
     }, Republic],
@@ -78,7 +78,7 @@ export const getRules = ({
       `city:cost:${[Yield.name]}:${type}:${Governments.map((Entity) => Entity.name).join('-')}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
       new Criterion((tileYield, city) => {
-        const [playerGovernment] = playerGovernmentRegistry.getBy('player', city.player);
+        const [playerGovernment] = playerGovernmentRegistry.getBy('player', city.player());
 
         if (playerGovernment) {
           return playerGovernment.is(...Governments);

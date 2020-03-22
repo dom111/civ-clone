@@ -9,10 +9,10 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'city:created:improvements:palace',
-    new Criterion((city) => ! cityRegistry.getBy('player', city.player).length),
+    new Criterion((city) => ! cityRegistry.getBy('player', city.player()).length),
     new Effect((city) => new Palace({
       city,
-      player: city.player,
+      player: city.player(),
     }))
   ),
 ];

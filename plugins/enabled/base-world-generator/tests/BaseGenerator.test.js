@@ -13,8 +13,8 @@ describe('BaseGenerator', () => {
   generator.generate();
 
   it('should return the expected dimensions', () => {
-    assert.strictEqual(generator.height, height);
-    assert.strictEqual(generator.width, width);
+    assert.strictEqual(generator.height(), height);
+    assert.strictEqual(generator.width(), width);
   });
 
   it('should correctly convert coordinates to an index', () => {

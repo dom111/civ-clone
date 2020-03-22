@@ -23,7 +23,7 @@ export const getRules = ({
     'city:cost:unhappiness:base',
     new Criterion((cityYield) => cityYield instanceof Unhappiness),
     // TODO: factor in difficulty levels
-    new Effect((cityYield, city) => cityYield.add(Math.max(city.size - 5, 0)))
+    new Effect((cityYield, city) => cityYield.add(Math.max(city.size() - 5, 0)))
   ),
   new Rule(
     'city:cost:production:civil-disorder',

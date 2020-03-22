@@ -13,7 +13,7 @@ export const getRules = ({
     'city:process-yield:gold',
     new Criterion((cityYield) => cityYield instanceof Gold),
     new Effect((cityYield, city) => {
-      const [playerTreasury] = playerTreasuryRegistry.getBy('player', city.player);
+      const [playerTreasury] = playerTreasuryRegistry.getBy('player', city.player());
 
       playerTreasury.add(cityYield);
       rulesRegistry.process('player:treasury:updated', playerTreasury, city);

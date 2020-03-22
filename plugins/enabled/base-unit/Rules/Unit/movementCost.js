@@ -45,7 +45,7 @@ export const getRules = ({
 
   new Rule(
     'unit:movementCost:withRoad',
-    new Criterion((unit, to, from) => tileImprovementRegistry.getBy('tile', from || unit.tile)
+    new Criterion((unit, to, from) => tileImprovementRegistry.getBy('tile', from || unit.tile())
       .some((improvement) => improvement instanceof Road)
     ),
     new Criterion((unit, to) => tileImprovementRegistry.getBy('tile', to)
@@ -56,7 +56,7 @@ export const getRules = ({
 
   new Rule(
     'unit:movementCost:withRailroad',
-    new Criterion((unit, to, from) => tileImprovementRegistry.getBy('tile', from || unit.tile)
+    new Criterion((unit, to, from) => tileImprovementRegistry.getBy('tile', from || unit.tile())
       .some((improvement) => improvement instanceof Railroad)
     ),
     new Criterion((unit, to) => tileImprovementRegistry.getBy('tile', to)
@@ -64,7 +64,7 @@ export const getRules = ({
     ),
     // TODO: need to also protect against goto etc, like classic Civ does, although I'd rather that was done by evaluating
     //  the moves and if a loop is detected auto-cancelling - this is pretty primitive.
-    // new Criterion((unit) => ! (unit.player instanceof AIPlayer)),
+    // new Criterion((unit) => ! (unit.player() instanceof AIPlayer)),
     new Effect(() => 0)
   ),
 

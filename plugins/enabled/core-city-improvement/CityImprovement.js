@@ -5,7 +5,7 @@ export class CityImprovement {
   #rulesRegistry;
   #player;
 
-  constructor({city, player = city.player, rulesRegistry = RulesRegistry.getInstance()}) {
+  constructor({city, player = city.player(), rulesRegistry = RulesRegistry.getInstance()}) {
     this.#city   = city;
     this.#player = player;
     this.#rulesRegistry = rulesRegistry;
@@ -13,11 +13,11 @@ export class CityImprovement {
     this.#rulesRegistry.process('city:improvement:created', this, city);
   }
 
-  get city() {
+  city() {
     return this.#city;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 }

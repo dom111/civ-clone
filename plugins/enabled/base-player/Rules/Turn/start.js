@@ -28,30 +28,25 @@ export const getRules = ({
 
   new Rule(
     'turn:start:player:units',
-    new Effect((player) => {
-      unitRegistry.getBy('player', player)
-        .sort((a, b) => b.waiting - a.waiting)
-        .forEach((unit) => {
-          if (unit.busy > 0) {
-            unit.busy--;
+    new Effect((player) => unitRegistry.getBy('player', player)
+      .forEach((unit) => {
+        const busyAction = unit.busy();
 
-            if (unit.busy === 0) {
-              // TODO: This feels crude - should maybe just have a promise to resolve.
-              if (unit.actionOnComplete) {
-                unit.actionOnComplete();
-              }
-            }
+        if (busyAction) {
+          if (! busyAction.validate()) {
+            return;
           }
 
-          unit.moves.set(unit.movement);
+          busyAction.process();
+        }
 
-          if (! unit.busy) {
-            unit.busy = false;
-            unit.active = true;
-          }
-        })
-      ;
-    })
+        unit.setActive();
+        unit.moves()
+          .set(unit.movement())
+        ;
+        unit.setWaiting(false);
+      })
+    )
   ),
 ];
 

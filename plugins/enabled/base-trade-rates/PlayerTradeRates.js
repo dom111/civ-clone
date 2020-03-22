@@ -43,7 +43,7 @@ export class PlayerTradeRates {
     ;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 

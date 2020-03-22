@@ -18,8 +18,8 @@ export const getRules = ({
   new Rule(
     'unit:destroyed:flags',
     new Effect((unit) => {
-      unit.active = false;
-      unit.destroyed = true;
+      unit.setActive(false);
+      unit.setDestroyed();
     })
   ),
 ];

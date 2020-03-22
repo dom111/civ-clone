@@ -50,14 +50,14 @@ export const getRules = ({
         new OneCriteria(
           new Criterion(() => ! RequiredAdvance),
           new Criterion(() => playerResearchRegistry
-            .getBy('player', city.player)
+            .getBy('player', city.player())
             .every((playerResearch) => playerResearch.completed(RequiredAdvance))
           )
         ),
         new OneCriteria(
           new Criterion(() => ! ObseletionAdvance),
           new Criterion(() => ! playerResearchRegistry
-            .getBy('player', city.player)
+            .getBy('player', city.player())
             .every((playerResearch) => playerResearch.completed(ObseletionAdvance))
           )
         )

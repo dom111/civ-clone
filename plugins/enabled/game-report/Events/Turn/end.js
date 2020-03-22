@@ -46,13 +46,13 @@ ${PlayerResearchRegistry.getInstance().getBy('player', player)
 Cities: (${cities.length})
 ${
   cities
-    .map((city) => `${city.name} (${city.size})
+    .map((city) => `${city.name()} (${city.size()})
 Worked Tiles:
 ${
-  city.tilesWorked
+  city.tilesWorked()
     .map((tile) => `${tile.terrain.constructor.name}${
-      tile.terrain.features.length ?
-        ` (${tile.terrain.features.map((feature) => feature.constructor.name).join(', ')})` :
+      tile.terrain.features().length ?
+        ` (${tile.terrain.features().map((feature) => feature.constructor.name).join(', ')})` :
         ''
     }${
       TileImprovementRegistry.getInstance()

@@ -2,17 +2,15 @@ import {Attack, Defence, Movement, Moves, Visibility} from './Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class Unit {
+  #active = true;
+  #busy = null;
   #city;
+  #destroyed = false;
   #moves = new Moves();
   #player;
   #rulesRegistry;
   #tile;
-
-  active = true;
-  busy = false;
-  destroyed = false;
-  status = null;
-  waiting = false;
+  #waiting = false;
 
   constructor({player, city, tile, rulesRegistry = RulesRegistry.getInstance()}) {
     this.#city   = city;
@@ -30,7 +28,7 @@ export class Unit {
     });
   }
 
-  actions(to = this.tile, from = this.tile) {
+  actions(to = this.#tile, from = this.#tile) {
     return this.#rulesRegistry.process('unit:action', this, to, from);
   }
 
@@ -38,10 +36,18 @@ export class Unit {
     return this.#rulesRegistry.process('unit:activate', this);
   }
 
+  active() {
+    return this.#active;
+  }
+
+  setActive(active = true) {
+    this.#active = active;
+  }
+
   applyVisibility() {
     const rules = this.#rulesRegistry.get('tile:seen');
 
-    this.#tile.getSurroundingArea(this.visibility)
+    this.#tile.getSurroundingArea(this.visibility())
       .forEach((tile) => rules
         .filter((rule) => rule.validate(tile, this.#player))
         .forEach((rule) => rule.process(tile, this.#player))
@@ -49,17 +55,25 @@ export class Unit {
     ;
   }
 
-  get attack() {
+  attack() {
     const [unitYield] = this.yield(new Attack());
 
     return unitYield;
   }
 
-  get city() {
+  busy() {
+    return this.#busy;
+  }
+
+  setBusy(rule = null) {
+    this.#busy = rule;
+  }
+
+  city() {
     return this.#city;
   }
 
-  get defence() {
+  defence() {
     const [unitYield] = this.yield(new Defence());
 
     return unitYield;
@@ -69,36 +83,48 @@ export class Unit {
     this.#rulesRegistry.process('unit:destroyed', this, player);
   }
 
-  get movement() {
+  destroyed() {
+    return this.#destroyed;
+  }
+
+  setDestroyed() {
+    this.#destroyed = true;
+  }
+
+  movement() {
     const [unitYield] = this.yield(new Movement());
 
     return unitYield;
   }
 
-  get moves() {
+  moves() {
     return this.#moves;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 
-  get tile() {
+  tile() {
     return this.#tile;
   }
 
-  set tile(tile) {
+  setTile(tile) {
     this.#tile = tile;
   }
 
-  get visibility() {
+  visibility() {
     const [unitYield] = this.yield(new Visibility());
 
     return unitYield;
   }
 
-  wait() {
-    this.waiting = true;
+  waiting() {
+    return this.#waiting;
+  }
+
+  setWaiting(waiting = true) {
+    this.#waiting = waiting;
   }
 
   yield(...yields) {

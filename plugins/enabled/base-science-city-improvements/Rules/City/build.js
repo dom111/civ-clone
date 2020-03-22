@@ -41,7 +41,7 @@ export const getRules = ({
       `city:build:improvement:${[Unit, Advance].map((entity) => entity.name.toLowerCase()).join(':')}`,
       new Criterion((city, buildItem) => buildItem === Unit),
       new Effect((city) => new Criterion(() => playerResearchRegistry
-        .getBy('player', city.player)
+        .getBy('player', city.player())
         .every((playerResearch) => playerResearch.completed(Advance))
       ))
     ))

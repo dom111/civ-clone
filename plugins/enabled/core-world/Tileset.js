@@ -32,13 +32,6 @@ export class Tileset {
     this.push(...tiles);
   }
 
-  cities() {
-    return this
-      .filter((tile) => tile.city)
-      .map((tile) => tile.city)
-    ;
-  }
-
   every(iterator) {
     return this.#tiles.every(iterator);
   }
@@ -59,6 +52,7 @@ export class Tileset {
     return this.#tiles.includes(tile);
   }
 
+  // this makes sense as a getter as it's just a facade to the underlying Array.
   get length() {
     return this.#tiles.length;
   }

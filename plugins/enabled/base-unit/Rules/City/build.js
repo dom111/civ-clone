@@ -16,7 +16,7 @@ export const getRules = () => [
     'city:build:unit:settlers',
     new Criterion((city, buildItem) => buildItem === Settlers),
     new Effect((city) => new Criteria(
-      new Criterion(() => city.size >= 2)
+      new Criterion(() => city.size() >= 2)
       // new Criterion(() => city.surplusFood > 0)
     ))
   ),
@@ -25,7 +25,7 @@ export const getRules = () => [
     'city:build:unit:naval-unit',
     new Criterion((city, buildItem) => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
     new Effect((city) => new Criteria(
-      new Criterion(() => city.tile.isCoast())
+      new Criterion(() => city.tile().isCoast())
     ))
   ),
 ];

@@ -16,14 +16,16 @@ export const getRules = () => [
     new Criterion((unit) => unit instanceof NavalTransport),
     new Criterion((unit, action) => action instanceof Move),
     new Criterion((unit) => unit.hasCargo()),
-    new Effect((unit, action) => unit.cargo.forEach((unit) => unit.action(action.forUnit(unit))))
+    new Effect((unit, action) => unit.cargo()
+      .forEach((unit) => unit.action(action.forUnit(unit)))
+    )
   ),
 
   new Rule(
     'unit:moved:trireme',
     new Criterion((unit) => unit instanceof Trireme),
-    new Criterion((unit) => unit.moves.value() === 0),
-    new Criterion((unit) => ! unit.tile.isCoast()),
+    new Criterion((unit) => unit.moves().value() === 0),
+    new Criterion((unit) => ! unit.tile().isCoast()),
     new Criterion(() => Math.random() <= .5),
     new Effect((unit) => {
       unit.destroy();
@@ -38,9 +40,9 @@ export const getRules = () => [
 
   new Rule(
     'unit:moved:deactivate',
-    new Criterion((unit) => unit.moves.value() < .1),
+    new Criterion((unit) => unit.moves().value() < .1),
     new Effect((unit) => {
-      unit.active = false;
+      unit.setActive(false);
     })
   ),
 ];

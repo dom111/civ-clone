@@ -26,7 +26,7 @@ describe('city:cost', () => {
         size: 2,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -48,7 +48,7 @@ describe('city:cost', () => {
         size: 2,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -68,7 +68,7 @@ describe('city:cost', () => {
         size: 2,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -100,7 +100,8 @@ describe('city:cost', () => {
         size: 6,
         rulesRegistry,
       }),
-      {player, tile} = city,
+      player = city.player(),
+      tile = city.tile(),
       playerGovernment = new PlayerGovernment({player})
     ;
 
@@ -126,7 +127,8 @@ describe('city:cost', () => {
         size: 10,
         rulesRegistry,
       }),
-      {player, tile} = city,
+      player = city.player(),
+      tile = city.tile(),
       playerGovernment = new PlayerGovernment({player})
     ;
 

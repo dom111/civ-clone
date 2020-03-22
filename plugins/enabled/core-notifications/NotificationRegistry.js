@@ -7,6 +7,7 @@ export class NotificationRegistry extends Registry {
   }
   check() {
     const notifications = this.filter((notification) => {
+      // TODO: Rule
       if (typeof notification.when === 'function') {
         return notification.when(notification);
       }

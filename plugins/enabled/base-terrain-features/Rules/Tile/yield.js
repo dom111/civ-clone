@@ -28,7 +28,7 @@ export const getRules = () => [
         new Criterion((tileYield, tile) => tile.terrain instanceof Terrain)
       ),
       new Criterion((tileYield) => tileYield instanceof YieldType),
-      new Criterion((tileYield, tile) => tile.terrain.features.some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
       new Effect((tileYield) => tileYield.add(value))
     ))
   ,

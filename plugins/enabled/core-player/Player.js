@@ -9,6 +9,7 @@ export class Player {
   #rulesRegistry;
   #seenTiles = new Tileset();
 
+  // TODO: setter for this
   civilization;
 
   constructor({
@@ -40,7 +41,7 @@ export class Player {
     return actions.length;
   }
 
-  get seenTiles() {
+  seenTiles() {
     return this.#seenTiles;
   }
 

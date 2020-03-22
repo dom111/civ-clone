@@ -15,7 +15,7 @@ describe('city:civil-disorder', () => {
     const city = setUpCity({
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -31,7 +31,7 @@ describe('city:civil-disorder', () => {
     const city = setUpCity({
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -48,7 +48,7 @@ describe('city:civil-disorder', () => {
     const city = setUpCity({
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [

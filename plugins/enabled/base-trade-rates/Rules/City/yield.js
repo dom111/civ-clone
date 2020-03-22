@@ -15,7 +15,7 @@ export const getRules = ({
     'city:yield:trade-rates',
     new Criterion((cityYield) => cityYield instanceof Trade),
     new Effect((cityYield, city, yields) => {
-      const [playerRates] = playerTradeRatesRegistry.getBy('player', city.player);
+      const [playerRates] = playerTradeRatesRegistry.getBy('player', city.player());
 
       availableTradeRateRegistry.entries()
         .forEach((TradeRate) => {

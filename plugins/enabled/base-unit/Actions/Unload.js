@@ -2,8 +2,8 @@ import {Action} from '../../core-unit/Action.js';
 
 export class Unload extends Action {
   perform() {
-    this.unit.wait();
-    this.unit.cargo
+    this.unit().setWaiting();
+    this.unit().cargo()
       .forEach((unit) => unit.activate())
     ;
   }

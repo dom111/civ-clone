@@ -7,7 +7,7 @@ export class RulesRegistry extends Registry {
     if (this.accepts(rule)) {
       Object.keys(this.#cache)
         .forEach((key) => {
-          if (rule.name.startsWith(key)) {
+          if (rule.name().startsWith(key)) {
             delete this.#cache[key];
           }
         })
@@ -25,8 +25,8 @@ export class RulesRegistry extends Registry {
 
   get(ruleName) {
     if (! this.#cache[ruleName]) {
-      this.#cache[ruleName] = this.filter((rule) => rule.name.startsWith(`${ruleName}:`) ||
-        rule.name === ruleName
+      this.#cache[ruleName] = this.filter((rule) => rule.name().startsWith(`${ruleName}:`) ||
+        rule.name() === ruleName
       );
     }
 

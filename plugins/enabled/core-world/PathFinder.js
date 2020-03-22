@@ -9,7 +9,7 @@ export class PathFinder {
     this.#unit = unit;
   }
 
-  get end() {
+  end() {
     return this.#end;
   }
 
@@ -17,11 +17,11 @@ export class PathFinder {
     throw new Error(`PathFinder#generate: Must be overridden in '${this.constructor.name}'.`);
   }
 
-  get start() {
+  start() {
     return this.#start;
   }
 
-  get unit() {
+  unit() {
     return this.#unit;
   }
 }

@@ -23,7 +23,7 @@ export const getRules = ({
     .map(([Yield, Feature, value, ...Governments]) => new Rule(
       `tile:yield:${[Yield.name, Feature.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
-      new Criterion((tileYield, tile) => tile.terrain.features.some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
       new Criterion((tileYield, tile, player) => {
         const [playerGovernment] = playerGovernmentRegistry.getBy('player', player);
 
@@ -45,7 +45,7 @@ export const getRules = ({
       `tile:yield:${[Yield.name, Feature.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
       new Criterion((tileYield, tile) => tile.terrain instanceof Terrain),
-      new Criterion((tileYield, tile) => tile.terrain.features.some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
       new Criterion((tileYield, tile, player) => {
         const [playerGovernment] = playerGovernmentRegistry.getBy('player', player);
 

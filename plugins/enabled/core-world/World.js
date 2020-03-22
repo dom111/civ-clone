@@ -9,8 +9,8 @@ export class World {
 
   constructor(generator) {
     this.#generator = generator;
-    this.#height = generator.height;
-    this.#width = generator.width;
+    this.#height = generator.height();
+    this.#width = generator.width();
 
     // TODO: use this to help generate consistent maps
     this.seed = Math.ceil(Math.random() * 1e7);
@@ -41,7 +41,7 @@ export class World {
     return this.#map.filter(filterFunction);
   }
 
-  get height() {
+  height() {
     return this.#height;
   }
 
@@ -53,7 +53,7 @@ export class World {
   //   return this.#map.map((tile) => tile.save())
   // }
 
-  get width() {
+  width() {
     return this.#width;
   }
 }

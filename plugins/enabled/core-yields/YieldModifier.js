@@ -11,7 +11,7 @@ export class YieldModifier {
     return this.#apply(value);
   }
 
-  get priority() {
+  priority() {
     return this.#priority;
   }
 }

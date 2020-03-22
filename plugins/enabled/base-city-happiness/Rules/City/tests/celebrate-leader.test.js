@@ -16,7 +16,7 @@ describe('city:celebrate-leader', () => {
         size: 4,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -33,7 +33,7 @@ describe('city:celebrate-leader', () => {
         size: 6,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -51,7 +51,7 @@ describe('city:celebrate-leader', () => {
         size: 2,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [
@@ -69,7 +69,7 @@ describe('city:celebrate-leader', () => {
         size: 3,
         rulesRegistry,
       }),
-      {tile} = city
+      tile = city.tile()
     ;
 
     tile.yields = () => [

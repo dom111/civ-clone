@@ -27,8 +27,8 @@ describe('city:grow', () => {
       [cityGrowth] = cityGrowthRegistry.getBy('city', city)
     ;
 
-    assert.strictEqual(cityGrowth.progress.value(), 0);
-    assert.strictEqual(cityGrowth.cost.value(), 20);
+    assert.strictEqual(cityGrowth.progress().value(), 0);
+    assert.strictEqual(cityGrowth.cost().value(), 20);
 
     [
       [2, 2, 20],
@@ -45,9 +45,9 @@ describe('city:grow', () => {
 
         cityGrowth.check();
 
-        assert.strictEqual(cityGrowth.progress.value(), expectedProgress);
-        assert.strictEqual(cityGrowth.cost.value(), expectedCost);
-        assert.strictEqual(city.tilesWorked.length, city.size + 1);
+        assert.strictEqual(cityGrowth.progress().value(), expectedProgress);
+        assert.strictEqual(cityGrowth.cost().value(), expectedCost);
+        assert.strictEqual(city.tilesWorked().length, city.size() + 1);
       })
     ;
   });

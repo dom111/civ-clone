@@ -6,7 +6,10 @@ export class PlayerGovernment {
   #player;
   #rulesRegistry;
 
-  constructor({player, rulesRegistry = RulesRegistry.getInstance()}) {
+  constructor({
+    player,
+    rulesRegistry = RulesRegistry.getInstance(),
+  } = {}) {
     this.#government = new Despotism();
     this.#player = player;
     this.#rulesRegistry = rulesRegistry;
@@ -20,7 +23,7 @@ export class PlayerGovernment {
     return governments.some((Government) => this.#government instanceof Government);
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 

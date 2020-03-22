@@ -111,7 +111,7 @@ describe('unit:action', () => {
       })
     ;
 
-    const actions = unit1.actions(unit2.tile);
+    const actions = unit1.actions(unit2.tile());
 
     assert(actions.some((action) => action instanceof Attack));
   });
@@ -206,17 +206,17 @@ describe('unit:action', () => {
 
     cityRegistry.register(city);
 
-    const [captureCity] = unit.actions(city.tile)
+    const [captureCity] = unit.actions(city.tile())
       .filter((action) => action instanceof CaptureCity)
     ;
 
     assert(captureCity);
 
-    assert.strictEqual(city.player, enemy);
+    assert.strictEqual(city.player(), enemy);
 
     unit.action(captureCity);
 
-    assert.strictEqual(city.player, player);
+    assert.strictEqual(city.player(), player);
 
     cityRegistry.unregister(city);
   });
@@ -243,7 +243,7 @@ describe('unit:action', () => {
       tile: world.get(2, 2),
     });
 
-    const [captureCity] = unit.actions(city.tile)
+    const [captureCity] = unit.actions(city.tile())
       .filter((action) => action instanceof CaptureCity)
     ;
 

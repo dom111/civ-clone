@@ -5,7 +5,7 @@ import PlayerResearchRegistry from './PlayerResearchRegistry.js';
 PlayerActionRegistry.getInstance()
   .register(new PlayerActionProvider((player) => {
     const [research] = PlayerResearchRegistry.getInstance()
-        .filter((playerResearch) => playerResearch.player === player),
+        .filter((playerResearch) => playerResearch.player() === player),
       [availableResearch] = research.available()
     ;
 

@@ -24,11 +24,11 @@ describe('city:process-yield', () => {
       cityYield = new Food(20)
     ;
 
-    assert.strictEqual(city.size, 1);
+    assert.strictEqual(city.size(), 1);
 
     rulesRegistry.process('city:process-yield', cityYield, city);
 
-    assert.strictEqual(city.size, 2);
+    assert.strictEqual(city.size(), 2);
   });
 
   it('should cause a city to shrink when the food store is depleted', () => {
@@ -39,10 +39,10 @@ describe('city:process-yield', () => {
       cityYield = new Food(-1)
     ;
 
-    assert.strictEqual(city.size, 2);
+    assert.strictEqual(city.size(), 2);
 
     rulesRegistry.process('city:process-yield', cityYield, city);
 
-    assert.strictEqual(city.size, 1);
+    assert.strictEqual(city.size(), 1);
   });
 });

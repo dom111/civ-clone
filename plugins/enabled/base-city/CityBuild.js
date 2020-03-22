@@ -48,8 +48,8 @@ export class CityBuild {
     //  more straightforward way...
     return this.#availableCityImprovementRegistry
       .filter((buildItem) => buildImprovementRules
-        .filter((rule) => rule.validate(this.city, buildItem))
-        .every((rule) => rule.process(this.city, buildItem)
+        .filter((rule) => rule.validate(this.city(), buildItem))
+        .every((rule) => rule.process(this.city(), buildItem)
           .validate()
         )
       )
@@ -64,8 +64,8 @@ export class CityBuild {
     //  straightforward way...
     return this.#availableUnitRegistry
       .filter((buildItem) => buildUnitRules
-        .filter((rule) => rule.validate(this.city, buildItem))
-        .every((rule) => rule.process(this.city, buildItem)
+        .filter((rule) => rule.validate(this.city(), buildItem))
+        .every((rule) => rule.process(this.city(), buildItem)
           .validate()
         )
       )
@@ -91,9 +91,9 @@ export class CityBuild {
   check() {
     if (this.#progress.value() >= this.#cost) {
       const built = new (this.#building)({
-        player: this.#city.player,
+        player: this.#city.player(),
         city: this.#city,
-        tile: this.#city.tile,
+        tile: this.#city.tile(),
       });
 
       this.#rulesRegistry.process('city:building-complete', this.#city, built);
@@ -106,15 +106,15 @@ export class CityBuild {
     }
   }
 
-  get city() {
+  city() {
     return this.#city;
   }
 
-  get cost() {
+  cost() {
     return this.#cost;
   }
 
-  get progress() {
+  progress() {
     return this.#progress;
   }
 

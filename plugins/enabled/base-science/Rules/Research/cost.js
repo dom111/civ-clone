@@ -12,7 +12,7 @@ export const getRules = () => [
       ) * (
         6 + (
           2 * (
-            playerResearch.player
+            playerResearch.player()
               .difficultyLevel ||
             0
           )

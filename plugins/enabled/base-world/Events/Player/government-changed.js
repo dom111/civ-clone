@@ -1,1 +1,1 @@
-engine.on('player:government:changed', (player) => player.seenTiles.forEach((tile) => tile.clearYieldCache(player)));
+engine.on('player:government:changed', (player) => player.seenTiles().forEach((tile) => tile.clearYieldCache(player)));

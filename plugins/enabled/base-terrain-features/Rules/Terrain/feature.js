@@ -42,7 +42,7 @@ export const getRules = () => {
           new Criterion((TerrainFeature, terrain) => terrains.some((Terrain) => terrain instanceof Terrain))
         ),
         new Criterion(() => Math.random() <= chance),
-        new Effect((TerrainFeature, terrain) => terrain.features.push(new TerrainFeature()))
+        new Effect((TerrainFeature, terrain) => terrain.features().push(new TerrainFeature()))
       ))
     ,
   ];

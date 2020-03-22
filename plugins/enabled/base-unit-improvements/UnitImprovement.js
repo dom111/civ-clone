@@ -5,7 +5,7 @@ export class UnitImprovement {
     this.#unit = unit;
   }
 
-  get unit() {
+  unit() {
     return this.#unit;
   }
 }

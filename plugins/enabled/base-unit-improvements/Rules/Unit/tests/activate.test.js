@@ -56,9 +56,11 @@ describe('unit:activate', () => {
 
         unit.action(action);
 
-        unit.actionOnComplete({
-          unitImprovementRegistry,
-        });
+        unit.busy()
+          .process({
+            unitImprovementRegistry,
+          })
+        ;
 
         assert(unitImprovementRegistry.getBy('unit', unit)
           .some((improvement) => improvement instanceof UnitImprovement)

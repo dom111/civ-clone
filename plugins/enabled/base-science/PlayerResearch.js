@@ -70,15 +70,15 @@ export class PlayerResearch {
     ;
   }
 
-  get cost() {
+  cost() {
     return this.#cost;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 
-  get progress() {
+  progress() {
     return this.#progress;
   }
 

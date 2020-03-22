@@ -24,8 +24,8 @@ export class CaptureCity extends Move {
 
   perform() {
     if (super.perform()) {
-      this.#cityRegistry.getBy('tile', this.to)
-        .forEach((city) => city.capture(this.unit.player))
+      this.#cityRegistry.getBy('tile', this.to())
+        .forEach((city) => city.capture(this.unit().player()))
       ;
     }
   }

@@ -32,7 +32,7 @@ export class Yield {
     this.#modifiers.add(...modifiers);
   }
 
-  get modifiers() {
+  modifiers() {
     return this.#modifiers;
   }
 

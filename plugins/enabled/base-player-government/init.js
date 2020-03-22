@@ -3,7 +3,7 @@
 
 // engine.on('player:revolt', (player) => {
 //   const [playerGovernment] = PlayerGovernmentRegistry.entries()
-//     .filter((playerGovernment) => playerGovernment.player === player)
+//     .filter((playerGovernment) => playerGovernment.player() === player)
 //   ;
 //
 //   playerGovernment.choose
@@ -13,7 +13,7 @@
 // PlayerActionRegistry.getInstance()
 //   .register(new Effect((player) => {
 //     const [research] = PlayerGovernmentRegistry.entries()
-//       .filter((playerResearch) => playerResearch.player === player)
+//       .filter((playerResearch) => playerResearch.player() === player)
 //     ;
 //
 //     if (! research.researching()) {

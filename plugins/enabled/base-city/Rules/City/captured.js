@@ -24,10 +24,16 @@ export const getRules = ({
     )
   ),
   new Rule(
+    'city:captured:destroy-units',
+    new Effect((capturedCity) => unitRegistry.getBy('city', capturedCity)
+      .forEach((unit) => unit.destroy())
+    )
+  ),
+  new Rule(
     'city:captured:check-player-status',
     // TODO: have some `Rule`s that just call `Player#defeated` or something?
-    new Criterion((capturedCity) => cityRegistry.getBy('player', capturedCity.player).length === 0),
-    new Effect((capturedCity) => engine.emit('player:defeated', capturedCity.player))
+    new Criterion((capturedCity) => cityRegistry.getBy('player', capturedCity.player()).length === 0),
+    new Effect((capturedCity) => engine.emit('player:defeated', capturedCity.player()))
   ),
 ];
 

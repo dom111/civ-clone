@@ -95,7 +95,7 @@ describe('tile:yield', () => {
         .map(([, value]) => value)
       ;
 
-      it(`${tile.terrain.constructor.name}${tile.terrain.features.length ? ` (${tile.terrain.features.map((feature) => feature.constructor.name).join('')})` : ''} should have ${value} ${tileYield.constructor.name}.`, () => {
+      it(`${tile.terrain.constructor.name}${tile.terrain.features().length ? ` (${tile.terrain.features().map((feature) => feature.constructor.name).join('')})` : ''} should have ${value} ${tileYield.constructor.name}.`, () => {
         assert.strictEqual(
           tileYield.value(),
           value

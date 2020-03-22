@@ -24,7 +24,7 @@ describe('city:yield', () => {
 
     cityImprovementRegistry.register(new Marketplace({city}));
 
-    city.tile.yields = () => [new Gold(4)];
+    city.tile().yields = () => [new Gold(4)];
 
     const [gold] = city.yields()
       .filter((cityYield) => cityYield instanceof Gold)

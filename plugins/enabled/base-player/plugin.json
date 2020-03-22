@@ -31,14 +31,6 @@
     },
     {
       "type": "script",
-      "file": "Events/Unit/action.js"
-    },
-    {
-      "type": "script",
-      "file": "Events/Unit/activate.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Turn/start.js"
     },
     {
@@ -56,6 +48,14 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-end.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-start.js"
     }
   ]
 }

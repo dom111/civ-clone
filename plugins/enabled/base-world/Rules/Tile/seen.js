@@ -5,9 +5,9 @@ import Rule from '../../../core-rules/Rule.js';
 export const getRules = () => [
   new Rule(
     'tile:seen:player-tiles',
-    new Criterion((tile, player) => ! player.seenTiles.includes(tile)),
+    new Criterion((tile, player) => ! player.seenTiles().includes(tile)),
     new Effect((tile, player) => {
-      player.seenTiles.push(tile);
+      player.seenTiles().push(tile);
 
       engine.emit('player:visibility-changed', player);
     })

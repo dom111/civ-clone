@@ -8,7 +8,7 @@ export const getRules = ({
   new Rule(
     'turn:start:notifications',
     new Effect(() => notificationRegistry.check()
-      .forEach((notification) => console.log(`${notification.name}: ${notification.message}`))
+      .forEach((notification) => console.log(`${notification.name()}: ${notification.message()}`))
     )
   ),
 ];

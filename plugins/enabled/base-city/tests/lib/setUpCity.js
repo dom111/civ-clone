@@ -34,7 +34,7 @@ export const setUpCity = ({
     Tileset.fromSurrounding(world.get(2, 2))
       .forEach((tile) => {
         tile.terrain = new Grassland();
-        tile.terrain.features.push(new Shield());
+        tile.terrain.features().push(new Shield());
       })
     ;
   }
@@ -51,7 +51,7 @@ export const setUpCity = ({
     .forEach((improvement) => cityImprovementRegistry.unregister(improvement))
   ;
 
-  Tileset.fromSurrounding(city.tile)
+  Tileset.fromSurrounding(city.tile())
     .forEach((tile) => {
       if (tile.terrain instanceof Water) {
         return;
@@ -64,11 +64,11 @@ export const setUpCity = ({
         .forEach((improvement) => tileImprovementRegistry.register(improvement))
       ;
 
-      player.seenTiles.push(tile);
+      player.seenTiles().push(tile);
     })
   ;
 
-  while (city.size < size) {
+  while (city.size() < size) {
     city.grow();
   }
 

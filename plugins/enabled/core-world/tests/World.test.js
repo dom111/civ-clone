@@ -20,8 +20,8 @@ describe('World', () => {
 
   // base map
   it('should extract dimensions from the generator', () => {
-    assert.strictEqual(world.height, height);
-    assert.strictEqual(world.width, width);
+    assert.strictEqual(world.height(), height);
+    assert.strictEqual(world.width(), width);
   });
 
   it('should return the expected `Tile`s', () => {

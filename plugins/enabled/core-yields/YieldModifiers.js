@@ -16,7 +16,7 @@ export class YieldModifiers {
   apply(value) {
     return this.#stack
       // sorting by highest priority first
-      .sort((a, b) => b.priority - a.priority)
+      .sort((a, b) => b.priority() - a.priority())
       .reduce((total, yieldModifier) => total + yieldModifier.apply(value), value)
     ;
   }

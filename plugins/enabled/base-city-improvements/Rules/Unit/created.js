@@ -12,7 +12,7 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'unit:created:veteran',
-    new Criterion((unit) => unit.city && cityImprovementRegistry.getBy('city', unit.city)
+    new Criterion((unit) => unit.city() && cityImprovementRegistry.getBy('city', unit.city())
       .some((improvement) => improvement instanceof Barracks)
     ),
     new Effect((unit) => unitImprovementRegistry.register(new Veteran(unit)))

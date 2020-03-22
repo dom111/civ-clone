@@ -17,8 +17,6 @@ export class Tile {
 
     this.#rulesRegistry = rulesRegistry;
 
-    this.features = [];
-
     // when generating use this:
     // this.seed = Math.ceil(Math.random() * 1e7);
     // this.seed = this.seed || (this.x * this.y);
@@ -41,18 +39,6 @@ export class Tile {
     }
 
     return this.#yieldCache.get(player);
-  }
-
-  get(tile) {
-    if (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].includes(tile)) {
-      return this.getNeighbour(tile);
-    }
-
-    if (tile instanceof Tile) {
-      return tile;
-    }
-
-    throw new TypeError(`Tile#get: Expected tile to be a neighbour alias or instance of Tile, got '${typeof tile}'.`);
   }
 
   getAdjacent() {
@@ -127,7 +113,7 @@ export class Tile {
       [1, 0],
       [1, -1],
     ]
-      .map(([x, y]) => Math.hypot(...[(this.x - tile.x) + (x * this.map.width), (this.y - tile.y) + (y * this.map.height)]))
+      .map(([x, y]) => Math.hypot(...[(this.x - tile.x) + (x * this.map.width()), (this.y - tile.y) + (y * this.map.height())]))
       .sort((a, b) => a - b)
     ;
 
@@ -161,7 +147,7 @@ export class Tile {
   }
 
   isVisible(player) {
-    return player.seenTiles.includes(this);
+    return player.seenTiles().includes(this);
   }
 
   // static load(data, map) {

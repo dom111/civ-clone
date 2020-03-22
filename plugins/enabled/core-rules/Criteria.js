@@ -17,12 +17,12 @@ export class Criteria {
     });
   }
 
-  get criteria() {
+  criteria() {
     return this.#criteria;
   }
 
   validate(...args) {
-    return this.criteria.every((criterion) => !! criterion.validate(...args));
+    return this.#criteria.every((criterion) => !! criterion.validate(...args));
   }
 }
 

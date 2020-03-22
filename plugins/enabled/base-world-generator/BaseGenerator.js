@@ -36,7 +36,7 @@ export class BaseGenerator extends Generator {
     this.#pathChance = pathChance; // chance for directly adjacent tiles to be part of the path
     this.#rulesRegistry = rulesRegistry;
 
-    this.#map = new Array(this.height * this.width)
+    this.#map = new Array(this.height() * this.width())
       .fill(0)
       .map(() => new Water())
     ;
@@ -45,7 +45,7 @@ export class BaseGenerator extends Generator {
   generateLand() {
     const seen = {},
       toProcess = [],
-      seedTile = Math.floor((this.height * this.width) * Math.random()),
+      seedTile = Math.floor((this.height() * this.width()) * Math.random()),
       flagAsSeen = (id) => {
         if (! (id in seen)) {
           seen[id] = 0;
@@ -144,8 +144,8 @@ export class BaseGenerator extends Generator {
               .filter((i) => this.#map[i] instanceof TerrainType.__proto__)
               .filter((i) =>
                 (
-                  i >= ((from * this.height) * this.width) &&
-                  i <= ((to * this.height) * this.width)
+                  i >= ((from * this.height()) * this.width()) &&
+                  i <= ((to * this.height()) * this.width())
                 )
               )
             ;

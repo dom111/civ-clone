@@ -27,7 +27,6 @@ export class City {
     this.#rulesRegistry = rulesRegistry;
 
     this.#rulesRegistry.process('city:created', this);
-
     this.assignUnassignedWorkers();
   }
 
@@ -78,15 +77,15 @@ export class City {
     this.#rulesRegistry.process('city:grow', this);
   }
 
-  get name() {
+  name() {
     return this.#name;
   }
 
-  get originalPlayer() {
+  originalPlayer() {
     return this.#originalPlayer;
   }
 
-  get player() {
+  player() {
     return this.#player;
   }
 
@@ -96,15 +95,15 @@ export class City {
     this.#rulesRegistry.process('city:shrink', this);
   }
 
-  get size() {
+  size() {
     return this.#size;
   }
 
-  get tile() {
+  tile() {
     return this.#tile;
   }
 
-  get tilesWorked() {
+  tilesWorked() {
     return this.#tilesWorked;
   }
 
@@ -115,7 +114,7 @@ export class City {
     const tilesetTields = this.#tilesWorked
       .yields({
         yields,
-        player: this.player,
+        player: this.#player,
       })
     ;
 

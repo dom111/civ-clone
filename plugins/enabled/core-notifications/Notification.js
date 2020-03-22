@@ -16,19 +16,19 @@ export class Notification {
     this.#when    = when;
   }
 
-  get message() {
+  message() {
     return this.#message;
   }
 
-  get name() {
+  name() {
     return this.#name;
   }
 
-  get type() {
+  type() {
     return this.#type;
   }
 
-  get when() {
+  when() {
     // TODO: Rule/Criterion?
     return this.#when;
   }

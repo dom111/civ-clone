@@ -9,29 +9,29 @@ export class Generator {
 
   coordsToIndex(x, y) {
     while (x < 0) {
-      x += this.width;
+      x += this.width();
     }
 
     while (y < 0) {
-      y += this.height;
+      y += this.height();
     }
 
-    x = x % this.width;
-    y = y % this.height;
+    x = x % this.width();
+    y = y % this.height();
 
-    return (y * this.width) + x;
+    return (y * this.width()) + x;
   }
 
   generate() {
     throw new Error(`Generator#generate(): Must be overridden in '${this.constructor.name}'.`);
   }
 
-  get height() {
+  height() {
     return this.#height;
   }
 
   indexToCoords(index) {
-    const total = this.height * this.width;
+    const total = this.height() * this.width();
 
     while (index < 0) {
       index += total;
@@ -39,7 +39,7 @@ export class Generator {
 
     index = index % total;
 
-    return [index % this.width, Math.floor(index / this.width)];
+    return [index % this.width(), Math.floor(index / this.width())];
   }
 
   distanceFrom(from, to) {
@@ -56,7 +56,7 @@ export class Generator {
         [1, 0],
         [1, -1],
       ]
-        .map(([x, y]) => [x * this.width, y * this.height])
+        .map(([x, y]) => [x * this.width(), y * this.height()])
         .map(([x, y]) => [(fromX - toX) + x, (fromY - toY) + y])
         .map((coords) => Math.hypot(...coords))
         .sort((a, b) => a - b)
@@ -65,7 +65,7 @@ export class Generator {
     return shortestDistance;
   }
 
-  get width() {
+  width() {
     return this.#width;
   }
 }

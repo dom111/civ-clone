@@ -30,16 +30,16 @@ export class Rule {
     this.#name = name;
   }
 
-  get hasEffect() {
+  hasEffect() {
     return this.#effect;
   }
 
-  get name() {
+  name() {
     return this.#name;
   }
 
   process(...args) {
-    if (this.hasEffect) {
+    if (this.hasEffect()) {
       return this.#effect.apply(...args);
     }
   }

@@ -12,7 +12,7 @@ export class Terrain {
     this.#rulesRegistry.process('terrain:created', this);
   }
 
-  get features() {
+  features() {
     return this.#features;
   }
 
@@ -21,13 +21,13 @@ export class Terrain {
   //     .getBy('name', data.Type)
   //   ;
   //
-  //   return new Entity(data.features.map((feature) => TerrainFeature.load(feature)));
+  //   return new Entity(data.features().map((feature) => TerrainFeature.load(feature)));
   // }
   //
   // save() {
   //   return {
   //     Type: this.constructor.name,
-  //     features: this.features.map((feature) => feature.save()),
+  //     features: this.features().map((feature) => feature.save()),
   //   };
   // }
 }

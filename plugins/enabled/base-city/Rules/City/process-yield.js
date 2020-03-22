@@ -37,7 +37,7 @@ export const getRules = ({
     new Criterion((cityYield) => cityYield instanceof Production),
     new Criterion((cityYield) => cityYield.value() < 0),
     new Effect((cityYield, city) => unitRegistry.getBy('city', city)
-      .sort((a, b) => a.tile.distanceFrom(city.tile) - b.tile.distanceFrom(city.tile))
+      .sort((a, b) => a.tile().distanceFrom(city.tile()) - b.tile().distanceFrom(city.tile()))
       .slice(cityYield.value())
       .forEach((unit) => unit.destroy())
     )

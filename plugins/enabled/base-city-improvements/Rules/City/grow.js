@@ -15,7 +15,7 @@ export const getRules = ({
     new Criterion((city) => ! cityImprovementRegistry.getBy('city', city)
       .some((improvement) => improvement instanceof Aqueduct)
     ),
-    new Criterion((city) => city.size > 10),
+    new Criterion((city) => city.size() > 10),
     new Effect((city) => city.shrink())
   ),
   new Rule(
@@ -24,7 +24,7 @@ export const getRules = ({
       .some((improvement) => improvement instanceof Granary)
     ),
     new Effect((city) => cityGrowthRegistry.getBy('city', city)
-      .forEach((cityGrowth) => cityGrowth.add(new Food(cityGrowth.cost.value() / 2)))
+      .forEach((cityGrowth) => cityGrowth.add(new Food(cityGrowth.cost().value() / 2)))
     )
   ),
 ];

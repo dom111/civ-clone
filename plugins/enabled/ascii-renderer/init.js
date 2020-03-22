@@ -70,16 +70,16 @@ export const renderMap = ({
 
           return {
             terrain: tile.terrain.constructor.name,
-            terrainFeatures: tile.terrain.features.map((feature) => feature.constructor.name).join(','),
+            terrainFeatures: tile.terrain.features().map((feature) => feature.constructor.name).join(','),
             units: tileUnits.map((unit) => (
               {
-                player: unit.player.civilization.people,
+                player: unit.player().civilization.people,
                 name: unit.constructor.name,
               }
             )),
             city: city && {
-              player: city.player.civilization.people,
-              name: city.name,
+              player: city.player().civilization.people,
+              name: city.name(),
             },
             visible: showMap || observingPlayers.some((player) => tile.isVisible(player)), // show only what any player has discovered
           };
@@ -94,7 +94,7 @@ export const renderMap = ({
                   `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
               ' '
           ) + (
-            (i % mapToRender.width) === (mapToRender.width - 1) ?
+            (i % mapToRender.width()) === (mapToRender.width() - 1) ?
               '\n' :
               ''
           )
@@ -114,7 +114,7 @@ export const renderMap = ({
           .length
       } [${
         cityRegistry.getBy('player', player)
-          .reduce((total, city) => total + city.size, 0)
+          .reduce((total, city) => total + city.size(), 0)
       }] U:${
         unitRegistry.getBy('player', player)
           .length

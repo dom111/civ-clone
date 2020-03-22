@@ -24,7 +24,7 @@ export const Loader = class extends Generator {
         terrain = new Terrain()
       ;
 
-      terrain.features.push(features.map((feature) => {
+      terrain.features().push(features.map((feature) => {
         const [Feature] = AvailableTerrainFeatureRegistry.getInstance()
           .getBy('name', feature)
         ;

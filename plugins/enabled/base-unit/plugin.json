@@ -12,7 +12,8 @@
     "base-unit-improvements",
     "core-city",
     "core-player",
-    "core-terrain"
+    "core-terrain",
+    "core-turn-based-game"
   ],
   "components": [
     {
@@ -210,6 +211,10 @@
     {
       "type": "script",
       "file": "PlayerActions/unitsToMove.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Sleep.js"
     }
   ]
 }

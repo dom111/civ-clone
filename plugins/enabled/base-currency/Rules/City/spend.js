@@ -9,7 +9,7 @@ export const getRules = () => [
   new Rule(
     'city:spend:unit:no-progress',
     new Criterion((cityBuild) => Object.isPrototypeOf.call(Unit, cityBuild.building())),
-    new Criterion((cityBuild) => cityBuild.progress.value() === 0),
+    new Criterion((cityBuild) => cityBuild.progress().value() === 0),
     new Effect((cityBuild, cost) => {
       const price = cityBuild.remaining() / 10;
 
@@ -20,7 +20,7 @@ export const getRules = () => [
   new Rule(
     'city:spend:unit:some-progress',
     new Criterion((cityBuild) => Object.isPrototypeOf.call(Unit, cityBuild.building())),
-    new Criterion((cityBuild) => cityBuild.progress.value() > 0),
+    new Criterion((cityBuild) => cityBuild.progress().value() > 0),
     new Effect((cityBuild, cost) => {
       const price = cityBuild.remaining() / 10;
 
@@ -31,14 +31,14 @@ export const getRules = () => [
   new Rule(
     'city:spend:city-improvement:no-progress',
     new Criterion((cityBuild) => Object.isPrototypeOf.call(CityImprovement, cityBuild.building())),
-    new Criterion((cityBuild) => cityBuild.progress.value() === 0),
+    new Criterion((cityBuild) => cityBuild.progress().value() === 0),
     new Effect((cityBuild, cost) => cost.add(cityBuild.remaining() * 4))
   ),
 
   new Rule(
     'city:spend:city-improvement:some-progress',
     new Criterion((cityBuild) => Object.isPrototypeOf.call(CityImprovement, cityBuild.building())),
-    new Criterion((cityBuild) => cityBuild.progress.value() > 0),
+    new Criterion((cityBuild) => cityBuild.progress().value() > 0),
     new Effect((cityBuild, cost) => cost.add(cityBuild.remaining() * 2))
   ),
 ];

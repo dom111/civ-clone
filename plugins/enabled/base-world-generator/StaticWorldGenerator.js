@@ -70,7 +70,7 @@ export class StaticWorldGenerator extends Generator {
     const terrain = new Terrain();
 
     if (Feature) {
-      terrain.features.push(new Feature());
+      terrain.features().push(new Feature());
     }
 
     return terrain;

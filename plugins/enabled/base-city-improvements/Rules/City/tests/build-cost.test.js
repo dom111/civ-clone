@@ -72,7 +72,7 @@ describe('city:build', () => {
         cityBuild.build(Improvement);
 
         assert.strictEqual(cityBuild.building(), Improvement);
-        assert.strictEqual(cityBuild.cost, cost);
+        assert.strictEqual(cityBuild.cost(), cost);
       });
     })
   ;

@@ -90,7 +90,7 @@ describe('Trireme', () => {
     });
 
     assert(transport.hasCargo());
-    assert(transport.cargo.includes(unit));
+    assert(transport.cargo().includes(unit));
     assert(unit.transport === transport);
 
     unitRegistry.unregister(transport, unit);
@@ -121,7 +121,7 @@ describe('Trireme', () => {
 
     embark.perform({unitRegistry});
 
-    assert.strictEqual(unit.tile, transport.tile);
+    assert.strictEqual(unit.tile(), transport.tile());
 
     const [move1] = transport.actions(world.get(3, 3))
       .filter((action) => action instanceof Move)
@@ -131,8 +131,8 @@ describe('Trireme', () => {
 
     transport.action(move1);
 
-    assert.strictEqual(transport.tile, world.get(3, 3));
-    assert.strictEqual(unit.tile, world.get(3, 3));
+    assert.strictEqual(transport.tile(), world.get(3, 3));
+    assert.strictEqual(unit.tile(), world.get(3, 3));
 
     const [move2] = transport.actions(world.get(4, 4))
       .filter((action) => action instanceof Move)
@@ -142,8 +142,8 @@ describe('Trireme', () => {
 
     transport.action(move2);
 
-    assert.strictEqual(transport.tile, world.get(4, 4));
-    assert.strictEqual(unit.tile, world.get(4, 4));
+    assert.strictEqual(transport.tile(), world.get(4, 4));
+    assert.strictEqual(unit.tile(), world.get(4, 4));
 
     const [move3] = transport.actions(world.get(5, 5))
       .filter((action) => action instanceof Move)
@@ -153,11 +153,11 @@ describe('Trireme', () => {
 
     transport.action(move3);
 
-    assert.strictEqual(transport.tile, world.get(5, 5));
-    assert.strictEqual(unit.tile, world.get(5, 5));
-    assert.strictEqual(transport.moves.value(), 0);
+    assert.strictEqual(transport.tile(), world.get(5, 5));
+    assert.strictEqual(unit.tile(), world.get(5, 5));
+    assert.strictEqual(transport.moves().value(), 0);
 
-    transport.moves.add(transport.movement);
+    transport.moves().add(transport.movement());
 
     const [unload] = transport.actions()
       .filter((action) => action instanceof Unload)
@@ -173,7 +173,7 @@ describe('Trireme', () => {
 
     unit.action(disembark);
 
-    assert.strictEqual(unit.tile, world.get(6, 6));
+    assert.strictEqual(unit.tile(), world.get(6, 6));
 
     unitRegistry.unregister(transport, unit);
   });
@@ -202,7 +202,7 @@ describe('Trireme', () => {
     cityRegistry.register(city);
     unitRegistry.register(transport, unit);
 
-    assert(transport.actions(city.tile)
+    assert(transport.actions(city.tile())
       .some((action) => action instanceof Attack)
     );
 
@@ -229,7 +229,7 @@ describe('Trireme', () => {
 
     unitRegistry.register(transport, unit);
 
-    assert(transport.actions(unit.tile)
+    assert(transport.actions(unit.tile())
       .some((action) => action instanceof Attack)
     );
 
@@ -255,7 +255,7 @@ describe('Trireme', () => {
     cityRegistry.register(city);
     unitRegistry.register(transport);
 
-    assert(! transport.actions(city.tile)
+    assert(! transport.actions(city.tile())
       .some((action) => action instanceof Attack)
     );
 

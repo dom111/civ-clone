@@ -27,19 +27,19 @@ export class Action {
     });
   }
 
-  get from() {
+  from() {
     return this.#from;
   }
 
-  get rulesRegistry() {
+  rulesRegistry() {
     return this.#rulesRegistry;
   }
 
-  get to() {
+  to() {
     return this.#to;
   }
 
-  get unit() {
+  unit() {
     return this.#unit;
   }
 }

@@ -28,12 +28,12 @@ export class Path extends Tileset {
     return path;
   }
 
-  get movementCost() {
+  movementCost() {
     return this.#movementCost;
   }
 
-  set movementCost(movementCost) {
-    return this.#movementCost = movementCost;
+  setMovementCost(movementCost) {
+    this.#movementCost = movementCost;
   }
 
   push(...tiles) {

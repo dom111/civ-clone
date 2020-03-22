@@ -34,13 +34,13 @@ describe('unit:yield', () => {
           unit = new Spearman({
             city,
             player,
-            tile: city.tile,
+            tile: city.tile(),
             rulesRegistry,
           })
         ;
 
-        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(! unit.defence
-          .modifiers
+        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(! unit.defence()
+          .modifiers()
           .has(UnitYieldModifier)
         ));
 
@@ -48,12 +48,14 @@ describe('unit:yield', () => {
           .register(new UnitImprovement(unit)))
         ;
 
-        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(unit.defence
-          .modifiers
+        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(unit.defence()
+          .modifiers()
           .has(UnitYieldModifier)
         ));
 
-        assert.strictEqual(expectedValue, unit.defence.value());
+        assert.strictEqual(expectedValue, unit.defence()
+          .value()
+        );
       });
     })
   ;
@@ -75,13 +77,13 @@ describe('unit:yield', () => {
           unit = new Spearman({
             city,
             player,
-            tile: city.tile,
+            tile: city.tile(),
             rulesRegistry,
           })
         ;
 
-        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(! unit.attack
-          .modifiers
+        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(! unit.attack()
+          .modifiers()
           .has(UnitYieldModifier)
         ));
 
@@ -89,12 +91,14 @@ describe('unit:yield', () => {
           .register(new UnitImprovement(unit)))
         ;
 
-        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(unit.attack
-          .modifiers
+        UnitYieldModifiers.forEach((UnitYieldModifier) => assert(unit.attack()
+          .modifiers()
           .has(UnitYieldModifier)
         ));
 
-        assert.strictEqual(expectedValue, unit.attack.value());
+        assert.strictEqual(expectedValue, unit.attack()
+          .value()
+        );
       });
     })
   ;

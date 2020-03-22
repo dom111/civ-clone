@@ -40,14 +40,14 @@ describe('city:shrink', () => {
       0,
     ]
       .forEach((value) => {
-        cityGrowth.add(new Food(cityGrowth.cost));
+        cityGrowth.add(new Food(cityGrowth.cost()));
 
         city.shrink();
 
-        assert.strictEqual(cityGrowth.progress.value(), value);
+        assert.strictEqual(cityGrowth.progress().value(), value);
       })
     ;
 
-    assert.strictEqual(city.size, 1);
+    assert.strictEqual(city.size(), 1);
   });
 });

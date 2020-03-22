@@ -9,17 +9,15 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'unit:activate:clearActive',
-    new Criterion((unit) => unit.moves.value() > 0),
-    new Effect((unit) => unit.active = true)
+    new Criterion((unit) => unit.moves()
+      .value() > 0
+    ),
+    new Effect((unit) => unit.setActive())
   ),
 
   new Rule(
-    'unit:activate:clear',
-    new Effect((unit) => {
-      unit.actionOnComplete = null;
-      unit.busy = false;
-      unit.status = null;
-    })
+    'unit:activate:clearBusy',
+    new Effect((unit) => unit.setBusy())
   ),
 
   ...[

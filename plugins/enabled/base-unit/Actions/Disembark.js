@@ -6,14 +6,15 @@ export class Disembark extends Move {
       return;
     }
 
-    this.unit.moves.set(0);
+    this.unit()
+      .moves()
+      .set(0)
+    ;
 
-    const {transport} = this.unit;
-
-    transport.cargo.splice(
-      transport.cargo.indexOf(this.unit),
-      1
-    );
+    this.unit()
+      .transport
+      .unload(this.unit())
+    ;
   }
 }
 

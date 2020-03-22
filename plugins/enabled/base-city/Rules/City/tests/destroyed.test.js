@@ -23,17 +23,17 @@ describe('city:destroyed', () => {
       rulesRegistry,
     });
 
-    assert(tileImprovementRegistry.getBy('tile', city.tile)
+    assert(tileImprovementRegistry.getBy('tile', city.tile())
       .some((improvement) => improvement instanceof Irrigation) &&
-      tileImprovementRegistry.getBy('tile', city.tile)
+      tileImprovementRegistry.getBy('tile', city.tile())
         .some((improvement) => improvement instanceof Road)
     );
 
     city.destroy();
 
-    assert((! tileImprovementRegistry.getBy('tile', city.tile)
+    assert((! tileImprovementRegistry.getBy('tile', city.tile())
       .some((improvement) => improvement instanceof Irrigation)) &&
-      tileImprovementRegistry.getBy('tile', city.tile)
+      tileImprovementRegistry.getBy('tile', city.tile())
         .some((improvement) => improvement instanceof Road)
     );
   });

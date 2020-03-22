@@ -7,7 +7,7 @@ export const getRules = () => [
   new Rule(
     'city:cost:food:base',
     new Criterion((tileYield) => tileYield instanceof Food),
-    new Effect((tileYield, city) => tileYield.subtract(city.size * 2))
+    new Effect((tileYield, city) => tileYield.subtract(city.size() * 2))
   ),
 ];
 

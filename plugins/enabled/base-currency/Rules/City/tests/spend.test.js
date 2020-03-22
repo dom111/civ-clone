@@ -53,7 +53,7 @@ describe('city:spend', () => {
         cityBuildRegistry.register(cityBuild);
 
         const playerTreasury = new PlayerTreasury({
-          player: city.player,
+          player: city.player(),
           rulesRegistry,
           cityBuildRegistry,
         });
@@ -64,11 +64,11 @@ describe('city:spend', () => {
 
         cityBuild.build(BuildItem);
 
-        assert.strictEqual(cityBuild.progress.value(), 0);
+        assert.strictEqual(cityBuild.progress().value(), 0);
 
         cityBuild.add(new Production(progress));
 
-        assert.strictEqual(cityBuild.progress.value(), progress);
+        assert.strictEqual(cityBuild.progress().value(), progress);
 
         const goldCost = playerTreasury.cost(city);
 

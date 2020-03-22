@@ -14,7 +14,7 @@ export const getRules = ({
   new Rule(
     'city:grow:set-growth-cost',
     new Effect((city) => cityGrowthRegistry.getBy('city', city)
-      .forEach((cityGrowth) => cityGrowth.cost.add(10))
+      .forEach((cityGrowth) => cityGrowth.cost().add(10))
     )
   ),
   new Rule(

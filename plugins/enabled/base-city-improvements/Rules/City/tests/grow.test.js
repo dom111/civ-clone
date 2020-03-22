@@ -41,7 +41,7 @@ describe('city:grow', () => {
       .forEach((value) => {
         city.grow();
 
-        assert.strictEqual(cityGrowth.progress.value(), value);
+        assert.strictEqual(cityGrowth.progress().value(), value);
       })
     ;
   });

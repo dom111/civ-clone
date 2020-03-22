@@ -62,7 +62,7 @@ export const getRules = ({
       new Criterion((tileYield, city) => cityImprovementRegistry.getBy('city', city)
         .some((improvement) => improvement instanceof Improvement)
       ),
-      new Criterion((tileYield, city) => playerResearchRegistry.getBy('player', city.player)
+      new Criterion((tileYield, city) => playerResearchRegistry.getBy('player', city.player())
         .some((playerResearch) => playerResearch.completed(Advance))
       ),
       new Effect((tileYield) => tileYield.subtract(Math.min(value, tileYield.value())))

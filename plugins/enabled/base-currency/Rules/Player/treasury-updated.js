@@ -8,7 +8,7 @@ export const getRules = () => [
     new Criterion((playerTreasury) => playerTreasury.value() < 0),
     // TODO: sell city improvements
     new Effect((playerTreasury/*, city*/) => {
-      engine.emit('player:treasury-exhausted', playerTreasury.player, playerTreasury);
+      engine.emit('player:treasury-exhausted', playerTreasury.player(), playerTreasury);
     })
   ),
 ];

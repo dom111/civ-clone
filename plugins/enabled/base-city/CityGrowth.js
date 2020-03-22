@@ -19,21 +19,21 @@ export class CityGrowth {
 
   check() {
     if (this.#progress.value() < 0) {
-      this.city.shrink();
+      this.city().shrink();
 
       return;
     }
 
     if (this.#progress.value() >= this.#cost) {
-      this.city.grow();
+      this.city().grow();
     }
   }
 
-  get city() {
+  city() {
     return this.#city;
   }
 
-  get cost() {
+  cost() {
     return this.#cost;
   }
 
@@ -41,7 +41,7 @@ export class CityGrowth {
     this.#progress.subtract(this.#progress.value());
   }
 
-  get progress() {
+  progress() {
     return this.#progress;
   }
 
