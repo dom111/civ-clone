@@ -46,7 +46,7 @@ Object.entries({
   'city:shrink': (city) => `${city.player().civilization.people} city of ${city.name()} has shrunk to (${city.size() - 1}).`,
   'city:yield': (cityYield, city) => `${city.player().civilization.people} city of ${city.name()} provides ${cityYield.value()} ${cityYield.constructor.name}.`,
   'city-improvement:created': (improvement, city) => `${city.player().civilization.people} city of ${city.name()} has built a ${improvement.constructor.name}.`,
-  'game:start': () => `${RulesRegistry.getInstance().entries().length} rules in play.`,
+  'game:start': () => `${RulesRegistry.getInstance().length} rules in play.`,
   // 'engine:initialise': () => '',
   // 'engine:plugins-loaded': () => '',
   // 'engine:settings-loaded': () => '',

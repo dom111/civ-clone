@@ -1,23 +1,31 @@
-import {Attack, Disembark, Embark, Move, Unload} from '../../Actions.js';
-import {Militia, Trireme} from '../../Units.js';
+import {Attack, Move} from '../../../base-unit/Actions.js';
+import {Disembark, Embark, Unload} from '../../Actions.js';
 import City from '../../../core-city/City.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
+import {Militia} from '../../../base-unit/Units.js';
 import Player from '../../../core-player/Player.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import TransportRegistry from '../../TransportRegistry.js';
+import {Trireme} from '../../Units.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
-import action from '../../Rules/Unit/action.js';
+import action from '../../../base-unit/Rules/Unit/action.js';
 import assert from 'assert';
-import created from  '../../../base-unit-yields/Rules/Unit/created.js';
-import moved from '../../Rules/Unit/moved.js';
-import movementCost from '../../Rules/Unit/movementCost.js';
+import created from '../../../base-unit-yields/Rules/Unit/created.js';
+import moved from '../../../base-unit/Rules/Unit/moved.js';
+import movementCost from '../../../base-unit/Rules/Unit/movementCost.js';
 import simpleWorldLoader from '../../../base-world/tests/lib/simpleLoadWorld.js';
+import transportAction from '../../Rules/Unit/action.js';
+import transportMoved from '../../Rules/Unit/moved.js';
+import transportMovementCost from '../../Rules/Unit/movementCost.js';
+import transportYield from '../../Rules/Unit/yield.js';
 import unitYield from '../../../base-unit-yields/Rules/Unit/yield.js';
-import validateMove from '../../Rules/Unit/validateMove.js';
+import validateMove from '../../../base-unit/Rules/Unit/validateMove.js';
 
 describe('Trireme', () => {
-  const rulesRegistry = new RulesRegistry(),
-    cityRegistry = new CityRegistry(),
+  const cityRegistry = new CityRegistry(),
+    rulesRegistry = new RulesRegistry(),
+    transportRegistry = new TransportRegistry(),
     unitRegistry = new UnitRegistry()
   ;
 
@@ -25,11 +33,22 @@ describe('Trireme', () => {
     ...action({
       cityRegistry,
       rulesRegistry,
+      transportRegistry,
       unitRegistry,
     }),
+    ...created(),
     ...moved(),
     ...movementCost(),
-    ...created(),
+    ...transportAction({
+      rulesRegistry,
+      transportRegistry,
+      unitRegistry,
+    }),
+    ...transportMoved(),
+    ...transportMovementCost({
+      transportRegistry,
+    }),
+    ...transportYield(),
     ...unitYield(),
     ...validateMove()
   );
@@ -69,6 +88,7 @@ describe('Trireme', () => {
         player,
         rulesRegistry,
         tile,
+        transportRegistry,
       }),
       unit = new Militia({
         player,
@@ -90,8 +110,12 @@ describe('Trireme', () => {
     });
 
     assert(transport.hasCargo());
-    assert(transport.cargo().includes(unit));
-    assert(unit.transport === transport);
+    assert(transport.cargo()
+      .includes(unit)
+    );
+    assert(transportRegistry.getBy('unit', unit)
+      .every((manifest) => manifest.transport() === transport)
+    );
 
     unitRegistry.unregister(transport, unit);
   });
@@ -104,6 +128,7 @@ describe('Trireme', () => {
         player,
         rulesRegistry,
         tile,
+        transportRegistry,
       }),
       unit = new Militia({
         player,
@@ -129,7 +154,9 @@ describe('Trireme', () => {
 
     assert(move1 instanceof Move);
 
-    transport.action(move1);
+    transport.action({
+      action: move1,
+    });
 
     assert.strictEqual(transport.tile(), world.get(3, 3));
     assert.strictEqual(unit.tile(), world.get(3, 3));
@@ -140,7 +167,9 @@ describe('Trireme', () => {
 
     assert(move2 instanceof Move);
 
-    transport.action(move2);
+    transport.action({
+      action: move2,
+    });
 
     assert.strictEqual(transport.tile(), world.get(4, 4));
     assert.strictEqual(unit.tile(), world.get(4, 4));
@@ -151,7 +180,9 @@ describe('Trireme', () => {
 
     assert(move3 instanceof Move);
 
-    transport.action(move3);
+    transport.action({
+      action: move3,
+    });
 
     assert.strictEqual(transport.tile(), world.get(5, 5));
     assert.strictEqual(unit.tile(), world.get(5, 5));
@@ -165,13 +196,17 @@ describe('Trireme', () => {
 
     assert(unload instanceof Unload);
 
-    transport.action(unload);
+    transport.action({
+      action: unload,
+    });
 
     const [disembark] = unit.actions(world.get(6, 6));
 
     assert(disembark instanceof Disembark);
 
-    unit.action(disembark);
+    unit.action({
+      action: disembark,
+    });
 
     assert.strictEqual(unit.tile(), world.get(6, 6));
 
@@ -187,6 +222,7 @@ describe('Trireme', () => {
         player,
         rulesRegistry,
         tile,
+        transportRegistry,
       }),
       city = new City({
         player: enemy,

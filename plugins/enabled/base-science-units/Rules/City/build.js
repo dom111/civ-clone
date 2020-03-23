@@ -16,11 +16,13 @@ import {
   Knights,
   Militia,
   Musketman,
-  Sail,
   Spearman,
   Swordman,
-  Trireme,
 } from '../../../base-unit/Units.js';
+import {
+  Sail,
+  Trireme,
+} from '../../../base-unit-transport/Units.js';
 import Criteria from '../../../core-rules/Criteria.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';

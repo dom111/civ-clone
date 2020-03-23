@@ -2,8 +2,8 @@ import {Action} from '../../core-unit/Action.js';
 
 export class Move extends Action {
   perform() {
-    const movementCost = this.movementCost(),
-      [valid] = this.rulesRegistry().process('unit:validateMove', this.unit(), movementCost)
+    const [valid] = this.rulesRegistry()
+      .process('unit:validateMove', this.unit(), this.movementCost())
     ;
 
     if (! valid) {

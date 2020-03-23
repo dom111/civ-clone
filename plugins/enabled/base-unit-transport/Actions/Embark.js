@@ -1,5 +1,5 @@
 import Criterion from '../../core-rules/Criterion.js';
-import {Move} from './Move.js';
+import {Move} from '../../base-unit/Actions/Move.js';
 import {NavalTransport} from '../Types.js';
 import Rule from '../../core-rules/Rule.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
@@ -20,7 +20,9 @@ export class Embark extends Move {
 
     super.perform();
 
-    targetVessel.stow(this.unit());
+    targetVessel.stow({
+      unit: this.unit(),
+    });
 
     this.unit()
       .setBusy(new Rule(

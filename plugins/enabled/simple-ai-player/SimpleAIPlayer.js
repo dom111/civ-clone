@@ -1,7 +1,7 @@
 import {Attack, Defence} from '../core-unit/Yields.js';
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-terrain-yields/Yields.js';
-import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../base-unit/Types.js';
+import {FortifiableUnit, LandUnit, NavalUnit} from '../base-unit/Types.js';
 import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
 import {Irrigation, Mine, Road} from '../base-tile-improvements/TileImprovements.js';
 import {Land, Water} from '../core-terrain/Types.js';
@@ -13,6 +13,7 @@ import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
+import {NavalTransport} from '../base-unit-transport/Types.js';
 import {Palace} from '../base-city-improvements/CityImprovements.js';
 import Path from '../core-world/Path.js';
 import PathFinderRegistry from '../core-world/PathFinderRegistry.js';
@@ -267,7 +268,9 @@ export class SimpleAIPlayer extends AIPlayer {
         ;
 
         if (move) {
-          unit.action(move);
+          unit.action({
+            action: move,
+          });
 
           if (path.length === 0) {
             this.#unitPathData.delete(unit);
@@ -305,7 +308,9 @@ export class SimpleAIPlayer extends AIPlayer {
 
       if (! target) {
         // TODO: could do something a bit more intelligent here
-        unit.action(new NoOrders({unit}));
+        unit.action({
+          action: new NoOrders({unit}),
+        });
 
         return;
       }
@@ -319,7 +324,9 @@ export class SimpleAIPlayer extends AIPlayer {
       ;
 
       if (! action) {
-        unit.action(new NoOrders({unit}));
+        unit.action({
+          action: new NoOrders({unit}),
+        });
 
         return;
       }
@@ -333,7 +340,8 @@ export class SimpleAIPlayer extends AIPlayer {
       this.#lastUnitMoves.set(unit, lastMoves.slice(-50));
 
       // TODO: not sure on this...
-      unit.action(action, {
+      unit.action({
+        action,
         rulesRegistry: this.#rulesRegistry,
         unitRegistry: this.#unitRegistry,
         cityRegistry: this.#cityRegistry,
@@ -459,8 +467,10 @@ export class SimpleAIPlayer extends AIPlayer {
         }
 
         while (this.hasActions()) {
+          const item = this.getAction();
+
           // TODO: Remove this when it's working as expected
-          if (loopCheck++ > 1e3) {
+          if (loopCheck++ > 13) {
             // TODO: raise warning - notification?
             console.log('');
             console.log('');
@@ -469,8 +479,6 @@ export class SimpleAIPlayer extends AIPlayer {
 
             break;
           }
-
-          const item = this.getAction();
 
           if (item instanceof Unit) {
             const unit = item,
@@ -498,8 +506,6 @@ export class SimpleAIPlayer extends AIPlayer {
 
             if (
               unload &&
-              unit instanceof NavalTransport &&
-              unit.hasCargo() &&
               tile.getNeighbours()
                 .some((tile) => tile.terrain instanceof Land &&
                   tile.isCoast()
@@ -512,7 +518,9 @@ export class SimpleAIPlayer extends AIPlayer {
                   )
                 )
             ) {
-              unit.action(unload);
+              unit.action({
+                action: unload,
+              });
 
               // skip out to allow the unloaded units to be moved.
               continue;
@@ -520,134 +528,149 @@ export class SimpleAIPlayer extends AIPlayer {
 
             if (unit instanceof Worker) {
               if (foundCity && this.#shouldBuildCity(tile)) {
-                unit.action(foundCity);
+                unit.action({
+                  action: foundCity,
+                });
               }
               else if (buildIrrigation && this.#shouldIrrigate(tile)) {
-                unit.action(buildIrrigation);
+                unit.action({
+                  action: buildIrrigation,
+                });
               }
               else if (buildMine && this.#shouldMine(tile)) {
-                unit.action(buildMine);
+                unit.action({
+                  action: buildMine,
+                });
               }
               else if (buildRoad && this.#shouldRoad(tile)) {
-                unit.action(buildRoad);
+                unit.action({
+                  action: buildRoad,
+                });
               }
               else if (! target && this.#goodSitesForCities.length) {
                 this.#unitTargetData.set(unit, this.#goodSitesForCities.shift());
               }
 
               this.moveUnit(unit);
+
+              continue;
             }
-            else {
-              // TODO: check for defense values and activate weaker for disband/upgrade/scouting
-              const [cityUnitWithLowerDefence] = tileUnits
-                  .filter((tileUnit) => this.#unitImprovementRegistry.getBy('unit', tileUnit)
-                    .some((improvement) => improvement instanceof Fortified) &&
+
+            // TODO: check for defense values and activate weaker for disband/upgrade/scouting
+            const [cityUnitWithLowerDefence] = tileUnits
+                .filter((tileUnit) => this.#unitImprovementRegistry.getBy('unit', tileUnit)
+                  .some((improvement) => improvement instanceof Fortified) &&
                   unit.defence() > tileUnit.defence()
-                  ),
-                [city] = this.#cityRegistry.getBy('tile', tile)
-              ;
+                ),
+              [city] = this.#cityRegistry.getBy('tile', tile)
+            ;
 
-              if (
-                fortify &&
-                city &&
-                (
-                  cityUnitWithLowerDefence ||
-                  tileUnits.length <= Math.ceil(city.size() / 5)
-                )
-              ) {
-                unit.action(fortify);
+            if (
+              fortify &&
+              city &&
+              (
+                cityUnitWithLowerDefence ||
+                tileUnits.length <= Math.ceil(city.size() / 5)
+              )
+            ) {
+              unit.action({
+                action: fortify,
+              });
 
-                if (cityUnitWithLowerDefence) {
-                  cityUnitWithLowerDefence.activate();
+              if (cityUnitWithLowerDefence) {
+                cityUnitWithLowerDefence.activate();
+              }
+
+              continue;
+            }
+
+            if (! target) {
+              // TODO: all the repetition - sort this.
+              if (unit instanceof FortifiableUnit && unit.defence() > 0 && this.#undefendedCities.length > 0) {
+                const [targetTile] = this.#undefendedCities
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
+
+                if (path) {
+                  this.#undefendedCities.splice(this.#undefendedCities.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
                 }
               }
-              else {
-                if (! target) {
-                  // TODO: all the repetition - sort this.
-                  if (unit instanceof FortifiableUnit && unit.defence() > 0 && this.#undefendedCities.length > 0) {
-                    const [targetTile] = this.#undefendedCities
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
 
-                    if (path) {
-                      this.#undefendedCities.splice(this.#undefendedCities.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
+              else if (unit.attack() > 0 && this.#citiesToLiberate.length > 0) {
+                const [targetTile] = this.#citiesToLiberate
+                    .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
+                    (unit instanceof NavalUnit && tile.terrain instanceof Water)
+                    )
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
 
-                  else if (unit.attack() > 0 && this.#citiesToLiberate.length > 0) {
-                    const [targetTile] = this.#citiesToLiberate
-                        .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
-                        (unit instanceof NavalUnit && tile.terrain instanceof Water)
-                        )
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
-
-                    if (path) {
-                      this.#citiesToLiberate.splice(this.#citiesToLiberate.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
-
-                  else if (unit.attack() > 0 && this.#enemyUnitsToAttack.length > 0) {
-                    const [targetTile] = this.#enemyUnitsToAttack
-                        .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
-                        (unit instanceof NavalUnit && tile.terrain instanceof Water)
-                        )
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
-
-                    if (path) {
-                      this.#enemyUnitsToAttack.splice(this.#enemyUnitsToAttack.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
-
-                  else if (unit instanceof LandUnit && unit.attack() > 0 && this.#enemyCitiesToAttack.length > 0) {
-                    const [targetTile] = this.#enemyCitiesToAttack
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
-
-                    if (path) {
-                      this.#enemyCitiesToAttack.splice(this.#enemyCitiesToAttack.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
-
-                  else if (unit instanceof LandUnit && this.#landTilesToExplore.length > 0) {
-                    const [targetTile] = this.#landTilesToExplore
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
-
-                    if (path) {
-                      this.#landTilesToExplore.splice(this.#landTilesToExplore.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
-
-                  else if (unit instanceof NavalUnit && this.#seaTilesToExplore.length > 0) {
-                    const [targetTile] = this.#seaTilesToExplore
-                        .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
-                      path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
-                    ;
-
-                    if (path) {
-                      this.#seaTilesToExplore.splice(this.#seaTilesToExplore.indexOf(targetTile), 1);
-                      this.#unitPathData.set(unit, path);
-                    }
-                  }
+                if (path) {
+                  this.#citiesToLiberate.splice(this.#citiesToLiberate.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
                 }
+              }
 
-                this.moveUnit(unit);
+              else if (unit.attack() > 0 && this.#enemyUnitsToAttack.length > 0) {
+                const [targetTile] = this.#enemyUnitsToAttack
+                    .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
+                    (unit instanceof NavalUnit && tile.terrain instanceof Water)
+                    )
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
+
+                if (path) {
+                  this.#enemyUnitsToAttack.splice(this.#enemyUnitsToAttack.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
+                }
+              }
+
+              else if (unit instanceof LandUnit && unit.attack() > 0 && this.#enemyCitiesToAttack.length > 0) {
+                const [targetTile] = this.#enemyCitiesToAttack
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
+
+                if (path) {
+                  this.#enemyCitiesToAttack.splice(this.#enemyCitiesToAttack.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
+                }
+              }
+
+              else if (unit instanceof LandUnit && this.#landTilesToExplore.length > 0) {
+                const [targetTile] = this.#landTilesToExplore
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
+
+                if (path) {
+                  this.#landTilesToExplore.splice(this.#landTilesToExplore.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
+                }
+              }
+
+              else if (unit instanceof NavalUnit && this.#seaTilesToExplore.length > 0) {
+                const [targetTile] = this.#seaTilesToExplore
+                    .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
+                  path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
+                ;
+
+                if (path) {
+                  this.#seaTilesToExplore.splice(this.#seaTilesToExplore.indexOf(targetTile), 1);
+                  this.#unitPathData.set(unit, path);
+                }
               }
             }
+
+            this.moveUnit(unit);
+
+            continue;
           }
-          else if (item instanceof CityBuild) {
+
+          if (item instanceof CityBuild) {
             const cityBuild = item,
               tile = cityBuild.city().tile(),
               available = cityBuild.available(),
@@ -714,19 +737,23 @@ export class SimpleAIPlayer extends AIPlayer {
             if (randomSelection) {
               cityBuild.build(randomSelection);
             }
+
+            continue;
           }
-          else if (item instanceof PlayerResearch) {
+
+          if (item instanceof PlayerResearch) {
             const available = item.available();
 
             if (available.length) {
               item.research(available[Math.floor(available.length * Math.random())]);
             }
-          }
-          else {
-            console.log(`Can't process: '${item.constructor.name}'`);
 
-            break;
+            continue;
           }
+
+          console.log(`Can't process: '${item.constructor.name}'`);
+
+          break;
         }
 
         resolve();

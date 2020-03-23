@@ -22,10 +22,6 @@
     },
     {
       "type": "script",
-      "file": "Types/NavalTransport.js"
-    },
-    {
-      "type": "script",
       "file": "Types/LandUnit.js"
     },
     {
@@ -66,10 +62,6 @@
     },
     {
       "type": "script",
-      "file": "Units/Trireme.js"
-    },
-    {
-      "type": "script",
       "file": "Units/Worker.js"
     },
     {
@@ -95,10 +87,6 @@
     {
       "type": "script",
       "file": "Rules/Unit/movementCost.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Sail.js"
     },
     {
       "type": "script",
@@ -159,18 +147,6 @@
     {
       "type": "script",
       "file": "Actions/ClearJungle.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/Unload.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/Disembark.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/Embark.js"
     },
     {
       "type": "script",

@@ -1,0 +1,84 @@
+{
+  "name": "base-unit-transport",
+  "dependencies": [
+    "base-unit",
+    "core-rules",
+    "core-terrain",
+    "core-unit",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Units/Trireme.js"
+    },
+    {
+      "type": "script",
+      "file": "Units/Sail.js"
+    },
+    {
+      "type": "script",
+      "file": "TransportManifest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Types.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "TransportRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Units.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableUnits.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/NavalTransport.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Unload.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Disembark.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Embark.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/movementCost.js"
+    }
+  ]
+}

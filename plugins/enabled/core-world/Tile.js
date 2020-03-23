@@ -124,11 +124,11 @@ export class Tile {
     const tile = this;
 
     return (
-      tile.isOcean() &&
+      tile.isWater() &&
       tile.getNeighbours().some((tile) => tile.isLand())
     ) || (
       tile.isLand() &&
-      tile.getNeighbours().some((tile) => tile.isOcean())
+      tile.getNeighbours().some((tile) => tile.isWater())
     );
   }
 
@@ -142,7 +142,7 @@ export class Tile {
     ;
   }
 
-  isOcean() {
+  isWater() {
     return this.terrain instanceof Water;
   }
 

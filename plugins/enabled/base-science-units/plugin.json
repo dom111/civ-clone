@@ -4,7 +4,8 @@
   "dependencies": [
     "core-rules",
     "base-science",
-    "base-unit"
+    "base-unit",
+    "base-unit-transport"
   ],
   "components": [
     {

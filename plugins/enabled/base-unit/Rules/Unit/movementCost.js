@@ -12,7 +12,6 @@ import {
   Swamp,
   Tundra,
 } from '../../../base-terrain/Terrains.js';
-import {LandUnit, NavalTransport} from '../../Types.js';
 import {Railroad, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
@@ -65,13 +64,6 @@ export const getRules = ({
     // TODO: need to also protect against goto etc, like classic Civ does, although I'd rather that was done by evaluating
     //  the moves and if a loop is detected auto-cancelling - this is pretty primitive.
     // new Criterion((unit) => ! (unit.player() instanceof AIPlayer)),
-    new Effect(() => 0)
-  ),
-
-  new Rule(
-    'unit:movementCost:beingTransported',
-    new Criterion((unit) => unit instanceof LandUnit),
-    new Criterion((unit) => unit.transport instanceof NavalTransport),
     new Effect(() => 0)
   ),
 ];

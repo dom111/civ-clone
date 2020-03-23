@@ -21,7 +21,8 @@
     "core-tile-improvements",
     "base-city",
     "core-world",
-    "core-rules"
+    "core-rules",
+    "base-unit-transport"
   ],
   "components": [
     {

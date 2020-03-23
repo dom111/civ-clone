@@ -1,10 +1,10 @@
 import * as Civilizations from '../../base-civilizations/Civilizations.js';
-import {Militia, Sail} from '../../base-unit/Units.js';
 import AdvanceRegistry from '../../core-science/AdvanceRegistry.js';
 import BasePathFinder from '../../base-world-path-finder/BasePathFinder.js';
 import CityImprovementRegistry from '../../core-city-improvement/CityImprovementRegistry.js';
 import CityRegistry from '../../core-city/CityRegistry.js';
 import CivilizationRegistry from '../../core-civilization/CivilizationRegistry.js';
+import {Militia} from '../../base-unit/Units.js';
 import PathFinderRegistry from '../../core-world/PathFinderRegistry.js';
 import PlayerActionRegistry from '../../core-player/PlayerActionRegistry.js';
 import PlayerGovernment from '../../base-player-government/PlayerGovernment.js';
@@ -12,8 +12,10 @@ import PlayerGovernmentRegistry from '../../base-player-government/PlayerGovernm
 import PlayerResearch from '../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../base-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import {Sail} from '../../base-unit-transport/Units.js';
 import SimpleAIPlayer from '../SimpleAIPlayer.js';
 import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';
+import TransportRegistry from '../../base-unit-transport/TransportRegistry.js';
 import UnitImprovementRegistry from '../../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
 import action from '../../base-unit/Rules/Unit/action.js';
@@ -27,6 +29,10 @@ import seen from '../../base-world/Rules/Tile/seen.js';
 import setUpCity from '../../base-city/tests/lib/setUpCity.js';
 import simpleWorldLoader from '../../base-world/tests/lib/simpleLoadWorld.js';
 import start from '../../base-player/Rules/Turn/start.js';
+import transportAction from '../../base-unit-transport/Rules/Unit/action.js';
+import transportMoved from '../../base-unit-transport/Rules/Unit/moved.js';
+import transportMovementCost from '../../base-unit-transport/Rules/Unit/movementCost.js';
+import transportYield from '../../base-unit-transport/Rules/Unit/yield.js';
 import turnYear from '../../base-game-year/Rules/Turn/year.js';
 import unitCreated from '../../base-unit/Rules/Unit/created.js';
 import unitCreatedPlayer from '../../base-player/Rules/Unit/created.js';
@@ -44,6 +50,7 @@ describe('SimpleAIPlayer', () => {
     playerGovernmentRegistry = new PlayerGovernmentRegistry(),
     playerResearchRegistry = new PlayerResearchRegistry(),
     advanceRegistry = new AdvanceRegistry(),
+    transportRegistry = new TransportRegistry(),
     unitRegistry = new UnitRegistry(),
     cityRegistry = new CityRegistry(),
     civilizationRegistry = new CivilizationRegistry(),
@@ -120,6 +127,18 @@ describe('SimpleAIPlayer', () => {
       rulesRegistry,
       unitRegistry,
     }),
+    ...transportAction({
+      rulesRegistry,
+      transportRegistry,
+      unitRegistry,
+    }),
+    ...transportMoved({
+      transportRegistry,
+    }),
+    ...transportMovementCost({
+      transportRegistry,
+    }),
+    ...transportYield(),
     ...turnYear(),
     ...unitCreated({
       unitRegistry,
@@ -172,6 +191,7 @@ describe('SimpleAIPlayer', () => {
         player,
         rulesRegistry,
         tile: world.get(1, 1),
+        transportRegistry,
       })
     ;
 
@@ -201,6 +221,7 @@ describe('SimpleAIPlayer', () => {
         player,
         rulesRegistry,
         tile: world.get(2, 2),
+        transportRegistry,
       })
     ;
 
@@ -229,10 +250,13 @@ describe('SimpleAIPlayer', () => {
         player,
         rulesRegistry,
         tile: world.get(2, 2),
+        transportRegistry,
       })
     ;
 
-    transport.stow(unit);
+    transport.stow({
+      unit,
+    });
     unitRegistry.register(transport, unit);
 
     takeTurns({

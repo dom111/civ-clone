@@ -21,10 +21,12 @@ export class Unit {
     this.#rulesRegistry.process('unit:created', this);
   }
 
-  action(action, {...args} = {}) {
-    action.perform({
+  action({
+    action,
+    ...args
+  } = {}) {
+    return action.perform({
       ...args,
-      rulesRegistry: this.#rulesRegistry,
     });
   }
 

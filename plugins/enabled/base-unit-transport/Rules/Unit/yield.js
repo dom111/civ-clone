@@ -1,30 +1,16 @@
 import {Attack, Defence, Movement, Visibility} from '../../../core-unit/Yields.js';
 import {
-  Catapult,
-  Cavalry,
-  Chariot,
-  Knights,
-  Militia,
-  Musketman,
-  Settlers,
-  Spearman,
-  Swordman,
-} from '../../../base-unit/Units.js';
+  Sail,
+  Trireme,
+} from '../../Units.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
 
 export const getRules = () => [
   ...[
-    [Catapult, 4],
-    [Cavalry, 2, 1, 2],
-    [Chariot, 4, 1, 2],
-    [Knights, 4, 1, 2],
-    [Militia],
-    [Musketman, 2, 3],
-    [Settlers, 0],
-    [Spearman, 1, 2],
-    [Swordman, 3],
+    [Sail, 1, 1, 3],
+    [Trireme, 1, 1, 3],
   ]
     .flatMap(([Unit, attack = 1, defence = 1, movement = 1, visibility = 1]) => [
       [Attack, attack],

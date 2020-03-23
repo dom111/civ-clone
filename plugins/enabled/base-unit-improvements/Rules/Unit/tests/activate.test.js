@@ -54,7 +54,9 @@ describe('unit:activate', () => {
           .some((improvement) => improvement instanceof UnitImprovement)
         );
 
-        unit.action(action);
+        unit.action({
+          action,
+        });
 
         unit.busy()
           .process({

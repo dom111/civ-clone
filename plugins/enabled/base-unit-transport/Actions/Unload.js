@@ -4,7 +4,9 @@ export class Unload extends Action {
   perform() {
     this.unit().setWaiting();
     this.unit().cargo()
-      .forEach((unit) => unit.activate())
+      .forEach((unit) => {
+        unit.activate();
+      })
     ;
   }
 }

@@ -208,7 +208,7 @@ const BaseRenderer = class BaseRenderer {
             images: (() => {
               const images = [];
 
-              if (tile.isOcean()) {
+              if (tile.isWater()) {
                 images.push(renderer._getPreloadedImage('assets/terrain/ocean.gif'));
               }
               else if (tile.isLand()) {
@@ -251,7 +251,7 @@ const BaseRenderer = class BaseRenderer {
 
           const images = [];
 
-          if (tile.isOcean()) {
+          if (tile.isWater()) {
             if (tile.isCoast()) {
               const sprite = renderer._getPreloadedImage('assets/terrain/coast_sprite.gif'),
                 image = renderer._createPreloadCanvas(),
@@ -262,14 +262,14 @@ const BaseRenderer = class BaseRenderer {
                 // ocean tile. Starting with the tile to the left as the least significant bit and
                 // going clockwise
                 bitmask =
-                  (! tile.getNeighbour('n').isOcean() ? 4 : 0) |
-                  (! tile.getNeighbour('ne').isOcean() ? 8 : 0) |
-                  (! tile.getNeighbour('e').isOcean() ? 16 : 0) |
-                  (! tile.getNeighbour('se').isOcean() ? 32 : 0) |
-                  (! tile.getNeighbour('s').isOcean() ? 64 : 0) |
-                  (! tile.getNeighbour('sw').isOcean() ? 128 : 0) |
-                  (! tile.getNeighbour('w').isOcean() ? 1 : 0) |
-                  (! tile.getNeighbour('nw').isOcean() ? 2 : 0)
+                  (! tile.getNeighbour('n').isWater() ? 4 : 0) |
+                  (! tile.getNeighbour('ne').isWater() ? 8 : 0) |
+                  (! tile.getNeighbour('e').isWater() ? 16 : 0) |
+                  (! tile.getNeighbour('se').isWater() ? 32 : 0) |
+                  (! tile.getNeighbour('s').isWater() ? 64 : 0) |
+                  (! tile.getNeighbour('sw').isWater() ? 128 : 0) |
+                  (! tile.getNeighbour('w').isWater() ? 1 : 0) |
+                  (! tile.getNeighbour('nw').isWater() ? 2 : 0)
               ;
 
               image.width = image.height = 16;
@@ -306,7 +306,7 @@ const BaseRenderer = class BaseRenderer {
           else {
             if (tile.terrain.name === 'river') {
               const adjoining = ['n', 'e', 's', 'w']
-                .filter((direction) => (tile.getAdjacent()[direction].isOcean() || (tile.getAdjacent()[direction].terrain.name === tile.terrain.name)))
+                .filter((direction) => (tile.getAdjacent()[direction].isWater() || (tile.getAdjacent()[direction].terrain.name === tile.terrain.name)))
                 .join('')
               ;
 

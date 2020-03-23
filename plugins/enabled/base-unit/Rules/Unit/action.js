@@ -7,17 +7,14 @@ import {
   ClearForest,
   ClearJungle,
   ClearSwamp,
-  Disembark,
-  Embark,
   Fortify,
   FoundCity,
   Move,
   NoOrders,
   PlantForest,
-  Unload,
 } from '../../Actions.js';
 import {Forest, Jungle, Plains, River, Swamp} from '../../../base-terrain/Terrains.js';
-import {FortifiableUnit, LandUnit, NavalTransport, NavalUnit} from '../../Types.js';
+import {FortifiableUnit, LandUnit, NavalUnit} from '../../Types.js';
 import {Irrigation, Mine, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import {Land, Water} from '../../../core-terrain/Types.js';
 import {Settlers, Worker} from '../../Units.js';
@@ -51,9 +48,8 @@ export const getRules = ({
       new OneCriteria(
         new Criteria(
           new Criterion((unit) => unit instanceof LandUnit),
-          new Criterion((unit, to) => to.terrain instanceof Land),
-          // if the unit is being transported, it needs to Disembark, not Move...
-          new Criterion((unit) => ! unit.transport),
+          new Criterion((unit, to, from = unit.tile()) => from.isLand()),
+          new Criterion((unit, to) => to.isLand()),
           new Criterion((unit, to) => unitRegistry.getBy('tile', to)
             .every((tileUnit) => tileUnit.player() === unit.player())
           )
@@ -61,7 +57,13 @@ export const getRules = ({
         new Criteria(
           new Criterion((unit) => unit instanceof NavalUnit),
           new OneCriteria(
-            new Criterion((unit, to) => to.terrain instanceof Water),
+            new Criterion((unit, to, from = unit.tile()) => from.isWater()),
+            new Criterion((unit, to, from = unit.tile()) => cityRegistry.getBy('tile', from)
+              .some((city) => city.player() === unit.player())
+            )
+          ),
+          new OneCriteria(
+            new Criterion((unit, to) => to.isWater()),
             new Criterion((unit, to) => cityRegistry.getBy('tile', to)
               .some((city) => city.player() === unit.player())
             )
@@ -128,22 +130,6 @@ export const getRules = ({
       new Effect((unit, to, from = unit.tile()) => new Attack({unit, to, from, rulesRegistry}))
     ),
 
-    new Rule(
-      'unit:action:boardTransport',
-      isNeighbouringTile,
-      hasEnoughMovesLeft,
-      new Criterion((unit) => unit instanceof LandUnit),
-      new Criterion((unit, to) => to.terrain instanceof Water),
-      new Criterion((unit, to) => unitRegistry.getBy('tile', to)
-        .every((tileUnit) => tileUnit.player() === unit.player())
-      ),
-      new Criterion((unit, to) => unitRegistry.getBy('tile', to)
-        .filter((tileUnit) => tileUnit instanceof NavalTransport)
-        .some((tileUnit) => tileUnit.hasCapacity())
-      ),
-      new Effect((unit, to, from = unit.tile()) => new Embark({unit, to, from, rulesRegistry}))
-    ),
-
     ...[
       [Irrigation, BuildIrrigation, new OneCriteria(
         new Criterion((unit, to, from = unit.tile()) => from.terrain instanceof River),
@@ -193,14 +179,6 @@ export const getRules = ({
     ),
 
     new Rule(
-      'unit:action:disembark',
-      isNeighbouringTile,
-      new Criterion((unit) => unit.transport),
-      new Criterion((unit, to, from = unit.tile()) => unit.transport.tile() === from),
-      new Effect((unit, to, from = unit.tile()) => new Disembark({unit, to, from, rulesRegistry}))
-    ),
-
-    new Rule(
       'unit:action:fortify',
       hasEnoughMovesLeft,
       new Criterion((unit) => unit instanceof FortifiableUnit),
@@ -225,15 +203,6 @@ export const getRules = ({
       'unit:action:noOrders',
       new Criterion((unit, to, from = unit.tile()) => from === to),
       new Effect((unit, to, from = unit.tile()) => new NoOrders({unit, to, from, rulesRegistry}))
-    ),
-
-    new Rule(
-      'unit:action:unload',
-      hasEnoughMovesLeft,
-      new Criterion((unit) => unit instanceof NavalTransport),
-      new Criterion((unit) => unit.hasCargo()),
-      new Criterion((unit, to, from = unit.tile()) => from === to),
-      new Effect((unit, to, from = unit.tile()) => new Unload({unit, to, from, rulesRegistry}))
     ),
 
     ...[

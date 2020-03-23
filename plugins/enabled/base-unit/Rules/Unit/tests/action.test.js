@@ -101,17 +101,17 @@ describe('unit:action', () => {
       [player, enemy] = addPlayers({
         n: 2,
       }),
-      unit1 = getUnit({
+      unit = getUnit({
         player,
         tile: world.get(0, 0),
       }),
-      unit2 = getUnit({
+      enemyUnit = getUnit({
         player: enemy,
         tile: world.get(1, 0),
       })
     ;
 
-    const actions = unit1.actions(unit2.tile());
+    const actions = unit.actions(enemyUnit.tile());
 
     assert(actions.some((action) => action instanceof Attack));
   });
@@ -214,7 +214,9 @@ describe('unit:action', () => {
 
     assert.strictEqual(city.player(), enemy);
 
-    unit.action(captureCity);
+    unit.action({
+      action: captureCity,
+    });
 
     assert.strictEqual(city.player(), player);
 
