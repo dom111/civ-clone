@@ -5,7 +5,7 @@ export class PlantForest extends DelayedAction {
   perform() {
     super.perform({
       name: 'plant-forest',
-      action: () => this.from().terrain = new Forest(this.from().terrain.features()),
+      action: () => this.from().setTerrain(new Forest(this.from().terrain().features())),
       // TODO: calculate moves needed
       turns: 3,
     });

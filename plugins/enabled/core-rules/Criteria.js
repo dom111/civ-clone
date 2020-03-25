@@ -5,11 +5,7 @@ export class Criteria {
 
   constructor(...criteria) {
     criteria.forEach((criterion) => {
-      if (typeof criterion === 'function') {
-        criterion = new Criterion(criterion);
-      }
-
-      else if (! (criterion instanceof Criteria) && ! (criterion instanceof Criterion)) {
+      if (! (criterion instanceof Criteria) && ! (criterion instanceof Criterion)) {
         throw new TypeError(`Rule: all criteria must be instances of Criteria or Criterion, got '${typeof apply}'.`);
       }
 

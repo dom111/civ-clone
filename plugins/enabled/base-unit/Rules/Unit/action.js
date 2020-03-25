@@ -18,11 +18,11 @@ import {FortifiableUnit, LandUnit, NavalUnit} from '../../Types.js';
 import {Irrigation, Mine, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import {Land, Water} from '../../../core-terrain/Types.js';
 import {Settlers, Worker} from '../../Units.js';
+import And from '../../../core-rules/Criteria/And.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
-import Criteria from '../../../core-rules/Criteria.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import OneCriteria from '../../../core-rules/OneCriteria.js';
+import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
@@ -45,8 +45,8 @@ export const getRules = ({
       'unit:action:move',
       isNeighbouringTile,
       hasEnoughMovesLeft,
-      new OneCriteria(
-        new Criteria(
+      new Or(
+        new And(
           new Criterion((unit) => unit instanceof LandUnit),
           new Criterion((unit, to, from = unit.tile()) => from.isLand()),
           new Criterion((unit, to) => to.isLand()),
@@ -54,15 +54,15 @@ export const getRules = ({
             .every((tileUnit) => tileUnit.player() === unit.player())
           )
         ),
-        new Criteria(
+        new And(
           new Criterion((unit) => unit instanceof NavalUnit),
-          new OneCriteria(
+          new Or(
             new Criterion((unit, to, from = unit.tile()) => from.isWater()),
             new Criterion((unit, to, from = unit.tile()) => cityRegistry.getBy('tile', from)
               .some((city) => city.player() === unit.player())
             )
           ),
-          new OneCriteria(
+          new Or(
             new Criterion((unit, to) => to.isWater()),
             new Criterion((unit, to) => cityRegistry.getBy('tile', to)
               .some((city) => city.player() === unit.player())
@@ -70,9 +70,9 @@ export const getRules = ({
           )
         )
       ),
-      new OneCriteria(
+      new Or(
         new Criterion((unit) => ! (unit instanceof LandUnit)),
-        new OneCriteria(
+        new Or(
           new Criterion((unit, to) => ! cityRegistry.getBy('tile', to)
             .length
           ),
@@ -83,7 +83,7 @@ export const getRules = ({
       ),
 
       // This is analogous to the original Civilization unit adjacency rules
-      new OneCriteria(
+      new Or(
         new Criterion((unit) => ! (unit instanceof LandUnit)),
         new Criterion((unit, to, from = unit.tile()) => ! (
           from.getNeighbours()
@@ -106,16 +106,16 @@ export const getRules = ({
       'unit:action:attack',
       isNeighbouringTile,
       hasEnoughMovesLeft,
-      new OneCriteria(
-        new Criteria(
+      new Or(
+        new And(
           new Criterion((unit) => unit instanceof LandUnit),
-          new Criterion((unit, to) => to.terrain instanceof Land)
+          new Criterion((unit, to) => to.terrain() instanceof Land)
         ),
-        new Criteria(
+        new And(
           new Criterion((unit) => unit instanceof NavalUnit),
-          new OneCriteria(
-            new Criterion((unit, to) => to.terrain instanceof Water),
-            new Criteria(
+          new Or(
+            new Criterion((unit, to) => to.terrain() instanceof Water),
+            new And(
               new Criterion((unit, to) => unitRegistry.getBy('tile', to)
                 .some((tileUnit) => tileUnit.player() !== unit.player())
               )
@@ -131,11 +131,11 @@ export const getRules = ({
     ),
 
     ...[
-      [Irrigation, BuildIrrigation, new OneCriteria(
-        new Criterion((unit, to, from = unit.tile()) => from.terrain instanceof River),
+      [Irrigation, BuildIrrigation, new Or(
+        new Criterion((unit, to, from = unit.tile()) => from.terrain() instanceof River),
         new Criterion((unit, to, from = unit.tile()) => from.isCoast()),
         new Criterion((unit, to, from = unit.tile()) => from.getAdjacent()
-          .some((tile) => tile.terrain instanceof River ||
+          .some((tile) => tile.terrain() instanceof River ||
             (
               tileImprovementRegistry.getBy('tile', tile)
                 .some((improvement) => improvement instanceof Irrigation) &&
@@ -216,7 +216,7 @@ export const getRules = ({
         hasEnoughMovesLeft,
         new Criterion((unit) => unit instanceof Worker),
         new Criterion((unit, to, from = unit.tile()) => to === from),
-        new Criterion((unit, to, from = unit.tile()) => from.terrain instanceof Terrain),
+        new Criterion((unit, to, from = unit.tile()) => from.terrain() instanceof Terrain),
         new Effect((unit, to, from = unit.tile()) => new Action({unit, to, from, rulesRegistry}))
       )),
   ];

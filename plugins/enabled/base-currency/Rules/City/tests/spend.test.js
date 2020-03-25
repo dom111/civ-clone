@@ -1,5 +1,4 @@
-import AvailableCityImprovementRegistry from '../../../../core-city-improvement/AvailableCityImprovementRegistry.js';
-import AvailableUnitRegistry from '../../../../core-unit/AvailableUnitRegistry.js';
+import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityBuildRegistry from '../../../../base-city/CityBuildRegistry.js';
 import {Militia} from '../../../../base-unit/Units.js';
@@ -15,8 +14,7 @@ import unitBuildCost from '../../../../base-unit/Rules/City/build-cost.js';
 
 describe('city:spend', () => {
   const rulesRegistry = new RulesRegistry(),
-    availableCityImprovementRegistry = new AvailableCityImprovementRegistry(),
-    availableUnitRegistry = new AvailableUnitRegistry(),
+    availableCityBuildItemsRegistry = new AvailableCityBuildItemsRegistry(),
     cityBuildRegistry = new CityBuildRegistry()
   ;
 
@@ -26,8 +24,7 @@ describe('city:spend', () => {
     ...unitBuildCost()
   );
 
-  availableCityImprovementRegistry.register(Temple);
-  availableUnitRegistry.register(Militia);
+  availableCityBuildItemsRegistry.register(Militia, Temple);
 
   [
     [Temple, 0, 160],
@@ -43,8 +40,7 @@ describe('city:spend', () => {
             rulesRegistry,
           }),
           cityBuild = new CityBuild({
-            availableCityImprovementRegistry,
-            availableUnitRegistry,
+            availableCityBuildItemsRegistry,
             city,
             rulesRegistry,
           })

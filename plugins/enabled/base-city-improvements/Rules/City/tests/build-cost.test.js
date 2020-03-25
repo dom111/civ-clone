@@ -1,16 +1,5 @@
-import {
-  Aqueduct,
-  Barracks,
-  CityWalls,
-  Colosseum,
-  Courthouse,
-  Granary,
-  Library,
-  Marketplace,
-  Palace,
-  Temple,
-} from '../../../CityImprovements.js';
-import AvailableCityImprovementRegistry from '../../../../core-city-improvement/AvailableCityImprovementRegistry.js';
+import * as CityImprovements from '../../../CityImprovements.js';
+import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
@@ -22,7 +11,7 @@ import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 describe('city:build', () => {
   const rulesRegistry = new RulesRegistry(),
     cityImprovementRegistry = new CityImprovementRegistry(),
-    availableCityImprovementRegistry = new AvailableCityImprovementRegistry()
+    availableCityBuildItemsRegistry = new AvailableCityBuildItemsRegistry()
   ;
 
   rulesRegistry.register(
@@ -32,30 +21,19 @@ describe('city:build', () => {
     ...buildCost()
   );
 
-  availableCityImprovementRegistry.register(...[
-    Aqueduct,
-    Barracks,
-    CityWalls,
-    Colosseum,
-    Courthouse,
-    Granary,
-    Library,
-    Marketplace,
-    Palace,
-    Temple,
-  ]);
+  availableCityBuildItemsRegistry.register(...Object.values(CityImprovements));
 
   [
-    [Aqueduct, 120],
-    [Barracks, 40],
-    [CityWalls, 120],
-    [Colosseum, 200],
-    [Courthouse, 80],
-    [Granary, 60],
-    [Library, 80],
-    [Marketplace, 80],
-    [Palace, 200],
-    [Temple, 40],
+    [CityImprovements.Aqueduct, 120],
+    [CityImprovements.Barracks, 40],
+    [CityImprovements.CityWalls, 120],
+    [CityImprovements.Colosseum, 100],
+    [CityImprovements.Courthouse, 80],
+    [CityImprovements.Granary, 60],
+    [CityImprovements.Library, 80],
+    [CityImprovements.Marketplace, 80],
+    [CityImprovements.Palace, 200],
+    [CityImprovements.Temple, 40],
   ]
     .forEach(([Improvement, cost]) => {
       it(`should cost ${cost} to build ${Improvement.name}`, () => {
@@ -63,7 +41,7 @@ describe('city:build', () => {
             rulesRegistry,
           }),
           cityBuild = new CityBuild({
-            availableCityImprovementRegistry,
+            availableCityBuildItemsRegistry,
             city,
             rulesRegistry,
           })
@@ -72,7 +50,7 @@ describe('city:build', () => {
         cityBuild.build(Improvement);
 
         assert.strictEqual(cityBuild.building(), Improvement);
-        assert.strictEqual(cityBuild.cost(), cost);
+        assert.strictEqual(cityBuild.cost().value(), cost);
       });
     })
   ;

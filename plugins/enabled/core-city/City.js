@@ -111,7 +111,7 @@ export class City {
     yieldRegistry = YieldRegistry.getInstance(),
     yields = yieldRegistry.entries(),
   } = {}) {
-    const tilesetTields = this.#tilesWorked
+    const tilesetYields = this.#tilesWorked
       .yields({
         yields,
         player: this.#player,
@@ -119,12 +119,12 @@ export class City {
     ;
 
     // Do for...of so that as yields are added, they too are processed.
-    for (const cityYield of tilesetTields) {
-      this.#rulesRegistry.process('city:yield', cityYield, this, tilesetTields);
-      this.#rulesRegistry.process('city:cost', cityYield, this, tilesetTields);
+    for (const cityYield of tilesetYields) {
+      this.#rulesRegistry.process('city:yield', cityYield, this, tilesetYields);
+      this.#rulesRegistry.process('city:cost', cityYield, this, tilesetYields);
     }
 
-    return tilesetTields;
+    return tilesetYields;
   }
 }
 

@@ -15,7 +15,7 @@ import {
 import {Coal, Fish, Game, Gems, Gold, Horse, Oasis, Oil, Seal, Shield} from '../../TerrainFeatures.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import OneCriteria from '../../../core-rules/OneCriteria.js';
+import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
 
 export const getRules = () => {
@@ -37,7 +37,7 @@ export const getRules = () => {
       .map(([Feature, chance, ...terrains]) => new Rule(
         `terrain:feature:${Feature.name.toLowerCase()}`,
         new Criterion((TerrainFeature) => TerrainFeature === Feature),
-        new OneCriteria(
+        new Or(
           new Criterion((TerrainFeature, Terrain) => terrains.includes(Terrain)),
           new Criterion((TerrainFeature, terrain) => terrains.some((Terrain) => terrain instanceof Terrain))
         ),

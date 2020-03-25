@@ -10,8 +10,8 @@ export class Tileset {
       gen = (radius) => {
         const pairs = [];
 
-        for (let x = tile.x - radius; x <= tile.x + radius; x++) {
-          for (let y = tile.y - radius; y <= tile.y + radius; y++) {
+        for (let x = tile.x() - radius; x <= tile.x() + radius; x++) {
+          for (let y = tile.y() - radius; y <= tile.y() + radius; y++) {
             pairs.push([x, y]);
           }
         }
@@ -20,9 +20,8 @@ export class Tileset {
       }
     ;
 
-    // strip out the corners
     return new this(...gen(radius)
-      .map((coords) => tile.map.get(...coords))
+      .map((coords) => tile.map().get(...coords))
       // strip any duplicates
       .filter((tile) => ! seen.includes(seen.push(tile)))
     );
@@ -80,7 +79,7 @@ export class Tileset {
   }
 
   yields({player, yields}) {
-    const finalYields =  this.#tiles
+    return this.#tiles
       .reduce((tilesetYields, tile) => {
         tile.yields({
           player,
@@ -104,8 +103,6 @@ export class Tileset {
         return tilesetYields;
       }, yields.map((Yield) => new Yield()))
     ;
-
-    return finalYields;
   }
 }
 

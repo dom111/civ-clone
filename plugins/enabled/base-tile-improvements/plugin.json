@@ -5,8 +5,8 @@
     "base-terrain",
     "base-terrain-yields",
     "core-rules",
-    "core-tile-improvements",
-    "base-science"
+    "base-science",
+    "core-tile-improvements"
   ],
   "components": [
     {

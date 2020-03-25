@@ -78,6 +78,10 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableCityBuildItemsRegistry.js"
     }
   ]
 }

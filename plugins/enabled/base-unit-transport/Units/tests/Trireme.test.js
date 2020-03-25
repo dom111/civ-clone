@@ -56,8 +56,8 @@ describe('Trireme', () => {
   const generateIslands = () => {
     const world = simpleWorldLoader('9OG44OG9O');
 
-    assert(world.get(1, 1).terrain instanceof Land);
-    assert(world.get(6, 6).terrain instanceof Land);
+    assert(world.get(1, 1).terrain() instanceof Land);
+    assert(world.get(6, 6).terrain() instanceof Land);
 
     return world;
   };

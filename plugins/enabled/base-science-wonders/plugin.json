@@ -1,0 +1,19 @@
+{
+  "name": "base-science-wonders",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-science",
+    "base-wonder",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

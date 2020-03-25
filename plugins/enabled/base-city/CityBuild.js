@@ -1,26 +1,22 @@
-import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
-import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
+import AvailableCityBuildItemsRegistry from './AvailableCityBuildItemsRegistry.js';
 import {BuildProgress} from './Yields.js';
 import {Production} from '../base-terrain-yields/Yields.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
 
 export class CityBuild {
-  #availableCityImprovementRegistry;
-  #availableUnitRegistry;
+  #availableCityBuildItemsRegistry;
   #building;
   #city;
-  #cost;
-  #progress;
+  #cost = new Production(Infinity);
+  #progress = new BuildProgress();
   #rulesRegistry;
 
   constructor({
-    availableCityImprovementRegistry = AvailableCityImprovementRegistry.getInstance(),
-    availableUnitRegistry = AvailableUnitRegistry.getInstance(),
+    availableCityBuildItemsRegistry = AvailableCityBuildItemsRegistry.getInstance(),
     city,
     rulesRegistry = RulesRegistry.getInstance(),
   }) {
-    this.#availableCityImprovementRegistry = availableCityImprovementRegistry;
-    this.#availableUnitRegistry = availableUnitRegistry;
+    this.#availableCityBuildItemsRegistry = availableCityBuildItemsRegistry;
     this.#city = city;
     this.#rulesRegistry = rulesRegistry;
   }
@@ -34,36 +30,13 @@ export class CityBuild {
   }
 
   available() {
-    return [
-      ...this.availableBuildUnits(),
-      ...this.availableBuildImprovements(),
-    ];
-  }
-
-  availableBuildImprovements() {
-    const buildImprovementRules = this.#rulesRegistry.get('city:build:improvement');
+    const buildImprovementRules = this.#rulesRegistry.get('city:build');
 
     // TODO: this still feels awkward... It's either this, or every rule has to be 'either it isn't this thing we're
     //  checking or it is and it meets the condition' or it's this. It'd be nice to be able to just filter the list in a
     //  more straightforward way...
-    return this.#availableCityImprovementRegistry
+    return this.#availableCityBuildItemsRegistry
       .filter((buildItem) => buildImprovementRules
-        .filter((rule) => rule.validate(this.city(), buildItem))
-        .every((rule) => rule.process(this.city(), buildItem)
-          .validate()
-        )
-      )
-    ;
-  }
-
-  availableBuildUnits() {
-    const buildUnitRules = this.#rulesRegistry.get('city:build:unit');
-
-    // TODO: this still feels awkward... It's either this, or every rule has to be 'either it isn't this thing we're
-    //  checking or it is and it meets the condition'. It'd be nice to be able to just filter the list in a more
-    //  straightforward way...
-    return this.#availableUnitRegistry
-      .filter((buildItem) => buildUnitRules
         .filter((rule) => rule.validate(this.city(), buildItem))
         .every((rule) => rule.process(this.city(), buildItem)
           .validate()
@@ -80,8 +53,10 @@ export class CityBuild {
     }
 
     this.#building = BuildItem;
-    [this.#cost] = this.#rulesRegistry.process('city:build-cost', BuildItem, this.#city);
-    this.#progress = new BuildProgress();
+
+    const [cost] = this.#rulesRegistry.process('city:build-cost', BuildItem, this.#city);
+
+    this.#cost.set(cost);
   }
 
   building() {
@@ -89,18 +64,18 @@ export class CityBuild {
   }
 
   check() {
-    if (this.#progress.value() >= this.#cost) {
+    if (this.#progress.value() >= this.#cost.value()) {
       const built = new (this.#building)({
         player: this.#city.player(),
         city: this.#city,
         tile: this.#city.tile(),
       });
 
-      this.#rulesRegistry.process('city:building-complete', this.#city, built);
-
-      this.#progress = null;
+      this.#progress.set(0);
       this.#building = null;
-      this.#cost = null;
+      this.#cost.set(Infinity);
+
+      this.#rulesRegistry.process('city:building-complete', this, built);
 
       return built;
     }
@@ -119,7 +94,18 @@ export class CityBuild {
   }
 
   remaining() {
-    return this.#cost - this.#progress.value();
+    return this.#cost.value() - this.#progress.value();
+  }
+
+  revalidate() {
+    if (! this.available()
+      .some((Entity) => Entity === this.#building)
+    ) {
+      this.#building = null;
+      this.#cost.set(Infinity);
+
+      this.#rulesRegistry.process('city:building-cancelled', this);
+    }
   }
 }
 

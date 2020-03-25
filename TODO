@@ -55,6 +55,9 @@
 - [X] Set pathing data for target in SimpleAIPlayer.
 - [X] Convert `DelayedAction` to use `Rule`s.
 - [X] Fix bug where units will continually fire `NoOrders` when on the coast - this seems to be resolved as part of the fixes applied to SimpleAIPlayer during testing/pathing addition.
+- [X] Handle `Unit#transport` somehow. Perhaps this needs to be a `Registry` to avoid adding it to `Unit`?
+- [X] Implement `Priority` for `Rule`s to aid processing `Trade`.
+- [X] Add wonders.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -66,15 +69,14 @@
 - [ ] Even more civilizations.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
-- [ ] Add `PlayerMap` classes that only see what the Player has discovered.
+- [ ] Add `PlayerMap` classes that only see what the Player has discovered and track the state (improvements, cities, etc)
 - [ ] Human players - this is likely dependent on a renderer, although perhaps make it playable within a TTY?
 - [ ] Write more tests.
 - [ ] Feature parity with Civilization.
 - [ ] Add more units.
 - [ ] Add more city improvements.
-- [ ] Add wonders.
-- [ ] Add wealth.
-- [ ] Add build-queue.
+- [ ] Add wealth. - not civ 1 - delay
+- [ ] Add build-queue. - not civ 1 - delay
 - [ ] Add Barbarians.
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
@@ -93,7 +95,12 @@
 - [ ] Add benefits to 'we love the leader' day.
 - [ ] Convert `Notificaiton#when` to use `Rule`s.
 - [ ] Break `SimpleAIPlayer` down into smaller routines.
-- [ ] Investigate why units always trend north-east.
+- [ ] Investigate why units STILL trend north-east.
 - [ ] Make `Player#civilization` use methods instead of bare properties.
-- [ ] Add rules to wake enemy units that are `Sleep`ing when moving with in their visible range.
-- [ ] Handle `Unit#transport` somehow. Perhaps this needs to be a `Registry` to avoid adding it to `Unit`?
+- [ ] Add rules to wake enemy units that are `Sleep`ing when moving within their visible range.
+- [ ] Consider breaking all `Wonder`s (and maybe everything like improvements and units etc...) into individual plugins... `Wonder`s specifically as they have a lot of dependencies - maybe individual plugins for the effects too as the wonders themselves still exist across most games, but the effects change...
+- [ ] Add effects for `GreatWall`.
+- [ ] Add effects for `Pyramids`.
+- [ ] Add more variance in the world that are generated again - no islands appear to be generated no matter the settings used.
+- [ ] Fix any tests that rely on global instances.
+- [ ] Fix bug where `SimpleAIPlayer` can't perform an action for a unit.

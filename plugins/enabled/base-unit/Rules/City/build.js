@@ -1,4 +1,4 @@
-import Criteria from '../../../core-rules/Criteria.js';
+import And from '../../../core-rules/Criteria/And.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {NavalUnit} from '../../Types.js';
@@ -15,7 +15,7 @@ export const getRules = () => [
   new Rule(
     'city:build:unit:settlers',
     new Criterion((city, buildItem) => buildItem === Settlers),
-    new Effect((city) => new Criteria(
+    new Effect((city) => new And(
       new Criterion(() => city.size() >= 2)
       // new Criterion(() => city.surplusFood > 0)
     ))
@@ -24,7 +24,7 @@ export const getRules = () => [
   new Rule(
     'city:build:unit:naval-unit',
     new Criterion((city, buildItem) => Object.prototype.isPrototypeOf.call(NavalUnit, buildItem)),
-    new Effect((city) => new Criteria(
+    new Effect((city) => new And(
       new Criterion(() => city.tile().isCoast())
     ))
   ),

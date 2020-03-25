@@ -14,10 +14,6 @@
     },
     {
       "type": "script",
-      "file": "AvailableUnitRegistry.js"
-    },
-    {
-      "type": "script",
       "file": "UnitRegistry.js"
     },
     {

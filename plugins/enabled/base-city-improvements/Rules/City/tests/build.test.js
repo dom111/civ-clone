@@ -1,16 +1,5 @@
-import {
-  Aqueduct,
-  Barracks,
-  CityWalls,
-  Colosseum,
-  Courthouse,
-  Granary,
-  Library,
-  Marketplace,
-  Palace,
-  Temple,
-} from '../../../CityImprovements.js';
-import AvailableCityImprovementRegistry from '../../../../core-city-improvement/AvailableCityImprovementRegistry.js';
+import * as CityImprovements from '../../../CityImprovements.js';
+import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
@@ -22,7 +11,7 @@ import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 describe('city:build', () => {
   const rulesRegistry = new RulesRegistry(),
     cityImprovementRegistry = new CityImprovementRegistry(),
-    availableCityImprovementRegistry = new AvailableCityImprovementRegistry()
+    availableCityBuildItemsRegistry = new AvailableCityBuildItemsRegistry()
   ;
 
   rulesRegistry.register(
@@ -34,38 +23,16 @@ describe('city:build', () => {
     })
   );
 
-  availableCityImprovementRegistry.register(...[
-    Aqueduct,
-    Barracks,
-    CityWalls,
-    Colosseum,
-    Courthouse,
-    Granary,
-    Library,
-    Marketplace,
-    Palace,
-    Temple,
-  ]);
+  availableCityBuildItemsRegistry.register(...Object.values(CityImprovements));
 
-  [
-    Aqueduct,
-    Barracks,
-    CityWalls,
-    Colosseum,
-    Courthouse,
-    Granary,
-    Library,
-    Marketplace,
-    Palace,
-    Temple,
-  ]
+  Object.values(CityImprovements)
     .forEach((Improvement) => {
       it(`should be possible to build ${Improvement.name} in a city`, () => {
         const city = setUpCity({
             rulesRegistry,
           }),
           cityBuild = new CityBuild({
-            availableCityImprovementRegistry,
+            availableCityBuildItemsRegistry,
             city,
             rulesRegistry,
           })
@@ -81,7 +48,7 @@ describe('city:build', () => {
             rulesRegistry,
           }),
           cityBuild = new CityBuild({
-            availableCityImprovementRegistry,
+            availableCityBuildItemsRegistry,
             city,
             rulesRegistry,
           })

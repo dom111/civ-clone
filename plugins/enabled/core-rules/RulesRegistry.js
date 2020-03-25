@@ -23,6 +23,18 @@ export class RulesRegistry extends Registry {
     super(Rule);
   }
 
+  entries() {
+    return super.entries()
+      .sort((a, b) => a.priority() - b.priority())
+    ;
+  }
+
+  filter(iterator) {
+    return super.filter(iterator)
+      .sort((a, b) => a.priority() - b.priority())
+    ;
+  }
+
   get(ruleName) {
     if (! this.#cache[ruleName]) {
       this.#cache[ruleName] = this.filter((rule) => rule.name().startsWith(`${ruleName}:`) ||

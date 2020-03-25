@@ -3,7 +3,7 @@ import {Food, Production} from '../../../base-terrain-yields/Yields.js';
 import {Plains, Tundra} from '../../../base-terrain/Terrains.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import OneCriteria from '../../../core-rules/OneCriteria.js';
+import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
 import {Trade} from '../../../base-terrain-yield-trade/Yields.js';
 
@@ -23,12 +23,12 @@ export const getRules = () => [
   ]
     .map(([YieldType, Feature, value, Terrain]) => new Rule(
       `tile:yield:${[YieldType, Feature].map((entity) => entity.name.toLowerCase()).join(':')}`,
-      new OneCriteria(
+      new Or(
         new Criterion(() => ! Terrain),
-        new Criterion((tileYield, tile) => tile.terrain instanceof Terrain)
+        new Criterion((tileYield, tile) => tile.terrain() instanceof Terrain)
       ),
       new Criterion((tileYield) => tileYield instanceof YieldType),
-      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain().features().some((feature) => feature instanceof Feature)),
       new Effect((tileYield) => tileYield.add(value))
     ))
   ,

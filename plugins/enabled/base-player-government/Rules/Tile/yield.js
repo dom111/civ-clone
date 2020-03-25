@@ -23,7 +23,7 @@ export const getRules = ({
     .map(([Yield, Feature, value, ...Governments]) => new Rule(
       `tile:yield:${[Yield.name, Feature.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
-      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain().features().some((feature) => feature instanceof Feature)),
       new Criterion((tileYield, tile, player) => {
         const [playerGovernment] = playerGovernmentRegistry.getBy('player', player);
 
@@ -44,8 +44,8 @@ export const getRules = ({
     .map(([Yield, Feature, value, Terrain, ...Governments]) => new Rule(
       `tile:yield:${[Yield.name, Feature.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
-      new Criterion((tileYield, tile) => tile.terrain instanceof Terrain),
-      new Criterion((tileYield, tile) => tile.terrain.features().some((feature) => feature instanceof Feature)),
+      new Criterion((tileYield, tile) => tile.terrain() instanceof Terrain),
+      new Criterion((tileYield, tile) => tile.terrain().features().some((feature) => feature instanceof Feature)),
       new Criterion((tileYield, tile, player) => {
         const [playerGovernment] = playerGovernmentRegistry.getBy('player', player);
 
@@ -67,7 +67,7 @@ export const getRules = ({
     .map(([Yield, Terrain, Improvement, value, ...Governments]) => new Rule(
       `tile:yield:${[Yield.name, Terrain.name, Improvement.name, Governments.map((Government) => Government.name).join('-')].join(':').toLowerCase()}`,
       new Criterion((tileYield) => tileYield instanceof Yield),
-      new Criterion((tileYield, tile) => tile.terrain instanceof Terrain),
+      new Criterion((tileYield, tile) => tile.terrain() instanceof Terrain),
       new Criterion((tileYield, tile) => tileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Improvement)
       ),

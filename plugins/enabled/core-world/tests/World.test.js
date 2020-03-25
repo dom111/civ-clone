@@ -25,10 +25,10 @@ describe('World', () => {
   });
 
   it('should return the expected `Tile`s', () => {
-    assert.strictEqual(world.get(90, 90).x, 90);
-    assert.strictEqual(world.get(90, 90).y, 90);
-    assert.strictEqual(world.get(50, 90).x, 50);
-    assert.strictEqual(world.get(50, 90).y, 90);
+    assert.strictEqual(world.get(90, 90).x(), 90);
+    assert.strictEqual(world.get(90, 90).y(), 90);
+    assert.strictEqual(world.get(50, 90).x(), 50);
+    assert.strictEqual(world.get(50, 90).y(), 90);
   });
 
   describe('Tile', () => {

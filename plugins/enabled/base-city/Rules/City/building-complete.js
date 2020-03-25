@@ -4,7 +4,7 @@ import Rule from '../../../core-rules/Rule.js';
 export const getRules = () => [
   new Rule(
     'city:building-complete:event',
-    new Effect((city, built) => engine.emit('city:building-complete', city, built))
+    new Effect((cityBuild, built) => engine.emit('city:building-complete', cityBuild, built))
   ),
 ];
 

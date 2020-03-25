@@ -1,58 +1,6 @@
-import {
-  Alphabet,
-  Astronomy,
-  BronzeWorking,
-  CeremonialBurial,
-  Chivalry,
-  CodeOfLaws,
-  Construction,
-  Currency,
-  Engineering,
-  Feudalism,
-  Gunpowder,
-  HorsebackRiding,
-  Invention,
-  IronWorking,
-  Literacy,
-  MapMaking,
-  Masonry,
-  Mathematics,
-  Monarchy,
-  Mysticism,
-  Navigation,
-  Pottery,
-  TheWheel,
-  Writing,
-} from './Advances.js';
+import * as Advances from './Advances.js';
 import AdvanceRegistry from '../core-science/AdvanceRegistry.js';
 
-[
-  Alphabet,
-  Astronomy,
-  BronzeWorking,
-  CeremonialBurial,
-  Chivalry,
-  CodeOfLaws,
-  Construction,
-  Currency,
-  Engineering,
-  Feudalism,
-  Gunpowder,
-  HorsebackRiding,
-  Invention,
-  IronWorking,
-  Literacy,
-  MapMaking,
-  Masonry,
-  Mathematics,
-  Monarchy,
-  Mysticism,
-  Navigation,
-  Pottery,
-  TheWheel,
-  Writing,
-]
-  .forEach((Advance) => AdvanceRegistry.getInstance()
-    .register(Advance)
-  )
+AdvanceRegistry.getInstance()
+  .register(...Object.values(Advances))
 ;

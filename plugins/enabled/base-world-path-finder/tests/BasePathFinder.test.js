@@ -177,7 +177,7 @@ describe('BasePathFinder', () => {
         [3, 7],
         [2, 7],
       ],
-      path.map((tile) => [tile.x, tile.y])
+      path.map((tile) => [tile.x(), tile.y()])
     );
   });
 });

@@ -13,7 +13,7 @@ export class ClearSwamp extends DelayedAction {
 
         // terrain.features().push(...this.from().features());
 
-        this.from().terrain = terrain;
+        this.from().setTerrain(terrain);
       },
       // TODO: calculate moves needed
       turns: 3,

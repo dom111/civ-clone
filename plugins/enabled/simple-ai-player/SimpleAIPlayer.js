@@ -31,11 +31,11 @@ export class SimpleAIPlayer extends AIPlayer {
   #shouldBuildCity = (tile) => {
     return (
       (
-        tile.terrain instanceof Grassland ||
-        tile.terrain instanceof River ||
-        tile.terrain instanceof Plains ||
-        tile.terrain.features().some((feature) => feature instanceof Oasis) ||
-        tile.terrain.features().some((feature) => feature instanceof Game)
+        tile.terrain() instanceof Grassland ||
+        tile.terrain() instanceof River ||
+        tile.terrain() instanceof Plains ||
+        tile.terrain().features().some((feature) => feature instanceof Oasis) ||
+        tile.terrain().features().some((feature) => feature instanceof Game)
       ) &&
       tile.getSurroundingArea()
         .score({
@@ -55,7 +55,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldIrrigate = (tile) => {
-    return [Desert, Plains, Grassland, River].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+    return [Desert, Plains, Grassland, River].some((TerrainType) => tile.terrain() instanceof TerrainType) &&
       // TODO: doing this a lot already, need to make improvements a value object with a helper method
       ! this.#tileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Irrigation) &&
@@ -64,7 +64,7 @@ export class SimpleAIPlayer extends AIPlayer {
           .some((city) => city.player() === this)
         ) &&
       [...tile.getAdjacent(), tile]
-        .some((tile) => tile.terrain instanceof River ||
+        .some((tile) => tile.terrain() instanceof River ||
           tile.isCoast() ||
           (
             this.#tileImprovementRegistry.getBy('tile', tile)
@@ -77,7 +77,7 @@ export class SimpleAIPlayer extends AIPlayer {
   };
 
   #shouldMine = (tile) => {
-    return [Hills, Mountains].some((TerrainType) => tile.terrain instanceof TerrainType) &&
+    return [Hills, Mountains].some((TerrainType) => tile.terrain() instanceof TerrainType) &&
       ! this.#tileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Mine) &&
       tile.getSurroundingArea()
@@ -179,7 +179,7 @@ export class SimpleAIPlayer extends AIPlayer {
       unit instanceof NavalTransport &&
       unit.hasCargo() &&
       tile.isCoast() &&
-      tile.terrain instanceof Water
+      tile.terrain() instanceof Water
     ) {
       score += 16;
     }
@@ -399,7 +399,7 @@ export class SimpleAIPlayer extends AIPlayer {
           this.#enemyUnitsToAttack.push(tile);
         }
         else if (
-          tile.terrain instanceof Land &&
+          tile.terrain() instanceof Land &&
           tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
           ! this.#landTilesToExplore.includes(tile)
           && ! existingTarget
@@ -407,7 +407,7 @@ export class SimpleAIPlayer extends AIPlayer {
           this.#landTilesToExplore.push(tile);
         }
         else if (
-          tile.terrain instanceof Water &&
+          tile.terrain() instanceof Water &&
           tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
           this.#seaTilesToExplore.includes(tile)
           && ! existingTarget
@@ -507,7 +507,7 @@ export class SimpleAIPlayer extends AIPlayer {
             if (
               unload &&
               tile.getNeighbours()
-                .some((tile) => tile.terrain instanceof Land &&
+                .some((tile) => tile.terrain() instanceof Land &&
                   tile.isCoast()
                 ) &&
               unit.cargo()
@@ -600,8 +600,8 @@ export class SimpleAIPlayer extends AIPlayer {
 
               else if (unit.attack() > 0 && this.#citiesToLiberate.length > 0) {
                 const [targetTile] = this.#citiesToLiberate
-                    .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
-                    (unit instanceof NavalUnit && tile.terrain instanceof Water)
+                    .filter((tile) => (unit instanceof LandUnit && tile.terrain() instanceof Land) ||
+                    (unit instanceof NavalUnit && tile.terrain() instanceof Water)
                     )
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -615,8 +615,8 @@ export class SimpleAIPlayer extends AIPlayer {
 
               else if (unit.attack() > 0 && this.#enemyUnitsToAttack.length > 0) {
                 const [targetTile] = this.#enemyUnitsToAttack
-                    .filter((tile) => (unit instanceof LandUnit && tile.terrain instanceof Land) ||
-                    (unit instanceof NavalUnit && tile.terrain instanceof Water)
+                    .filter((tile) => (unit instanceof LandUnit && tile.terrain() instanceof Land) ||
+                    (unit instanceof NavalUnit && tile.terrain() instanceof Water)
                     )
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)

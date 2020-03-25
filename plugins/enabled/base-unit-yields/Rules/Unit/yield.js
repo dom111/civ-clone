@@ -16,10 +16,10 @@ import Rule from '../../../core-rules/Rule.js';
 
 export const getRules = () => [
   ...[
-    [Catapult, 4],
+    [Catapult, 6],
     [Cavalry, 2, 1, 2],
     [Chariot, 4, 1, 2],
-    [Knights, 4, 1, 2],
+    [Knights, 4, 2, 2],
     [Militia],
     [Musketman, 2, 3],
     [Settlers, 0],

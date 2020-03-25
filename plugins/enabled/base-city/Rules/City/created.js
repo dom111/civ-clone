@@ -17,12 +17,12 @@ export const getRules = ({
 } = {}) => [
   new Rule(
     'city:created:tile:improvements',
-    new Effect(({tile}) => {
+    new Effect((city) => {
       [
-        new Irrigation(tile),
-        new Road(tile),
+        Irrigation,
+        Road,
       ]
-        .forEach((improvement) => tileImprovementRegistry.register(improvement))
+        .forEach((Improvement) => tileImprovementRegistry.register(new Improvement(city.tile())))
       ;
     })
   ),

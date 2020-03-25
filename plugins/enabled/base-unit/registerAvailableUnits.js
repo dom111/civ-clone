@@ -1,28 +1,6 @@
-import {
-  Catapult,
-  Cavalry,
-  Chariot,
-  Knights,
-  Militia,
-  Musketman,
-  Settlers,
-  Spearman,
-  Swordman,
-} from './Units.js';
-import AvailableUnitRegistry from '../core-unit/AvailableUnitRegistry.js';
+import * as Units from './Units.js';
+import AvailableCityBuildItemsRegistry from '../base-city/AvailableCityBuildItemsRegistry.js';
 
-[
-  Catapult,
-  Cavalry,
-  Chariot,
-  Knights,
-  Militia,
-  Musketman,
-  Settlers,
-  Spearman,
-  Swordman,
-]
-  .forEach((Unit) => AvailableUnitRegistry.getInstance()
-    .register(Unit)
-  )
+AvailableCityBuildItemsRegistry.getInstance()
+  .register(...Object.values(Units))
 ;

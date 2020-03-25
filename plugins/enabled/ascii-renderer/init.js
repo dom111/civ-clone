@@ -69,8 +69,8 @@ export const renderMap = ({
           ;
 
           return {
-            terrain: tile.terrain.constructor.name,
-            terrainFeatures: tile.terrain.features().map((feature) => feature.constructor.name).join(','),
+            terrain: tile.terrain().constructor.name,
+            terrainFeatures: tile.terrain().features().map((feature) => feature.constructor.name).join(','),
             units: tileUnits.map((unit) => (
               {
                 player: unit.player().civilization.people,

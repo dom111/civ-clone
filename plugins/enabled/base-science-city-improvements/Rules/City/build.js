@@ -42,7 +42,7 @@ export const getRules = ({
       new Criterion((city, buildItem) => buildItem === Unit),
       new Effect((city) => new Criterion(() => playerResearchRegistry
         .getBy('player', city.player())
-        .every((playerResearch) => playerResearch.completed(Advance))
+        .some((playerResearch) => playerResearch.completed(Advance))
       ))
     ))
   ,

@@ -1,7 +1,7 @@
-import Criteria from '../Criteria.js';
+import And from '../Criteria/And.js';
 import Criterion from '../Criterion.js';
 import Effect from '../Effect.js';
-import OneCriteria from '../OneCriteria.js';
+import Or from '../Criteria/Or.js';
 import Rule from '../Rule.js';
 import RulesRegistry from '../RulesRegistry.js';
 import assert from 'assert';
@@ -10,17 +10,17 @@ describe('Rules', () => {
   const emptyRule = new Rule(
       'empty:rule'
     ),
-    emptyCriteria = new Criteria(),
+    emptyCriteria = new And(),
     emptyCriterion = new Criterion(),
-    emptyOneCriteria = new OneCriteria(),
+    emptyOneCriteria = new Or(),
     even = new Criterion((x) => x % 2 === 0),
     square = new Criterion((x) => {
       const i = Math.sqrt(x);
 
       return i === Math.floor(i);
     }),
-    evenAndSquare = new Criteria(even, square),
-    evenOrSquare = new OneCriteria(even, square),
+    evenAndSquare = new And(even, square),
+    evenOrSquare = new Or(even, square),
     evenRule = new Rule('number:even', even),
     squareRule = new Rule('number:square', square),
     evenAndSquareRule = new Rule('number:even-and-square', evenAndSquare),

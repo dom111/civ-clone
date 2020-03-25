@@ -19,7 +19,7 @@ export const getRules = () => [
     [Aqueduct, 120],
     [Barracks, 40],
     [CityWalls, 120],
-    [Colosseum, 200],
+    [Colosseum, 100],
     [Courthouse, 80],
     [Granary, 60],
     [Library, 80],

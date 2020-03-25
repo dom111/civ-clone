@@ -31,6 +31,19 @@ export class PlayerResearch {
     this.check();
   }
 
+  addAdvance(Advance) {
+    if (this.#complete
+      .some((advance) => advance instanceof Advance)
+    ) {
+      return;
+    }
+
+    const completedResearch = new Advance();
+
+    this.#complete.push(completedResearch);
+    this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
+  }
+
   available() {
     const rules = this.#rulesRegistry.get('research:requirements');
 
@@ -46,8 +59,6 @@ export class PlayerResearch {
     if (this.researching() && (this.#progress.value() >= this.#cost.value())) {
       const completedResearch = new (this.#researching)();
 
-      this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
-
       this.#complete.push(completedResearch);
       this.#researching = null;
       this.#progress.subtract(this.#cost);
@@ -57,6 +68,8 @@ export class PlayerResearch {
       }
 
       this.#cost.set(Infinity);
+
+      this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
     }
   }
 

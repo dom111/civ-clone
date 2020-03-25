@@ -45,6 +45,10 @@
     {
       "type": "script",
       "file": "registerYields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
     }
   ]
 }

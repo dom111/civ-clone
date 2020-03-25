@@ -17,15 +17,20 @@ export const getRules = ({
     new Effect((cityYield, city, yields) => {
       const [playerRates] = playerTradeRatesRegistry.getBy('player', city.player());
 
+      if (! playerRates) {
+        throw new Error('fail');
+      }
+
       availableTradeRateRegistry.entries()
         .forEach((TradeRate) => {
           let [tradeYield] = yields.filter((existingYield) => existingYield instanceof (TradeRate.tradeYield));
 
           if (! tradeYield) {
-            tradeYield = new (TradeRate.tradeYield)(cityYield.value() * playerRates.get(TradeRate));
+            tradeYield = new (TradeRate.tradeYield)();
             yields.push(tradeYield);
-            // cityYield.subtract(tradeYield.value());
           }
+
+          tradeYield.add(cityYield.value() * playerRates.get(TradeRate));
 
           rulesRegistry.process('city:yield', tradeYield, city, yields);
         })

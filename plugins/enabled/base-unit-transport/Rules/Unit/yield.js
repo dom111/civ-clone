@@ -10,7 +10,7 @@ import Rule from '../../../core-rules/Rule.js';
 export const getRules = () => [
   ...[
     [Sail, 1, 1, 3],
-    [Trireme, 1, 1, 3],
+    [Trireme, 1, 0, 3],
   ]
     .flatMap(([Unit, attack = 1, defence = 1, movement = 1, visibility = 1]) => [
       [Attack, attack],

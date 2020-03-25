@@ -13,7 +13,8 @@
     "core-city",
     "core-player",
     "core-terrain",
-    "core-turn-based-game"
+    "core-turn-based-game",
+    "base-city"
   ],
   "components": [
     {

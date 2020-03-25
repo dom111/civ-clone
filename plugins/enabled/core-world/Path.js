@@ -45,7 +45,7 @@ export class Path extends Tileset {
       const top = this.end();
 
       if (this.length > 0 && ! tile.isNeighbourOf(top)) {
-        throw new TypeError(`Tile#push: Invalid element passed, ${tile.x},${tile.y} is not a neighbour of ${top.x},${top.y}.`);
+        throw new TypeError(`Tile#push: Invalid element passed, ${tile.x()},${tile.y()} is not a neighbour of ${top.x()},${top.y()}.`);
       }
 
       super.push(tile);

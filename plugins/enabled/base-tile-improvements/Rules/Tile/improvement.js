@@ -33,7 +33,7 @@ export const getRules = ({
       new Criterion((tile, TileImprovement) => ! tileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof TileImprovement)
       ),
-      new Criterion((tile) => Terrains.some((Terrain) => tile.terrain instanceof Terrain))
+      new Criterion((tile) => Terrains.some((Terrain) => tile.terrain() instanceof Terrain))
     )),
 
   ...[
@@ -45,7 +45,7 @@ export const getRules = ({
       new Criterion((tile, TileImprovement, player) => playerResearchRegistry.getBy('player', player)
         .some((playerResearch) => playerResearch.completed(Advance))
       ),
-      new Criterion((tile) => tile.terrain instanceof Terrain)
+      new Criterion((tile) => tile.terrain() instanceof Terrain)
     )),
 ];
 

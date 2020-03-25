@@ -20,7 +20,7 @@ export const getRules = ({
     .map(([Terrain, YieldType, Improvement, value]) => new Rule(
       `tile:yield:${[YieldType, Terrain, Improvement].map((entity) => entity.name.toLowerCase()).join(':')}`,
       new Criterion((tileYield) => tileYield instanceof YieldType),
-      new Criterion((tileYield, tile) => tile.terrain instanceof Terrain),
+      new Criterion((tileYield, tile) => tile.terrain() instanceof Terrain),
       new Criterion((tileYield, tile) => tileImprovementRegistry.getBy('tile', tile)
         .some((improvement) => improvement instanceof Improvement)
       ),

@@ -1,8 +1,8 @@
-import {Irrigation, Road} from '../../../base-tile-improvements/TileImprovements.js';
+import {Arctic, Desert, Grassland, Hills, Mountains, Ocean, Plains, River} from '../../../base-terrain/Terrains.js';
+import {Irrigation, Mine, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import City from '../../../core-city/City.js';
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import FillGenerator from '../../../base-world-generator/FillGenerator.js';
-import {Grassland} from '../../../base-terrain/Terrains.js';
 import Player from '../../../core-player/Player.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import {Shield} from '../../../base-terrain-features/TerrainFeatures.js';
@@ -13,39 +13,38 @@ import World from '../../../core-world/World.js';
 
 export const setUpCity = ({
   size = 1,
-  tile,
-  world,
   rulesRegistry = RulesRegistry.getInstance(),
-  cityImprovementRegistry = CityImprovementRegistry.getInstance(),
-  tileImprovementRegistry = TileImprovementRegistry.getInstance(),
-} = {}) => {
-  if (! world) {
+  world = (() => {
     const generator = new FillGenerator({
+      Terrain: Grassland,
       height: 5,
       width: 5,
     });
 
-    world = new World(generator);
+    const world = new World(generator);
 
     world.build({
       rulesRegistry,
     });
 
-    Tileset.fromSurrounding(world.get(2, 2))
-      .forEach((tile) => {
-        tile.terrain = new Grassland();
-        tile.terrain.features().push(new Shield());
-      })
+    world.getBy(() => true)
+      .forEach((tile) => tile.terrain().features().push(new Shield()))
     ;
-  }
 
-  const player = new Player(),
-    city = new City({
-      player,
-      rulesRegistry,
-      tile: tile || world.get(2, 2),
-    })
-  ;
+    return world;
+  })(),
+  tile = world.get(2, 2),
+  player = new Player({
+    rulesRegistry,
+  }),
+  cityImprovementRegistry = CityImprovementRegistry.getInstance(),
+  tileImprovementRegistry = TileImprovementRegistry.getInstance(),
+} = {}) => {
+  const city = new City({
+    player,
+    rulesRegistry,
+    tile,
+  });
 
   cityImprovementRegistry.getBy('city', city)
     .forEach((improvement) => cityImprovementRegistry.unregister(improvement))
@@ -53,18 +52,24 @@ export const setUpCity = ({
 
   Tileset.fromSurrounding(city.tile())
     .forEach((tile) => {
-      if (tile.terrain instanceof Water) {
+      if (tile.terrain() instanceof Water) {
         return;
       }
 
-      [
-        new Irrigation(tile),
-        new Road(tile),
-      ]
-        .forEach((improvement) => tileImprovementRegistry.register(improvement))
-      ;
+      if ([Desert, Grassland, Hills, Plains, River].includes(tile.terrain().constructor)) {
+        tileImprovementRegistry.register(new Irrigation(tile));
+      }
+      else if ([Hills, Mountains].includes(tile.terrain().constructor)) {
+        tileImprovementRegistry.register(new Mine(tile));
+      }
 
-      player.seenTiles().push(tile);
+      if (! [Arctic, Ocean, River].includes(tile.terrain().constructor)) {
+        tileImprovementRegistry.register(new Road(tile));
+      }
+
+      player.seenTiles()
+        .push(tile)
+      ;
     })
   ;
 

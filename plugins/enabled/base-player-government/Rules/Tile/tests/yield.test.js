@@ -105,7 +105,7 @@ describe('tile:yield:monarchy', () => {
 
           rulesRegistry.process('tile:yield', tileYield, tile, player);
 
-          it(`${tile.terrain.constructor.name}${tile.terrain.features().length ? ` (${tile.terrain.features().map((feature) => feature.constructor.name).join('')})` : ''} under a Monarchy should have ${expectedValue} ${Yield.name}.`, () => {
+          it(`${tile.terrain().constructor.name}${tile.terrain().features().length ? ` (${tile.terrain().features().map((feature) => feature.constructor.name).join('')})` : ''} under a Monarchy should have ${expectedValue} ${Yield.name}.`, () => {
             assert.strictEqual(
               tileYield.value(),
               expectedValue

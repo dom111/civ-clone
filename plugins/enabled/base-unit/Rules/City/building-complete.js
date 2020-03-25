@@ -6,8 +6,10 @@ import {Settlers} from '../../Units/Settlers.js';
 export const getRules = () => [
   new Rule(
     'city:building-complete:unit:settlers',
-    new Criterion((city, unit) => unit instanceof Settlers),
-    new Effect((city) => city.shrink())
+    new Criterion((cityBuild, unit) => unit instanceof Settlers),
+    new Effect((cityBuild) => cityBuild.city()
+      .shrink()
+    )
   ),
 ];
 

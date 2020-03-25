@@ -50,9 +50,9 @@ ${
 Worked Tiles:
 ${
   city.tilesWorked()
-    .map((tile) => `${tile.terrain.constructor.name}${
-      tile.terrain.features().length ?
-        ` (${tile.terrain.features().map((feature) => feature.constructor.name).join(', ')})` :
+    .map((tile) => `${tile.terrain().constructor.name}${
+      tile.terrain().features().length ?
+        ` (${tile.terrain().features().map((feature) => feature.constructor.name).join(', ')})` :
         ''
     }${
       TileImprovementRegistry.getInstance()

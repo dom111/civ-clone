@@ -30,7 +30,7 @@ export const getRules = ({
       isNeighbouringTile,
       hasEnoughMovesLeft,
       new Criterion((unit) => unit instanceof LandUnit),
-      new Criterion((unit, to) => to.terrain instanceof Water),
+      new Criterion((unit, to) => to.terrain() instanceof Water),
       new Criterion((unit, to) => unitRegistry.getBy('tile', to)
         .every((tileUnit) => tileUnit.player() === unit.player())
       ),

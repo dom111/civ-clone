@@ -1,28 +1,6 @@
-import {
-  Aqueduct,
-  Barracks,
-  CityWalls,
-  Colosseum,
-  Courthouse,
-  Granary,
-  Library,
-  Marketplace,
-  Palace,
-  Temple,
-} from './CityImprovements.js';
-import AvailableCityImprovementRegistry from '../core-city-improvement/AvailableCityImprovementRegistry.js';
+import * as CityImprovements from './CityImprovements.js';
+import AvailableCityBuildItemsRegistry from '../base-city/AvailableCityBuildItemsRegistry.js';
 
-AvailableCityImprovementRegistry.getInstance()
-  .register(...[
-    Aqueduct,
-    Barracks,
-    CityWalls,
-    Colosseum,
-    Courthouse,
-    Granary,
-    Library,
-    Marketplace,
-    Palace,
-    Temple,
-  ])
+AvailableCityBuildItemsRegistry.getInstance()
+  .register(...Object.values(CityImprovements))
 ;

@@ -1,11 +1,15 @@
+import And from './Criteria/And.js';
 import Criteria from './Criteria.js';
 import Criterion from './Criterion.js';
 import Effect from './Effect.js';
+import {Normal} from './Priorities.js';
+import Priority from './Priority.js';
 
 export class Rule {
   #criteria;
   #effect;
   #name;
+  #priority = new Normal();
 
   constructor(name, ...values) {
     const criteria = [];
@@ -16,17 +20,27 @@ export class Rule {
           throw new TypeError('Rule: effect already specified, but another was provided.');
         }
 
-        return this.#effect = value;
+        this.#effect = value;
+
+        return;
       }
 
       if (value instanceof Criteria || value instanceof Criterion) {
-        return criteria.push(value);
+        criteria.push(value);
+
+        return;
       }
 
-      throw new TypeError(`Unknown value passed to Rule#constructor: ${Object.prototype.toString.call(value)}.`);
+      if (value instanceof Priority) {
+        this.#priority = value;
+
+        return;
+      }
+
+      throw new TypeError(`Unknown value passed to Rule#constructor: ${value ? value.constructor.name : value}.`);
     });
 
-    this.#criteria = new Criteria(...criteria);
+    this.#criteria = new And(...criteria);
     this.#name = name;
   }
 
@@ -38,6 +52,10 @@ export class Rule {
     return this.#name;
   }
 
+  priority() {
+    return this.#priority;
+  }
+
   process(...args) {
     if (this.hasEffect()) {
       return this.#effect.apply(...args);
@@ -45,7 +63,7 @@ export class Rule {
   }
 
   validate(...args) {
-    if (this.#criteria instanceof Criteria) {
+    if (this.#criteria instanceof And) {
       return this.#criteria.validate(...args);
     }
   }

@@ -1,11 +1,6 @@
-import '../../../registerYields.js';
-import {Happiness, Unhappiness} from '../../../Yields.js';
+import {Happiness} from '../../../Yields.js';
 import {Luxuries} from '../../../../base-luxuries/Yields.js';
-import PlayerGovernment from '../../../../base-player-government/PlayerGovernment.js';
-import PlayerGovernmentRegistry from '../../../../base-player-government/PlayerGovernmentRegistry.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
-import Unit from '../../../../core-unit/Unit.js';
-import UnitRegistry from '../../../../core-unit/UnitRegistry.js';
 import assert from 'assert';
 import cost from '../cost.js';
 import governmentCost from '../../../../base-player-government/Rules/City/cost.js';
@@ -81,73 +76,5 @@ describe('city:cost', () => {
     ;
 
     assert.strictEqual(happiness.value(), 1);
-  });
-
-  it('should produce Unhappiness in a city with a size of 6 or more ', () => {
-    const city = setUpCity({
-        size: 6,
-        rulesRegistry,
-      }),
-      [unhappiness] = city.yields()
-        .filter((cityYield) => cityYield instanceof Unhappiness)
-    ;
-
-    assert.strictEqual(unhappiness.value(), 1);
-  });
-
-  it('should eradicate Unhappiness by martial law', () => {
-    const city = setUpCity({
-        size: 6,
-        rulesRegistry,
-      }),
-      player = city.player(),
-      tile = city.tile(),
-      playerGovernment = new PlayerGovernment({player})
-    ;
-
-    PlayerGovernmentRegistry.getInstance()
-      .register(playerGovernment);
-
-    UnitRegistry.getInstance()
-      .register(new Unit({
-        player,
-        city,
-        tile,
-      }));
-
-    const [unhappiness] = city.yields()
-      .filter((cityYield) => cityYield instanceof Unhappiness)
-    ;
-
-    assert.strictEqual(unhappiness.value(), 0);
-  });
-
-  it('should eradicate Unhappiness by martial law for up to 4 units', () => {
-    const city = setUpCity({
-        size: 10,
-        rulesRegistry,
-      }),
-      player = city.player(),
-      tile = city.tile(),
-      playerGovernment = new PlayerGovernment({player})
-    ;
-
-    PlayerGovernmentRegistry.getInstance()
-      .register(playerGovernment);
-
-    for (let i = 0; i < 5; i++) {
-      UnitRegistry.getInstance()
-        .register(new Unit({
-          player,
-          city,
-          tile,
-        }));
-    }
-
-    const [unhappiness] = city.yields()
-      .filter((cityYield) => cityYield instanceof Unhappiness)
-    ;
-
-    assert.strictEqual(unhappiness.value(), 1);
   });
 });

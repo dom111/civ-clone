@@ -26,7 +26,7 @@ engine.on('world:built', (map) => {
     usedStartSquares = []
   ;
 
-  let startingSquares = map.getBy((tile) => tile.terrain instanceof Land)
+  let startingSquares = map.getBy((tile) => tile.terrain() instanceof Land)
     .sort((a, b) => tileScore(b) - tileScore(a))
     .slice(0, numberOfPlayers * 20)
   ;
@@ -45,7 +45,7 @@ engine.on('world:built', (map) => {
 
     startingSquares = startingSquares
       .filter((tile) => ! usedStartSquares.includes(tile))
-      .filter((tile) => usedStartSquares.every((startSquare) => startSquare.distanceFrom(tile) > 10))
+      .filter((tile) => usedStartSquares.every((startSquare) => startSquare.distanceFrom(tile) > 4))
     ;
 
     const startingSquare = startingSquares[Math.floor(startingSquares.length * Math.random())];

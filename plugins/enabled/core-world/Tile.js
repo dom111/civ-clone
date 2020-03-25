@@ -5,22 +5,26 @@ import {Yield} from '../core-yields/Yield.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
 
 export class Tile {
+  #map;
   #neighbours;
   #rulesRegistry;
+  #terrain;
+  #x;
+  #y;
   #yieldCache = new Map();
 
   constructor({x, y, terrain, map, rulesRegistry = RulesRegistry.getInstance()}) {
-    this.x = x;
-    this.y = y;
-    this.terrain = terrain;
-    this.map = map;
+    this.#x = x;
+    this.#y = y;
+    this.#terrain = terrain;
+    this.#map = map;
 
     this.#rulesRegistry = rulesRegistry;
 
     // when generating use this:
     // this.seed = Math.ceil(Math.random() * 1e7);
-    // this.seed = this.seed || (this.x * this.y);
-    this.seed = this.seed || (this.x ^ this.y);
+    // this.seed = this.seed || (this.#x * this.#y);
+    this.seed = this.seed || (this.#x ^ this.#y);
   }
 
   clearYieldCache(player) {
@@ -49,41 +53,41 @@ export class Tile {
 
   getNeighbour(direction) {
     if (direction === 'n') {
-      return this.map.get(this.x, this.y - 1);
+      return this.#map.get(this.#x, this.#y - 1);
     }
 
     if (direction === 'ne') {
-      return this.map.get(this.x + 1, this.y - 1);
+      return this.#map.get(this.#x + 1, this.#y - 1);
     }
 
 
     if (direction === 'e') {
-      return this.map.get(this.x + 1, this.y);
+      return this.#map.get(this.#x + 1, this.#y);
     }
 
 
     if (direction === 'se') {
-      return this.map.get(this.x + 1, this.y + 1);
+      return this.#map.get(this.#x + 1, this.#y + 1);
     }
 
 
     if (direction === 's') {
-      return this.map.get(this.x, this.y + 1);
+      return this.#map.get(this.#x, this.#y + 1);
     }
 
 
     if (direction === 'sw') {
-      return this.map.get(this.x - 1, this.y + 1);
+      return this.#map.get(this.#x - 1, this.#y + 1);
     }
 
 
     if (direction === 'w') {
-      return this.map.get(this.x - 1, this.y);
+      return this.#map.get(this.#x - 1, this.#y);
     }
 
 
     if (direction === 'nw') {
-      return this.map.get(this.x - 1, this.y - 1);
+      return this.#map.get(this.#x - 1, this.#y - 1);
     }
   }
 
@@ -113,7 +117,7 @@ export class Tile {
       [1, 0],
       [1, -1],
     ]
-      .map(([x, y]) => Math.hypot(...[(this.x - tile.x) + (x * this.map.width()), (this.y - tile.y) + (y * this.map.height())]))
+      .map(([x, y]) => Math.hypot(...[(this.#x - tile.x()) + (x * this.#map.width()), (this.#y - tile.y()) + (y * this.#map.height())]))
       .sort((a, b) => a - b)
     ;
 
@@ -133,7 +137,7 @@ export class Tile {
   }
 
   isLand() {
-    return this.terrain instanceof Land;
+    return this.#terrain instanceof Land;
   }
 
   isNeighbourOf(otherTile) {
@@ -143,7 +147,7 @@ export class Tile {
   }
 
   isWater() {
-    return this.terrain instanceof Water;
+    return this.#terrain instanceof Water;
   }
 
   isVisible(player) {
@@ -158,6 +162,10 @@ export class Tile {
   //     y: data.y,
   //   });
   // }
+
+  map() {
+    return this.#map;
+  }
 
   resource(type, player) {
     const yieldCache = this.getYieldCache(player);
@@ -180,9 +188,9 @@ export class Tile {
   // save() {
   //   return {
   //     Type: this.constructor.name,
-  //     terrain: this.terrain.save(),
-  //     x: this.x,
-  //     y: this.y,
+  //     terrain: this.#terrain.save(),
+  //     x: this.#x,
+  //     y: this.#y,
   //   };
   // }
 
@@ -204,15 +212,27 @@ export class Tile {
     ;
   }
 
+  terrain() {
+    return this.#terrain;
+  }
+
+  setTerrain(terrain) {
+    this.#terrain = terrain;
+  }
+
+  x() {
+    return this.#x;
+  }
+
+  y() {
+    return this.#y;
+  }
+
   yields({
     player,
     yieldRegistry = YieldRegistry.getInstance(),
     yields = yieldRegistry.entries(),
   }) {
-    if (yields.some((y) => typeof y !==  'function')) {
-      throw new Error('blah');
-    }
-
     return yields.map((YieldType) => this.resource(new YieldType(), player));
   }
 }

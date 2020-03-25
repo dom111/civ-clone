@@ -272,7 +272,7 @@ describe('unit:action', () => {
           });
 
           world.get(3, 4)
-            .terrain = new Ocean()
+            .setTerrain(new Ocean())
           ;
 
           const [player] = addPlayers(),

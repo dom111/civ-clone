@@ -37,7 +37,7 @@ export const getRules = ({
   ]
     .map(([Terrain, cost]) => new Rule(
       `unit:movementCost:${[Terrain.name.toLowerCase()]}`,
-      new Criterion((unit, to) => to.terrain instanceof Terrain),
+      new Criterion((unit, to) => to.terrain() instanceof Terrain),
       new Effect(() => cost)
     ))
   ,

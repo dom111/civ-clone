@@ -57,6 +57,10 @@ export class Registry {
     });
   }
 
+  some(iterator) {
+    return this.#entries.some(iterator);
+  }
+
   unregister(...entities) {
     entities.forEach((entity) => {
       const index = this.#entries.indexOf(entity);

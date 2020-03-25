@@ -1,9 +1,6 @@
-import {Research, Tax} from './TradeRates.js';
+import * as TradeRates from './TradeRates.js';
 import AvailableTradeRateRegistry from './AvailableTradeRateRegistry.js';
 
 AvailableTradeRateRegistry.getInstance()
-  .register(
-    Research,
-    Tax
-  )
+  .register(...Object.values(TradeRates))
 ;

@@ -13,10 +13,6 @@
     },
     {
       "type": "script",
-      "file": "AvailableCityImprovementRegistry.js"
-    },
-    {
-      "type": "script",
       "file": "CityImprovementRegistry.js"
     }
   ]

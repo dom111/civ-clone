@@ -20,15 +20,39 @@
     },
     {
       "type": "script",
-      "file": "OneCriteria.js"
-    },
-    {
-      "type": "script",
       "file": "RulesRegistry.js"
     },
     {
       "type": "script",
       "file": "Rule.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/Normal.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/Low.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/High.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities.js"
+    },
+    {
+      "type": "script",
+      "file": "Criteria/And.js"
+    },
+    {
+      "type": "script",
+      "file": "Criteria/Or.js"
+    },
+    {
+      "type": "script",
+      "file": "Priority.js"
     }
   ]
 }

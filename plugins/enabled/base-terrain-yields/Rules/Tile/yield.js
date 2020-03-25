@@ -33,7 +33,7 @@ export const getRules = () => [
     .map(([YieldType, TerrainType, value]) => new Rule(
       `tile:yield:${[YieldType, TerrainType].map((entity) => entity.name.toLowerCase()).join(':')}`,
       new Criterion((tileYield) => tileYield instanceof YieldType),
-      new Criterion((tileYield, tile) => tile.terrain instanceof TerrainType),
+      new Criterion((tileYield, tile) => tile.terrain() instanceof TerrainType),
       new Effect((tileYield) => tileYield.add(value))
     ))
   ,
