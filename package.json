@@ -14,7 +14,8 @@
         "profile": "node --prof --experimental-vm-modules ./boot.js -- --reportTurns=250 --reportAndQuit=1",
         "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
         "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
-        "test": "mocha --delay run-tests.cjs",
+        "test": "mocha ./**/tests/*.test.js",
+        "test:coverage": "c8 mocha ./**/tests/*.test.js",
         "validate": "./checkPlugins.sh"
     },
     "author": "dom111 <dom111@users.noreply.github.com>",
@@ -37,12 +38,13 @@
         }
     },
     "engines": {
-        "node" : ">=13.0.0"
+        "node": ">=13.0.0"
     },
     "dependencies": {},
     "devDependencies": {
         "ajv-cli": "^3.0.0",
         "babel-eslint": "^10.0.3",
+        "c8": "^7.1.0",
         "eslint": "^6.8.0",
         "eslint-plugin-import": "^2.19.1",
         "husky": "^3.1.0",

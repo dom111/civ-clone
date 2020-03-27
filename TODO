@@ -58,6 +58,8 @@
 - [X] Handle `Unit#transport` somehow. Perhaps this needs to be a `Registry` to avoid adding it to `Unit`?
 - [X] Implement `Priority` for `Rule`s to aid processing `Trade`.
 - [X] Add wonders.
+- [-] Add wealth. - not civ 1 - delay
+- [-] Add build-queue. - not civ 1 - delay
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -75,8 +77,6 @@
 - [ ] Feature parity with Civilization.
 - [ ] Add more units.
 - [ ] Add more city improvements.
-- [ ] Add wealth. - not civ 1 - delay
-- [ ] Add build-queue. - not civ 1 - delay
 - [ ] Add Barbarians.
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.

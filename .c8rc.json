@@ -1,0 +1,11 @@
+{
+  "all": true,
+  "exclude": [
+    "**/tests/**",
+    "*.test.js",
+    "node_modules/**",
+    "boot.js",
+    "mock.engine.js",
+    "**/register*.js"
+  ]
+}

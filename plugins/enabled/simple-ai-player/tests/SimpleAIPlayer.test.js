@@ -40,11 +40,6 @@ import unitYield from '../../base-unit-yields/Rules/Unit/yield.js';
 import unitsToMove from '../../base-unit/PlayerActions/unitsToMove.js';
 import validateMove from '../../base-unit/Rules/Unit/validateMove.js';
 
-global.engine = {
-  emit: () => {},
-  option: () => {},
-};
-
 describe('SimpleAIPlayer', () => {
   const rulesRegistry = new RulesRegistry(),
     playerGovernmentRegistry = new PlayerGovernmentRegistry(),
