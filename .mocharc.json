@@ -1,5 +1,4 @@
 {
-  "allowUncaught": true,
   "file": [
     "./src/tests/lib/mock.engine.js"
   ],

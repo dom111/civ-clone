@@ -3,76 +3,18 @@
   "title": "Base City Improvements",
   "version": "0.1.0",
   "dependencies": [
-    "base-unit-improvements",
-    "core-city",
     "core-city-improvement",
     "core-rules",
-    "base-currency",
-    "base-science",
-    "base-city-happiness",
-    "base-city",
-    "base-terrain-yields"
+    "core-registry"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Rules/Unit/created.js"
-    },
     {
       "type": "script",
       "file": "Rules/City/build-cost.js"
     },
     {
       "type": "script",
-      "file": "Rules/City/grow.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/City/build.js"
-    },
-    {
-      "type": "script",
-      "file": "Rules/City/created.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Temple.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Library.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Granary.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Aqueduct.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Barracks.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Marketplace.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Courthouse.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/CityWalls.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Palace.js"
     },
     {
       "type": "script",
@@ -81,14 +23,6 @@
     {
       "type": "script",
       "file": "Rules/City/improvement-created.js"
-    },
-    {
-      "type": "script",
-      "file": "CityImprovements/Colosseum.js"
-    },
-    {
-      "type": "script",
-      "file": "registerCityImprovements.js"
     },
     {
       "type": "script",

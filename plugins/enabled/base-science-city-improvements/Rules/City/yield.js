@@ -1,7 +1,7 @@
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import {Library} from '../../../base-city-improvements/CityImprovements.js';
+import {Library} from '../../../base-city-improvements-civ1/CityImprovements.js';
 import {Library as LibraryModifier} from '../../YieldModifier/Library.js';
 import {Research} from '../../../base-science/Yields.js';
 import Rule from '../../../core-rules/Rule.js';

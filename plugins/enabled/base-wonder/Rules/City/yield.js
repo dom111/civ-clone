@@ -9,7 +9,7 @@ import Effect from '../../../core-rules/Effect.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import {Research} from '../../../base-science/Yields.js';
 import Rule from '../../../core-rules/Rule.js';
-import {Temple} from '../../../base-city-improvements/CityImprovements.js';
+import {Temple} from '../../../base-city-improvements-civ1/CityImprovements.js';
 import {Trade} from '../../../base-terrain-yield-trade/Yields.js';
 import WonderRegistry from '../../../core-wonder/WonderRegistry.js';
 

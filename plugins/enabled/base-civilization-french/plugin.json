@@ -1,0 +1,13 @@
+{
+  "name": "base-civilization-french",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "French.js"
+    }
+  ]
+}

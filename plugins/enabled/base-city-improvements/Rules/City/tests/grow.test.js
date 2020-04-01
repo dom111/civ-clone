@@ -1,10 +1,10 @@
 import CityGrowthRegistry from '../../../../base-city/CityGrowthRegistry.js';
-import {Granary} from '../../../CityImprovements.js';
+import {Granary} from '../../../../base-city-improvements-civ1/CityImprovements.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import assert from 'assert';
 import cityGrow from '../../../../base-city/Rules/City/grow.js';
 import created from '../../../../base-city/Rules/City/created.js';
-import grow from '../grow.js';
+import grow from '../../../../base-city-improvement-granary/Rules/City/grow.js';
 import improvementCreated from  '../improvement-created.js';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 

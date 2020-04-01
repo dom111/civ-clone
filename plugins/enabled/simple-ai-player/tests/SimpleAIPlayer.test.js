@@ -1,10 +1,9 @@
-import * as Civilizations from '../../base-civilizations/Civilizations.js';
+import * as Civilizations from '../../base-civilizations-civ1/Civilizations.js';
 import AdvanceRegistry from '../../core-science/AdvanceRegistry.js';
 import BasePathFinder from '../../base-world-path-finder/BasePathFinder.js';
 import CityImprovementRegistry from '../../core-city-improvement/CityImprovementRegistry.js';
 import CityRegistry from '../../core-city/CityRegistry.js';
 import CivilizationRegistry from '../../core-civilization/CivilizationRegistry.js';
-import {Militia} from '../../base-unit/Units.js';
 import PathFinderRegistry from '../../core-world/PathFinderRegistry.js';
 import PlayerActionRegistry from '../../core-player/PlayerActionRegistry.js';
 import PlayerGovernment from '../../base-player-government/PlayerGovernment.js';
@@ -18,6 +17,7 @@ import TileImprovementRegistry from '../../core-tile-improvements/TileImprovemen
 import TransportRegistry from '../../base-unit-transport/TransportRegistry.js';
 import UnitImprovementRegistry from '../../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
+import {Warrior} from '../../base-units-civ1/Units.js';
 import action from '../../base-unit/Rules/Unit/action.js';
 import activate from '../../base-unit-improvements/Rules/Unit/activate.js';
 import assert from 'assert';
@@ -36,9 +36,10 @@ import transportYield from '../../base-unit-transport/Rules/Unit/yield.js';
 import turnYear from '../../base-game-year/Rules/Turn/year.js';
 import unitCreated from '../../base-unit/Rules/Unit/created.js';
 import unitCreatedPlayer from '../../base-player/Rules/Unit/created.js';
-import unitYield from '../../base-unit-yields/Rules/Unit/yield.js';
 import unitsToMove from '../../base-unit/PlayerActions/unitsToMove.js';
 import validateMove from '../../base-unit/Rules/Unit/validateMove.js';
+import warriorUnitYield from '../../base-unit-warrior/Rules/Unit/yield.js';
+import warriorYield from '../../base-unit-warrior/Rules/Unit/yield.js';
 
 describe('SimpleAIPlayer', () => {
   const rulesRegistry = new RulesRegistry(),
@@ -112,6 +113,7 @@ describe('SimpleAIPlayer', () => {
     ...activate({
       unitImprovementRegistry,
     }),
+    ...warriorYield(),
     ...movementCost(),
     ...validateMove(),
     ...createdYields(),
@@ -139,7 +141,7 @@ describe('SimpleAIPlayer', () => {
       unitRegistry,
     }),
     ...unitCreatedPlayer(),
-    ...unitYield()
+    ...warriorUnitYield()
   );
 
   playerActionRegistry.register(
@@ -156,13 +158,19 @@ describe('SimpleAIPlayer', () => {
 
   it('should move land units around to explore the available map', () => {
     const world = simpleWorldLoader('5O3GO3GO3G'),
-      [player] = createPlayers(),
-      unit = new Militia({
-        player,
-        rulesRegistry,
-        tile: world.get(1, 1),
-      })
+      [player] = createPlayers()
     ;
+
+    assert.strictEqual(player.seenTiles().length, 0);
+
+    const unit = new Warrior({
+      player,
+      rulesRegistry,
+      tile: world.get(1, 1),
+    })
+    ;
+
+    assert.strictEqual(unit.visibility().value(), 1);
 
     assert.strictEqual(player.seenTiles().length, 9);
 
@@ -207,7 +215,7 @@ describe('SimpleAIPlayer', () => {
   it('should embark land units onto naval transport units', () => {
     const world = simpleWorldLoader('6OG18O'),
       [player] = createPlayers(),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: world.get(1, 1),
@@ -236,7 +244,7 @@ describe('SimpleAIPlayer', () => {
   it('should disembark land units from naval transport units', () => {
     const world = simpleWorldLoader('5OG10O'),
       [player] = createPlayers(),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: world.get(2, 2),
@@ -278,7 +286,7 @@ describe('SimpleAIPlayer', () => {
       [enemy] = getPlayers({
         rulesRegistry,
       }),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: world.get(1, 1),

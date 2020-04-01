@@ -4,13 +4,13 @@
   "version": "0.1.0",
   "dependencies": [
     "base-terrain-yields",
-    "base-unit",
     "core-city",
     "core-civilization",
     "core-player",
     "core-rules",
     "core-terrain",
-    "core-unit"
+    "core-unit",
+    "base-units-civ1"
   ],
   "components": [
     {

@@ -8,7 +8,7 @@ import {
   Marketplace,
   Palace,
   Temple,
-} from '../../../base-city-improvements/CityImprovements.js';
+} from '../../../base-city-improvements-civ1/CityImprovements.js';
 import {
   CeremonialBurial,
   CodeOfLaws,

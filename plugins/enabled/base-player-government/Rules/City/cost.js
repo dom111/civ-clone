@@ -4,7 +4,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import PlayerGovernmentRegistry from '../../PlayerGovernmentRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
-import {Settlers} from '../../../base-unit/Units.js';
+import {Settlers} from '../../../base-units-civ1/Units.js';
 import {Unhappiness} from '../../../base-city-happiness/Yields.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 

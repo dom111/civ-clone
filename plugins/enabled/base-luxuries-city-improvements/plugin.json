@@ -17,10 +17,10 @@
   ],
   "depdendencies": [],
   "dependencies": [
-    "base-city-improvements",
     "base-luxuries",
     "core-city-improvement",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "base-city-improvements-civ1"
   ]
 }

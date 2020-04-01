@@ -1,0 +1,30 @@
+{
+  "name": "base-civilizations-civ1",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-civilization-american",
+    "base-civilization-aztec",
+    "base-civilization-babylonian",
+    "base-civilization-english",
+    "base-civilization-french",
+    "base-civilization-german",
+    "base-civilization-greek",
+    "base-civilization-indian",
+    "base-civilization-roman",
+    "base-civilization-russian",
+    "core-civilization",
+    "base-civilization-japanese",
+    "base-civilization-polish",
+    "base-civilization-spanish"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerCivilizations.js"
+    },
+    {
+      "type": "script",
+      "file": "Civilizations.js"
+    }
+  ]
+}

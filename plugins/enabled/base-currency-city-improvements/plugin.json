@@ -2,11 +2,11 @@
   "name": "base-currency-city-improvements",
   "version": "0.1.0",
   "dependencies": [
-    "base-city-improvements",
     "base-currency",
     "core-city-improvement",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "base-city-improvements-civ1"
   ],
   "components": [
     {

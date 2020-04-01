@@ -60,6 +60,10 @@
 - [X] Add wonders.
 - [-] Add wealth. - not civ 1 - delay
 - [-] Add build-queue. - not civ 1 - delay
+- [X] Break `base-civilizations` into individual plugins.
+- [X] Break `base-unit` into individual plugins.
+- [X] Break `base-city-improvements` into individual plugins.
+- [X] Fix bug where `SimpleAIPlayer` can't perform an action for a unit.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -86,10 +90,10 @@
 - [ ] Add diplomacy
 - [ ] Add leader traits
 - [ ] Modify AI to adjust trade rates
-- [ ] Add `load` and `save` methods to `World`.
+- [ ] Add `load` and `save` methods to `World` - need to consider the available plugins when saving/loading - mandating the exact plugins seems too much, but need to consider this before working on this functionality.
 - [ ] Replace `Tile#features` with `Registry` pattern - not sure on how useful this is, since it'll necessitate a refactor in `World#build`/`Generator`.
 - [ ] Add ability to sell `CityImprovement`s.
-- [ ] Add `Caravan` and `Diplomat` and correctly exclude these from `city:cost`s.
+- [ ] Add `Caravan` and `Diplomat` and correctly exclude these from `city:cost`s. (`Diplomatic` type of `Unit`?)
 - [ ] (Eventually) Convert all plugins to individual packages on npm so that plugin packs can be provided that combine a bunch of plugins to match the functionality of a desired Civ game.
 - [ ] Add AI routine to avoid civil disorder.
 - [ ] Add benefits to 'we love the leader' day.
@@ -98,9 +102,13 @@
 - [ ] Investigate why units STILL trend north-east.
 - [ ] Make `Player#civilization` use methods instead of bare properties.
 - [ ] Add rules to wake enemy units that are `Sleep`ing when moving within their visible range.
-- [ ] Consider breaking all `Wonder`s (and maybe everything like improvements and units etc...) into individual plugins... `Wonder`s specifically as they have a lot of dependencies - maybe individual plugins for the effects too as the wonders themselves still exist across most games, but the effects change...
 - [ ] Add effects for `GreatWall`.
 - [ ] Add effects for `Pyramids`.
 - [ ] Add more variance in the world that are generated again - no islands appear to be generated no matter the settings used.
 - [ ] Fix any tests that rely on global instances.
-- [ ] Fix bug where `SimpleAIPlayer` can't perform an action for a unit.
+- [ ] Add `Zulu`, `Egyptian`, `Chinese`, `Mongol` civilizations for Civ1 compatibility.
+- [ ] Add `Pillage` unit action.
+- [ ] Add `Sleep` action definition `Rule`s.
+- [ ] Break `base-terrain` into individual `base-terrain-x` plugins and incorporate `movementCost`s.
+- [ ] Break `base-wonder` into individual plugins.
+- [ ] Make `Civilization` and leader choice a bit better - add `Leader` class and use `Player#setCivilization` or something.

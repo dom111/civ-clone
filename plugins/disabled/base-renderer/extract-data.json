@@ -328,7 +328,7 @@
                 "y": 160,
                 "contents": [
                     { "name": "settler", "x": 0 },
-                    { "name": "militia", "x": 16 },
+                    { "name": "warrior", "x": 16 },
                     { "name": "phalanx", "x": 32 },
                     { "name": "legion", "x": 48 },
                     { "name": "musketeers", "x": 64 },

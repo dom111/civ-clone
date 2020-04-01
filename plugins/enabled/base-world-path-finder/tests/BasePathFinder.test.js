@@ -4,17 +4,19 @@ import {simpleRLEDecoder, simpleWorldLoader} from '../../base-world/tests/lib/si
 import BasePathFinder from '../BasePathFinder.js';
 import City from '../../core-city/City.js';
 import CityRegistry from '../../core-city/CityRegistry.js';
-import {Militia} from '../../base-unit/Units.js';
+import Path from '../../core-world/Path.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
+import {Warrior} from '../../base-units-civ1/Units.js';
 import action from '../../base-unit/Rules/Unit/action.js';
 import assert from 'assert';
 import created from '../../base-unit-yields/Rules/Unit/created.js';
 import getPlayers from '../../base-player/tests/lib/getPlayers.js';
 import moved from '../../base-unit/Rules/Unit/moved.js';
 import movementCost from '../../base-unit/Rules/Unit/movementCost.js';
-import unitYield from '../../base-unit-yields/Rules/Unit/yield.js';
 import validateMove from '../../base-unit/Rules/Unit/validateMove.js';
+import warriorUnitYield from '../../base-unit-warrior/Rules/Unit/yield.js';
+import warriorYield from '../../base-unit-warrior/Rules/Unit/yield.js';
 
 describe('BasePathFinder', () => {
   const rulesRegistry = new RulesRegistry(),
@@ -29,10 +31,11 @@ describe('BasePathFinder', () => {
       rulesRegistry,
       unitRegistry,
     }),
+    ...warriorYield(),
     ...moved(),
     ...validateMove(),
     ...created(),
-    ...unitYield()
+    ...warriorUnitYield()
   );
 
   it('should return the shortest path length for neighbouring tiles', () => {
@@ -42,7 +45,7 @@ describe('BasePathFinder', () => {
       }),
       startTile = world.get(3, 3),
       targetTile = world.get(4, 4),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: startTile,
@@ -53,6 +56,7 @@ describe('BasePathFinder', () => {
       path = pathFinder.generate()
     ;
 
+    assert(path instanceof Path);
     assert.strictEqual(path.length, 2);
   });
 
@@ -67,7 +71,7 @@ describe('BasePathFinder', () => {
       }),
       startTile = world.get(1, 1),
       targetTile = world.get(5, 6),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: startTile,
@@ -78,6 +82,7 @@ describe('BasePathFinder', () => {
       path = pathFinder.generate()
     ;
 
+    assert(path instanceof Path);
     assert.strictEqual(path.length, 45);
   });
 
@@ -89,12 +94,12 @@ describe('BasePathFinder', () => {
       }),
       startTile = world.get(1, 1),
       targetTile = world.get(4, 4),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: startTile,
       }),
-      enemyUnit = new Militia({
+      enemyUnit = new Warrior({
         player: enemy,
         rulesRegistry,
         tile: world.get(3, 3),
@@ -113,6 +118,7 @@ describe('BasePathFinder', () => {
       path = pathFinder.generate()
     ;
 
+    assert(path instanceof Path);
     assert.strictEqual(path.length, 6);
 
     unitRegistry.unregister(unit, enemyUnit);
@@ -126,7 +132,7 @@ describe('BasePathFinder', () => {
       }),
       startTile = world.get(1, 1),
       targetTile = world.get(3, 3),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: startTile,
@@ -147,7 +153,7 @@ describe('BasePathFinder', () => {
       }),
       startTile = world.get(1, 1),
       targetTile = world.get(2, 7),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: startTile,
@@ -158,6 +164,7 @@ describe('BasePathFinder', () => {
       path = pathFinder.generate()
     ;
 
+    assert(path instanceof Path);
     assert.deepStrictEqual(
       [
         [1, 1],

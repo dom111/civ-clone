@@ -11,14 +11,14 @@ import {
 } from '../../../base-science/Advances.js';
 import {
   Catapult,
-  Cavalry,
   Chariot,
-  Knights,
-  Militia,
+  Horseman,
+  Knight,
   Musketman,
   Spearman,
   Swordman,
-} from '../../../base-unit/Units.js';
+  Warrior,
+} from '../../../base-units-civ1/Units.js';
 import {
   Sail,
   Trireme,
@@ -30,15 +30,40 @@ import Or from '../../../core-rules/Criteria/Or.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
 
+// export const getRules = (Unit, RequiredAdvance, ObseletionAdvance, {
+//   playerResearchRegistry = PlayerResearchRegistry.getInstance(),
+// } = {}) => [
+//   new Rule(
+//     `city:build:unit:${[Unit, RequiredAdvance, ObseletionAdvance].map((Entity) => Entity ? Entity.name.toLowerCase() : 'none').join(':')}`,
+//     new Criterion((city, BuildItem) => BuildItem === Unit),
+//     new Effect((city) => new And(
+//       new Or(
+//         new Criterion(() => ! RequiredAdvance),
+//         new Criterion(() => playerResearchRegistry
+//           .getBy('player', city.player())
+//           .some((playerResearch) => playerResearch.completed(RequiredAdvance))
+//         )
+//       ),
+//       new Or(
+//         new Criterion(() => ! ObseletionAdvance),
+//         new Criterion(() => ! playerResearchRegistry
+//           .getBy('player', city.player())
+//           .some((playerResearch) => playerResearch.completed(ObseletionAdvance))
+//         )
+//       )
+//     ))
+//   )
+// ];
+
 export const getRules = ({
   playerResearchRegistry = PlayerResearchRegistry.getInstance(),
 } = {}) => [
   ...[
     [Catapult, Mathematics],
-    [Cavalry, HorsebackRiding, Gunpowder],
+    [Horseman, HorsebackRiding, Gunpowder],
     [Chariot, TheWheel, Chivalry],
-    [Knights, Chivalry],
-    [Militia, null, Gunpowder],
+    [Knight, Chivalry],
+    [Warrior, null, Gunpowder],
     [Musketman, Gunpowder],
     [Sail, Navigation],
     [Spearman, BronzeWorking, Gunpowder],

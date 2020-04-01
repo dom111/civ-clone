@@ -2,7 +2,7 @@ import CityImprovementRegistry from '../../../core-city-improvement/CityImprovem
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {Luxuries} from '../../../base-luxuries/Yields.js';
-import {Marketplace} from '../../../base-city-improvements/CityImprovements.js';
+import {Marketplace} from '../../../base-city-improvements-civ1/CityImprovements.js';
 import {Marketplace as MarketplaceModifier} from '../../YieldModifier/Marketplace.js';
 import Rule from '../../../core-rules/Rule.js';
 

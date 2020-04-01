@@ -1,11 +1,11 @@
-import NavalUnit from '../../base-unit/Types/NavalUnit.js';
+import Naval from '../../base-unit/Types/Naval.js';
 import RulesRegistry from '../../core-rules/RulesRegistry.js';
 import {Sleep} from '../../base-unit/Actions/Sleep.js';
 import TransportManifest from '../TransportManifest.js';
 import TransportRegistry from '../TransportRegistry.js';
 import Unit from '../../core-unit/Unit.js';
 
-export class NavalTransport extends NavalUnit {
+export class NavalTransport extends Naval {
   #transportRegistry;
 
   constructor({

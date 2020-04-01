@@ -1,0 +1,38 @@
+{
+  "name": "base-city-improvement-granary",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-city-improvements",
+    "base-currency",
+    "base-terrain-yields",
+    "core-city-improvement",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Granary.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/grow.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

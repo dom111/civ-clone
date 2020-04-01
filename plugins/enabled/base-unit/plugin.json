@@ -8,70 +8,15 @@
     "base-tile-improvements",
     "core-tile-improvements",
     "base-terrain",
-    "base-terrain-features",
     "base-unit-improvements",
     "core-city",
     "core-player",
-    "core-terrain",
-    "core-turn-based-game",
-    "base-city"
+    "core-turn-based-game"
   ],
   "components": [
     {
       "type": "script",
-      "file": "Types/NavalUnit.js"
-    },
-    {
-      "type": "script",
-      "file": "Types/LandUnit.js"
-    },
-    {
-      "type": "script",
-      "file": "Types/FortifiableUnit.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Catapult.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Cavalry.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Chariot.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Knights.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Militia.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Settlers.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Spearman.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Swordman.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Worker.js"
-    },
-    {
-      "type": "script",
       "file": "Types.js"
-    },
-    {
-      "type": "script",
-      "file": "Units.js"
     },
     {
       "type": "script",
@@ -83,15 +28,7 @@
     },
     {
       "type": "script",
-      "file": "Rules/City/building-complete.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/Unit/movementCost.js"
-    },
-    {
-      "type": "script",
-      "file": "Units/Musketman.js"
     },
     {
       "type": "script",
@@ -115,27 +52,7 @@
     },
     {
       "type": "script",
-      "file": "Actions/ClearForest.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/BuildIrrigation.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/BuildRoad.js"
-    },
-    {
-      "type": "script",
       "file": "Actions/CaptureCity.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/BuildMine.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/PlantForest.js"
     },
     {
       "type": "script",
@@ -144,14 +61,6 @@
     {
       "type": "script",
       "file": "Actions/Move.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/ClearJungle.js"
-    },
-    {
-      "type": "script",
-      "file": "Actions/ClearSwamp.js"
     },
     {
       "type": "script",
@@ -167,10 +76,6 @@
     },
     {
       "type": "script",
-      "file": "Actions/FoundCity.js"
-    },
-    {
-      "type": "script",
       "file": "registerPlayerActions.js"
     },
     {
@@ -183,15 +88,31 @@
     },
     {
       "type": "script",
-      "file": "registerAvailableUnits.js"
-    },
-    {
-      "type": "script",
       "file": "PlayerActions/unitsToMove.js"
     },
     {
       "type": "script",
       "file": "Actions/Sleep.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Worker.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Land.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Naval.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Fortifiable.js"
     }
   ]
 }

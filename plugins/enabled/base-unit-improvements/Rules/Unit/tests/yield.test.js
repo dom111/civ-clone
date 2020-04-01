@@ -2,18 +2,18 @@ import {Fortified as FortifiedImprovement, Veteran as VeteranImprovement} from '
 import {Fortified as FortifiedYieldModifier, Veteran as VeteranYieldModifier} from '../../../YieldModifiers.js';
 import Player from '../../../../core-player/Player.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
-import {Spearman} from '../../../../base-unit/Units.js';
+import {Spearman} from '../../../../base-units-civ1/Units.js';
 import UnitImprovementRegistry from '../../../UnitImprovementRegistry.js';
 import assert from 'assert';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
+import spearmanUnitYield from '../../../../base-unit-spearman/Rules/Unit/yield.js';
 import unitImprovementYield from '../yield.js';
-import unitYield from '../../../../base-unit-yields/Rules/Unit/yield.js';
 
 describe('unit:yield', () => {
   const rulesRegistry = new RulesRegistry();
 
   rulesRegistry.register(
-    ...unitYield(),
+    ...spearmanUnitYield(),
     ...unitImprovementYield()
   );
 

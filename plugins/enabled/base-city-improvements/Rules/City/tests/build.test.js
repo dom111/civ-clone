@@ -1,4 +1,4 @@
-import * as CityImprovements from '../../../CityImprovements.js';
+import * as CityImprovements from '../../../../base-city-improvements-civ1/CityImprovements.js';
 import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';

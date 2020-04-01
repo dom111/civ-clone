@@ -3,7 +3,7 @@ import AIPlayer from '../../../core-player/AIPlayer.js';
 import CivilizationRegistry from '../../../core-civilization/CivilizationRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
 import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
-import {Settlers} from '../../../base-unit/Units.js';
+import {Settlers} from '../../../base-units-civ1/Units.js';
 
 const cache = new Map(),
   tileScore = (tile) => {

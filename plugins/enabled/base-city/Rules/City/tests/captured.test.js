@@ -1,7 +1,7 @@
-import {Militia} from '../../../../base-unit/Units.js';
 import Player from '../../../../core-player/Player.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import UnitRegistry from '../../../../core-unit/UnitRegistry.js';
+import {Warrior} from '../../../../base-units-civ1/Units.js';
 import assert from 'assert';
 import captured from '../captured.js';
 import created from '../created.js';
@@ -50,7 +50,7 @@ describe('city:captured', () => {
         rulesRegistry,
       }),
       enemy = new Player(),
-      unit = new Militia({
+      unit = new Warrior({
         city,
         ...city,
         rulesRegistry,

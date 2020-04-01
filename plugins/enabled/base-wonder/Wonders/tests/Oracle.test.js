@@ -5,14 +5,14 @@ import {Oracle} from '../../Wonders.js';
 import PlayerResearch from '../../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
-import {Temple} from '../../../base-city-improvements/CityImprovements.js';
+import {Temple} from '../../../base-city-improvements-civ1/CityImprovements.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import {Unhappiness} from '../../../base-city-happiness/Yields.js';
 import WonderRegistry from '../../../core-wonder/WonderRegistry.js';
 import assert from 'assert';
 import cityHappinessYield from '../../../base-city-happiness/Rules/City/yield.js';
 import cityYield from '../../Rules/City/yield.js';
-import cost from '../../../base-city-improvements/Rules/City/cost.js';
+import cost from '../../../base-city-improvement-temple/Rules/City/cost.js';
 import setUpCity from '../../../base-city/tests/lib/setUpCity.js';
 
 describe('Oracle', () => {

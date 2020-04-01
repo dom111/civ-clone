@@ -1,0 +1,33 @@
+{
+  "name": "base-city-improvement-palace",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-city-improvements",
+    "core-city",
+    "core-city-improvement",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/created.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Palace.js"
+    }
+  ]
+}

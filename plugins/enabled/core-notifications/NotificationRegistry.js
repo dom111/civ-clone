@@ -5,16 +5,9 @@ export class NotificationRegistry extends Registry {
   constructor() {
     super(Notification);
   }
+
   check() {
-    const notifications = this.filter((notification) => {
-      // TODO: Rule
-      if (typeof notification.when === 'function') {
-        return notification.when(notification);
-      }
-      else {
-        return true;
-      }
-    });
+    const notifications = this.filter((notification) => notification.when());
 
     this.unregister(...notifications);
 

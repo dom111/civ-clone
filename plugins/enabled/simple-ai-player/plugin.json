@@ -13,16 +13,16 @@
     "base-unit-improvements",
     "core-city",
     "core-player",
-    "core-terrain",
     "core-unit",
-    "base-city-improvements",
     "base-terrain-features",
     "base-tile-improvements",
     "core-tile-improvements",
     "base-city",
     "core-world",
     "core-rules",
-    "base-unit-transport"
+    "base-unit-transport",
+    "base-units-civ1",
+    "base-city-improvements-civ1"
   ],
   "components": [
     {

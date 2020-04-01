@@ -47,12 +47,25 @@ export class Manager {
   constructor(engine) {
     this.#engine = engine;
 
-    const context = {
-      console: ['log', 'warn', 'error'].reduce((obj, key) => ({
-        ...obj,
-        [key]: (...args) => console[key](...args),
-      }), {}),
-    };
+    const context = {},
+      consoleWrapper = {}
+    ;
+
+    ['log', 'warn', 'error']
+      .forEach((key) => Object.defineProperty(consoleWrapper, key, {
+        writable: false,
+        enumerable: true,
+        configurable: false,
+        value: (...args) => console[key](...args),
+      }))
+    ;
+
+    Object.defineProperty(context, 'console', {
+      writable: false,
+      enumerable: true,
+      configurable: false,
+      value: consoleWrapper,
+    });
 
     Object.defineProperty(context, 'engine', {
       writable: false,
@@ -120,7 +133,32 @@ export class Manager {
           })
         )
         .then((plugin) => Promise.all(plugin.components
-          .map((component) => component.run(this.#context, this.#linker(plugin, component)))
+          .map((component) => {
+            const result = component.run(this.#context, this.#linker(plugin, component)),
+              promiseProperties = {
+                value: null,
+                exception: null,
+                isPending: true,
+                isResolved: false,
+                isRejected: false,
+              }
+            ;
+
+            result.then(() => promiseProperties.isResolved = true)
+              .catch(() => promiseProperties.isRejected = true)
+              .finally(() => promiseProperties.isPending = false)
+            ;
+
+            setTimeout(() => {
+              if (promiseProperties.isResolved || promiseProperties.isRejected) {
+                return;
+              }
+
+              console.error(`Manager#get: Failed to load plugin component: '${plugin.name}/${component.file}'.`);
+            }, 1000);
+
+            return result;
+          })
         )
           .then(() => plugin)
         )

@@ -1,0 +1,31 @@
+{
+  "name": "base-unit-spearman",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-unit",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Spearman.js"
+    }
+  ]
+}

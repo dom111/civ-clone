@@ -2,15 +2,9 @@
   "name": "base-unit-yields",
   "version": "0.1.0",
   "dependencies": [
-    "base-unit",
-    "core-rules",
-    "core-unit"
+    "core-rules"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Rules/Unit/yield.js"
-    },
     {
       "type": "script",
       "file": "Rules/Unit/created.js"

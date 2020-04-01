@@ -5,7 +5,7 @@ import {
 } from '../../Actions.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
-import {LandUnit} from '../../../base-unit/Types.js';
+import {Land} from '../../../base-unit/Types.js';
 import {NavalTransport} from '../../Types.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
@@ -29,7 +29,7 @@ export const getRules = ({
       'unit:action:embark',
       isNeighbouringTile,
       hasEnoughMovesLeft,
-      new Criterion((unit) => unit instanceof LandUnit),
+      new Criterion((unit) => unit instanceof Land),
       new Criterion((unit, to) => to.terrain() instanceof Water),
       new Criterion((unit, to) => unitRegistry.getBy('tile', to)
         .every((tileUnit) => tileUnit.player() === unit.player())

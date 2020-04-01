@@ -12,6 +12,7 @@
     }
   ],
   "dependencies": [
-    "core-registry"
+    "core-registry",
+    "core-rules"
   ]
 }

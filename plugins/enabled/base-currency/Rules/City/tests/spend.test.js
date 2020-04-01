@@ -1,16 +1,16 @@
 import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityBuildRegistry from '../../../../base-city/CityBuildRegistry.js';
-import {Militia} from '../../../../base-unit/Units.js';
 import PlayerTreasury from '../../../PlayerTreasury.js';
 import {Production} from '../../../../base-terrain-yields/Yields.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
-import {Temple} from '../../../../base-city-improvements/CityImprovements.js';
+import {Temple} from '../../../../base-city-improvements-civ1/CityImprovements.js';
+import {Warrior} from '../../../../base-units-civ1/Units.js';
 import assert from 'assert';
-import cityImprovementBuildCost from '../../../../base-city-improvements/Rules/City/build-cost.js';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';
 import spend from '../spend.js';
-import unitBuildCost from '../../../../base-unit/Rules/City/build-cost.js';
+import templeBuildCost from '../../../../base-city-improvement-temple/Rules/City/build-cost.js';
+import warriorCityBuildCost from '../../../../base-unit-warrior/Rules/City/build-cost.js';
 
 describe('city:spend', () => {
   const rulesRegistry = new RulesRegistry(),
@@ -19,20 +19,20 @@ describe('city:spend', () => {
   ;
 
   rulesRegistry.register(
-    ...cityImprovementBuildCost(),
     ...spend(),
-    ...unitBuildCost()
+    ...templeBuildCost(),
+    ...warriorCityBuildCost()
   );
 
-  availableCityBuildItemsRegistry.register(Militia, Temple);
+  availableCityBuildItemsRegistry.register(Warrior, Temple);
 
   [
     [Temple, 0, 160],
     [Temple, 1, 78],
     [Temple, 39, 2],
-    [Militia, 0, 50],
-    [Militia, 1, 22],
-    [Militia, 9, 2],
+    [Warrior, 0, 50],
+    [Warrior, 1, 22],
+    [Warrior, 9, 2],
   ]
     .forEach(([BuildItem, progress, expectedCost]) => {
       it(`should cost ${expectedCost} Gold to buy a ${BuildItem.name} with ${progress} progress`, () => {

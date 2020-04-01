@@ -10,10 +10,10 @@
     "core-registry",
     "core-rules",
     "core-unit",
-    "base-unit",
     "base-tile-improvements",
     "core-tile-improvements",
-    "base-city-happiness"
+    "base-city-happiness",
+    "base-units-civ1"
   ],
   "components": [
     {

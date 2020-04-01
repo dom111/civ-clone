@@ -1,12 +1,10 @@
 import {Attack, Defence} from '../core-unit/Yields.js';
 import {Desert, Grassland, Hills, Mountains, Plains, River} from '../base-terrain/Terrains.js';
 import {Food, Production} from '../base-terrain-yields/Yields.js';
-import {FortifiableUnit, LandUnit, NavalUnit} from '../base-unit/Types.js';
+import {Fortifiable, Land, Naval, Worker} from '../base-unit/Types.js';
 import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
 import {Irrigation, Mine, Road} from '../base-tile-improvements/TileImprovements.js';
-import {Land, Water} from '../core-terrain/Types.js';
 import {Move, NoOrders} from '../base-unit/Actions.js';
-import {Settlers, Worker} from '../base-unit/Units.js';
 import AIPlayer from '../core-player/AIPlayer.js';
 import CityBuild from '../base-city/CityBuild.js';
 import CityRegistry from '../core-city/CityRegistry.js';
@@ -14,13 +12,14 @@ import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
 import {NavalTransport} from '../base-unit-transport/Types.js';
-import {Palace} from '../base-city-improvements/CityImprovements.js';
+import {Palace} from '../base-city-improvements-civ1/CityImprovements.js';
 import Path from '../core-world/Path.js';
 import PathFinderRegistry from '../core-world/PathFinderRegistry.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../core-rules/RulesRegistry.js';
+import {Settlers} from '../base-units-civ1/Units.js';
 import TileImprovementRegistry from '../core-tile-improvements/TileImprovementRegistry.js';
 import {Trade} from '../base-terrain-yield-trade/Yields.js';
 import Unit from '../core-unit/Unit.js';
@@ -142,7 +141,7 @@ export class SimpleAIPlayer extends AIPlayer {
     if (
       ! actions.length ||
       (actions.length === 1 && noOrders) ||
-      (unit instanceof FortifiableUnit && actions.length === 2 && fortify && noOrders)
+      (unit instanceof Fortifiable && actions.length === 2 && fortify && noOrders)
     ) {
       return -1;
     }
@@ -179,7 +178,7 @@ export class SimpleAIPlayer extends AIPlayer {
       unit instanceof NavalTransport &&
       unit.hasCargo() &&
       tile.isCoast() &&
-      tile.terrain() instanceof Water
+      tile.isWater()
     ) {
       score += 16;
     }
@@ -399,7 +398,7 @@ export class SimpleAIPlayer extends AIPlayer {
           this.#enemyUnitsToAttack.push(tile);
         }
         else if (
-          tile.terrain() instanceof Land &&
+          tile.isLand() &&
           tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
           ! this.#landTilesToExplore.includes(tile)
           && ! existingTarget
@@ -407,7 +406,7 @@ export class SimpleAIPlayer extends AIPlayer {
           this.#landTilesToExplore.push(tile);
         }
         else if (
-          tile.terrain() instanceof Water &&
+          tile.isWater() &&
           tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
           this.#seaTilesToExplore.includes(tile)
           && ! existingTarget
@@ -470,11 +469,22 @@ export class SimpleAIPlayer extends AIPlayer {
           const item = this.getAction();
 
           // TODO: Remove this when it's working as expected
-          if (loopCheck++ > 13) {
+          if (loopCheck++ > 1e3) {
             // TODO: raise warning - notification?
             console.log('');
             console.log('');
-            console.log(this.getAction());
+            console.log(item);
+
+            if (item instanceof Unit) {
+              console.log(item.actions());
+              item.tile().getNeighbours()
+                .forEach((tile) => console.log(item.actions(tile)))
+              ;
+              console.log(item.active());
+              console.log(item.busy());
+              console.log(item.moves().value());
+              console.log(UnitImprovementRegistry.getInstance().getBy('unit', item));
+            }
             reject(new Error('SimpleAIPlayer: Couldn\'t pick an action to do.'));
 
             break;
@@ -507,7 +517,7 @@ export class SimpleAIPlayer extends AIPlayer {
             if (
               unload &&
               tile.getNeighbours()
-                .some((tile) => tile.terrain() instanceof Land &&
+                .some((tile) => tile.isLand() &&
                   tile.isCoast()
                 ) &&
               unit.cargo()
@@ -586,7 +596,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
             if (! target) {
               // TODO: all the repetition - sort this.
-              if (unit instanceof FortifiableUnit && unit.defence() > 0 && this.#undefendedCities.length > 0) {
+              if (unit instanceof Fortifiable && unit.defence() > 0 && this.#undefendedCities.length > 0) {
                 const [targetTile] = this.#undefendedCities
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -600,8 +610,8 @@ export class SimpleAIPlayer extends AIPlayer {
 
               else if (unit.attack() > 0 && this.#citiesToLiberate.length > 0) {
                 const [targetTile] = this.#citiesToLiberate
-                    .filter((tile) => (unit instanceof LandUnit && tile.terrain() instanceof Land) ||
-                    (unit instanceof NavalUnit && tile.terrain() instanceof Water)
+                    .filter((tile) => (unit instanceof Land && tile.isLand()) ||
+                    (unit instanceof Naval && tile.isWater())
                     )
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -615,8 +625,8 @@ export class SimpleAIPlayer extends AIPlayer {
 
               else if (unit.attack() > 0 && this.#enemyUnitsToAttack.length > 0) {
                 const [targetTile] = this.#enemyUnitsToAttack
-                    .filter((tile) => (unit instanceof LandUnit && tile.terrain() instanceof Land) ||
-                    (unit instanceof NavalUnit && tile.terrain() instanceof Water)
+                    .filter((tile) => (unit instanceof Land && tile.isLand()) ||
+                    (unit instanceof Naval && tile.isWater())
                     )
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -628,7 +638,7 @@ export class SimpleAIPlayer extends AIPlayer {
                 }
               }
 
-              else if (unit instanceof LandUnit && unit.attack() > 0 && this.#enemyCitiesToAttack.length > 0) {
+              else if (unit instanceof Land && unit.attack() > 0 && this.#enemyCitiesToAttack.length > 0) {
                 const [targetTile] = this.#enemyCitiesToAttack
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -640,7 +650,7 @@ export class SimpleAIPlayer extends AIPlayer {
                 }
               }
 
-              else if (unit instanceof LandUnit && this.#landTilesToExplore.length > 0) {
+              else if (unit instanceof Land && this.#landTilesToExplore.length > 0) {
                 const [targetTile] = this.#landTilesToExplore
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)
@@ -652,7 +662,7 @@ export class SimpleAIPlayer extends AIPlayer {
                 }
               }
 
-              else if (unit instanceof NavalUnit && this.#seaTilesToExplore.length > 0) {
+              else if (unit instanceof Naval && this.#seaTilesToExplore.length > 0) {
                 const [targetTile] = this.#seaTilesToExplore
                     .sort((a, b) => a.distanceFrom(unit.tile()) - b.distanceFrom(unit.tile())),
                   path = Path.for(unit, unit.tile(), targetTile, pathFinderRegistry)

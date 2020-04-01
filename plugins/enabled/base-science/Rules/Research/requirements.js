@@ -21,6 +21,7 @@ import {
   Monarchy,
   Mysticism,
   Navigation,
+  TheRepublic,
   TheWheel,
   Writing,
 } from '../../Advances.js';
@@ -47,6 +48,7 @@ export const getRules = () => [
     [Monarchy, CodeOfLaws, Mysticism],
     [Mysticism, CeremonialBurial],
     [Navigation, Astronomy, MapMaking],
+    [TheRepublic, CodeOfLaws, Literacy],
     [Writing, Alphabet],
   ]
     .map(([Advance, ...requiredAdvances]) => new Rule(

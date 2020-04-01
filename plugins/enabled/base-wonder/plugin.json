@@ -6,12 +6,12 @@
     "core-wonder",
     "base-city",
     "base-city-happiness",
-    "base-city-improvements",
     "base-science",
     "base-terrain-yield-trade",
     "base-unit",
     "core-city-improvement",
-    "core-unit"
+    "core-unit",
+    "base-city-improvements-civ1"
   ],
   "components": [
     {

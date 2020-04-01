@@ -14,22 +14,24 @@ import {
 } from '../../../../base-terrain/Terrains.js';
 import {
   Attack,
+  CaptureCity,
+  Fortify,
+  Move,
+} from '../../../Actions.js';
+import {
   BuildIrrigation,
   BuildMine,
   BuildRoad,
-  CaptureCity,
   ClearForest,
   ClearJungle,
   ClearSwamp,
-  Fortify,
-  FoundCity,
-  Move,
   PlantForest,
-} from '../../../Actions.js';
-import {Militia, Settlers} from '../../../Units.js';
+} from '../../../../base-unit-worker/Actions.js';
+import {Settlers, Warrior} from '../../../../base-units-civ1/Units.js';
 import {BridgeBuilding} from '../../../../base-science/Advances.js';
 import City from '../../../../core-city/City.js';
 import CityRegistry from '../../../../core-city/CityRegistry.js';
+import {FoundCity} from '../../../../base-unit-settlers/Actions.js';
 import PlayerResearch from '../../../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../../../base-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
@@ -42,10 +44,13 @@ import assert from 'assert';
 import generateFixedWorld from '../../../../base-world/tests/lib/generateFixedWorld.js';
 import improvement from '../../../../base-tile-improvements/Rules/Tile/improvement.js';
 import movementCost from '../../../../base-unit/Rules/Unit/movementCost.js';
+import settlersUnitAction from '../../../../base-unit-settlers/Rules/Unit/action.js';
+import settlersUnitYield from '../../../../base-unit-settlers/Rules/Unit/yield.js';
 import unitCreated from '../../../../base-unit/Rules/Unit/created.js';
 import unitCreatedYields from '../../../../base-unit-yields/Rules/Unit/created.js';
-import unitYield from '../../../../base-unit-yields/Rules/Unit/yield.js';
 import validateMove from '../validateMove.js';
+import warriorUnitYield from '../../../../base-unit-warrior/Rules/Unit/yield.js';
+import workerUnitAction from '../../../../base-unit-worker/Rules/Unit/action.js';
 
 describe('unit:action', () => {
   const rulesRegistry = new RulesRegistry(),
@@ -54,7 +59,7 @@ describe('unit:action', () => {
     tileImprovementRegistry = new TileImprovementRegistry(),
     playerResearchRegistry = new PlayerResearchRegistry(),
     unitRegistry = new UnitRegistry(),
-    getUnit = ({Unit = Militia, player, tile}) => new Unit({
+    getUnit = ({Unit = Warrior, player, tile}) => new Unit({
       player,
       rulesRegistry,
       tile,
@@ -66,19 +71,29 @@ describe('unit:action', () => {
       playerResearchRegistry,
       tileImprovementRegistry,
     }),
+    ...warriorUnitYield(),
     ...unitCreated({
       unitRegistry,
     }),
     ...unitCreatedYields(),
-    ...unitYield(),
+    ...settlersUnitYield(),
     ...action({
       cityRegistry,
       rulesRegistry,
       tileImprovementRegistry,
       unitRegistry,
     }),
+    ...settlersUnitAction({
+      cityRegistry,
+      rulesRegistry,
+    }),
     ...validateMove(),
-    ...movementCost()
+    ...movementCost(),
+    ...workerUnitAction({
+      cityRegistry,
+      rulesRegistry,
+      tileImprovementRegistry,
+    })
   );
 
   terrainRegistry.register(

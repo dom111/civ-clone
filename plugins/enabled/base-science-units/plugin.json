@@ -4,8 +4,8 @@
   "dependencies": [
     "core-rules",
     "base-science",
-    "base-unit",
-    "base-unit-transport"
+    "base-unit-transport",
+    "base-units-civ1"
   ],
   "components": [
     {

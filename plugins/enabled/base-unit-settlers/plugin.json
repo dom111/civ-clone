@@ -1,0 +1,53 @@
+{
+  "name": "base-unit-settlers",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-unit",
+    "core-city",
+    "core-rules",
+    "core-unit"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Settlers.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/FoundCity.js"
+    }
+  ]
+}

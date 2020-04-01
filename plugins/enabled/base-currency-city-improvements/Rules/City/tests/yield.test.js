@@ -1,6 +1,6 @@
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
 import {Gold} from '../../../../base-currency/Yields.js';
-import {Marketplace} from '../../../../base-city-improvements/CityImprovements.js';
+import {Marketplace} from '../../../../base-city-improvements-civ1/CityImprovements.js';
 import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
 import assert from 'assert';
 import cityYield from '../yield.js';

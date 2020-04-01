@@ -1,3 +1,5 @@
+import Criterion from '../core-rules/Criterion.js';
+
 export class Notification {
   #message;
   #name;
@@ -8,7 +10,7 @@ export class Notification {
     message,
     name,
     type,
-    when,
+    when = new Criterion(),
   }) {
     this.#message = message;
     this.#name    = name;
@@ -30,7 +32,7 @@ export class Notification {
 
   when() {
     // TODO: Rule/Criterion?
-    return this.#when;
+    return this.#when.validate();
   }
 }
 

@@ -3,12 +3,12 @@ import {Disembark, Embark, Unload} from '../../Actions.js';
 import City from '../../../core-city/City.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
-import {Militia} from '../../../base-unit/Units.js';
 import Player from '../../../core-player/Player.js';
 import RulesRegistry from '../../../core-rules/RulesRegistry.js';
 import TransportRegistry from '../../TransportRegistry.js';
 import {Trireme} from '../../Units.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
+import {Warrior} from '../../../base-units-civ1/Units.js';
 import action from '../../../base-unit/Rules/Unit/action.js';
 import assert from 'assert';
 import created from '../../../base-unit-yields/Rules/Unit/created.js';
@@ -19,8 +19,8 @@ import transportAction from '../../Rules/Unit/action.js';
 import transportMoved from '../../Rules/Unit/moved.js';
 import transportMovementCost from '../../Rules/Unit/movementCost.js';
 import transportYield from '../../Rules/Unit/yield.js';
-import unitYield from '../../../base-unit-yields/Rules/Unit/yield.js';
 import validateMove from '../../../base-unit/Rules/Unit/validateMove.js';
+import warriorYield from '../../../base-unit-warrior/Rules/Unit/yield.js';
 
 describe('Trireme', () => {
   const cityRegistry = new CityRegistry(),
@@ -37,6 +37,7 @@ describe('Trireme', () => {
       unitRegistry,
     }),
     ...created(),
+    ...warriorYield(),
     ...moved(),
     ...movementCost(),
     ...transportAction({
@@ -49,7 +50,6 @@ describe('Trireme', () => {
       transportRegistry,
     }),
     ...transportYield(),
-    ...unitYield(),
     ...validateMove()
   );
 
@@ -90,7 +90,7 @@ describe('Trireme', () => {
         tile,
         transportRegistry,
       }),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: world.get(1, 1),
@@ -130,7 +130,7 @@ describe('Trireme', () => {
         tile,
         transportRegistry,
       }),
-      unit = new Militia({
+      unit = new Warrior({
         player,
         rulesRegistry,
         tile: world.get(1, 1),
@@ -228,7 +228,7 @@ describe('Trireme', () => {
         player: enemy,
         tile: world.get(1, 1),
       }),
-      unit = new Militia({
+      unit = new Warrior({
         player: enemy,
         rulesRegistry,
         tile: world.get(1, 1),
@@ -256,7 +256,7 @@ describe('Trireme', () => {
         rulesRegistry,
         tile,
       }),
-      unit = new Militia({
+      unit = new Warrior({
         player: enemy,
         rulesRegistry,
         tile: world.get(1, 1),

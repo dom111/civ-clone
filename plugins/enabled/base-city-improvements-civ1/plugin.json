@@ -1,0 +1,22 @@
+{
+  "name": "base-city-improvements-civ1",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city-improvement-aqueduct",
+    "base-city-improvement-barracks",
+    "base-city-improvement-citywalls",
+    "base-city-improvement-colosseum",
+    "base-city-improvement-courthouse",
+    "base-city-improvement-granary",
+    "base-city-improvement-library",
+    "base-city-improvement-marketplace",
+    "base-city-improvement-palace",
+    "base-city-improvement-temple"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "CityImprovements.js"
+    }
+  ]
+}
