@@ -8,7 +8,7 @@ import Effect from '../../../core-rules/Effect.js';
 import {Land} from '../../../base-unit/Types.js';
 import {NavalTransport} from '../../Types.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import TransportRegistry from '../../TransportRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 import {Water} from '../../../core-terrain/Types.js';

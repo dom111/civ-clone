@@ -6,7 +6,8 @@
     "base-unit",
     "core-city",
     "core-rules",
-    "core-unit"
+    "core-unit",
+    "core-rules-registry"
   ],
   "components": [
     {

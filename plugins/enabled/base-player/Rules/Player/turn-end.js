@@ -2,7 +2,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import CurrentPlayerRegistry from '../../../core-player/CurrentPlayerRegistry.js';
 import Effect from '../../../core-rules/Effect.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 export const getRules = ({
   currentPlayerRegistry = CurrentPlayerRegistry.getInstance(),

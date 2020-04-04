@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 // import TerrainRegistry from './TerrainRegistry.js';
 // import TerrainFeature from '../core-terrain-features/TerrainFeature.js';
 

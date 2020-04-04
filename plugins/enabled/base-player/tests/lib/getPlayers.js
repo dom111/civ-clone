@@ -1,5 +1,5 @@
 import Player from '../../../core-player/Player.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 export const getPlayers = ({
   n = 1,

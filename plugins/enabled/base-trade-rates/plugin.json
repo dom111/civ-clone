@@ -7,7 +7,8 @@
     "base-terrain-yield-trade",
     "core-registry",
     "core-yields",
-    "core-rules"
+    "core-rules",
+    "core-rules-registry"
   ],
   "components": [
     {

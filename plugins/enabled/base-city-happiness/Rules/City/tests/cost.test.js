@@ -1,6 +1,6 @@
 import {Happiness} from '../../../Yields.js';
 import {Luxuries} from '../../../../base-luxuries/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import cost from '../cost.js';
 import governmentCost from '../../../../base-player-government/Rules/City/cost.js';

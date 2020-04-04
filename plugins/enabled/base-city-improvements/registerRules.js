@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import improvementCreated from './Rules/City/improvement-created.js';
 
 RulesRegistry.getInstance()

@@ -10,7 +10,8 @@
     "core-rules",
     "core-terrain",
     "core-unit",
-    "base-units-civ1"
+    "base-units-civ1",
+    "core-rules-registry"
   ],
   "components": [
     {

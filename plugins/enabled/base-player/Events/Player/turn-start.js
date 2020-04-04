@@ -1,4 +1,4 @@
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 engine.on('player:turn-start', (player) => {
   RulesRegistry.getInstance()

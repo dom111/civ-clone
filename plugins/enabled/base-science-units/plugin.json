@@ -5,7 +5,8 @@
     "core-rules",
     "base-science",
     "base-unit-transport",
-    "base-units-civ1"
+    "base-units-civ1",
+    "core-rules-registry"
   ],
   "components": [
     {

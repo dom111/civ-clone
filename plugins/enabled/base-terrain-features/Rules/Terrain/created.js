@@ -1,7 +1,7 @@
 import AvailableTerrainFeatureRegistry from '../../../core-terrain-features/AvailableTerrainFeatureRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 export const getRules = ({
   rulesRegistry = RulesRegistry.getInstance(),

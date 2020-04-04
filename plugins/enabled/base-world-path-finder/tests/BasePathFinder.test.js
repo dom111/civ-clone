@@ -5,7 +5,7 @@ import BasePathFinder from '../BasePathFinder.js';
 import City from '../../core-city/City.js';
 import CityRegistry from '../../core-city/CityRegistry.js';
 import Path from '../../core-world/Path.js';
-import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
 import {Warrior} from '../../base-units-civ1/Units.js';
 import action from '../../base-unit/Rules/Unit/action.js';

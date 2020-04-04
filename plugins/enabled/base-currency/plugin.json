@@ -9,7 +9,8 @@
     "base-city",
     "base-terrain-yields",
     "core-city-improvement",
-    "core-unit"
+    "core-unit",
+    "core-rules-registry"
   ],
   "components": [
     {

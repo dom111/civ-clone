@@ -3,7 +3,7 @@ import Criterion from '../Criterion.js';
 import Effect from '../Effect.js';
 import Or from '../Criteria/Or.js';
 import Rule from '../Rule.js';
-import RulesRegistry from '../RulesRegistry.js';
+import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 
 describe('Rules', () => {

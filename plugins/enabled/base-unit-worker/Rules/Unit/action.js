@@ -14,7 +14,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import {Worker} from '../../../base-unit/Types/Worker.js';
 import {hasEnoughMovesLeft} from '../../../base-unit/Rules/Unit/action.js';

@@ -5,7 +5,7 @@
   "dependencies": [
     "core-registry",
     "core-world",
-    "core-rules"
+    "core-rules-registry"
   ],
   "components": [
     {

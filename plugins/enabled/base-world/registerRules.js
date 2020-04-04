@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import seen from './Rules/Tile/seen.js';
 
 RulesRegistry.getInstance()

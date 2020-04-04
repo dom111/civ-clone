@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
 

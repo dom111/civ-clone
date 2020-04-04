@@ -1,7 +1,7 @@
 import {Fortified as FortifiedImprovement, Veteran as VeteranImprovement} from '../../../UnitImprovements.js';
 import {Fortified as FortifiedYieldModifier, Veteran as VeteranYieldModifier} from '../../../YieldModifiers.js';
 import Player from '../../../../core-player/Player.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import {Spearman} from '../../../../base-units-civ1/Units.js';
 import UnitImprovementRegistry from '../../../UnitImprovementRegistry.js';
 import assert from 'assert';

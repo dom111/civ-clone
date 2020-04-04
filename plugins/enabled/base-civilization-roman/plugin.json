@@ -8,6 +8,10 @@
     {
       "type": "script",
       "file": "Roman.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
     }
   ]
 }

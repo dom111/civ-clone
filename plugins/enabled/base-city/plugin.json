@@ -12,7 +12,8 @@
     "core-player",
     "core-registry",
     "core-unit",
-    "core-yields"
+    "core-yields",
+    "core-rules-registry"
   ],
   "components": [
     {

@@ -4,6 +4,7 @@ import {
   Fortify,
   Move,
   NoOrders,
+  Sleep,
 } from '../../Actions.js';
 import {Fortifiable, Land, Naval} from '../../Types.js';
 import And from '../../../core-rules/Criteria/And.js';
@@ -12,7 +13,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 export const isNeighbouringTile = new Criterion((unit, to, from = unit.tile()) => to.isNeighbourOf(from)),
@@ -137,6 +138,13 @@ export const getRules = ({
       new Criterion((unit, to, from = unit.tile()) => from.isLand()),
       new Criterion((unit, to, from = unit.tile()) => from === to),
       new Effect((unit, to, from = unit.tile()) => new Fortify({unit, to, from, rulesRegistry}))
+    ),
+
+    new Rule(
+      'unit:action:sleep',
+      hasEnoughMovesLeft,
+      new Criterion((unit, to, from = unit.tile()) => from === to),
+      new Effect((unit, to, from = unit.tile()) => new Sleep({unit, to, from, rulesRegistry}))
     ),
 
     new Rule(

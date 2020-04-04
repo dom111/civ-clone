@@ -12,16 +12,12 @@
     "base-civilization-indian",
     "base-civilization-roman",
     "base-civilization-russian",
-    "core-civilization",
-    "base-civilization-japanese",
-    "base-civilization-polish",
-    "base-civilization-spanish"
+    "base-civilization-zulu",
+    "base-civilization-chinese",
+    "base-civilization-mongol",
+    "base-civilization-egyptian"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "registerCivilizations.js"
-    },
     {
       "type": "script",
       "file": "Civilizations.js"

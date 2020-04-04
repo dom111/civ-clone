@@ -8,7 +8,8 @@
     "base-currency",
     "core-city-improvement",
     "core-rules",
-    "core-registry"
+    "core-registry",
+    "core-rules-registry"
   ],
   "components": [
     {

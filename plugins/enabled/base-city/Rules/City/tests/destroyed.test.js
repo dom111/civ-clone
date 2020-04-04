@@ -1,6 +1,6 @@
 import {Irrigation, Road} from '../../../../base-tile-improvements/TileImprovements.js';
 import CityRegistry from '../../../../core-city/CityRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import TileImprovementRegistry from '../../../../core-tile-improvements/TileImprovementRegistry.js';
 import assert from 'assert';
 import created from '../created.js';

@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "dependencies": [
     "base-science",
-    "base-wonder",
-    "core-rules"
+    "core-rules",
+    "core-rules-registry",
+    "base-wonders-civ1"
   ],
   "components": [
     {

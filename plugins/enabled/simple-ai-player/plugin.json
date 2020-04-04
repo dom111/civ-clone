@@ -19,10 +19,10 @@
     "core-tile-improvements",
     "base-city",
     "core-world",
-    "core-rules",
     "base-unit-transport",
     "base-units-civ1",
-    "base-city-improvements-civ1"
+    "base-city-improvements-civ1",
+    "core-rules-registry"
   ],
   "components": [
     {

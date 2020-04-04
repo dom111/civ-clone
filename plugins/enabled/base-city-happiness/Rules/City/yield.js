@@ -3,7 +3,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {Production} from '../../../base-terrain-yields/Yields.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import {Trade} from '../../../base-terrain-yield-trade/Yields.js';
 import {Unhappiness} from '../../Yields.js';
 

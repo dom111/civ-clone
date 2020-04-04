@@ -6,7 +6,8 @@
     "core-terrain",
     "core-unit",
     "core-registry",
-    "base-city"
+    "base-city",
+    "core-rules-registry"
   ],
   "components": [
     {

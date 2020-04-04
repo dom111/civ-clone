@@ -1,7 +1,7 @@
 import AvailableCityBuildItemsRegistry from './AvailableCityBuildItemsRegistry.js';
 import {BuildProgress} from './Yields.js';
 import {Production} from '../base-terrain-yields/Yields.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class CityBuild {
   #availableCityBuildItemsRegistry;

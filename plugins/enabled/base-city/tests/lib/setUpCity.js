@@ -4,7 +4,7 @@ import City from '../../../core-city/City.js';
 import CityImprovementRegistry from '../../../core-city-improvement/CityImprovementRegistry.js';
 import FillGenerator from '../../../base-world-generator/FillGenerator.js';
 import Player from '../../../core-player/Player.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import {Shield} from '../../../base-terrain-features/TerrainFeatures.js';
 import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import Tileset from '../../../core-world/Tileset.js';

@@ -5,7 +5,7 @@ import {Monarchy} from '../../../../base-governments/Governments.js';
 import {Player} from '../../../../core-player/Player.js';
 import PlayerGovernment from '../../../PlayerGovernment.js';
 import PlayerGovernmentRegistry from '../../../PlayerGovernmentRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import StaticWorldGenerator from '../../../../base-world-generator/StaticWorldGenerator.js';
 import {Trade} from '../../../../base-terrain-yield-trade/Yields.js';
 import World from '../../../../core-world/World.js';

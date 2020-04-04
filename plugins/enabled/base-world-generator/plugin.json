@@ -1,11 +1,11 @@
 {
   "name": "base-world-generator",
   "dependencies": [
-    "core-rules",
     "core-terrain",
     "core-world-generator",
     "base-terrain",
-    "base-terrain-features"
+    "base-terrain-features",
+    "core-rules-registry"
   ],
   "components": [
     {

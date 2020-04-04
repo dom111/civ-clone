@@ -1,0 +1,28 @@
+{
+  "name": "base-wonders",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "core-wonder",
+    "base-city",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

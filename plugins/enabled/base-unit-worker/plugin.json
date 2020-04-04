@@ -8,7 +8,8 @@
     "base-unit",
     "core-city",
     "core-rules",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "core-rules-registry"
   ],
   "components": [
     {

@@ -1,6 +1,6 @@
 import CityGrowthRegistry from '../../../CityGrowthRegistry.js';
 import {Food} from '../../../../base-terrain-yields/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import created from '../created.js';
 import setUpCity from '../../../tests/lib/setUpCity.js';

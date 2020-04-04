@@ -34,7 +34,7 @@ import CityRegistry from '../../../../core-city/CityRegistry.js';
 import {FoundCity} from '../../../../base-unit-settlers/Actions.js';
 import PlayerResearch from '../../../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../../../base-science/PlayerResearchRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import TerrainRegistry from '../../../../core-terrain/TerrainRegistry.js';
 import TileImprovementRegistry from '../../../../core-tile-improvements/TileImprovementRegistry.js';
 import UnitRegistry from '../../../../core-unit/UnitRegistry.js';

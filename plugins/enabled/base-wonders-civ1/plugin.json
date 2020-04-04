@@ -1,0 +1,21 @@
+{
+  "name": "base-wonders-civ1",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-wonder-colossus",
+    "base-wonder-copernicus-observatory",
+    "base-wonder-great-library",
+    "base-wonder-great-wall",
+    "base-wonder-hanging-gardens",
+    "base-wonder-lighthouse",
+    "base-wonder-magellans-expedition",
+    "base-wonder-oracle",
+    "base-wonder-pyramids"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Wonders.js"
+    }
+  ]
+}

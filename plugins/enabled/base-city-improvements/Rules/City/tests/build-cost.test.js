@@ -2,7 +2,7 @@ import * as CityImprovements from '../../../../base-city-improvements-civ1/CityI
 import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import aqueductBuildCost from '../../../../base-city-improvement-aqueduct/Rules/City/build-cost.js';
 import assert from 'assert';
 import barracksBuildCost from '../../../../base-city-improvement-barracks/Rules/City/build-cost.js';

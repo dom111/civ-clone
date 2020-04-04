@@ -1,6 +1,6 @@
 import FillGenerator from '../../../base-world-generator/FillGenerator.js';
 import {Grassland} from '../../../base-terrain/Terrains.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import World from '../../../core-world/World.js';
 
 export const generateFixedWorld = ({

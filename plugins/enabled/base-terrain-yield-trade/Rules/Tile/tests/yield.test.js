@@ -1,5 +1,5 @@
 import {Food, Production} from '../../../../base-terrain-yields/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import StaticWorldGenerator from '../../../../base-world-generator/StaticWorldGenerator.js';
 import {Trade} from '../../../Yields.js';
 import World from '../../../../core-world/World.js';

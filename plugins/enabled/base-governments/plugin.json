@@ -4,7 +4,8 @@
   "dependencies": [
     "base-science",
     "core-government",
-    "core-rules"
+    "core-rules",
+    "core-rules-registry"
   ],
   "components": [
     {

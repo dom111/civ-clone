@@ -1,6 +1,6 @@
 import {Land, Water} from '../core-terrain/Types.js';
 import {Generator} from '../core-world-generator/Generator.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class BaseGenerator extends Generator {
   #chanceToBecomeLand;

@@ -1,5 +1,5 @@
 import {Attack, Defence, Movement, Moves, Visibility} from './Yields.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class Unit {
   #active = true;

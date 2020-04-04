@@ -11,7 +11,8 @@
     "base-unit-improvements",
     "core-city",
     "core-player",
-    "core-turn-based-game"
+    "core-turn-based-game",
+    "core-rules-registry"
   ],
   "components": [
     {

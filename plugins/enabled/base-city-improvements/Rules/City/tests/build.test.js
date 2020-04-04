@@ -2,7 +2,7 @@ import * as CityImprovements from '../../../../base-city-improvements-civ1/CityI
 import AvailableCityBuildItemsRegistry from '../../../../base-city/AvailableCityBuildItemsRegistry.js';
 import CityBuild from '../../../../base-city/CityBuild.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import build from '../build.js';
 import improvementCreated from '../improvement-created.js';

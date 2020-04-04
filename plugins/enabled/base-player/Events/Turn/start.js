@@ -1,6 +1,6 @@
 import CurrentPlayerRegistry from '../../../core-player/CurrentPlayerRegistry.js';
 import PlayerRegistry from '../../../core-player/PlayerRegistry.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 engine.on('turn:start', () => {
   const rules = RulesRegistry.getInstance()

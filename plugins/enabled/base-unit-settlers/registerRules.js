@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import build from './Rules/City/build.js';
 import buildCost from './Rules/City/build-cost.js';
 import buildingComplete from './Rules/City/building-complete.js';

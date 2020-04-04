@@ -3,7 +3,7 @@ import Effect from '../../../core-rules/Effect.js';
 import {Gold} from '../../Yields.js';
 import PlayerTreasuryRegistry from '../../PlayerTreasuryRegistry.js';
 import Rule from '../../../core-rules/Rule.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 export const getRules = ({
   playerTreasuryRegistry = PlayerTreasuryRegistry.getInstance(),

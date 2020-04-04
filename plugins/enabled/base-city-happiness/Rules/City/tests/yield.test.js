@@ -1,7 +1,7 @@
 import '../../../registerYields.js';
 import PlayerGovernment from '../../../../base-player-government/PlayerGovernment.js';
 import PlayerGovernmentRegistry from '../../../../base-player-government/PlayerGovernmentRegistry.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import {Unhappiness} from '../../../Yields.js';
 import Unit from '../../../../core-unit/Unit.js';
 import UnitRegistry from '../../../../core-unit/UnitRegistry.js';

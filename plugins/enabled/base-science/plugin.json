@@ -6,7 +6,8 @@
     "core-science",
     "core-yields",
     "core-player",
-    "core-registry"
+    "core-registry",
+    "core-rules-registry"
   ],
   "components": [
     {

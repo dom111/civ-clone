@@ -1,4 +1,4 @@
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import added from './Rules/Player/added.js';
 import processYields from './Rules/City/process-yield.js';
 import spend from './Rules/City/spend.js';

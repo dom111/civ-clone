@@ -10,7 +10,7 @@ import {
 import AdvanceRegistry from '../../../../core-science/AdvanceRegistry.js';
 import Player from '../../../../core-player/Player.js';
 import PlayerResearch from '../../../PlayerResearch.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import requirements from '../requirements.js';
 

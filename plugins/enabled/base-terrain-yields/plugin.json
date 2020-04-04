@@ -4,7 +4,8 @@
   "dependencies": [
     "base-terrain",
     "core-rules",
-    "core-yields"
+    "core-yields",
+    "core-rules-registry"
   ],
   "components": [
     {

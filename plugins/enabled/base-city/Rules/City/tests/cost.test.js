@@ -1,5 +1,5 @@
 import {Food} from '../../../../base-terrain-yields/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import cost from '../cost.js';
 import setUpCity from '../../../tests/lib/setUpCity.js';

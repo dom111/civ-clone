@@ -6,7 +6,8 @@
     "base-terrain-yields",
     "core-rules",
     "base-science",
-    "core-tile-improvements"
+    "core-tile-improvements",
+    "core-rules-registry"
   ],
   "components": [
     {

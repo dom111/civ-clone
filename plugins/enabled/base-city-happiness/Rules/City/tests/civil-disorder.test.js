@@ -1,5 +1,5 @@
 import {Happiness, Unhappiness} from '../../../Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import civilDisorder from '../civil-disorder.js';
 import setUpCity from '../../../../base-city/tests/lib/setUpCity.js';

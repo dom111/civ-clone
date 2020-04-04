@@ -6,7 +6,8 @@
     "base-city-improvements",
     "core-city",
     "core-city-improvement",
-    "core-rules"
+    "core-rules",
+    "core-rules-registry"
   ],
   "components": [
     {

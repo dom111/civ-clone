@@ -1,5 +1,5 @@
 import PlayerActionRegistry from './PlayerActionRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 
 export class Player {

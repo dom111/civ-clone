@@ -13,7 +13,8 @@
     "base-tile-improvements",
     "core-tile-improvements",
     "base-city-happiness",
-    "base-units-civ1"
+    "base-units-civ1",
+    "core-rules-registry"
   ],
   "components": [
     {

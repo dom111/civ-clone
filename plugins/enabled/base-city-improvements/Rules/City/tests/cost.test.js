@@ -13,7 +13,7 @@ import {
 } from '../../../../base-city-improvements-civ1/CityImprovements.js';
 import CityImprovementRegistry from '../../../../core-city-improvement/CityImprovementRegistry.js';
 import {Gold} from '../../../../base-currency/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import aqueductCost from '../../../../base-city-improvement-aqueduct/Rules/City/cost.js';
 import assert from 'assert';
 import citywallsCost from '../../../../base-city-improvement-citywalls/Rules/City/cost.js';

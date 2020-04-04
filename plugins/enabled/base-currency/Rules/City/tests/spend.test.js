@@ -3,7 +3,7 @@ import CityBuild from '../../../../base-city/CityBuild.js';
 import CityBuildRegistry from '../../../../base-city/CityBuildRegistry.js';
 import PlayerTreasury from '../../../PlayerTreasury.js';
 import {Production} from '../../../../base-terrain-yields/Yields.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import {Temple} from '../../../../base-city-improvements-civ1/CityImprovements.js';
 import {Warrior} from '../../../../base-units-civ1/Units.js';
 import assert from 'assert';

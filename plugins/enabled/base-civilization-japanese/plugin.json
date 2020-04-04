@@ -8,6 +8,10 @@
     {
       "type": "script",
       "file": "Japanese.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import Notification from '../core-notifications/Notification.js';
 import NotificationRegistry from '../core-notifications/NotificationRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Year from '../core-game-year/Year.js';
 
 const renderTurns = parseInt(engine.option('renderTurns', 1), 10),

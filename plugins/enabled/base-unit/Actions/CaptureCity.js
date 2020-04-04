@@ -1,6 +1,6 @@
 import CityRegistry from '../../core-city/CityRegistry.js';
 import Move from './Move.js';
-import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 
 export class CaptureCity extends Move {
   #cityRegistry;

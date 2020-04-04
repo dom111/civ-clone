@@ -1,0 +1,34 @@
+{
+  "name": "base-wonder-copernicus-observatory",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-science",
+    "base-wonders",
+    "core-rules",
+    "core-rules-registry",
+    "core-wonder"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerWonder.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "CopernicusObservatory.js"
+    }
+  ]
+}

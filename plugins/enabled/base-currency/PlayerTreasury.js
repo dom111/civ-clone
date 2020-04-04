@@ -1,7 +1,7 @@
 import CityBuildRegistry from '../base-city/CityBuildRegistry.js';
 import {Gold} from './Yields.js';
 import {Production} from '../base-terrain-yields/Yields.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Yield from '../core-yields/Yield.js';
 
 export class PlayerTreasury extends Yield {

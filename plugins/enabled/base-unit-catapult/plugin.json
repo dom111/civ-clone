@@ -4,7 +4,7 @@
   "dependencies": [
     "base-city",
     "base-unit",
-    "core-rules"
+    "core-rules-registry"
   ],
   "components": [
     {

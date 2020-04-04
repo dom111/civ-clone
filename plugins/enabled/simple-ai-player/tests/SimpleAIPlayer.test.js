@@ -10,7 +10,7 @@ import PlayerGovernment from '../../base-player-government/PlayerGovernment.js';
 import PlayerGovernmentRegistry from '../../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../base-science/PlayerResearchRegistry.js';
-import RulesRegistry from '../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 import {Sail} from '../../base-unit-transport/Units.js';
 import SimpleAIPlayer from '../SimpleAIPlayer.js';
 import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';

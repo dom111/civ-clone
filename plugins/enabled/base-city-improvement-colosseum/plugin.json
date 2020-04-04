@@ -7,7 +7,7 @@
     "base-city-improvements",
     "base-currency",
     "core-city-improvement",
-    "core-rules"
+    "core-rules-registry"
   ],
   "components": [
     {

@@ -59,7 +59,7 @@ the game versions in the Civilization series without too much work.
 
 ## TODO
 
-Loads! See [`TODO`](./TODO) for the bigger ideas that are outstanding as well as looking for `// TODO` in the
+Loads! See [`TODO`](TODO.md) for the bigger ideas that are outstanding as well as looking for `// TODO` in the
 codebase.
 
 ## Contributing

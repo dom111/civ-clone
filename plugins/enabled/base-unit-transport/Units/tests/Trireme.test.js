@@ -4,7 +4,7 @@ import City from '../../../core-city/City.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import {Land} from '../../../core-terrain/Types.js';
 import Player from '../../../core-player/Player.js';
-import RulesRegistry from '../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import TransportRegistry from '../../TransportRegistry.js';
 import {Trireme} from '../../Units.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';

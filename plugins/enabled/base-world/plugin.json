@@ -3,7 +3,8 @@
   "dependencies": [
     "core-world",
     "core-world-generator",
-    "core-rules"
+    "core-rules",
+    "core-rules-registry"
   ],
   "components": [
     {

@@ -18,7 +18,7 @@ import {
   MagellansExpedition,
   Oracle,
   Pyramids,
-} from '../../../base-wonder/Wonders.js';
+} from '../../../base-wonders-civ1/Wonders.js';
 import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import PlayerResearchRegistry from '../../../base-science/PlayerResearchRegistry.js';

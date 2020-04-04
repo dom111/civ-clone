@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "dependencies": [
     "core-registry",
-    "core-rules",
-    "core-yields"
+    "core-yields",
+    "core-rules-registry"
   ],
   "components": [
     {

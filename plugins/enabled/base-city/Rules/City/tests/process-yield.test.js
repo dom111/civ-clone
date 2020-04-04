@@ -1,5 +1,5 @@
 import {Food} from '../../../../base-terrain-yields/Yields/Food.js';
-import RulesRegistry from '../../../../core-rules/RulesRegistry.js';
+import RulesRegistry from '../../../../core-rules-registry/RulesRegistry.js';
 import assert from 'assert';
 import created from '../created.js';
 import grow from '../grow.js';

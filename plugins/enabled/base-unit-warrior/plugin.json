@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "dependencies": [
     "base-unit",
-    "core-rules",
-    "base-city"
+    "base-city",
+    "core-rules-registry"
   ],
   "components": [
     {

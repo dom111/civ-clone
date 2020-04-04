@@ -2,9 +2,7 @@
   "name": "core-rules",
   "title": "Core RulesRegistry",
   "version": "0.1.0",
-  "dependencies": [
-    "core-registry"
-  ],
+  "dependencies": [],
   "components": [
     {
       "type": "script",
@@ -17,10 +15,6 @@
     {
       "type": "script",
       "file": "Effect.js"
-    },
-    {
-      "type": "script",
-      "file": "RulesRegistry.js"
     },
     {
       "type": "script",

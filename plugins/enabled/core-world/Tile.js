@@ -1,5 +1,5 @@
 import {Land, Water} from '../core-terrain/Types.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tileset from './Tileset.js';
 import {Yield} from '../core-yields/Yield.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';

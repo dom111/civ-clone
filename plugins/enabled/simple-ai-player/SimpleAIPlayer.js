@@ -18,7 +18,7 @@ import PathFinderRegistry from '../core-world/PathFinderRegistry.js';
 import PlayerGovernmentRegistry from '../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../base-science/PlayerResearchRegistry.js';
-import RulesRegistry from '../core-rules/RulesRegistry.js';
+import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import {Settlers} from '../base-units-civ1/Units.js';
 import TileImprovementRegistry from '../core-tile-improvements/TileImprovementRegistry.js';
 import {Trade} from '../base-terrain-yield-trade/Yields.js';
