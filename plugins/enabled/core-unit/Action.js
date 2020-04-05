@@ -31,6 +31,8 @@ export class Action {
     return this.#from;
   }
 
+  perform() {}
+
   rulesRegistry() {
     return this.#rulesRegistry;
   }

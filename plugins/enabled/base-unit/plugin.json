@@ -12,7 +12,8 @@
     "core-city",
     "core-player",
     "core-turn-based-game",
-    "core-rules-registry"
+    "core-rules-registry",
+    "core-registry"
   ],
   "components": [
     {
@@ -114,6 +115,10 @@
     {
       "type": "script",
       "file": "Types/Fortifiable.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Pillage.js"
     }
   ]
 }

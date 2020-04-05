@@ -8,16 +8,11 @@
     "core-civilization",
     "core-player",
     "core-rules",
-    "core-terrain",
     "core-unit",
-    "base-units-civ1",
-    "core-rules-registry"
+    "core-rules-registry",
+    "base-unit-settlers"
   ],
   "components": [
-    {
-      "type": "script",
-      "file": "Events/World/built.js"
-    },
     {
       "type": "script",
       "file": "Events/Player/defeated.js"
@@ -57,6 +52,10 @@
     {
       "type": "script",
       "file": "Rules/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/World/built.js"
     }
   ]
 }

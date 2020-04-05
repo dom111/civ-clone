@@ -5,7 +5,8 @@
     "core-turn-based-game",
     "core-unit",
     "core-game-year",
-    "core-player"
+    "core-player",
+    "core-goody-huts"
   ],
   "components": [
     {

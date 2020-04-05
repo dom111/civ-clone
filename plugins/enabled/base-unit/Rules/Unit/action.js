@@ -7,6 +7,7 @@ import {
   Sleep,
 } from '../../Actions.js';
 import {Fortifiable, Land, Naval} from '../../Types.js';
+import {Irrigation, Mine, Railroad, Road} from '../../../base-tile-improvements/TileImprovements.js';
 import And from '../../../core-rules/Criteria/And.js';
 import CityRegistry from '../../../core-city/CityRegistry.js';
 import Criterion from '../../../core-rules/Criterion.js';
@@ -14,6 +15,7 @@ import Effect from '../../../core-rules/Effect.js';
 import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
+import TileImprovementRegistry from '../../../core-tile-improvements/TileImprovementRegistry.js';
 import UnitRegistry from '../../../core-unit/UnitRegistry.js';
 
 export const isNeighbouringTile = new Criterion((unit, to, from = unit.tile()) => to.isNeighbourOf(from)),
@@ -25,6 +27,7 @@ export const isNeighbouringTile = new Criterion((unit, to, from = unit.tile()) =
 export const getRules = ({
   cityRegistry = CityRegistry.getInstance(),
   rulesRegistry = RulesRegistry.getInstance(),
+  tileImprovementRegistry = TileImprovementRegistry.getInstance(),
   unitRegistry = UnitRegistry.getInstance(),
 } = {}) => {
   return [
@@ -129,6 +132,21 @@ export const getRules = ({
         .length
       ),
       new Effect((unit, to, from = unit.tile()) => new CaptureCity({unit, to, from, rulesRegistry, cityRegistry}))
+    ),
+
+    new Rule(
+      'unit:action:pillage',
+      hasEnoughMovesLeft,
+      new Criterion((unit) => unit instanceof Fortifiable),
+      new Criterion((unit, to, from = unit.tile()) => from === to),
+      new Criterion((unit, to) => tileImprovementRegistry.getBy('tile', to)
+        // TODO: Pillagable(sp?)Improvement subclass?
+        .filter((improvement) => [Irrigation, Mine, Railroad, Road]
+          .some((Improvement) => improvement instanceof Improvement)
+        )
+        .length > 0
+      ),
+      new Effect((unit, to, from = unit.tile()) => new Fortify({unit, to, from, rulesRegistry}))
     ),
 
     new Rule(

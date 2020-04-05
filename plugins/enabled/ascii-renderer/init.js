@@ -1,4 +1,5 @@
 import CityRegistry from '../core-city/CityRegistry.js';
+import GoodyHutRegistry from '../core-goody-huts/GoodyHutRegistry.js';
 import PlayerRegistry from '../core-player/PlayerRegistry.js';
 import Turn from '../core-turn-based-game/Turn.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
@@ -9,6 +10,7 @@ let map;
 export const renderMap = ({
   cityRegistry = CityRegistry.getInstance(),
   everyXTurns = parseInt(engine.option('renderTurns', 1), 10),
+  goodyHutRegistry = GoodyHutRegistry.getInstance(),
   mapToRender = map,
   playerRegistry = PlayerRegistry.getInstance(),
   observingPlayers = playerRegistry.entries(),
@@ -73,6 +75,7 @@ export const renderMap = ({
           ;
 
           return {
+            goodyHut: goodyHutRegistry.getBy('tile', tile).length > 0,
             terrain: tile.terrain().constructor.name,
             terrainFeatures: tile.terrain().features().map((feature) => feature.constructor.name).join(','),
             units: tileUnits.map((unit) => (
@@ -95,7 +98,9 @@ export const renderMap = ({
                 `${lookup[tile.city.player]}#\u001b[0m` :
                 tile.units.length ?
                   `${lookup[tile.units[0].player]}${lookup[tile.units[0].name] || tile.units[0].name.substr(0, 1)}\u001b[0m` :
-                  `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
+                  tile.goodyHut ?
+                    '\u001b[38;5;220;48;5;250m#\u001b[0m' :
+                    `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
               ' '
           ) + (
             (i % mapToRender.width()) === (mapToRender.width() - 1) ?

@@ -32,7 +32,7 @@
 - [X] Add trade rates to control how much of a city's yield is tax/science/etc
 - [X] Convert science to trade rate
 - [X] Add tax trade rate
-- [-] Look at the benefit of creating a single entity registry with helper methods like `.is(...)`. - `const [entity] = Registry.getBy(...)` is sufficient for this.
+- [X] Look at the benefit of creating a single entity registry with helper methods like `.is(...)`. - `const [entity] = Registry.getBy(...)` is sufficient for this.
 - [X] Obseletion mechanism (primarily units, but potentially anything...) - Covered by research with an extra criteria check.
 - [X] Add `Modifier`s to `Yield`s with either a priority field, or a `Queue` of some sort.
 - [X] Add Science and Gold multipliers (Library, Marketplace, etc)
@@ -48,7 +48,7 @@
 - [X] Add ability to spend gold on city build items.
 - [X] Move `foodStorage` into a value object instead of a property.
 - [X] Add pathing mechanisms (A*?)
-- [-] Add version checking to plugin system. - negated when moving to using npm modules.
+- [X] Add version checking to plugin system. - negated when moving to using npm modules.
 - [X] Fix bug where AI wasn't attacking other units
 - [X] Change the way events and rules are triggered to make testing feasible. This could be main script in package.json.
 - [X] Fix bug when AI is using `NavalTransport` - unit testing the AI might be a good way to do this... (Game hangs)
@@ -58,8 +58,8 @@
 - [X] Handle `Unit#transport` somehow. Perhaps this needs to be a `Registry` to avoid adding it to `Unit`?
 - [X] Implement `Priority` for `Rule`s to aid processing `Trade`.
 - [X] Add wonders.
-- [-] Add wealth. - not civ 1 - delay
-- [-] Add build-queue. - not civ 1 - delay
+- [X] Add wealth. - not civ 1 - delay
+- [X] Add build-queue. - not civ 1 - delay
 - [X] Break `base-civilizations` into individual plugins.
 - [X] Break `base-unit` into individual plugins.
 - [X] Break `base-city-improvements` into individual plugins.
@@ -68,6 +68,8 @@
 - [X] Add `Zulu`, `Egyptian`, `Chinese`, `Mongol` civilizations for Civ1 compatibility.
 - [X] Break `base-wonder` into individual plugins.
 - [X] Add `Sleep` action definition `Rule`s.
+- [X] Add `Pillage` unit action.
+- [X] Add goody huts
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
 - [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
 - [ ] Convert to TypeScript?
@@ -89,7 +91,6 @@
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
 - [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
-- [ ] Add goody huts
 - [ ] Consider building a 'compiler' that can build a static version of the game including all rules that would run better and consider the current state as 'dev' mode.
 - [ ] Add diplomacy
 - [ ] Add leader traits
@@ -110,5 +111,4 @@
 - [ ] Add effects for `Pyramids`.
 - [ ] Add more variance in the world that are generated again - no islands appear to be generated no matter the settings used.
 - [ ] Fix any tests that rely on global instances.
-- [ ] Add `Pillage` unit action.
 - [ ] Break `base-terrain` into individual `base-terrain-x` plugins and incorporate `movementCost`s.

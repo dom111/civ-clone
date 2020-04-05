@@ -1,8 +1,10 @@
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
-import seen from './Rules/Tile/seen.js';
+import engineStart from './Rules/Engine/start.js';
+import tileSeen from './Rules/Tile/seen.js';
 
 RulesRegistry.getInstance()
   .register(
-    ...seen()
+    ...engineStart(),
+    ...tileSeen()
   )
 ;

@@ -64,7 +64,7 @@ export class Tileset {
     this.#tiles.push(...tiles);
   }
 
-  score({player = null, values}) {
+  score({player = null, values} = {}) {
     return this.map((tile) => tile.score({player, values}))
       .reduce((total, score) => total + score, 0)
     ;

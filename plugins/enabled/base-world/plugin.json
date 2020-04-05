@@ -9,10 +9,6 @@
   "components": [
     {
       "type": "script",
-      "file": "Events/Engine/start.js"
-    },
-    {
-      "type": "script",
       "file": "Events/Player/government-changed.js"
     },
     {
@@ -26,6 +22,14 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/World/built.js"
     }
   ]
 }

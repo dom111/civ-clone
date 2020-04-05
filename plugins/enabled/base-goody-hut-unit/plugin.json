@@ -1,0 +1,26 @@
+{
+  "name": "base-goody-hut-unit",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-goody-huts",
+    "core-rules-registry",
+    "core-rules",
+    "base-unit-horseman",
+    "base-unit-swordman",
+    "core-unit"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Unit.js"
+    }
+  ]
+}

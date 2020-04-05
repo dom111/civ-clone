@@ -9,6 +9,7 @@ import AIPlayer from '../core-player/AIPlayer.js';
 import CityBuild from '../base-city/CityBuild.js';
 import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
+import GoodyHutRegistry from '../core-goody-huts/GoodyHutRegistry.js';
 import {Monarchy as MonarchyAdvance} from '../base-science/Advances.js';
 import {Monarchy as MonarchyGovernment} from '../base-governments/Governments.js';
 import {NavalTransport} from '../base-unit-transport/Types.js';
@@ -110,6 +111,7 @@ export class SimpleAIPlayer extends AIPlayer {
   #rulesRegistry;
   #unitRegistry;
   #cityRegistry;
+  #goodyHutRegistry;
   #playerGovernmentRegistry;
   #playerResearchRegistry;
   #unitImprovementRegistry;
@@ -147,6 +149,12 @@ export class SimpleAIPlayer extends AIPlayer {
     }
 
     let score = 0;
+
+    const [goodyHut] = this.#goodyHutRegistry.getBy('tile', tile);
+
+    if (goodyHut) {
+      score += 60;
+    }
 
     // TODO: consider appending all the positives to the score instead of returning immediately
     if (
@@ -350,6 +358,14 @@ export class SimpleAIPlayer extends AIPlayer {
         tileImprovementRegistry: this.#tileImprovementRegistry,
       });
     }
+
+    // If we're here, we still have some moves left, lets clear them up.
+    // TODO: This might not be necessary, just remove all checks for >= .1 moves left...
+    if (unit.moves() > 0) {
+      unit.action({
+        action: new NoOrders({unit}),
+      });
+    }
   }
 
   preProcessTurn() {
@@ -437,6 +453,7 @@ export class SimpleAIPlayer extends AIPlayer {
     rulesRegistry = RulesRegistry.getInstance(),
     unitRegistry = UnitRegistry.getInstance(),
     cityRegistry = CityRegistry.getInstance(),
+    goodyHutRegistry = GoodyHutRegistry.getInstance(),
     pathFinderRegistry = PathFinderRegistry.getInstance(),
     playerGovernmentRegistry = PlayerGovernmentRegistry.getInstance(),
     playerResearchRegistry = PlayerResearchRegistry.getInstance(),
@@ -446,6 +463,7 @@ export class SimpleAIPlayer extends AIPlayer {
     this.#rulesRegistry = rulesRegistry;
     this.#unitRegistry = unitRegistry;
     this.#cityRegistry = cityRegistry;
+    this.#goodyHutRegistry = goodyHutRegistry;
     this.#playerGovernmentRegistry = playerGovernmentRegistry;
     this.#playerResearchRegistry = playerResearchRegistry;
     this.#unitImprovementRegistry = unitImprovementRegistry;

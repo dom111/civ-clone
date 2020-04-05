@@ -38,6 +38,10 @@ export class PlayerResearch {
       return;
     }
 
+    if (this.#researching === Advance) {
+      this.#researching = null;
+    }
+
     const completedResearch = new Advance();
 
     this.#complete.push(completedResearch);

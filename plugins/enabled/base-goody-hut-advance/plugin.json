@@ -1,0 +1,24 @@
+{
+  "name": "base-goody-hut-advance",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-science",
+    "core-goody-huts",
+    "core-rules-registry",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Advance.js"
+    }
+  ]
+}
