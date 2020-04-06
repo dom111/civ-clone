@@ -112,3 +112,5 @@
 - [ ] Add more variance in the world that are generated again - no islands appear to be generated no matter the settings used.
 - [ ] Fix any tests that rely on global instances.
 - [ ] Break `base-terrain` into individual `base-terrain-x` plugins and incorporate `movementCost`s.
+- [ ] Add `Negotiation` to `core-diplomacy`.
+- [ ] Add more `Interaction`s and use this data to inform AI decisions on trusting another player.
