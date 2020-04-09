@@ -2,6 +2,10 @@ import EventEmitter from 'events';
 import Manager from './Plugin/Manager.js';
 import loadJSON from './lib/loadJSON.js';
 import path from 'path';
+import {
+  isMainThread, parentPort, workerData,
+} from 'worker_threads';
+
 
 export class Engine extends EventEmitter {
   #defaultPaths = {
@@ -14,7 +18,7 @@ export class Engine extends EventEmitter {
   #paths = {};
   #pluginManager;
 
-  constructor(paths = {}) {
+  constructor(paths = workerData || {}) {
     super();
 
     this.#pluginManager = new Manager(this);
@@ -44,6 +48,37 @@ export class Engine extends EventEmitter {
     this.debug(() => console.log(`Engine#emit: ${event}: ${args}`));
 
     super.emit(event, ...args);
+
+    const simplify = (value) => {
+      if (value instanceof Function) {
+        return {
+          _: value.name,
+          ...value,
+        };
+      }
+
+      if (value instanceof Object) {
+        const simple = {};
+
+        Object.entries(value)
+          .forEach(([key, value]) => simple[key] = simplify(value))
+        ;
+
+        return {
+          _: value.constructor.name,
+          ...simple,
+        };
+      }
+
+      return value;
+    };
+
+    if (! isMainThread) {
+      parentPort.postMessage({
+        event,
+        args: args.map((arg) => simplify(arg)),
+      });
+    }
   }
 
   loadPlugins() {
