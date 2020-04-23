@@ -1,7 +1,13 @@
 export class GoodyHutAction {
+  /** @type {GoodyHut} */
   #goodyHut;
+  /** @type {Unit} */
   #unit;
 
+  /**
+   * @param goodyHut {GoodyHut}
+   * @param unit {Unit}
+   */
   constructor({
     goodyHut,
     unit,
@@ -10,12 +16,18 @@ export class GoodyHutAction {
     this.#unit = unit;
   }
 
+  /**
+   * @returns {GoodyHut}
+   */
   goodyHut() {
     return this.#goodyHut;
   }
 
   perform() {}
 
+  /**
+   * @returns {Unit}
+   */
   unit() {
     return this.#unit;
   }

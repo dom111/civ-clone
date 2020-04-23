@@ -3,8 +3,14 @@ import CityRegistry from '../core-city/CityRegistry.js';
 import GoodyHutAction from '../core-goody-huts/GoodyHutAction.js';
 
 export class BuildCity extends GoodyHutAction {
+  /** @type {CityRegistry} */
   #cityRegistry;
 
+  /**
+   * @param goodyHut {GoodyHut}
+   * @param cityRegistry {CityRegistry}
+   * @param unit {Unit}
+   */
   constructor({
     goodyHut,
     cityRegistry = CityRegistry.getInstance(),

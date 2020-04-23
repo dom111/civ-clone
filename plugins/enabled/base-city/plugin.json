@@ -74,15 +74,27 @@
     },
     {
       "type": "script",
-      "file": "registerActions.js"
-    },
-    {
-      "type": "script",
       "file": "registerRules.js"
     },
     {
       "type": "script",
       "file": "AvailableCityBuildItemsRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/CityBuild.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
     }
   ]
 }

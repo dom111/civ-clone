@@ -5,6 +5,7 @@ import created from './Rules/Unit/created.js';
 import destroyed from './Rules/Unit/destroyed.js';
 import moved from './Rules/Unit/moved.js';
 import movementCost from './Rules/Unit/movementCost.js';
+import playerAction from './Rules/Player/action.js';
 import validateMove from './Rules/Unit/validateMove.js';
 
 RulesRegistry.getInstance()
@@ -15,6 +16,7 @@ RulesRegistry.getInstance()
     ...destroyed(),
     ...moved(),
     ...movementCost(),
+    ...playerAction(),
     ...validateMove()
   )
 ;

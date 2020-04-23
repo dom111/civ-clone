@@ -3,10 +3,19 @@ import Path from '../core-world/Path.js';
 import PathFinder from '../core-world/PathFinder.js';
 
 export class BasePathFinder extends PathFinder {
+  /** @type {Path[]} */
   #candidates = [];
+  /** @type {{}[]} */
   #heap = [this.createNode(this.start())];
+  /** @type {Tile} */
   #seen = [this.start()];
 
+  /**
+   * @param tile {Tile}
+   * @param parent {{}}
+   * @param cost {number}
+   * @returns {{parent: null, cost: number, tile: Tile}}
+   */
   createNode(tile, parent = null, cost = 0) {
     return {
       tile,
@@ -15,6 +24,10 @@ export class BasePathFinder extends PathFinder {
     };
   }
 
+  /**
+   * @param node {{}}
+   * @returns {Path}
+   */
   createPath(node) {
     const tiles = [];
 
@@ -36,6 +49,9 @@ export class BasePathFinder extends PathFinder {
     return path;
   }
 
+  /**
+   * @returns {Path}
+   */
   generate() {
     while (this.#heap.length) {
       const currentNode = this.#heap.shift(),

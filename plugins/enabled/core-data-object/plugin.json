@@ -1,0 +1,14 @@
+{
+  "name": "core-data-object",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "DataObject.js"
+    }
+  ],
+  "dependencies": [
+    "core-registry",
+    "core-rules-registry"
+  ]
+}

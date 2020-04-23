@@ -3,12 +3,24 @@ import Tile from './Tile.js';
 import Tileset from './Tileset.js';
 
 export class Path extends Tileset {
+  /** @type {number} */
   #movementCost;
 
+  /**
+   * @returns {Tile}
+   */
   end() {
     return this.get(this.length - 1);
   }
 
+  /**
+   * @static
+   * @param unit {Unit}
+   * @param start {Tile}
+   * @param end {Tile}
+   * @param pathFinderRegistry {PathFinderRegistry}
+   * @returns {Path}
+   */
   static for(unit, start, end, pathFinderRegistry = PathFinderRegistry.getInstance()) {
     // If there are lots of `PathFinder`s here, this could take aaages, so probably best to only have one registered at
     // a time, but this mechanism avoids and hard-coding
@@ -28,14 +40,23 @@ export class Path extends Tileset {
     return path;
   }
 
+  /**
+   * @returns {number}
+   */
   movementCost() {
     return this.#movementCost;
   }
 
+  /**
+   * @param movementCost {number}
+   */
   setMovementCost(movementCost) {
     this.#movementCost = movementCost;
   }
 
+  /**
+   * @param tiles {...Tile}
+   */
   push(...tiles) {
     tiles.forEach((tile) => {
       if (! (tile instanceof Tile)) {
@@ -52,6 +73,9 @@ export class Path extends Tileset {
     });
   }
 
+  /**
+   * @returns {Tile}
+   */
   start() {
     return this.get(0);
   }

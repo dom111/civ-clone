@@ -27,7 +27,7 @@ export const setUpCity = ({
       rulesRegistry,
     });
 
-    world.getBy(() => true)
+    world.entries()
       .forEach((tile) => tile.terrain().features().push(new Shield()))
     ;
 
@@ -56,14 +56,14 @@ export const setUpCity = ({
         return;
       }
 
-      if ([Desert, Grassland, Hills, Plains, River].includes(tile.terrain().constructor)) {
+      if ([Desert, Grassland, Hills, Plains, River].some((Terrain) => tile.terrain() instanceof Terrain)) {
         tileImprovementRegistry.register(new Irrigation(tile));
       }
-      else if ([Hills, Mountains].includes(tile.terrain().constructor)) {
+      else if ([Hills, Mountains].some((Terrain) => tile.terrain() instanceof Terrain)) {
         tileImprovementRegistry.register(new Mine(tile));
       }
 
-      if (! [Arctic, Ocean, River].includes(tile.terrain().constructor)) {
+      if (! [Arctic, Ocean, River].some((Terrain) => tile.terrain() instanceof Terrain)) {
         tileImprovementRegistry.register(new Road(tile));
       }
 

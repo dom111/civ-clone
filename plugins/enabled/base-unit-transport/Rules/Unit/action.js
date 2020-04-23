@@ -7,6 +7,7 @@ import Criterion from '../../../core-rules/Criterion.js';
 import Effect from '../../../core-rules/Effect.js';
 import {Land} from '../../../base-unit/Types.js';
 import {NavalTransport} from '../../Types.js';
+import Or from '../../../core-rules/Criteria/Or.js';
 import Rule from '../../../core-rules/Rule.js';
 import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 import TransportRegistry from '../../TransportRegistry.js';
@@ -47,6 +48,10 @@ export const getRules = ({
       new Criterion((unit) => transportRegistry.getBy('unit', unit)
         .length
       ),
+      new Or(
+        new Criterion((unit) => ! (unit instanceof Land)),
+        new Criterion((unit, to) => to.isLand())
+      ),
       new Criterion((unit, to, from = unit.tile()) => transportRegistry.getBy('unit', unit)
         .every((manifest) => manifest.transport()
           .tile() === from
@@ -61,6 +66,9 @@ export const getRules = ({
       new Criterion((unit) => unit instanceof NavalTransport),
       new Criterion((unit) => unit.hasCargo()),
       new Criterion((unit, to, from = unit.tile()) => from === to),
+      new Criterion((unit, to) => to.getNeighbours()
+        .some((tile) => tile.isLand())
+      ),
       new Effect((unit, to, from = unit.tile()) => new Unload({unit, to, from, rulesRegistry}))
     ),
   ];

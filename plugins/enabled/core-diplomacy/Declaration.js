@@ -3,8 +3,12 @@ import Interaction from './Interaction.js';
 import Player from '../core-player/Player.js';
 
 export class Declaration extends Interaction {
+  /** @type Expiry */
   #expiry = new Expiry(Infinity);
 
+  /**
+   * @param args {...(Player|Expiry)}
+   */
   constructor(...args) {
     const players = args.filter((arg) => arg instanceof Player);
 
@@ -17,6 +21,9 @@ export class Declaration extends Interaction {
     });
   }
 
+  /**
+   * @returns {Expiry}
+   */
   expiry() {
     return this.#expiry;
   }

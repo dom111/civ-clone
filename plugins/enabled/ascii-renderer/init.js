@@ -7,6 +7,19 @@ import Year from '../core-game-year/Year.js';
 
 let map;
 
+/**
+ * @param cityRegistry {CityRegistry}
+ * @param everyXTurns {number}
+ * @param goodyHutRegistry {GoodyHutRegistry}
+ * @param mapToRender {World}
+ * @param playerRegistry {PlayerRegistry}
+ * @param observingPlayers {Player[]}
+ * @param showMap {string}
+ * @param topCorner {boolean}
+ * @param turn {Turn}
+ * @param unitRegistry {UnitRegistry}
+ * @param year {Year}
+ */
 export const renderMap = ({
   cityRegistry = CityRegistry.getInstance(),
   everyXTurns = parseInt(engine.option('renderTurns', 1), 10),
@@ -99,7 +112,7 @@ export const renderMap = ({
                 tile.units.length ?
                   `${lookup[tile.units[0].player]}${lookup[tile.units[0].name] || tile.units[0].name.substr(0, 1)}\u001b[0m` :
                   tile.goodyHut ?
-                    '\u001b[38;5;220;48;5;250m#\u001b[0m' :
+                    '\u001b[38;5;0;48;5;220m!\u001b[0m' :
                     `${lookup[tile.terrain] || tile.terrain}${(tile.terrainFeatures ? tile.terrainFeatures : tile.terrain).substr(0, 1)}\u001b[0m` :
               ' '
           ) + (

@@ -14,27 +14,19 @@
     },
     {
       "type": "script",
-      "file": "AIPlayer.js"
-    },
-    {
-      "type": "script",
-      "file": "HumanPlayer.js"
-    },
-    {
-      "type": "script",
-      "file": "PlayerActionProvider.js"
-    },
-    {
-      "type": "script",
-      "file": "PlayerActionRegistry.js"
-    },
-    {
-      "type": "script",
       "file": "CurrentPlayerRegistry.js"
     },
     {
       "type": "script",
       "file": "PlayerRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerAction.js"
+    },
+    {
+      "type": "script",
+      "file": "MandatoryPlayerAction.js"
     }
   ]
 }

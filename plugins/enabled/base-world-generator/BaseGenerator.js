@@ -3,16 +3,37 @@ import {Generator} from '../core-world-generator/Generator.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class BaseGenerator extends Generator {
+  /** @type {number} */
   #chanceToBecomeLand;
+  /** @type {number} */
   #clusterChance;
+  /** @type {number} */
   #coverage;
+  /** @type {number} */
   #landCoverage;
+  /** @type {number} */
   #landMassReductionScale;
+  /** @type {Terrain[]} */
   #map;
+  /** @type {number} */
   #maxIterations;
+  /** @type {number} */
   #pathChance;
+  /** @type {RulesRegistry} */
   #rulesRegistry;
 
+  /**
+   * @param coverage {number}
+   * @param chanceToBecomeLand {number}
+   * @param clusterChance {number}
+   * @param height {number}
+   * @param landCoverage {number}
+   * @param landMassReductionScale {number}
+   * @param maxIterations {number}
+   * @param pathChance {number}
+   * @param rulesRegistry {RulesRegistry}
+   * @param width {number}
+   */
   constructor({
     coverage = .1,
     chanceToBecomeLand = 5,
@@ -42,6 +63,9 @@ export class BaseGenerator extends Generator {
     ;
   }
 
+  /**
+   * @returns {Terrain[]}
+   */
   generateLand() {
     const seen = {},
       toProcess = [],
@@ -93,6 +117,9 @@ export class BaseGenerator extends Generator {
     return this.generateLand();
   }
 
+  /**
+   * @returns {Terrain[]}
+   */
   generate() {
     this.generateLand();
     this.populateTerrain();
@@ -100,6 +127,11 @@ export class BaseGenerator extends Generator {
     return this.#map;
   }
 
+  /**
+   * @param index {number}
+   * @param directNeighbours {boolean}
+   * @returns {number[]}
+   */
   getNeighbours(index, directNeighbours = true) {
     const [x, y] = this.indexToCoords(index),
 

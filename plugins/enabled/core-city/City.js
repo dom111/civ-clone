@@ -1,23 +1,42 @@
+import DataObject from '../core-data-object/DataObject.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tileset from '../core-world/Tileset.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
 
-export class City {
+export class City extends DataObject {
+  /** @type {string} */
   #name;
+  /** @type {Player} */
   #originalPlayer;
+  /** @type {Player} */
   #player;
+  /** @type {RulesRegistry} */
   #rulesRegistry;
+  /** @type {number} */
   #size = 1;
+  /** @type {Tile} */
   #tile;
+  /** @type {Tileset} */
   #tiles;
+  /** @type {Tileset} */
   #tilesWorked = new Tileset();
 
+  /**
+   * @param player {Player}
+   * @param tile {Tile}
+   * @param name {string}
+   * @param rulesRegistry {RulesRegistry}
+   */
   constructor({
     player,
     tile,
     name,
     rulesRegistry = RulesRegistry.getInstance(),
   }) {
+    super({
+      rulesRegistry,
+    });
+
     this.#name = name;
     this.#originalPlayer = player;
     this.#player = player;
@@ -61,12 +80,18 @@ export class City {
     );
   }
 
+  /**
+   * @param player {Player}
+   */
   capture(player) {
     this.#player = player;
 
     this.#rulesRegistry.process('city:captured', this, player);
   }
 
+  /**
+   * @param player {Player|null}
+   */
   destroy(player = null) {
     this.#rulesRegistry.process('city:destroyed', this, player);
   }
@@ -77,14 +102,38 @@ export class City {
     this.#rulesRegistry.process('city:grow', this);
   }
 
+  /**
+   * @returns {string[]}
+   */
+  keys() {
+    return [
+      'name',
+      'player',
+      'size',
+      'tile',
+      'tilesWorked',
+      'yields',
+      ...super.keys(),
+    ];
+  }
+
+  /**
+   * @returns {string}
+   */
   name() {
     return this.#name;
   }
 
+  /**
+   * @returns {Player}
+   */
   originalPlayer() {
     return this.#originalPlayer;
   }
 
+  /**
+   * @returns {Player}
+   */
   player() {
     return this.#player;
   }
@@ -95,18 +144,32 @@ export class City {
     this.#rulesRegistry.process('city:shrink', this);
   }
 
+  /**
+   * @returns {number}
+   */
   size() {
     return this.#size;
   }
 
+  /**
+   * @returns {Tile}
+   */
   tile() {
     return this.#tile;
   }
 
+  /**
+   * @returns {Tileset}
+   */
   tilesWorked() {
     return this.#tilesWorked;
   }
 
+  /**
+   * @param yieldRegistry {YieldRegistry}
+   * @param yields {class[]}
+   * @returns {Yield[]}
+   */
   yields({
     yieldRegistry = YieldRegistry.getInstance(),
     yields = yieldRegistry.entries(),

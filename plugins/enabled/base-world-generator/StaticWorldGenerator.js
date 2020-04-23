@@ -35,6 +35,9 @@ export class StaticWorldGenerator extends Generator {
     });
   }
 
+  /**
+   * @returns {Terrain[]}
+   */
   generate() {
     return [
       [Arctic],
@@ -66,6 +69,11 @@ export class StaticWorldGenerator extends Generator {
     ;
   }
 
+  /**
+   * @param Terrain {class}
+   * @param Feature {class}
+   * @returns {Terrain}
+   */
   getTerrainWithFeature(Terrain, Feature) {
     const terrain = new Terrain();
 

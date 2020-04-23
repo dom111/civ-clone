@@ -6,7 +6,8 @@
     "core-registry",
     "core-world",
     "core-yields",
-    "core-rules-registry"
+    "core-rules-registry",
+    "core-data-object"
   ],
   "components": [
     {

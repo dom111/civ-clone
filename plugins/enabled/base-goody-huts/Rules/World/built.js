@@ -13,11 +13,13 @@ export const getRules = ({
     new Effect((world) => {
       const goodyHutRules = rulesRegistry.get('tile:goody-hut');
 
-      world.getBy((tile) => goodyHutRules.every((rule) => rule.validate(tile)))
-        .forEach((tile) => goodyHutRegistry.register(new GoodyHut({
-          tile,
-        })))
-      ;
+      world.entries((tile) => {
+        if (goodyHutRules.every((rule) => rule.validate(tile))) {
+          goodyHutRegistry.register(new GoodyHut({
+            tile,
+          }));
+        }
+      });
     })
   ),
 ];

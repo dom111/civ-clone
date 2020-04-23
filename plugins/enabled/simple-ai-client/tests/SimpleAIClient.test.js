@@ -5,14 +5,14 @@ import CityImprovementRegistry from '../../core-city-improvement/CityImprovement
 import CityRegistry from '../../core-city/CityRegistry.js';
 import CivilizationRegistry from '../../core-civilization/CivilizationRegistry.js';
 import PathFinderRegistry from '../../core-world/PathFinderRegistry.js';
-import PlayerActionRegistry from '../../core-player/PlayerActionRegistry.js';
+import Player from '../../core-player/Player.js';
 import PlayerGovernment from '../../base-player-government/PlayerGovernment.js';
 import PlayerGovernmentRegistry from '../../base-player-government/PlayerGovernmentRegistry.js';
 import PlayerResearch from '../../base-science/PlayerResearch.js';
 import PlayerResearchRegistry from '../../base-science/PlayerResearchRegistry.js';
 import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 import {Sail} from '../../base-unit-transport/Units.js';
-import SimpleAIPlayer from '../SimpleAIPlayer.js';
+import SimpleAIClient from '../SimpleAIClient.js';
 import TileImprovementRegistry from '../../core-tile-improvements/TileImprovementRegistry.js';
 import TransportRegistry from '../../base-unit-transport/TransportRegistry.js';
 import UnitImprovementRegistry from '../../base-unit-improvements/UnitImprovementRegistry.js';
@@ -36,12 +36,12 @@ import transportYield from '../../base-unit-transport/Rules/Unit/yield.js';
 import turnYear from '../../base-game-year/Rules/Turn/year.js';
 import unitCreated from '../../base-unit/Rules/Unit/created.js';
 import unitCreatedPlayer from '../../base-player/Rules/Unit/created.js';
-import unitsToMove from '../../base-unit/PlayerActions/unitsToMove.js';
+import unitsToMove from '../../base-unit/Rules/Player/action.js';
 import validateMove from '../../base-unit/Rules/Unit/validateMove.js';
 import warriorUnitYield from '../../base-unit-warrior/Rules/Unit/yield.js';
 import warriorYield from '../../base-unit-warrior/Rules/Unit/yield.js';
 
-describe('SimpleAIPlayer', () => {
+describe('SimpleAIClient', () => {
   const rulesRegistry = new RulesRegistry(),
     playerGovernmentRegistry = new PlayerGovernmentRegistry(),
     playerResearchRegistry = new PlayerResearchRegistry(),
@@ -52,15 +52,16 @@ describe('SimpleAIPlayer', () => {
     civilizationRegistry = new CivilizationRegistry(),
     tileImprovementRegistry = new TileImprovementRegistry(),
     unitImprovementRegistry = new UnitImprovementRegistry(),
-    playerActionRegistry = new PlayerActionRegistry(),
     cityImprovementRegistry = new CityImprovementRegistry(),
     pathFinderRegistry = new PathFinderRegistry(),
-    takeTurns = ({n = 1, player} = {}) => {
+    takeTurns = ({n = 1, client, callable = () => {}} = {}) => {
       while (n--) {
+        const player = client.player();
+
         rulesRegistry.process('turn:start', player);
         rulesRegistry.process('player:turn-start', player);
 
-        player.takeTurn({
+        client.takeTurn({
           cityRegistry,
           pathFinderRegistry,
           playerGovernmentRegistry,
@@ -70,6 +71,8 @@ describe('SimpleAIPlayer', () => {
           unitImprovementRegistry,
           unitRegistry,
         });
+
+        callable();
       }
     },
     createPlayers = ({
@@ -77,14 +80,16 @@ describe('SimpleAIPlayer', () => {
     } = {}) => new Array(n)
       .fill(0)
       .map(() => {
-        const player = new SimpleAIPlayer({
-            playerActionRegistry,
+        const player = new Player({
             rulesRegistry,
+          }),
+          client = new SimpleAIClient({
+            player,
           }),
           availableCivilizations = civilizationRegistry.entries()
         ;
 
-        player.chooseCivilization(availableCivilizations);
+        client.chooseCivilization(availableCivilizations);
 
         civilizationRegistry.unregister(player.civilization.constructor);
 
@@ -99,7 +104,7 @@ describe('SimpleAIPlayer', () => {
           rulesRegistry,
         }));
 
-        return player;
+        return client;
       })
   ;
 
@@ -141,13 +146,10 @@ describe('SimpleAIPlayer', () => {
       unitRegistry,
     }),
     ...unitCreatedPlayer(),
-    ...warriorUnitYield()
-  );
-
-  playerActionRegistry.register(
     ...unitsToMove({
       unitRegistry,
-    })
+    }),
+    ...warriorUnitYield()
   );
 
   civilizationRegistry.register(
@@ -158,7 +160,8 @@ describe('SimpleAIPlayer', () => {
 
   it('should move land units around to explore the available map', () => {
     const world = simpleWorldLoader('5O3GO3GO3G'),
-      [player] = createPlayers()
+      [client] = createPlayers(),
+      player = client.player()
     ;
 
     assert.strictEqual(player.seenTiles().length, 0);
@@ -178,7 +181,7 @@ describe('SimpleAIPlayer', () => {
 
     takeTurns({
       n: 3,
-      player,
+      client,
       world,
     });
 
@@ -189,7 +192,8 @@ describe('SimpleAIPlayer', () => {
 
   it('should move naval units around to explore the available map', () => {
     const world = simpleWorldLoader('16O'),
-      [player] = createPlayers(),
+      [client] = createPlayers(),
+      player = client.player(),
       unit = new Sail({
         player,
         rulesRegistry,
@@ -203,7 +207,7 @@ describe('SimpleAIPlayer', () => {
     unitRegistry.register(unit);
 
     takeTurns({
-      player,
+      client,
       world,
     });
 
@@ -214,7 +218,8 @@ describe('SimpleAIPlayer', () => {
 
   it('should embark land units onto naval transport units', () => {
     const world = simpleWorldLoader('6OG18O'),
-      [player] = createPlayers(),
+      [client] = createPlayers(),
+      player = client.player(),
       unit = new Warrior({
         player,
         rulesRegistry,
@@ -231,7 +236,7 @@ describe('SimpleAIPlayer', () => {
     unitRegistry.register(unit, transport);
 
     takeTurns({
-      player,
+      client,
       world,
     });
 
@@ -243,7 +248,8 @@ describe('SimpleAIPlayer', () => {
 
   it('should disembark land units from naval transport units', () => {
     const world = simpleWorldLoader('5OG10O'),
-      [player] = createPlayers(),
+      [client] = createPlayers(),
+      player = client.player(),
       unit = new Warrior({
         player,
         rulesRegistry,
@@ -257,13 +263,14 @@ describe('SimpleAIPlayer', () => {
       })
     ;
 
+    unitRegistry.register(transport, unit);
+
     transport.stow({
       unit,
     });
-    unitRegistry.register(transport, unit);
 
     takeTurns({
-      player,
+      client,
       world,
     });
 
@@ -274,15 +281,9 @@ describe('SimpleAIPlayer', () => {
   });
 
   it('should set a path to a capturable enemy city', () => {
-    const world = simpleWorldLoader(`
-      O O O O O O
-      O G G G G O
-      O O O O O G
-      O O G G G O
-      O G O O O O
-      O O G G G G
-    `),
-      [player] = createPlayers(),
+    const world = simpleWorldLoader('7O4G6OG2O3G2OG6O4G'),
+      [client] = createPlayers(),
+      player = client.player(),
       [enemy] = getPlayers({
         rulesRegistry,
       }),
@@ -302,14 +303,16 @@ describe('SimpleAIPlayer', () => {
       })
     ;
 
-    player.seenTiles().push(...world.getBy(() => true));
+    player.seenTiles()
+      .push(...world.entries())
+    ;
 
     unitRegistry.register(unit);
     cityRegistry.register(city);
 
     takeTurns({
       n: 13,
-      player,
+      client,
       world,
     });
 

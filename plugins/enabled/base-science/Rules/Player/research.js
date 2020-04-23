@@ -4,7 +4,7 @@ import Rule from '../../../core-rules/Rule.js';
 export const getRules = () => [
   new Rule(
     'player:research:event',
-    new Effect((player, advance) => engine.emit('player:research', player, advance))
+    new Effect((playerResearch, advance) => engine.emit('player:research', playerResearch, advance))
   ),
 ];
 

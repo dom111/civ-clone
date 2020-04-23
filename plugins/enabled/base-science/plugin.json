@@ -152,10 +152,6 @@
     },
     {
       "type": "script",
-      "file": "registerActions.js"
-    },
-    {
-      "type": "script",
       "file": "registerAdvances.js"
     },
     {
@@ -169,6 +165,18 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/ChooseResearch.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
     }
   ]
 }

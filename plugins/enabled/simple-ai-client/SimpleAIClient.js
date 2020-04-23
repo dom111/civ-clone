@@ -5,7 +5,7 @@ import {Fortifiable, Land, Naval, Worker} from '../base-unit/Types.js';
 import {Game, Oasis} from '../base-terrain-features/TerrainFeatures.js';
 import {Irrigation, Mine, Road} from '../base-tile-improvements/TileImprovements.js';
 import {Move, NoOrders} from '../base-unit/Actions.js';
-import AIPlayer from '../core-player/AIPlayer.js';
+import AIClient from '../core-ai-client/AIClient.js';
 import CityBuild from '../base-city/CityBuild.js';
 import CityRegistry from '../core-city/CityRegistry.js';
 import {Fortified} from '../base-unit-improvements/UnitImprovements.js';
@@ -27,7 +27,7 @@ import Unit from '../core-unit/Unit.js';
 import UnitImprovementRegistry from '../base-unit-improvements/UnitImprovementRegistry.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
 
-export class SimpleAIPlayer extends AIPlayer {
+export class SimpleAIClient extends AIClient {
   #shouldBuildCity = (tile) => {
     return (
       (
@@ -39,7 +39,7 @@ export class SimpleAIPlayer extends AIPlayer {
       ) &&
       tile.getSurroundingArea()
         .score({
-          player: this,
+          player: this.player(),
           values: [
             [Food, 4],
             [Production, 2],
@@ -61,7 +61,7 @@ export class SimpleAIPlayer extends AIPlayer {
         .some((improvement) => improvement instanceof Irrigation) &&
       tile.getSurroundingArea()
         .some((tile) => this.#cityRegistry.getBy('tile', tile)
-          .some((city) => city.player() === this)
+          .some((city) => city.player() === this.player())
         ) &&
       [...tile.getAdjacent(), tile]
         .some((tile) => tile.terrain() instanceof River ||
@@ -82,7 +82,7 @@ export class SimpleAIPlayer extends AIPlayer {
         .some((improvement) => improvement instanceof Mine) &&
       tile.getSurroundingArea()
         .some((tile) => this.#cityRegistry.getBy('tile', tile)
-          .some((city) => city.player() === this)
+          .some((city) => city.player() === this.player())
         )
     ;
   };
@@ -92,7 +92,7 @@ export class SimpleAIPlayer extends AIPlayer {
       .some((improvement) => improvement instanceof Road) &&
       tile.getSurroundingArea()
         .some((tile) => this.#cityRegistry.getBy('tile', tile)
-          .some((city) => city.player() === this)
+          .some((city) => city.player() === this.player())
         )
     ;
   };
@@ -170,7 +170,7 @@ export class SimpleAIPlayer extends AIPlayer {
         .sort((a, b) => b.defence() - a.defence())
       ,
       [defender] = tileUnits,
-      ourUnitsOnTile = tileUnits.some((unit) => unit.player() === this)
+      ourUnitsOnTile = tileUnits.some((unit) => unit.player() === this.player())
     ;
 
     if (
@@ -228,7 +228,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
     const discoverableTiles = tile.getNeighbours()
       .filter(
-        (neighbouringTile) => ! neighbouringTile.isVisible(this)
+        (neighbouringTile) => ! neighbouringTile.isVisible(this.player())
       )
       .length
     ;
@@ -259,7 +259,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
     while (unit.active() && unit.moves().value() >= .1) {
       if (loopCheck++ > 1e3) {
-        console.log('SimpleAIPlayer#moveUnit: loopCheck: aborting');
+        console.log('SimpleAIClient#moveUnit: loopCheck: aborting');
 
         return;
       }
@@ -377,7 +377,8 @@ export class SimpleAIPlayer extends AIPlayer {
     this.#seaTilesToExplore.splice(0);
     this.#undefendedCities.splice(0);
 
-    this.seenTiles()
+    this.player()
+      .seenTiles()
       .forEach((tile) => {
         const [tileCity] = this.#cityRegistry.getBy('tile', tile),
           tileUnits = this.#unitRegistry.getBy('tile', tile),
@@ -392,7 +393,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
         if (
           tileCity &&
-          tileCity.player() === this &&
+          tileCity.player() === this.player() &&
           ! tileUnits.length &&
           ! this.#undefendedCities.includes(tile) &&
           ! existingTarget
@@ -400,22 +401,22 @@ export class SimpleAIPlayer extends AIPlayer {
           this.#undefendedCities.push(tile);
         }
         // TODO: when diplomacy exists, check diplomatic status with player
-        else if (tileCity && tileCity.player() !== this && tileCity.originalPlayer() === this) {
+        else if (tileCity && tileCity.player() !== this.player() && tileCity.originalPlayer() === this.player()) {
           this.#citiesToLiberate.push(tile);
         }
-        else if (tileCity && tileCity.player() !== this && ! this.#enemyCitiesToAttack.includes(tile)) {
+        else if (tileCity && tileCity.player() !== this.player() && ! this.#enemyCitiesToAttack.includes(tile)) {
           this.#enemyCitiesToAttack.push(tile);
         }
         else if (
           tileUnits.length &&
-          tileUnits.some((unit) => unit.player() !== this) &&
+          tileUnits.some((unit) => unit.player() !== this.player()) &&
           this.#enemyUnitsToAttack.includes(tile)
         ) {
           this.#enemyUnitsToAttack.push(tile);
         }
         else if (
           tile.isLand() &&
-          tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
+          tile.getNeighbours().some((tile) => ! tile.isVisible(this.player())) &&
           ! this.#landTilesToExplore.includes(tile)
           && ! existingTarget
         ) {
@@ -423,7 +424,7 @@ export class SimpleAIPlayer extends AIPlayer {
         }
         else if (
           tile.isWater() &&
-          tile.getNeighbours().some((tile) => ! tile.isVisible(this)) &&
+          tile.getNeighbours().some((tile) => ! tile.isVisible(this.player())) &&
           this.#seaTilesToExplore.includes(tile)
           && ! existingTarget
         ) {
@@ -436,7 +437,7 @@ export class SimpleAIPlayer extends AIPlayer {
       })
     ;
 
-    this.#cityRegistry.getBy('player', this)
+    this.#cityRegistry.getBy('player', this.player())
       .forEach((city) => {
         const tileUnits = this.#unitRegistry.getBy('tile', city.tile());
 
@@ -475,16 +476,21 @@ export class SimpleAIPlayer extends AIPlayer {
 
         this.preProcessTurn();
 
-        const [playerGovernment] = this.#playerGovernmentRegistry.filter((playerGovernment) => playerGovernment.player() === this),
-          [playerResearch] = this.#playerResearchRegistry.filter((playerScience) => playerScience.player() === this)
+        const [playerGovernment] = this.#playerGovernmentRegistry.filter((playerGovernment) => playerGovernment.player() === this.player()),
+          [playerResearch] = this.#playerResearchRegistry.filter((playerScience) => playerScience.player() === this.player())
         ;
 
         if (playerResearch.completed(MonarchyAdvance) && ! playerGovernment.is(MonarchyGovernment)) {
           playerGovernment.set(new MonarchyGovernment());
         }
 
-        while (this.hasActions()) {
-          const item = this.getAction();
+        while (this.player()
+          .hasMandatoryActions()
+        ) {
+          const item = this.player()
+            .getMandatoryAction()
+            .value()
+          ;
 
           // TODO: Remove this when it's working as expected
           if (loopCheck++ > 1e3) {
@@ -503,7 +509,7 @@ export class SimpleAIPlayer extends AIPlayer {
               console.log(item.moves().value());
               console.log(UnitImprovementRegistry.getInstance().getBy('unit', item));
             }
-            reject(new Error('SimpleAIPlayer: Couldn\'t pick an action to do.'));
+            reject(new Error('SimpleAIClient: Couldn\'t pick an action to do.'));
 
             break;
           }
@@ -534,10 +540,7 @@ export class SimpleAIPlayer extends AIPlayer {
 
             if (
               unload &&
-              tile.getNeighbours()
-                .some((tile) => tile.isLand() &&
-                  tile.isCoast()
-                ) &&
+              tile.isCoast() &&
               unit.cargo()
                 .some((unit) => ! tile.getNeighbours()
                   .some((tile) => (this.#lastUnitMoves
@@ -737,7 +740,7 @@ export class SimpleAIPlayer extends AIPlayer {
             if (available.includes(Settlers) &&
               ! this.#unitRegistry.getBy('city', cityBuild.city())
                 .some((unit) => unit instanceof Settlers) &&
-              this.#unitRegistry.getBy('player', this)
+              this.#unitRegistry.getBy('player', this.player())
                 .filter((unit) => unit instanceof Settlers)
                 // TODO: use expansionist leader trait
                 .length < 3
@@ -793,4 +796,4 @@ export class SimpleAIPlayer extends AIPlayer {
   }
 }
 
-export default SimpleAIPlayer;
+export default SimpleAIClient;

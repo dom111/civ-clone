@@ -5,6 +5,10 @@ import Rule from '../../core-rules/Rule.js';
 import UnitRegistry from '../../core-unit/UnitRegistry.js';
 
 export class Embark extends Move {
+  /**
+   * @param unitRegistry {UnitRegistry}
+   * @returns {boolean}
+   */
   perform({
     unitRegistry = UnitRegistry.getInstance(),
   } = {}) {

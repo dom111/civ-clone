@@ -1,16 +1,23 @@
 import And from './Criteria/And.js';
-import Criteria from './Criteria.js';
 import Criterion from './Criterion.js';
 import Effect from './Effect.js';
 import {Normal} from './Priorities.js';
 import Priority from './Priority.js';
 
 export class Rule {
+  /** @type {Criterion} */
   #criteria;
+  /** @type {Effect} */
   #effect;
+  /** @type {string} */
   #name;
+  /** @type {Priority} */
   #priority = new Normal();
 
+  /**
+   * @param name {string}
+   * @param values {...(Priority|Criterion|Effect)}
+   */
   constructor(name, ...values) {
     const criteria = [];
 
@@ -25,7 +32,7 @@ export class Rule {
         return;
       }
 
-      if (value instanceof Criteria || value instanceof Criterion) {
+      if (value instanceof Criterion) {
         criteria.push(value);
 
         return;
@@ -44,14 +51,23 @@ export class Rule {
     this.#name = name;
   }
 
+  /**
+   * @returns {Effect}
+   */
   hasEffect() {
     return this.#effect;
   }
 
+  /**
+   * @returns {string}
+   */
   name() {
     return this.#name;
   }
 
+  /**
+   * @returns {Priority}
+   */
   priority() {
     return this.#priority;
   }
@@ -62,6 +78,9 @@ export class Rule {
     }
   }
 
+  /**
+   * @returns {boolean}
+   */
   validate(...args) {
     if (this.#criteria instanceof And) {
       return this.#criteria.validate(...args);

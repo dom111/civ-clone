@@ -52,6 +52,10 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
     }
   ]
 }

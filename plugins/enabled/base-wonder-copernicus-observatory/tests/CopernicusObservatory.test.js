@@ -20,12 +20,6 @@ describe('CopernicusObservatory', () => {
       wonderRegistry = new WonderRegistry(),
       availableTradeRateRegistry = new AvailableTradeRateRegistry(),
       tileImprovementRegistry = new TileImprovementRegistry(),
-      city = setUpCity({
-        rulesRegistry,
-        size: 5,
-        tileImprovementRegistry,
-      }),
-      playerTradeRates = new PlayerTradeRates(city.player(), new ResearchRate(1)),
       playerTradeRatesRegistry = new PlayerTradeRatesRegistry()
     ;
 
@@ -42,6 +36,15 @@ describe('CopernicusObservatory', () => {
         rulesRegistry,
       })
     );
+
+    const city = setUpCity({
+        rulesRegistry,
+        size: 5,
+        tileImprovementRegistry,
+      }),
+      playerTradeRates = new PlayerTradeRates(city.player(), new ResearchRate(1))
+    ;
+
     availableTradeRateRegistry.register(ResearchRate);
     playerTradeRatesRegistry.register(playerTradeRates);
 

@@ -78,19 +78,11 @@
     },
     {
       "type": "script",
-      "file": "registerPlayerActions.js"
-    },
-    {
-      "type": "script",
       "file": "Rules/Unit/created.js"
     },
     {
       "type": "script",
       "file": "registerRules.js"
-    },
-    {
-      "type": "script",
-      "file": "PlayerActions/unitsToMove.js"
     },
     {
       "type": "script",
@@ -119,6 +111,22 @@
     {
       "type": "script",
       "file": "Actions/Pillage.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/ActiveUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/InactiveUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
     }
   ]
 }

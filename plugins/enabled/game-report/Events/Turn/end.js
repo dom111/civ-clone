@@ -32,7 +32,8 @@ engine.on('turn:end', () => {
 Government: ${PlayerGovernmentRegistry.getInstance()
     .getBy('player', player)
     .map((playerGovernment) => playerGovernment.get().name)}
-Treasury: ${PlayerTreasuryRegistry.getBy('player', player)
+Treasury: ${PlayerTreasuryRegistry.getInstance()
+    .getBy('player', player)
     .map((playerTreasury) => playerTreasury.value())}
 Completed research:
 ${PlayerResearchRegistry.getInstance().getBy('player', player)

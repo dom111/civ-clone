@@ -6,7 +6,8 @@
     "core-terrain",
     "core-yields",
     "core-registry",
-    "core-rules-registry"
+    "core-rules-registry",
+    "core-data-object"
   ],
   "components": [
     {

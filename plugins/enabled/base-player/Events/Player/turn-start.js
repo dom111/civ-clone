@@ -1,3 +1,4 @@
+import ClientRegistry from '../../../core-client/ClientRegistry.js';
 import RulesRegistry from '../../../core-rules-registry/RulesRegistry.js';
 
 engine.on('player:turn-start', (player) => {
@@ -5,7 +6,11 @@ engine.on('player:turn-start', (player) => {
     .process('player:turn-start', player)
   ;
 
-  player.takeTurn()
+  const [client] = ClientRegistry.getInstance()
+    .getBy('player', player)
+  ;
+
+  client.takeTurn()
     .then(() => engine.emit('player:turn-end', player))
   ;
 });

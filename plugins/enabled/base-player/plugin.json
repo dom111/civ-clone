@@ -10,7 +10,10 @@
     "core-rules",
     "core-unit",
     "core-rules-registry",
-    "base-unit-settlers"
+    "base-unit-settlers",
+    "core-client",
+    "simple-ai-client",
+    "core-player-world"
   ],
   "components": [
     {

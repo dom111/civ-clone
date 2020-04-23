@@ -12,11 +12,11 @@ export const getRules = ({
   new Rule(
     'player:research-complete:great-library',
     new Criterion(() => wonderRegistry.some((wonder) => wonder instanceof GreatLibrary)),
-    new Criterion((player, completedResearch) => playerResearchRegistry
+    new Criterion((playerResearch, completedResearch) => playerResearchRegistry
       .filter((playerResearch) => playerResearch.completed(completedResearch.constructor))
       .length >= 3
     ),
-    new Criterion((player, completedResearch) => {
+    new Criterion((playerResearch, completedResearch) => {
       const [owningPlayer] = wonderRegistry.filter((wonder) => wonder instanceof GreatLibrary)
           .map((greatLibrary) => greatLibrary.player()),
         [owningPlayerResearch] = playerResearchRegistry.getBy('player', owningPlayer)
@@ -24,7 +24,7 @@ export const getRules = ({
 
       return ! owningPlayerResearch.completed(completedResearch.constructor);
     }),
-    new Effect((player, completedResearch) => {
+    new Effect((playerResearch, completedResearch) => {
       const [owningPlayer] = wonderRegistry.filter((wonder) => wonder instanceof GreatLibrary)
           .map((greatLibrary) => greatLibrary.player()),
         [owningPlayerResearch] = playerResearchRegistry.getBy('player', owningPlayer)

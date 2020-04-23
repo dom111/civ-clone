@@ -5,6 +5,12 @@ import Rule from '../../core-rules/Rule.js';
 import Turn from '../../core-turn-based-game/Turn.js';
 
 export class DelayedAction extends Action {
+  /**
+   * @param action {function}
+   * @param name {string}
+   * @param turn {Turn}
+   * @param turns {number}
+   */
   perform({
     action = () => {},
     name,

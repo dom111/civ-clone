@@ -1,12 +1,24 @@
 export class Generator {
+  /** @type {number} */
   #height;
+  /** @type {number} */
   #width;
 
+  /**
+   * @param height   *
+
+   * @param width {number}
+   */
   constructor({height, width} = {}) {
     this.#height = height;
     this.#width = width;
   }
 
+  /**
+   * @param x {number}
+   * @param y {number}
+   * @returns {number}
+   */
   coordsToIndex(x, y) {
     while (x < 0) {
       x += this.width();
@@ -22,14 +34,24 @@ export class Generator {
     return (y * this.width()) + x;
   }
 
+  /**
+   * @abstract
+   * @return {Terrain[]}
+   */
   generate() {
     throw new Error(`Generator#generate(): Must be overridden in '${this.constructor.name}'.`);
   }
 
+  /**
+   * @returns {number}
+   */
   height() {
     return this.#height;
   }
 
+  /**
+   * @returns {[number, number]}
+   */
   indexToCoords(index) {
     const total = this.height() * this.width();
 
@@ -42,6 +64,11 @@ export class Generator {
     return [index % this.width(), Math.floor(index / this.width())];
   }
 
+  /**
+   * @param from {number}
+   * @param to {number}
+   * @returns {number}
+   */
   distanceFrom(from, to) {
     const [fromX, fromY] = this.indexToCoords(from),
       [toX, toY] = this.indexToCoords(to),
@@ -65,6 +92,9 @@ export class Generator {
     return shortestDistance;
   }
 
+  /**
+   * @returns {number}
+   */
   width() {
     return this.#width;
   }

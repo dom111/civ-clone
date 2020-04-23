@@ -1,12 +1,26 @@
-export class Tileset {
-  #tiles = [];
+import Registry from '../core-registry/Registry.js';
+// import Tile from './Tile.js';
 
+export class Tileset extends Registry {
+  /**
+   * @param tiles {...Tile}
+   * @returns {Tileset}
+   */
   static from(...tiles) {
     return new this(...tiles);
   }
 
+  /**
+   * @param tile {Tile}
+   * @param radius {number}
+   * @returns {Tileset}
+   */
   static fromSurrounding(tile, radius = 2) {
     const seen = [],
+      /**
+       * @param radius {number}
+       * @returns {[[number, number]]}
+       */
       gen = (radius) => {
         const pairs = [];
 
@@ -27,59 +41,53 @@ export class Tileset {
     );
   }
 
+  /**
+   * @param tiles {...Tile}
+   */
   constructor(...tiles) {
-    this.push(...tiles);
+    // TODO: fix this cyclic dependency
+    // super(Tile);
+    super(Object);
+
+    this.register(...tiles);
   }
 
-  every(iterator) {
-    return this.#tiles.every(iterator);
-  }
-
-  filter(iterator) {
-    return this.#tiles.filter(iterator);
-  }
-
-  forEach(iterator) {
-    return this.#tiles.forEach(iterator);
-  }
-
-  get(i) {
-    return this.#tiles[i];
-  }
-
-  includes(tile) {
-    return this.#tiles.includes(tile);
-  }
-
-  // this makes sense as a getter as it's just a facade to the underlying Array.
-  get length() {
-    return this.#tiles.length;
-  }
-
-  map(iterator) {
-    return this.#tiles.map(iterator);
-  }
-
+  /**
+   * @param tiles {...Tile}
+   */
   push(...tiles) {
-    this.#tiles.push(...tiles);
+    this.register(...tiles);
   }
 
+  /**
+   * @return {Tile}
+   */
+  shift() {
+    const [first] = this.entries();
+
+    this.unregister(first);
+
+    return first;
+  }
+
+  /**
+   * @param player {Player}
+   * @param values {[[Yield, number]]}
+   * @returns {number}
+   */
   score({player = null, values} = {}) {
     return this.map((tile) => tile.score({player, values}))
       .reduce((total, score) => total + score, 0)
     ;
   }
 
-  shift() {
-    return this.#tiles.shift();
-  }
-
-  some(iterator) {
-    return this.#tiles.some(iterator);
-  }
-
+  /**
+   * @param player {Player}
+   * @param yields {Yield[]}
+   * @returns {Yield[]}
+   */
   yields({player, yields}) {
-    return this.#tiles
+    return this.entries()
       .reduce((tilesetYields, tile) => {
         tile.yields({
           player,

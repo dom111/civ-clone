@@ -44,6 +44,18 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/Revolution.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
     }
   ]
 }

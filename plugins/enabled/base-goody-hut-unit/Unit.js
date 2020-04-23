@@ -5,9 +5,17 @@ import Swordman from '../base-unit-swordman/Swordman.js';
 import UnitRegistry from '../core-unit/UnitRegistry.js';
 
 export class Unit extends GoodyHutAction {
+  /** @type {RulesRegistry} */
   #rulesRegistry;
+  /** @type {UnitRegistry} */
   #unitRegistry;
 
+  /**
+   * @param goodyHut {GoodyHut}
+   * @param rulesRegistry {RulesRegistry}
+   * @param unitRegistry {UnitRegistry}
+   * @param unit {Unit}
+   */
   constructor({
     goodyHut,
     rulesRegistry = RulesRegistry.getInstance(),

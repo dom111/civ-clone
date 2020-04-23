@@ -5,6 +5,9 @@ export class Fortify extends DelayedAction {
   perform() {
     super.perform({
       name: 'pillage',
+      /**
+       * @param tileImprovementRegistry {TileImprovementRegistry}
+       */
       action: ({
         tileImprovementRegistry = TileImprovementRegistry.getInstance(),
       } = {}) => {

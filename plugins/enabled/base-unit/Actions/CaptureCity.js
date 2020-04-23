@@ -5,6 +5,13 @@ import RulesRegistry from '../../core-rules-registry/RulesRegistry.js';
 export class CaptureCity extends Move {
   #cityRegistry;
 
+  /**
+   * @param cityRegistry {CityRegistry}
+   * @param from {Tile}
+   * @param rulesRegistry {RulesRegistry}
+   * @param to {Tile}
+   * @param unit {Unit}
+   */
   constructor({
     cityRegistry = CityRegistry.getInstance(),
     from,

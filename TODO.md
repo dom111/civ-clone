@@ -70,9 +70,11 @@
 - [X] Add `Sleep` action definition `Rule`s.
 - [X] Add `Pillage` unit action.
 - [X] Add goody huts
+- [X] Ensure Engine is passed to plugins in read-only mode, but expose events system.
+- [X] Convert to TypeScript? - There's no run-time system to handle this at the moment, look into again later... Alongside the "compiler"
+- [X] Add `PlayerMap` classes that only see what the Player has discovered and track the state (improvements, cities, etc) - perhaps this is a concern of a `Client`?
+- [X] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop. - Used `Rule`s but, implemented.
 - [ ] Abstract World class to allow implementation of hexes rather than squares and other world generators.
-- [ ] Ensure Engine is passed to plugins in read-only mode, but expose events system.
-- [ ] Convert to TypeScript?
 - [ ] Renderer interface - I imagine this to be a separate application that has this repo as a dependency. - Look at NodeGUI - need a canvas or something similar to be implemented. Or wait for Electron to adopt Node 14...
 - [ ] Break the engine into it's own `core-engine` repo.
 - [ ] Input management (keyboard/mouse) - tied to renderer?
@@ -81,7 +83,6 @@
 - [ ] Even more civilizations.
 - [ ] Difficulties.
 - [ ] Add optional dependencies to plugins.
-- [ ] Add `PlayerMap` classes that only see what the Player has discovered and track the state (improvements, cities, etc)
 - [ ] Human players - this is likely dependent on a renderer, although perhaps make it playable within a TTY?
 - [ ] Write more tests.
 - [ ] Feature parity with Civilization.
@@ -90,7 +91,6 @@
 - [ ] Add Barbarians.
 - [ ] Look at modular AI info for plugin Unit providing data/weightings on what to do with the unit?
 - [ ] Add starter technologies - need to read why Civ allocates these and set up `Rules` within `base-science`.
-- [ ] Consider `PlayerActionRegistry` returning a `PlayerAction` entity that can be processed or dismissed. Sub-class with `Mandatory`... and `Optional`... `PlayerAction`s which can be optionally skipped in the `Player#takeTurn` loop.
 - [ ] Consider building a 'compiler' that can build a static version of the game including all rules that would run better and consider the current state as 'dev' mode.
 - [ ] Add diplomacy
 - [ ] Add leader traits
@@ -108,9 +108,15 @@
 - [ ] Make `Civilization` and leader choice a bit better - add `Leader` class and use `Player#setCivilization` or something.
 - [ ] Add rules to wake enemy units that are `Sleep`ing when moving within their visible range.
 - [ ] Add effects for `GreatWall`.
+- [ ] Add revolution delay in changing governments.
 - [ ] Add effects for `Pyramids`.
-- [ ] Add more variance in the world that are generated again - no islands appear to be generated no matter the settings used.
+- [ ] Add more variance in the worlds that are generated again - no islands appear to be generated no matter the settings used.
 - [ ] Fix any tests that rely on global instances.
 - [ ] Break `base-terrain` into individual `base-terrain-x` plugins and incorporate `movementCost`s.
 - [ ] Add `Negotiation` to `core-diplomacy`.
 - [ ] Add more `Interaction`s and use this data to inform AI decisions on trusting another player.
+- [ ] Convert `activate`, `disband`, etc from methods to `Action`s for `Unit`s.
+- [ ] Add `Corruption` yield.
+- [ ] Fix units having `Fortified` applied loads of times.
+- [ ] Add `GoTo` action for `Unit`s.
+- [ ] Add `provider` to `Yield`s.

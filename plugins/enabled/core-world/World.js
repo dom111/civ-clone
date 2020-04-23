@@ -1,46 +1,57 @@
+import Registry from '../core-registry/Registry.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tile from './Tile.js';
 
-export class World {
+export class World extends Registry {
+  /** @type {Generator} */
   #generator;
+  /** @type {number} */
   #height;
-  #map;
+  /** @type {number} */
   #width;
 
+  /**
+   * @param generator {Generator}
+   */
   constructor(generator) {
+    super(Tile);
+
     this.#generator = generator;
     this.#height = generator.height();
     this.#width = generator.width();
-
-    // TODO: use this to help generate consistent maps
-    this.seed = Math.ceil(Math.random() * 1e7);
-    // this.seed = 615489;
   }
 
+  /**
+   * @param rulesRegistry {RulesRegistry}
+   */
   build({
     rulesRegistry = RulesRegistry.getInstance(),
   } = {}) {
-    const rawMap = this.#generator.generate();
+    this.#generator.generate()
+      .forEach((terrain, i) => {
+        const tile = new Tile({
+          x: i % this.#width,
+          y: Math.floor(i / this.#width),
+          terrain,
+          map: this,
+          rulesRegistry,
+        });
 
-    this.#map = rawMap
-      .map((terrain, i) => new Tile({
-        x: i % this.#width,
-        y: Math.floor(i / this.#width),
-        terrain,
-        map: this,
-        rulesRegistry,
-      }))
+        this.register(tile);
+      })
     ;
   }
 
+  /**
+   * @returns {Tile}
+   */
   get(x, y) {
-    return this.#map[this.#generator.coordsToIndex(x, y)];
+    return super.get(this.#generator.coordsToIndex(x, y));
   }
 
-  getBy(filterFunction) {
-    return this.#map.filter(filterFunction);
-  }
-
+  /**
+   * @returns {number}
+   */
   height() {
     return this.#height;
   }
@@ -53,6 +64,9 @@ export class World {
   //   return this.#map.map((tile) => tile.save())
   // }
 
+  /**
+   * @returns {number}
+   */
   width() {
     return this.#width;
   }

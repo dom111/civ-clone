@@ -3,14 +3,26 @@ import {Research} from './Yields.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class PlayerResearch {
+  /** @type {AdvanceRegistry} */
   #advanceRegistry;
+  /** @type {Advance[]} */
   #complete = [];
+  /** @type {class} */
   #researching;
+  /** @type {Player} */
   #player;
+  /** @type {Research} */
   #cost = new Research(Infinity);
+  /** @type {Research} */
   #progress = new Research(0);
+  /** @type {RulesRegistry} */
   #rulesRegistry;
 
+  /**
+   * @param advanceRegistry {AdvanceRegistry}
+   * @param player {Player}
+   * @param rulesRegistry {RulesRegistry}
+   */
   constructor({
     advanceRegistry = AdvanceRegistry.getInstance(),
     player,
@@ -21,6 +33,9 @@ export class PlayerResearch {
     this.#rulesRegistry = rulesRegistry;
   }
 
+  /**
+   * @param researchYield {Research}
+   */
   add(researchYield) {
     if (! (researchYield instanceof Research)) {
       throw new TypeError(`PlayerResearch#add: Expected instance of 'Research', got '${researchYield && researchYield.constructor.name}'`);
@@ -31,6 +46,9 @@ export class PlayerResearch {
     this.check();
   }
 
+  /**
+   * @param Advance {class}
+   */
   addAdvance(Advance) {
     if (this.#complete
       .some((advance) => advance instanceof Advance)
@@ -45,9 +63,12 @@ export class PlayerResearch {
     const completedResearch = new Advance();
 
     this.#complete.push(completedResearch);
-    this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
+    this.#rulesRegistry.process('player:research-complete', this, completedResearch);
   }
 
+  /**
+   * @returns {Advance[]}
+   */
   available() {
     const rules = this.#rulesRegistry.get('research:requirements');
 
@@ -73,41 +94,63 @@ export class PlayerResearch {
 
       this.#cost.set(Infinity);
 
-      this.#rulesRegistry.process('player:research-complete', this.#player, completedResearch);
+      this.#rulesRegistry.process('player:research-complete', this, completedResearch);
     }
   }
 
+  /**
+   * @returns {Advance[]}
+   */
   complete() {
     return this.#complete;
   }
 
+  /**
+   * @param Advance {class}
+   * @returns {boolean}
+   */
   completed(Advance) {
     return this.#complete
       .some((advance) => advance instanceof Advance)
     ;
   }
 
+  /**
+   * @returns {Research}
+   */
   cost() {
     return this.#cost;
   }
 
+  /**
+   * @returns {Player}
+   */
   player() {
     return this.#player;
   }
 
+  /**
+   * @returns {Research}
+   */
   progress() {
     return this.#progress;
   }
 
+  /**
+   * @param Advance {class}
+   */
   research(Advance) {
     const [cost] = this.#rulesRegistry.process('research:cost', Advance, this);
 
     this.#cost.set(cost);
     this.#researching = Advance;
 
-    this.#rulesRegistry.process('player:research', this.#player, Advance);
+    this.#rulesRegistry.process('player:research', this, Advance);
   }
 
+  /**
+   * @returns {class}
+   */
   researching() {
     return this.#researching;
   }

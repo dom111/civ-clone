@@ -1,17 +1,30 @@
 export class PlayerTradeRates {
+  /** @type {number} */
   #fudgeFactor = 100;
+  /** @type {Player} */
   #player;
+  /** @type {TradeRate[]} */
   #rates = [];
 
+  /**
+   * @param player {Player}
+   * @param rates {...TradeRate}
+   */
   constructor(player, ...rates) {
     this.#player = player;
     this.#rates = rates;
   }
 
+  /**
+   * @returns {TradeRate[]}
+   */
   all() {
     return [...this.#rates];
   }
 
+  /**
+   * @param fixed {TradeRate}
+   */
   balance(fixed) {
     if (this.total() === 1) {
       return;
@@ -36,6 +49,10 @@ export class PlayerTradeRates {
     }
   }
 
+  /**
+   * @param Type {class}
+   * @returns {number}
+   */
   get(Type) {
     return this.#rates
       .filter((rate) => rate instanceof Type)
@@ -43,10 +60,17 @@ export class PlayerTradeRates {
     ;
   }
 
+  /**
+   * @returns {Player}
+   */
   player() {
     return this.#player;
   }
 
+  /**
+   * @param Type {class}
+   * @param value {number}
+   */
   set(Type, value) {
     const rate = this.get(Type);
 
@@ -55,6 +79,9 @@ export class PlayerTradeRates {
     this.balance(rate);
   }
 
+  /**
+   * @returns {number}
+   */
   total() {
     return Math.round(
       this.#rates

@@ -19,6 +19,9 @@ export class Move extends Action {
     return true;
   }
 
+  /**
+   * @returns {number}
+   */
   movementCost() {
     const [movementCost] = this.rulesRegistry().process('unit:movementCost', this.unit(), this.to(), this.from())
       .sort((a, b) => a - b)

@@ -8,6 +8,9 @@ export class Fortify extends DelayedAction {
   perform() {
     super.perform({
       name: 'fortify',
+      /**
+       * @param unitImprovementRegistry {UnitImprovementRegistry}
+       */
       action: ({
         unitImprovementRegistry = UnitImprovementRegistry.getInstance(),
       } = {}) => {

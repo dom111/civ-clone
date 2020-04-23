@@ -4,13 +4,24 @@ import {Production} from '../base-terrain-yields/Yields.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 
 export class CityBuild {
+  /** @type AvailableCityBuildItemsRegistry */
   #availableCityBuildItemsRegistry;
+  /** @type {class} */
   #building;
+  /** @type {City} */
   #city;
+  /** @type {Production} */
   #cost = new Production(Infinity);
-  #progress = new BuildProgress();
+  /** @type {BuildProgress} */
+  #progress = new BuildProgress()
+  /** @type {RulesRegistry} */
   #rulesRegistry;
 
+  /**
+   * @param availableCityBuildItemsRegistry {AvailableCityBuildItemsRegistry}
+   * @param city {City}
+   * @param rulesRegistry {RulesRegistry}
+   */
   constructor({
     availableCityBuildItemsRegistry = AvailableCityBuildItemsRegistry.getInstance(),
     city,
@@ -21,6 +32,9 @@ export class CityBuild {
     this.#rulesRegistry = rulesRegistry;
   }
 
+  /**
+   * @param production {Production}
+   */
   add(production) {
     if (! (production instanceof Production)) {
       throw new TypeError(`CityBuild#add: Cannot add '${production.constructor ? production.constructor.name : typeof production}' to progress.`);
@@ -29,6 +43,9 @@ export class CityBuild {
     this.#progress.add(production);
   }
 
+  /**
+   * @returns {class[]}
+   */
   available() {
     const buildImprovementRules = this.#rulesRegistry.get('city:build');
 
@@ -45,6 +62,9 @@ export class CityBuild {
     ;
   }
 
+  /**
+   * @param BuildItem {class}
+   */
   build(BuildItem) {
     if (! this.available()
       .some((Entity) => Entity === BuildItem)
@@ -59,6 +79,9 @@ export class CityBuild {
     this.#cost.set(cost);
   }
 
+  /**
+   * @returns {class}
+   */
   building() {
     return this.#building;
   }
@@ -81,18 +104,30 @@ export class CityBuild {
     }
   }
 
+  /**
+   * @returns {City}
+   */
   city() {
     return this.#city;
   }
 
+  /**
+   * @returns {Production}
+   */
   cost() {
     return this.#cost;
   }
 
+  /**
+   * @returns {BuildProgress}
+   */
   progress() {
     return this.#progress;
   }
 
+  /**
+   * @returns {number}
+   */
   remaining() {
     return this.#cost.value() - this.#progress.value();
   }

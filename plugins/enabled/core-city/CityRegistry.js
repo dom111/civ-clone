@@ -5,6 +5,11 @@ export class CityRegistry extends Registry {
   constructor() {
     super(City);
   }
+
+  /**
+   * @method entities
+   * @return {City[]}
+   */
 }
 
 export default CityRegistry;

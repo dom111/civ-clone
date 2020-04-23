@@ -5,6 +5,13 @@ export class GoodyHutRegistry extends Registry {
   constructor() {
     super(GoodyHut);
   }
+
+  /**
+   * @returns {GoodyHut[]}
+   */
+  entries() {
+    return super.entries();
+  }
 }
 
 export default GoodyHutRegistry;

@@ -6,7 +6,8 @@
     "core-city-improvement",
     "core-rules",
     "core-registry",
-    "core-rules-registry"
+    "core-rules-registry",
+    "core-city"
   ],
   "components": [
     {
@@ -28,6 +29,10 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
     }
   ]
 }

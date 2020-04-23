@@ -12,12 +12,7 @@ describe('Colossus', () => {
   it('should provide one additional trade per tile with trade already on in the city that builds it', () => {
     const rulesRegistry = new RulesRegistry(),
       wonderRegistry = new WonderRegistry(),
-      tileImprovementRegistry = new TileImprovementRegistry(),
-      city = setUpCity({
-        rulesRegistry,
-        size: 5,
-        tileImprovementRegistry,
-      })
+      tileImprovementRegistry = new TileImprovementRegistry()
     ;
 
     rulesRegistry.register(
@@ -29,9 +24,15 @@ describe('Colossus', () => {
       })
     );
 
-    const [tradeYield] = city.yields({
-      yields: [Trade],
-    });
+    const city = setUpCity({
+        rulesRegistry,
+        size: 5,
+        tileImprovementRegistry,
+      }),
+      [tradeYield] = city.yields({
+        yields: [Trade],
+      })
+    ;
 
     assert.strictEqual(tradeYield.value(), 6);
 

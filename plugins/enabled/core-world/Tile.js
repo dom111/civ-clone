@@ -1,32 +1,48 @@
 import {Land, Water} from '../core-terrain/Types.js';
+import DataObject from '../core-data-object/DataObject.js';
 import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 import Tileset from './Tileset.js';
 import {Yield} from '../core-yields/Yield.js';
 import YieldRegistry from '../core-yields/YieldRegistry.js';
 
-export class Tile {
+export class Tile extends DataObject {
+  /** @type {World} */
   #map;
+  /** @type {Tile[]} */
   #neighbours;
+  /** @type {RulesRegistry} */
   #rulesRegistry;
+  /** @type {Terrain} */
   #terrain;
+  /** @type {number} */
   #x;
+  /** @type {number} */
   #y;
+  /** @type {Map} */
   #yieldCache = new Map();
 
+  /**
+   * @param x {number}
+   * @param y {number}
+   * @param terrain {Terrain}
+   * @param map {World}
+   * @param rulesRegistry {RulesRegistry}
+   */
   constructor({x, y, terrain, map, rulesRegistry = RulesRegistry.getInstance()}) {
+    super({
+      rulesRegistry,
+    });
+
     this.#x = x;
     this.#y = y;
     this.#terrain = terrain;
     this.#map = map;
-
     this.#rulesRegistry = rulesRegistry;
-
-    // when generating use this:
-    // this.seed = Math.ceil(Math.random() * 1e7);
-    // this.seed = this.seed || (this.#x * this.#y);
-    this.seed = this.seed || (this.#x ^ this.#y);
   }
 
+  /**
+   * @param player {Player}
+   */
   clearYieldCache(player) {
     if (! player) {
       this.#yieldCache.clear();
@@ -37,6 +53,23 @@ export class Tile {
     this.#yieldCache.set(player, new Map());
   }
 
+  /**
+   * @returns {Tile}
+   */
+  clone() {
+    return new Tile({
+      x: this.#x,
+      y: this.#y,
+      terrain: this.#terrain.clone(),
+      map: this.#map,
+      rulesRegistry: this.#rulesRegistry,
+    });
+  }
+
+  /**
+   * @param player
+   * @returns {Map}
+   */
   getYieldCache(player) {
     if (! this.#yieldCache.has(player)) {
       this.#yieldCache.set(player, new Map());
@@ -45,12 +78,19 @@ export class Tile {
     return this.#yieldCache.get(player);
   }
 
+  /**
+   * @returns {Tile[]}
+   */
   getAdjacent() {
     return ['n', 'e', 's', 'w']
       .map((direction) => this.getNeighbour(direction))
     ;
   }
 
+  /**
+   * @param direction {string}
+   * @returns {Tile}
+   */
   getNeighbour(direction) {
     if (direction === 'n') {
       return this.#map.get(this.#x, this.#y - 1);
@@ -91,6 +131,9 @@ export class Tile {
     }
   }
 
+  /**
+   * @returns {Tile[]}
+   */
   getNeighbours() {
     if (! this.#neighbours) {
       this.#neighbours = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -101,10 +144,18 @@ export class Tile {
     return this.#neighbours;
   }
 
+  /**
+   * @param radius {number}
+   * @returns {Tileset}
+   */
   getSurroundingArea(radius = 2) {
     return Tileset.fromSurrounding(this, radius);
   }
 
+  /**
+   * @param tile {Tile}
+   * @returns {number}
+   */
   distanceFrom(tile) {
     const [shortestDistance] = [
       [-1, 1],
@@ -124,6 +175,9 @@ export class Tile {
     return shortestDistance;
   }
 
+  /**
+   * @returns {boolean}
+   */
   isCoast() {
     const tile = this;
 
@@ -136,20 +190,34 @@ export class Tile {
     );
   }
 
+  /**
+   * @returns {boolean}
+   */
   isLand() {
     return this.#terrain instanceof Land;
   }
 
+  /**
+   * @param otherTile {Tile}
+   * @returns {boolean}
+   */
   isNeighbourOf(otherTile) {
     return this.getNeighbours()
       .includes(otherTile)
     ;
   }
 
+  /**
+   * @returns {boolean}
+   */
   isWater() {
     return this.#terrain instanceof Water;
   }
 
+  /**
+   * @param player {Player}
+   * @returns {boolean}
+   */
   isVisible(player) {
     return player.seenTiles().includes(this);
   }
@@ -163,10 +231,32 @@ export class Tile {
   //   });
   // }
 
+  /**
+   * @returns {string[]}
+   */
+  keys() {
+    return [
+      'terrain',
+      'x',
+      'y',
+      // TODO: this needs to be passed the player, or be handled in another way...
+      'yields',
+      ...super.keys(),
+    ];
+  }
+
+  /**
+   * @returns {World}
+   */
   map() {
     return this.#map;
   }
 
+  /**
+   * @param type {Yield}
+   * @param player {Player}
+   * @returns {Yield}
+   */
   resource(type, player) {
     const yieldCache = this.getYieldCache(player);
 
@@ -194,6 +284,11 @@ export class Tile {
   //   };
   // }
 
+  /**
+   * @param player {Player}
+   * @param values {[[Yield, number]]}
+   * @returns {number}
+   */
   score({player, values = [[Yield, 3]]}) {
     const yields = this.yields({player});
 
@@ -212,27 +307,45 @@ export class Tile {
     ;
   }
 
+  /**
+   * @returns {Terrain}
+   */
   terrain() {
     return this.#terrain;
   }
 
+  /**
+   * @param terrain
+   */
   setTerrain(terrain) {
     this.#terrain = terrain;
   }
 
+  /**
+   * @returns {number}
+   */
   x() {
     return this.#x;
   }
 
+  /**
+   * @returns {number}
+   */
   y() {
     return this.#y;
   }
 
+  /**
+   * @param player {Player}
+   * @param yieldRegistry {YieldRegistry}
+   * @param yields {Yield[]}
+   * @returns {Yield[]}
+   */
   yields({
     player,
     yieldRegistry = YieldRegistry.getInstance(),
     yields = yieldRegistry.entries(),
-  }) {
+  } = {}) {
     return yields.map((YieldType) => this.resource(new YieldType(), player));
   }
 }

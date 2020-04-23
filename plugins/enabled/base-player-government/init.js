@@ -8,18 +8,3 @@
 //
 //   playerGovernment.choose
 // });
-
-// TODO: Perhaps an optional action type needs to be created?
-// PlayerActionRegistry.getInstance()
-//   .register(new Effect((player) => {
-//     const [research] = PlayerGovernmentRegistry.entries()
-//       .filter((playerResearch) => playerResearch.player() === player)
-//     ;
-//
-//     if (! research.researching()) {
-//       return [research];
-//     }
-//
-//     return [];
-//   }))
-// ;

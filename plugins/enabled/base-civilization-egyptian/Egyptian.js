@@ -6,9 +6,9 @@ export class Egyptian extends Civilization {
   colors = ['#63e367', '#2f7b00', '#fff'];
   leaders = [
     {
-      name: 'Mao Zedong',
+      name: 'Ramesses II',
       traits: {
-        expansionist: true,
+        expansionist: false,
         civilized: true,
         militaristic: false,
       },

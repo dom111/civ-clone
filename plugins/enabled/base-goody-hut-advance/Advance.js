@@ -2,8 +2,14 @@ import GoodyHutAction from '../core-goody-huts/GoodyHutAction.js';
 import PlayerResearchRegistry from '../base-science/PlayerResearchRegistry.js';
 
 export class Advance extends GoodyHutAction {
+  /** @type {PlayerResearchRegistry} */
   #playerResearchRegistry;
 
+  /**
+   * @param goodyHut {GoodyHut}
+   * @param playerResearchRegistry {PlayerResearchRegistry}
+   * @param unit {Unit}
+   */
   constructor({
     goodyHut,
     playerResearchRegistry = PlayerResearchRegistry.getInstance(),

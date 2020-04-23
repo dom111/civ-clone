@@ -3,15 +3,39 @@ import RulesRegistry from '../core-rules-registry/RulesRegistry.js';
 // import TerrainFeature from '../core-terrain-features/TerrainFeature.js';
 
 export class Terrain {
+  /** @type {TerrainFeature[]} */
   #features = [];
+  /** @type {RulesRegistry} */
   #rulesRegistry;
 
+  /**
+   * @param rulesRegistry {RulesRegistry}
+   */
   constructor(rulesRegistry = RulesRegistry.getInstance()) {
     this.#rulesRegistry = rulesRegistry;
 
     this.#rulesRegistry.process('terrain:created', this);
   }
 
+  /**
+   * @returns {Terrain}
+   */
+  clone() {
+    const clone = new (this.constructor)(this.#rulesRegistry);
+
+    clone.features()
+      .push(
+        ...this.#features
+          .map((feature) => feature.clone())
+      )
+    ;
+
+    return clone;
+  }
+
+  /**
+   * @returns {TerrainFeature[]}
+   */
   features() {
     return this.#features;
   }

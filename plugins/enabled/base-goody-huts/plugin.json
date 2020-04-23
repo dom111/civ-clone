@@ -26,6 +26,10 @@
     {
       "type": "script",
       "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action-performed.js"
     }
   ]
 }

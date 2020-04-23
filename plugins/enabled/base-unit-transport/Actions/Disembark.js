@@ -2,6 +2,9 @@ import Move from '../../base-unit/Actions/Move.js';
 import TransportRegistry from '../TransportRegistry.js';
 
 export class Disembark extends Move {
+  /**
+   * @param transportRegistry {TransportRegistry}
+   */
   perform({
     transportRegistry = TransportRegistry.getInstance(),
   }) {

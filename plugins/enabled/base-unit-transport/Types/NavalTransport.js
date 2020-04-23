@@ -6,8 +6,16 @@ import TransportRegistry from '../TransportRegistry.js';
 import Unit from '../../core-unit/Unit.js';
 
 export class NavalTransport extends Naval {
+  /** @type {TransportRegistry} */
   #transportRegistry;
 
+  /**
+   * @param player {Player}
+   * @param city {City}
+   * @param rulesRegistry {RulesRegistry}
+   * @param tile {Tile}
+   * @param transportRegistry {TransportRegistry}
+   */
   constructor({
     player,
     city,
@@ -20,6 +28,10 @@ export class NavalTransport extends Naval {
     this.#transportRegistry = transportRegistry;
   }
 
+  /**
+   * @param unit {Unit}
+   * @returns {boolean}
+   */
   canStow(unit) {
     return unit instanceof Unit &&
       ! this.cargo()
@@ -27,28 +39,44 @@ export class NavalTransport extends Naval {
     ;
   }
 
+  /**
+   * @returns {number}
+   */
   capacity() {
     return 0;
   }
 
+  /**
+   * @returns {Unit[]}
+   */
   cargo() {
     return this.#transportRegistry.getBy('transport', this)
       .map((manifest) => manifest.unit())
     ;
   }
 
+  /**
+   * @returns {boolean}
+   */
   hasCapacity() {
     return this.#transportRegistry.getBy('transport', this)
       .length < this.capacity()
     ;
   }
 
+  /**
+   * @returns {boolean}
+   */
   hasCargo() {
     return this.#transportRegistry.getBy('transport', this)
       .length > 0
     ;
   }
 
+  /**
+   * @param unit {Unit}
+   * @returns {boolean}
+   */
   stow({
     unit,
   }) {
@@ -70,6 +98,10 @@ export class NavalTransport extends Naval {
     return true;
   }
 
+  /**
+   * @param unit {Unit}
+   * @returns {boolean}
+   */
   unload(unit) {
     const [manifest] = this.#transportRegistry.getBy('unit', unit);
 
