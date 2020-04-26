@@ -1,25 +1,42 @@
-import Engine from './src/Engine.js';
-import process from 'process';
+const {
+  FlexLayout,
+  QLabel,
+  QMainWindow,
+  QWidget
+} = NodeGui;
+import NodeGui from '@nodegui/nodegui';
+import {Worker} from 'worker_threads';
 
-// This helps track down unhandled promise rejections
-process.on('unhandledRejection', (error) => {
-  console.error(error.stack);
+const win = new QMainWindow();
+
+const centralWidget = new QWidget();
+centralWidget.setObjectName("myroot");
+const rootLayout = new FlexLayout();
+centralWidget.setLayout(rootLayout);
+
+const label = new QLabel();
+label.setInlineStyle("font-size: 16px; font-weight: bold;");
+label.setText("Loading...");
+
+rootLayout.addWidget(label);
+win.setCentralWidget(centralWidget);
+win.setStyleSheet(
+  `
+    #myroot {
+      background-color: #e7e7e7;
+    }
+  `
+);
+
+win.show();
+
+global.window = win;
+
+const engine = new Worker('./engine.js', {
+  workerData: null,
 });
 
-(() => {
-  const engine = new Engine();
-
-  process.argv.slice(process.argv.indexOf('--') + 1)
-    .forEach((arg) => {
-      const [key, value] = arg.replace(/^--/, '')
-        .split(/=/, 2)
-      ;
-
-      engine.setOption(key, arg.match(/=/) ? value : ! arg.match(/^--no-/));
-    })
-  ;
-
-  engine.on('game:exit', () => process.exit());
-
-  engine.start();
-})();
+engine.on('message', ({event, args}) => {
+  label.setText(event);
+  // console.log(event, args);
+});

@@ -11,6 +11,7 @@
         "jsonlint:plugins": "find ./ -name plugin.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -n1 ajv -s src/Plugin/Schema.json -d",
         "lint": "npm run jsonlint:plugins && npm run eslint",
         "start": "node --experimental-vm-modules ./boot.js",
+        "start:renderer": "qode --experimental-vm-modules ./boot.js",
         "profile": "node --prof --experimental-vm-modules ./boot.js -- --reportTurns=250 --reportAndQuit=1",
         "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
         "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
@@ -40,7 +41,9 @@
     "engines": {
         "node": ">=13.0.0"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@nodegui/nodegui": "^0.18.2"
+    },
     "devDependencies": {
         "ajv-cli": "^3.0.0",
         "babel-eslint": "^10.0.3",
