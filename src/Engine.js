@@ -2,23 +2,26 @@ import EventEmitter from 'events';
 import Manager from './Plugin/Manager.js';
 import loadJSON from './lib/loadJSON.js';
 import path from 'path';
-import {
-  isMainThread, parentPort, workerData,
-} from 'worker_threads';
-
 
 export class Engine extends EventEmitter {
+  /** @type {{plugins: string, base: string}} */
   #defaultPaths = {
     base: './',
     plugins: 'plugins/enabled',
   };
+  /** @type {{manifestName: string}} */
   #options = {
     manifestName: 'plugin.json',
   };
+  /** @type {{}} */
   #paths = {};
+  /** @type Manager */
   #pluginManager;
 
-  constructor(paths = workerData || {}) {
+  /**
+   * @param paths {{}}
+   */
+  constructor(paths = {}) {
     super();
 
     this.#pluginManager = new Manager(this);
@@ -36,6 +39,9 @@ export class Engine extends EventEmitter {
     ;
   }
 
+  /**
+   * @param callback {function}
+   */
   debug(callback) {
     if (! this.option('debug')) {
       return;
@@ -44,41 +50,14 @@ export class Engine extends EventEmitter {
     return callback();
   }
 
+  /**
+   * @param event {string}
+   * @param args
+   */
   emit(event, ...args) {
     this.debug(() => console.log(`Engine#emit: ${event}: ${args}`));
 
     super.emit(event, ...args);
-
-    const simplify = (value) => {
-      if (value instanceof Function) {
-        return {
-          _: value.name,
-          ...value,
-        };
-      }
-
-      if (value instanceof Object) {
-        const simple = {};
-
-        Object.entries(value)
-          .forEach(([key, value]) => simple[key] = simplify(value))
-        ;
-
-        return {
-          _: value.constructor.name,
-          ...simple,
-        };
-      }
-
-      return value;
-    };
-
-    if (! isMainThread) {
-      parentPort.postMessage({
-        event,
-        args: args.map((arg) => simplify(arg)),
-      });
-    }
   }
 
   loadPlugins() {
@@ -89,6 +68,11 @@ export class Engine extends EventEmitter {
     ;
   }
 
+  /**
+   * @param key {string}
+   * @param parts {string}
+   * @returns {string}
+   */
   path(key, ...parts) {
     if (parts.length) {
       this.#paths[key] = path.resolve(...parts);
@@ -98,11 +82,20 @@ export class Engine extends EventEmitter {
     return (key in this.#paths) ? this.#paths[key] : '';
   }
 
-  // options are per-instance settings that affect only the current instance
+  /**
+   * Options are per-instance settings that affect only the current instance.
+   *
+   * @param key {string}
+   * @param defaultValue
+   */
   option(key, defaultValue) {
     return this.#options[key] || defaultValue;
   }
 
+  /**
+   * @param key {string}
+   * @param value
+   */
   setOption(key, value) {
     if (this.#options[key] !== value) {
       this.#options[key] = value;
@@ -111,6 +104,9 @@ export class Engine extends EventEmitter {
     }
   }
 
+  /**
+   * @returns {Promise<boolean>}
+   */
   start() {
     if (this.started) {
       return;
@@ -125,6 +121,10 @@ export class Engine extends EventEmitter {
     ;
   }
 
+  /**
+   * @param parts string
+   * @returns {Promise<{}>}
+   */
   loadJSON(...parts) {
     return loadJSON(path.join(...parts));
   }

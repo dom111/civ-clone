@@ -42,7 +42,8 @@
         "node": ">=13.0.0"
     },
     "dependencies": {
-        "@nodegui/nodegui": "^0.18.2"
+        "@nodegui/nodegui": "^0.18.2",
+        "typescript": "^3.8.3"
     },
     "devDependencies": {
         "ajv-cli": "^3.0.0",

@@ -9,14 +9,14 @@ loadJSON(manifestPath)
 
     contents.components = contents.components || [];
 
-    if (!components
+    if (! components
       .every((component) =>
-        contents.components.some((contentComponent) => contentComponent.file === component),
+        contents.components.some((contentComponent) => contentComponent.file === component)
       )
     ) {
       components
-        .filter((component) => !contents.components
-          .some((contentComponent) => contentComponent.file === component),
+        .filter((component) => ! contents.components
+          .some((contentComponent) => contentComponent.file === component)
         )
         .forEach((component) => {
           console.log(`\x1b[31m${manifestPath} is missing component '${component}'.\x1b[0m`);
@@ -31,18 +31,18 @@ loadJSON(manifestPath)
       ;
     }
 
-    if (!contents.components
+    if (! contents.components
       .every((component) => components.includes(component.file))
     ) {
       contents.components
-        .filter((component) => !components.includes(component.file))
+        .filter((component) => ! components.includes(component.file))
         .forEach((component) => {
           console.log(`\x1b[33m${manifestPath} has unused component '${component.file}'.\x1b[0m`);
           contents.components
             .splice(
               contents.components
                 .indexOf(component),
-              1,
+              1
             )
           ;
 

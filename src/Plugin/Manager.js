@@ -5,9 +5,60 @@ import path from 'path';
 import vm from 'vm';
 
 export class Manager {
+  /** @type {{}} */
   #context;
+  /** @type {Engine} */
   #engine;
+  /**
+   * @param plugin {Plugin}
+   * @param component {Component}
+   * @returns {function(...[string]=)}
+   */
   #linker = (plugin, component) => (specifier) => {
+    const whiteList = {
+        // TODO: get this from the main `package.json` of the app, should have something like `@civ-clone/` etc
+        worker_threads: [
+          'default',
+          'parentPort',
+        ],
+      },
+      [whiteListEntry] = Object.entries(whiteList)
+        .filter(([key]) => key.endsWith('/') ?
+          specifier.startsWith(key) :
+          key === specifier
+        )
+    ;
+
+    if (whiteListEntry) {
+      const [, exports] = whiteListEntry;
+
+      return import(specifier)
+        .then((importedModule) => {
+          const module = new vm.SyntheticModule(exports, function() {
+            this.setExport('default', importedModule);
+
+            exports.filter((key) => key !== 'default')
+              .forEach((key) => this.setExport(key, importedModule[key]))
+            ;
+          }, {
+            identifier: specifier,
+            context: this.#context,
+          });
+
+          return module.link(this.#linker)
+            .then(() => module.evaluate())
+            .then(() => {
+              if (module.status === 'errored') {
+                throw module.error;
+              }
+
+              return module;
+            })
+          ;
+        })
+      ;
+    }
+
     const fullPath = path.dirname(path.join(component.path, component.file)),
       filePath = path.relative(this.#engine.path('plugins'), path.join(component.path, component.file)),
       calculatedPath = path.resolve(fullPath, specifier),
@@ -41,9 +92,18 @@ export class Manager {
       })
     ;
   };
+  /**
+   * @type {{}}
+   */
   #pluginManifests = {};
+  /**
+   * @type {Plugin}
+   */
   #plugins = {};
 
+  /**
+   * @param engine {Engine}
+   */
   constructor(engine) {
     this.#engine = engine;
 
@@ -93,7 +153,11 @@ export class Manager {
     this.#context = vm.createContext(context);
   }
 
-  // TODO: this is big, break it down into re-usable chunks
+  /**
+   * @todo This is big, break it down into re-usable chunks
+   * @param pluginName {string}
+   * @returns {Promise<Plugin>}
+   */
   get(pluginName) {
     if (! (pluginName in this.#plugins)) {
       this.#plugins[pluginName] = this.loadManifest(pluginName)
@@ -133,32 +197,37 @@ export class Manager {
           })
         )
         .then((plugin) => Promise.all(plugin.components
-          .map((component) => {
-            const result = component.run(this.#context, this.#linker(plugin, component)),
-              promiseProperties = {
-                value: null,
-                exception: null,
-                isPending: true,
-                isResolved: false,
-                isRejected: false,
-              }
-            ;
+          .map(
+            /**
+             * @param component {Component|Data|File|Script}
+             */
+            (component) => {
+              const result = component.run(this.#context, this.#linker(plugin, component)),
+                promiseProperties = {
+                  value: null,
+                  exception: null,
+                  isPending: true,
+                  isResolved: false,
+                  isRejected: false,
+                }
+              ;
 
-            result.then(() => promiseProperties.isResolved = true)
-              .catch(() => promiseProperties.isRejected = true)
-              .finally(() => promiseProperties.isPending = false)
-            ;
+              result.then(() => promiseProperties.isResolved = true)
+                .catch(() => promiseProperties.isRejected = true)
+                .finally(() => promiseProperties.isPending = false)
+              ;
 
-            setTimeout(() => {
-              if (promiseProperties.isResolved || promiseProperties.isRejected) {
-                return;
-              }
+              setTimeout(() => {
+                if (promiseProperties.isResolved || promiseProperties.isRejected) {
+                  return;
+                }
 
-              console.error(`Manager#get: Failed to load plugin component: '${plugin.name}/${component.file}'.`);
-            }, 1000);
+                console.error(`Manager#get: Failed to load plugin component: '${plugin.name}/${component.file}'.`);
+              }, 1000);
 
-            return result;
-          })
+              return result;
+            }
+          )
         )
           .then(() => plugin)
         )
@@ -168,12 +237,19 @@ export class Manager {
     return this.#plugins[pluginName];
   }
 
+  /**
+   * @returns {Promise<Plugin>[]}
+   */
   load() {
     return fs.readdir(this.#engine.path('plugins'))
       .then((plugins) => Promise.all(plugins.map((pluginName) => this.get(pluginName))))
     ;
   }
 
+  /**
+   * @param pluginName {string}
+   * @returns {Promise<{}>}
+   */
   loadManifest(pluginName) {
     const pluginJSONPath = path.join(this.#engine.path('plugins'), pluginName, this.#engine.option('manifestName'));
 
