@@ -1,26 +1,66 @@
 {
-    "name": "base-terrain",
-    "title": "Base Terrain",
-    "version": "0.0.1",
-    "components": [
-        {
-            "type": "terrain",
-            "priority": 0,
-            "contents": [
-                "terrains/ocean.json",
-                "terrains/grassland.json",
-                "terrains/river.json",
-                "terrains/plains.json",
-                "terrains/desert.json",
-                "terrains/forest.json",
-                "terrains/jungle.json",
-                "terrains/swamp.json",
-                "terrains/hills.json",
-                "terrains/tundra.json",
-                "terrains/arctic.json",
-                "terrains/mountains.json"
-            ]
-        }
-    ],
-    "priority": 0
+  "name": "base-terrain",
+  "title": "Base Terrain",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-terrain"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Terrains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Forest.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Desert.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Ocean.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Hills.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Jungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Grassland.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Tundra.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/River.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Plains.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Arctic.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Swamp.js"
+    },
+    {
+      "type": "script",
+      "file": "Terrains/Mountains.js"
+    },
+    {
+      "type": "script",
+      "file": "registerTerrains.js"
+    }
+  ]
 }

@@ -1,0 +1,26 @@
+{
+    "name": "base-language-en",
+    "title": "Base Language - English",
+    "version": "0.1.0",
+    "components": [
+        {
+            "type": "translation",
+            "priority": 0,
+            "language": "en",
+            "contents": [
+                "language/en.json"
+            ]
+        },
+        {
+            "type": "translation",
+            "priority": 100,
+            "language": "en",
+            "country": "US",
+            "contents": [
+                "language/en-US.json"
+            ]
+        }
+    ],
+    "options": [],
+    "priority": 0
+}

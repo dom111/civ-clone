@@ -1,0 +1,17 @@
+{
+  "name": "core-data-client",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-client"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Connection.js"
+    },
+    {
+      "type": "script",
+      "file": "DataClient.js"
+    }
+  ]
+}

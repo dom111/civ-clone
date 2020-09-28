@@ -1,32 +1,100 @@
 {
-    "name": "base-city",
-    "title": "Base City",
-    "version": "0.0.1",
-    "dependencies": [],
-    "components": [
-        {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "city.js"
-            ]
-        },
-        {
-            "type": "style",
-            "priority": 0,
-            "contents": [
-                "style/style.css"
-            ]
-        },
-        {
-            "type": "template",
-            "label": "city-view",
-            "priority": 0,
-            "contents": [
-                "mustache/city-view.mustache"
-            ]
-        }
-    ],
-    "options": [],
-    "priority": 0
+  "name": "base-city",
+  "title": "Base City",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain-yields",
+    "core-city",
+    "core-rules",
+    "base-tile-improvements",
+    "core-tile-improvements",
+    "core-city-improvement",
+    "core-player",
+    "core-registry",
+    "core-unit",
+    "core-yields",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/BuildProgress.js"
+    },
+    {
+      "type": "script",
+      "file": "CityBuildRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "CityBuild.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/grow.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/shrink.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/captured.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/building-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "CityGrowthRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "CityGrowth.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableCityBuildItemsRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/CityBuild.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
+    }
+  ]
 }

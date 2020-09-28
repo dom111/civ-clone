@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "globals": {
+        "engine": false
+      }
+    },
+    {
+      "files": ["*.test.js"],
+      "globals": {
+        "describe": false,
+        "it": false
+      }
+    }
+  ]
+}

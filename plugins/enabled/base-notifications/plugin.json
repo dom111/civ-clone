@@ -1,17 +1,24 @@
 {
-    "name": "base-notifications",
-    "title": "Base Notifications",
-    "version": "0.0.1",
-    "dependencies": [],
-    "components": [
-        {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "notifications.js"
-            ]
-        }
-    ],
-    "options": [],
-    "priority": 0
+  "name": "base-notifications",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "registerNotifications.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Turn/start.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ],
+  "dependencies": [
+    "core-rules",
+    "core-game-year",
+    "core-notifications",
+    "core-rules-registry"
+  ]
 }

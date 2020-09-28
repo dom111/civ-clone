@@ -1,0 +1,31 @@
+{
+    "name": "base-civilopedia",
+    "title": "Base Civilopedia",
+    "version": "0.1.0",
+    "components": [
+        {
+            "type": "civilopedia",
+            "priority": 0,
+            "contents": [
+                "civilopedia/base.json"
+            ]
+        },
+        {
+            "type": "translation",
+            "priority": 0,
+            "language": "en",
+            "contents": [
+                "language/en.json"
+            ]
+        },
+        {
+            "type": "script",
+            "priority": 0,
+            "contents": [
+                "civilopedia.js"
+            ]
+        }
+    ],
+    "options": [],
+    "priority": 0
+}

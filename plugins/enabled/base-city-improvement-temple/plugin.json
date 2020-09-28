@@ -1,0 +1,36 @@
+{
+  "name": "base-city-improvement-temple",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-city-happiness",
+    "base-city-improvements",
+    "base-currency",
+    "base-science",
+    "core-city-improvement",
+    "core-registry",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Temple.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

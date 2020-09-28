@@ -1,0 +1,17 @@
+{
+  "name": "core-tile-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "TileImprovement.js"
+    },
+    {
+      "type": "script",
+      "file": "TileImprovementRegistry.js"
+    }
+  ]
+}

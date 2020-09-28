@@ -1,0 +1,21 @@
+{
+  "name": "base-science-units",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "base-science",
+    "base-unit-transport",
+    "base-units-civ1",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

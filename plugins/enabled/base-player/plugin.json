@@ -1,16 +1,64 @@
 {
-    "name": "base-player",
-    "title": "Base Player",
-    "version": "0.0.1",
-    "dependencies": [],
-    "components": [
-        {
-            "type": "game-modifier",
-            "priority": 100,
-            "contents": [
-                "player.js"
-            ]
-        }
-    ],
-    "priority": 100
+  "name": "base-player",
+  "title": "Base Player",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain-yields",
+    "core-city",
+    "core-civilization",
+    "core-player",
+    "core-rules",
+    "core-unit",
+    "core-rules-registry",
+    "base-unit-settlers",
+    "core-client",
+    "simple-ai-client",
+    "core-player-world"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Events/Player/defeated.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-end.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Turn/start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/created.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Turn/start.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-end.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/World/built.js"
+    }
+  ]
 }

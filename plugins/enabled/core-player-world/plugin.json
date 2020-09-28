@@ -1,0 +1,18 @@
+{
+  "name": "core-player-world",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-world",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "PlayerWorld.js"
+    },
+    {
+      "type": "script",
+      "file": "UndiscoveredTile.js"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "base-trade-rates",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-currency",
+    "base-science",
+    "base-terrain-yield-trade",
+    "core-registry",
+    "core-yields",
+    "core-rules",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "TradeRate.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRate/Tax.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRates.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTradeRates.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTradeRatesRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableTradeRateRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "TradeRate/Research.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableTradeRates.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

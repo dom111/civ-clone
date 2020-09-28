@@ -1,0 +1,38 @@
+{
+  "name": "simple-ai-client",
+  "title": "Simple AI Client",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-governments",
+    "base-player-government",
+    "base-science",
+    "base-terrain",
+    "base-terrain-yield-trade",
+    "base-terrain-yields",
+    "base-unit",
+    "base-unit-improvements",
+    "core-city",
+    "core-unit",
+    "base-terrain-features",
+    "base-tile-improvements",
+    "core-tile-improvements",
+    "base-city",
+    "core-world",
+    "base-unit-transport",
+    "base-units-civ1",
+    "base-city-improvements-civ1",
+    "core-rules-registry",
+    "core-goody-huts",
+    "core-ai-client"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAIClient.js"
+    },
+    {
+      "type": "script",
+      "file": "SimpleAIClient.js"
+    }
+  ]
+}

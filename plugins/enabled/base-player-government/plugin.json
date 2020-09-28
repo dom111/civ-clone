@@ -1,0 +1,61 @@
+{
+  "name": "base-player-government",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-governments",
+    "base-terrain",
+    "base-terrain-features",
+    "base-terrain-yields",
+    "core-player",
+    "core-registry",
+    "core-rules",
+    "core-unit",
+    "base-tile-improvements",
+    "core-tile-improvements",
+    "base-city-happiness",
+    "base-units-civ1",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "PlayerGovernmentRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerGovernment.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "init.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/Revolution.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
+    }
+  ]
+}

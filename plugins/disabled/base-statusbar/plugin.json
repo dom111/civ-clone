@@ -1,0 +1,22 @@
+{
+    "name": "base-statusbar",
+    "title": "Base Statusbar",
+    "version": "0.1.0",
+    "components": [
+        {
+            "type": "script",
+            "priority": 0,
+            "contents": [
+                "statusbar.js"
+            ]
+        },
+        {
+            "type": "file",
+            "label": "layout",
+            "priority": 0,
+            "contents": [
+                "mustache/layout.mustache"
+            ]
+        }
+    ]
+}

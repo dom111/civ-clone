@@ -1,0 +1,13 @@
+{
+  "name": "core-game-year",
+  "components": [
+    {
+      "type": "script",
+      "file": "Year.js"
+    }
+  ],
+  "dependencies": [
+    "core-turn-based-game",
+    "core-rules-registry"
+  ]
+}

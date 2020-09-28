@@ -1,0 +1,35 @@
+{
+  "name": "base-wonder-hanging-gardens",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-city-happiness",
+    "base-science",
+    "base-wonders",
+    "core-rules",
+    "core-rules-registry",
+    "core-wonder"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerWonder.js"
+    },
+    {
+      "type": "script",
+      "file": "HangingGardens.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

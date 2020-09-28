@@ -1,0 +1,24 @@
+{
+  "name": "base-goody-hut-gold",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-goody-huts",
+    "core-rules-registry",
+    "core-rules",
+    "base-currency"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Gold.js"
+    }
+  ]
+}

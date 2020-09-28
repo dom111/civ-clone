@@ -1,0 +1,17 @@
+{
+  "name": "ascii-renderer",
+  "dependencies": [
+    "core-city",
+    "core-turn-based-game",
+    "core-unit",
+    "core-game-year",
+    "core-player",
+    "core-goody-huts"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "init.js"
+    }
+  ]
+}

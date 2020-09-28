@@ -1,0 +1,56 @@
+{
+  "name": "base-unit-worker",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain",
+    "base-terrain-features",
+    "base-tile-improvements",
+    "base-unit",
+    "core-city",
+    "core-rules",
+    "core-tile-improvements",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Actions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildIrrigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildRoad.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/BuildMine.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/PlantForest.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearJungle.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/ClearSwamp.js"
+    }
+  ]
+}

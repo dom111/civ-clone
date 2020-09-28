@@ -1,0 +1,13 @@
+{
+  "name": "base-turn-based-game",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Events/Engine/start.js"
+    }
+  ]
+}

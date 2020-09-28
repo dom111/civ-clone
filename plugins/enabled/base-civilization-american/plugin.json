@@ -1,0 +1,17 @@
+{
+  "name": "base-civilization-american",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "American.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "core-unit",
+  "title": "Core Unit",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-yields",
+    "core-rules-registry",
+    "core-data-object"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Unit.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Defence.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Movement.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Attack.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Visibility.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Moves.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Action.js"
+    }
+  ]
+}

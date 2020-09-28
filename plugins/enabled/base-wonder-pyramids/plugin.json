@@ -1,0 +1,28 @@
+{
+  "name": "base-wonder-pyramids",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-wonders",
+    "core-rules-registry",
+    "core-wonder"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerWonder.js"
+    },
+    {
+      "type": "script",
+      "file": "Pyramids.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "base-city-happiness",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city",
+    "core-rules",
+    "core-yields",
+    "base-luxuries",
+    "base-terrain-yields",
+    "base-terrain-yield-trade",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Unhappiness.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Happiness.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/celebrate-leader.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/civil-disorder.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/turn-start.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerYields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    }
+  ]
+}

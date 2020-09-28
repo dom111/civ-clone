@@ -1,0 +1,17 @@
+{
+  "name": "base-civilization-zulu",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Zulu.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "base-terrain-features",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain-yields",
+    "base-terrain-yield-trade",
+    "core-rules",
+    "core-terrain-features",
+    "base-terrain",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Coal.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Fish.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Game.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Gems.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Gold.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Horse.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Oasis.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Oil.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Seal.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures/Shield.js"
+    },
+    {
+      "type": "script",
+      "file": "TerrainFeatures.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Terrain/feature.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Terrain/created.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAvailableTerrainFeatures.js"
+    }
+  ]
+}

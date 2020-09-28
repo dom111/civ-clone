@@ -1,24 +1,57 @@
 {
-    "name": "base-currency",
-    "title": "Base Currency",
-    "version": "0.0.1",
-    "components": [
-        {
-            "type": "translation",
-            "priority": 0,
-            "language": "en",
-            "contents": [
-                "language/en.json"
-            ]
-        },
-        {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "currency.js"
-            ]
-        }
-    ],
-    "options": [],
-    "priority": 0
+  "name": "base-currency",
+  "title": "Base Currency",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-rules",
+    "core-yields",
+    "base-city",
+    "base-terrain-yields",
+    "core-city-improvement",
+    "core-unit",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Yields/Gold.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTreasuryRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerTreasury.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/treasury-updated.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/spend.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "registerYields.js"
+    }
+  ]
 }

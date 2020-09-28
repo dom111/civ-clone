@@ -1,0 +1,22 @@
+{
+  "name": "core-city",
+  "title": "Core City",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-world",
+    "core-yields",
+    "core-rules-registry",
+    "core-data-object"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "City.js"
+    },
+    {
+      "type": "script",
+      "file": "CityRegistry.js"
+    }
+  ]
+}

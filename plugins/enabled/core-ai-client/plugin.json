@@ -1,0 +1,18 @@
+{
+  "name": "core-ai-client",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-client",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "AIClientRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "AIClient.js"
+    }
+  ]
+}

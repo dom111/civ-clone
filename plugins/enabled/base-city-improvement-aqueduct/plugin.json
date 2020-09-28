@@ -1,0 +1,38 @@
+{
+  "name": "base-city-improvement-aqueduct",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-city",
+    "base-city-improvements",
+    "base-currency",
+    "core-city-improvement",
+    "core-rules",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "registerAvailableCityBuildItem.js"
+    },
+    {
+      "type": "script",
+      "file": "Aqueduct.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/grow.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

@@ -1,24 +1,132 @@
 {
-    "name": "base-unit",
-    "title": "Base Unit",
-    "version": "0.0.1",
-    "dependencies": [],
-    "components": [
-        {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "unit.js"
-            ]
-        },
-        {
-            "type": "unit",
-            "contents": [
-                "units/settlers.json",
-                "units/militia.json",
-                "units/cavalry.json"
-            ]
-        }
-    ],
-    "priority": 0
+  "name": "base-unit",
+  "title": "Base Unit",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "core-unit",
+    "base-tile-improvements",
+    "core-tile-improvements",
+    "base-terrain",
+    "base-unit-improvements",
+    "core-city",
+    "core-player",
+    "core-turn-based-game",
+    "core-rules-registry",
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Types.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/movementCost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/destroyed.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/action.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/validateMove.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/CaptureCity.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Attack.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Move.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/DelayedAction.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/NoOrders.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Fortify.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/created.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Sleep.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Worker.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Land.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Naval.js"
+    },
+    {
+      "type": "script",
+      "file": "Types/Fortifiable.js"
+    },
+    {
+      "type": "script",
+      "file": "Actions/Pillage.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/ActiveUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/InactiveUnit.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
+    }
+  ]
 }

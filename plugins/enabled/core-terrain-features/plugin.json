@@ -1,0 +1,17 @@
+{
+  "name": "core-terrain-features",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "TerrainFeature.js"
+    },
+    {
+      "type": "script",
+      "file": "AvailableTerrainFeatureRegistry.js"
+    }
+  ]
+}

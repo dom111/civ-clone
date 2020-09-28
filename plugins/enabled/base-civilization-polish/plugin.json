@@ -1,0 +1,17 @@
+{
+  "name": "base-civilization-polish",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Polish.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
+    }
+  ]
+}

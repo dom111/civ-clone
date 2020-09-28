@@ -1,0 +1,17 @@
+{
+  "name": "core-client",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Client.js"
+    },
+    {
+      "type": "script",
+      "file": "ClientRegistry.js"
+    }
+  ]
+}

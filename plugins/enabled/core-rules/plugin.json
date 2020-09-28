@@ -1,0 +1,52 @@
+{
+  "name": "core-rules",
+  "title": "Core RulesRegistry",
+  "version": "0.1.0",
+  "dependencies": [],
+  "components": [
+    {
+      "type": "script",
+      "file": "Criteria.js"
+    },
+    {
+      "type": "script",
+      "file": "Criterion.js"
+    },
+    {
+      "type": "script",
+      "file": "Effect.js"
+    },
+    {
+      "type": "script",
+      "file": "Rule.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/Normal.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/Low.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities/High.js"
+    },
+    {
+      "type": "script",
+      "file": "Priorities.js"
+    },
+    {
+      "type": "script",
+      "file": "Criteria/And.js"
+    },
+    {
+      "type": "script",
+      "file": "Criteria/Or.js"
+    },
+    {
+      "type": "script",
+      "file": "Priority.js"
+    }
+  ]
+}

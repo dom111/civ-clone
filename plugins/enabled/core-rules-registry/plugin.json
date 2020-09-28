@@ -1,0 +1,14 @@
+{
+  "name": "core-rules-registry",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "RulesRegistry.js"
+    }
+  ]
+}

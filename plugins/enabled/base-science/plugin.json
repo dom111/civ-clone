@@ -1,55 +1,182 @@
 {
-    "name": "base-science",
-    "title": "Base Science",
-    "version": "0.0.1",
-    "components": [
-        {
-            "type": "translation",
-            "language": "en",
-            "contents": [
-                "language/en-GB.json"
-            ]
-        },
-        {
-            "type": "game-modifier",
-            "contents": [
-                "science.js"
-            ],
-            "priority": 200
-        },
-        {
-            "type": "game-modifier",
-            "contents": [
-                "advance.js"
-            ],
-            "priority": 201
-        },
-        {
-            "type": "advance",
-            "contents": [
-                "advances/alphabet.js",
-                "advances/code-of-laws.js",
-                "advances/literacy.js",
-                "advances/masonry.js",
-                "advances/mathematics.js",
-                "advances/republic.js",
-                "advances/wheel.js",
-                "advances/writing.js"
-            ]
-        },
-        {
-            "type": "template",
-            "label": "research-selector",
-            "contents": [
-                "assets/mustache/research-selector.mustache"
-            ]
-        },
-        {
-            "type": "style",
-            "contents": [
-                "assets/style/style.css"
-            ]
-        }
-    ],
-    "priority": 200
+  "name": "base-science",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "core-science",
+    "core-yields",
+    "core-player",
+    "core-registry",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Advances/Alphabet.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Navigation.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Mathematics.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/BronzeWorking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/CodeOfLaws.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Feudalism.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Astronomy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/TheWheel.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Currency.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/HorsebackRiding.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Chivalry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Masonry.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/IronWorking.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Pottery.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Monarchy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Writing.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Mysticism.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/CeremonialBurial.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/MapMaking.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Construction.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Literacy.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Gunpowder.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Invention.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/Engineering.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerResearchRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Yields/Research.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerResearch.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Research/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Research/requirements.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/process-yield.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/BridgeBuilding.js"
+    },
+    {
+      "type": "script",
+      "file": "Advances/TheRepublic.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/added.js"
+    },
+    {
+      "type": "script",
+      "file": "registerAdvances.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/research.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/research-complete.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions/ChooseResearch.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Player/action.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerActions.js"
+    }
+  ]
 }

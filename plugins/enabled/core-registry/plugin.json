@@ -1,0 +1,10 @@
+{
+  "name": "core-registry",
+  "version": "0.1.0",
+  "components": [
+    {
+      "type": "script",
+      "file": "Registry.js"
+    }
+  ]
+}

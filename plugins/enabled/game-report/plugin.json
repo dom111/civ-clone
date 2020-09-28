@@ -1,0 +1,22 @@
+{
+  "name": "game-report",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city",
+    "core-turn-based-game",
+    "core-unit",
+    "core-city-improvement",
+    "base-player-government",
+    "base-currency",
+    "core-tile-improvements",
+    "base-science",
+    "base-unit-improvements",
+    "core-player"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Events/Turn/end.js"
+    }
+  ]
+}

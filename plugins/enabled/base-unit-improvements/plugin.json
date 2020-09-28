@@ -1,0 +1,61 @@
+{
+  "name": "base-unit-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-rules",
+    "core-registry",
+    "core-unit",
+    "core-yields",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/Unit/activate.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitImprovementRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitImprovements.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifiers.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifiers/Veteran.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifiers/Fortified.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitImprovements/Veteran.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitImprovements/Fortified.js"
+    },
+    {
+      "type": "script",
+      "file": "UnitImprovement.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "core-yields",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "YieldModifier.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifiers.js"
+    },
+    {
+      "type": "script",
+      "file": "Yield.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldRegistry.js"
+    }
+  ]
+}

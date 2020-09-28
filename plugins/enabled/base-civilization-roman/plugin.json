@@ -1,0 +1,17 @@
+{
+  "name": "base-civilization-roman",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-civilization"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Roman.js"
+    },
+    {
+      "type": "script",
+      "file": "registerCivilization.js"
+    }
+  ]
+}

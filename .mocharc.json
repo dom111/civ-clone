@@ -1,0 +1,6 @@
+{
+  "file": [
+    "./src/tests/lib/mock.engine.js"
+  ],
+  "recursive": true
+}

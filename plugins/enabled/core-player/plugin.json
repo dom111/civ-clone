@@ -1,0 +1,32 @@
+{
+  "name": "core-player",
+  "title": "Core Player",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-world",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Player.js"
+    },
+    {
+      "type": "script",
+      "file": "CurrentPlayerRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "PlayerAction.js"
+    },
+    {
+      "type": "script",
+      "file": "MandatoryPlayerAction.js"
+    }
+  ]
+}

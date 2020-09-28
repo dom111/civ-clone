@@ -1,0 +1,24 @@
+{
+  "name": "base-terrain-distribution",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-terrain",
+    "core-rules",
+    "core-terrain",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/Terrain/distributionGroups.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Terrain/distribution.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "base-city-improvements",
+  "title": "Base City Improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-city-improvement",
+    "core-rules",
+    "core-registry",
+    "core-rules-registry",
+    "core-city"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build-cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/cost.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/improvement-created.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
+    }
+  ]
+}

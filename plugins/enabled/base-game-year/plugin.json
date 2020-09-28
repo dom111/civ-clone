@@ -1,0 +1,17 @@
+{
+  "name": "base-game-year",
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/Turn/year.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ],
+  "dependencies": [
+    "core-rules",
+    "core-rules-registry"
+  ]
+}

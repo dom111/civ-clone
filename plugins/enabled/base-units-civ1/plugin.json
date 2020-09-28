@@ -1,0 +1,21 @@
+{
+  "name": "base-units-civ1",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-unit-catapult",
+    "base-unit-chariot",
+    "base-unit-horseman",
+    "base-unit-knight",
+    "base-unit-musketman",
+    "base-unit-settlers",
+    "base-unit-warrior",
+    "base-unit-spearman",
+    "base-unit-swordman"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Units.js"
+    }
+  ]
+}

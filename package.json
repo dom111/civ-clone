@@ -1,13 +1,25 @@
 {
-    "productName": "Civ One",
-    "name": "civ-one",
-    "version": "0.0.1",
+    "productName": "civ-clone",
+    "name": "civ-clone",
+    "version": "0.1.0",
     "homepage": "https://github.com/dom111/civ-one",
-    "description": "CivOne base libraries and plugin infrastructure.",
+    "description": "civ-clone base library and plugin infrastructure.",
+    "type": "module",
     "scripts": {
-        "start": "electron boot.js"
+        "eslint": "eslint src plugins",
+        "eslint:fix": "npm run eslint -- --fix",
+        "jsonlint:plugins": "find ./ -name plugin.json -not -path \"./node_modules/*\" -not -path \"./plugins/disabled/*\" | xargs -n1 ajv -s src/Plugin/Schema.json -d",
+        "lint": "npm run jsonlint:plugins && npm run eslint",
+        "start": "node --experimental-vm-modules ./boot.js",
+        "start:renderer": "qode --experimental-vm-modules ./boot.js",
+        "profile": "node --prof --experimental-vm-modules ./boot.js -- --reportTurns=250 --reportAndQuit=1",
+        "start:fit": "node --experimental-vm-modules ./boot.js -- --height=$(($(tput lines) - 2)) --width=$(tput cols) --players=7",
+        "start:debug": "node --inspect --experimental-vm-modules ./boot.js",
+        "test": "mocha ./**/tests/*.test.js",
+        "test:coverage": "c8 mocha ./**/tests/*.test.js",
+        "validate": "./checkPlugins.sh"
     },
-    "author": "dom111 <CivOne@dom111.uk>",
+    "author": "dom111 <dom111@users.noreply.github.com>",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/dom111/civ-one.git"
@@ -21,9 +33,25 @@
         "civone",
         "civ-one"
     ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run eslint:fix && npm run test"
+        }
+    },
+    "engines": {
+        "node": ">=13.0.0"
+    },
     "dependencies": {
-        "electron-prebuilt": "^0.36.0",
-        "extend": "~3.0.0",
-        "mustache": "^2.0.0"
+        "@nodegui/nodegui": "^0.18.2",
+        "typescript": "^3.8.3"
+    },
+    "devDependencies": {
+        "ajv-cli": "^3.0.0",
+        "babel-eslint": "^10.0.3",
+        "c8": "^7.1.0",
+        "eslint": "^6.8.0",
+        "eslint-plugin-import": "^2.19.1",
+        "husky": "^3.1.0",
+        "mocha": "^7.0.1"
     }
 }

@@ -1,0 +1,51 @@
+{
+  "name": "core-diplomacy",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-player",
+    "core-registry",
+    "core-yields"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "InteractionRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Interactions/Contact.js"
+    },
+    {
+      "type": "script",
+      "file": "Declarations/Peace.js"
+    },
+    {
+      "type": "script",
+      "file": "Declarations/War.js"
+    },
+    {
+      "type": "script",
+      "file": "DeclarationRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "Declarations.js"
+    },
+    {
+      "type": "script",
+      "file": "Interactions.js"
+    },
+    {
+      "type": "script",
+      "file": "Interaction.js"
+    },
+    {
+      "type": "script",
+      "file": "Expiry.js"
+    },
+    {
+      "type": "script",
+      "file": "Declaration.js"
+    }
+  ]
+}

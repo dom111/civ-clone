@@ -1,0 +1,19 @@
+{
+  "name": "core-city-improvement",
+  "title": "Core City Improvement",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "CityImprovement.js"
+    },
+    {
+      "type": "script",
+      "file": "CityImprovementRegistry.js"
+    }
+  ]
+}

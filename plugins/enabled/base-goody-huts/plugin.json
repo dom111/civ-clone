@@ -1,0 +1,35 @@
+{
+  "name": "base-goody-huts",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-goody-huts",
+    "core-rules-registry",
+    "core-rules"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/World/built.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/goody-hut.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Unit/moved.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/discovered.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action-performed.js"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "base-science-city-improvements",
+  "version": "0.1.0",
+  "dependencies": [
+    "base-science",
+    "core-rules",
+    "core-city-improvement",
+    "core-yields",
+    "base-city-improvements-civ1",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/City/build.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/City/yield.js"
+    },
+    {
+      "type": "script",
+      "file": "YieldModifier/Library.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    }
+  ]
+}

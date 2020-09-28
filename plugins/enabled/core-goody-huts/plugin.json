@@ -1,0 +1,22 @@
+{
+  "name": "core-goody-huts",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-registry",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "GoodyHutAction.js"
+    },
+    {
+      "type": "script",
+      "file": "GoodyHutRegistry.js"
+    },
+    {
+      "type": "script",
+      "file": "GoodyHut.js"
+    }
+  ]
+}

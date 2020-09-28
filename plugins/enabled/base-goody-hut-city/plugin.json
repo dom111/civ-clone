@@ -1,0 +1,25 @@
+{
+  "name": "base-goody-hut-city",
+  "version": "0.1.0",
+  "dependencies": [
+    "core-goody-huts",
+    "core-rules-registry",
+    "core-rules",
+    "base-terrain",
+    "core-city"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Rules/GoodyHut/action.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "FoundCity.js"
+    }
+  ]
+}

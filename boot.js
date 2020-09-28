@@ -1,38 +1,42 @@
-'use strict';
+const {
+  FlexLayout,
+  QLabel,
+  QMainWindow,
+  QWidget
+} = NodeGui;
+import NodeGui from '@nodegui/nodegui';
+import {Worker} from 'worker_threads';
 
-const electron = require('electron');
-const app = electron.app;
-const ipc = electron.ipcMain;
+const win = new QMainWindow();
 
-// commandline argument
-global.debug = true;
+const centralWidget = new QWidget();
+centralWidget.setObjectName("myroot");
+const rootLayout = new FlexLayout();
+centralWidget.setLayout(rootLayout);
 
-// ipc listeners
-ipc.on('app.getPath', function(event, name) {
-    event.returnValue = app.getPath(name);
-});
+const label = new QLabel();
+label.setInlineStyle("font-size: 16px; font-weight: bold;");
+label.setText("Loading...");
 
-ipc.on('app.getLocale', function(event) {
-    event.returnValue = app.getLocale();
-});
-
-app.on('window-all-closed', () => {
-    // TODO: possible auto-save before quitting
-    app.quit(); // Yes, even on Mac OS X...
-});
-
-app.on('ready', () => {
-    global.MainWindow = new electron.BrowserWindow({
-        title: `civ-one`,
-        webPreferences: {
-            devTools: global.debug,
-            offscreen: true
-        }
-    });
-
-    MainWindow.loadURL(`file:///${__dirname}/views/main/html/index.html?debug=${global.debug}`);
-
-    if (global.debug) {
-        MainWindow.webContents.openDevTools();
+rootLayout.addWidget(label);
+win.setCentralWidget(centralWidget);
+win.setStyleSheet(
+  `
+    #myroot {
+      background-color: #e7e7e7;
     }
+  `
+);
+
+win.show();
+
+global.window = win;
+
+const engine = new Worker('./engine.js', {
+  workerData: null,
+});
+
+engine.on('message', ({event, args}) => {
+  label.setText(event);
+  // console.log(event, args);
 });

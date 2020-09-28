@@ -1,17 +1,35 @@
 {
-    "name": "base-world",
-    "title": "Base World",
-    "version": "0.0.1",
-    "dependencies": [],
-    "components": [
-        {
-            "type": "game-modifier",
-            "priority": 0,
-            "contents": [
-                "world.js"
-            ]
-        }
-    ],
-    "options": [],
-    "priority": 0
+  "name": "base-world",
+  "dependencies": [
+    "core-world",
+    "core-world-generator",
+    "core-rules",
+    "core-rules-registry"
+  ],
+  "components": [
+    {
+      "type": "script",
+      "file": "Events/Player/government-changed.js"
+    },
+    {
+      "type": "script",
+      "file": "Events/Tile/improvement-built.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Tile/seen.js"
+    },
+    {
+      "type": "script",
+      "file": "registerRules.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/Engine/start.js"
+    },
+    {
+      "type": "script",
+      "file": "Rules/World/built.js"
+    }
+  ]
 }
