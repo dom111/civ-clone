@@ -1,5 +1,16 @@
 # civ-clone
 
+
+# This is no-longer under development, please sees the @civ-clone organisation where work is continuing.
+
+This monorepo is to be archived in favour of the new approach, being package-based and intermitently developed.
+
+The closest package to this is probably [civ-clone/electron-renderer] which has some prerequisites.
+
+[civ-clone/electron-renderer]: https://github.com/civ-clone/electron-renderer
+
+---
+
 Open source, plugin-driven, Civilization clone, written in JavaScript (`node`).
 
 ## Aims
